@@ -1,0 +1,26 @@
+CXX=g++
+
+SETTINGS = DEBUG
+
+DEFAULT= -std=c++17
+DEBUG=-g -Wall -DDEBUG -std=c++17 -pedantic
+OPTIM=-O3 -std=c++17
+
+ifeq ($(SETTINGS), DEFAULT)
+	CPPFLAGS = $(DEBUG)
+else ifeq ($(SETTINGS), DEBUG)
+	CPPFLAGS =  $(DEBUG)
+else ifeq ($(SETTINGS), OPTIM)
+	CPPFLAGS =  $(OPTIM)
+endif
+
+MAKE = make SETTINGS="$(SETTINGS)"
+
+ifeq "${HOME}" "/home/abdu"
+    H5LD = /usr/lib/x86_64-linux-gnu/hdf5/serial 
+    H5ID = /usr/include/hdf5/serial/
+    EIGEN = /home/abdu/eigen/
+else ifeq "${HOME}" "/user/gent/456/vsc45632"
+    H5LD = /usr/lib64/
+    H5ID = /kyukon/home/apps/RHEL8/zen2-ib/software/HDF5/1.12.2-gompi-2022a/include
+endif
