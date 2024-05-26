@@ -1,11 +1,21 @@
+/**
+ * @file Nodes.h
+ * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
+ * @brief A class for reading and storing nodal coordinates. Works for 2D and 3D.
+ * @date 2024-05-23
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ * Updates (when, what and who)
+
+ */
+
 #include "Nodes.h"
 #include <iostream>
-
 
 #ifndef DEBUG
 #define at(x) operator[](x)
 #endif
-
 
 Nodes::~Nodes(){
 
@@ -22,7 +32,6 @@ void Nodes::ReadNodes(H5IO &H5File){
     dsetName = "SimulationParameters/nDim";
     nDim = H5File.ReadScalar(dsetName);
 
-    //TODO Make check that all nodes have the correct number of coordinates for 2/3D. 
     vector<double> dummy1(nDim);
 
     for (int iNod=0; iNod<nNodes; iNod++){

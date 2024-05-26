@@ -6,6 +6,7 @@ all :
 	@echo "Compiling PhiMATSFEM ... "
 	@echo "Start: " $(shell date)
 	@echo "---------------------------------"
+	mkdir -p src/obj
 	make -C src/
 	@echo "---------------------------------"
 	@echo "End: " $(shell date)

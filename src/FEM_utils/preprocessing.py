@@ -1,5 +1,5 @@
-
 import numpy as numpy
+import meshio
 from pathlib import Path
 import h5py
 import numpy as np
@@ -7,89 +7,381 @@ import numpy as np
 class PreProcessing:
     
     def __init__(self, inputData):
+                
+        #----------------------------------------------------------------------
+        # Read input data  
+        #----------------------------------------------------------------------
         
         self.Simul = inputData["Simul"]
-        self.nNodes = inputData["nNodes"]
-        self.nElements = inputData["nElements"]
+        self.mesh = inputData["mesh"]
         self.elementName = inputData["elementName"]
         self.nElementSets = inputData["nElementSets"]
-        self.nPresDofs = inputData["nPresDofs"]
         self.presDOFs = inputData["presDOFs"]
+        self.nPresDofs = len(self.presDOFs)
 
-        allowedElements = ["quad4", "quad8"]
-        elements2D = ["quad4"]
-        elements3D = ["quad8"]
-        if not self.elementName in allowedElements:
-            ErrString = "ERROR! Unknown element type: " + self.elementType
-            raise Exception(ErrString)
+        #----------------------------------------------------------------------
+        # Check for allowed elements and assign element data (number of nodes,
+        # dimension and order) 
+        #----------------------------------------------------------------------
+
+        # Allowed elements (naming should match with Gmsh)
+        allowedElements = ["quad", "quad8", "triangle", "hexahedron"]
+        # 2D elements
+        elements2D = ["quad", "quad8", "triangle"]
+        # 3D elements
+        elements3D = ["hexahedron"]
+        # First order
+        elementsOrder1 = ["quad", "triangle", "hexahedron"]
+        # Second order
+        elementsOrder2 = ["quad8"]
         
-        if self.elementName == "quad4":
-            self.elementNodes = 4
-            self.elementType = 1
-            
+        if not self.elementName in allowedElements:
+            ErrString = "ERROR! Unknown element name < " + self.elementName + " >\n"
+            ErrString += "Allowed elements are: \n"
+            for elem in allowedElements:
+                ErrString += elem + "\n"
+            raise ValueError(ErrString)
+        
+        # # Number of element nodes
+        # if self.elementName == "quad":
+        #     self.elementNodes = 4
+        # elif self.elementName == "tri3":
+        #     self.elementNodes = 3
+        
+        # 2D or 3D
         if self.elementName in elements2D:
             self.nDim = 2
+        if self.elementName in elements3D:
+            self.nDim = 3
         
-        self.nodeConnectivity = inputData["nodeConnectivity"]
-        self.nodeCoord = inputData["nodeCoord"]
+        # First of second order
+        if self.elementName in elementsOrder1:
+            self.nOrder = 1
+        if self.elementName in elementsOrder2:
+            self.nOrder = 2
+            
+        #----------------------------------------------------------------------
+        # Read nodes  
+        #----------------------------------------------------------------------
+        
+        # Total number of nodes
+        self.nNodes = self.mesh.points.shape[0]  
+        # Node connectivity
+        self.nodeConnectivity = self.mesh.cells_dict[self.elementName] 
+        
+        # Node coordinates
+        if self.nDim == 2:
+            self.nodeCoord = self.mesh.points[:,0:2]
+        elif self.nDim == 3:    
+            self.nodeCoord = self.mesh.points
+        
+        #----------------------------------------------------------------------
+        # Read number of elements  
+        #----------------------------------------------------------------------
+        
+        # Total number of elements
+        self.nElements = self.mesh.cells_dict[self.elementName].data.shape[0]  
+
+        #----------------------------------------------------------------------
+        # Read material data
+        #----------------------------------------------------------------------
         
         self.Emod = inputData["Emod"]
         self.nu = inputData["nu"]
 
-        
         pass
     
 #-----------------------------------------------------------------------------#
     
-    def CreateFileHDF5(self):
+    def WriteFileHDF5(self):
+        """
+        Creates and writes data to hdf5 input file
+        """
+        
+        # Open hdf5 file 
+        self.OpenFileHDF5()
+               
+        #----------------------------------------------------------------------
+        # Write simulation parameters to hdf5  
+        #----------------------------------------------------------------------
+        
+        try :
+            
+            # self.fh5.attrs["Simulation"] =  self.Simul
+                      
+            #----------------------------------------------------------------------
+            # Nodes/Elements data 
+            #----------------------------------------------------------------------
+            
+            self.grp_Sim_Params = self.fh5.create_group('SimulationParameters')
+
+            self.grp_Sim_Params.create_dataset("nNodes", data=self.nNodes, dtype = np.int64)
+            self.grp_Sim_Params.create_dataset("nDim", data=self.nDim, dtype = np.int64)
+            self.grp_Sim_Params.create_dataset("nElements", data=self.nElements, dtype = np.int64)
+            self.grp_Sim_Params.create_dataset("nPresDofs", data=self.nPresDofs, dtype = np.int64)
+            self.grp_Sim_Params.create_dataset("nElementSets", data=self.nElementSets, dtype = np.int64) 
+            # self.grp_Sim_Params.create_dataset("elementNodes", data=self.elementNodes, dtype = np.int64) 
+            # self.grp_Sim_Params.create_dataset("elementType", data=self.elementType, dtype = np.int64) 
+            
+            # Material data
+            self.grp_Sim_Params.create_dataset("Emod", data=self.Emod) 
+            self.grp_Sim_Params.create_dataset("nu", data=self.nu) 
+            
+            #----------------------------------------------------------------------
+            # Write node coordinates 
+            #----------------------------------------------------------------------
+            
+            self.grp_nNodes = self.fh5.create_group('NodeCoordinates')
+            
+            for iset in range(self.nNodes):
+                self.grp_nNodes.create_dataset("Node_"+str(iset), data=self.nodeCoord[iset], dtype = np.float64)   
+                       
+            #----------------------------------------------------------------------
+            # Write node connectivity
+            #----------------------------------------------------------------------
+            
+            self.grp_nodeConnectivity = self.fh5.create_group('NodeConnectivity')
+            
+            for iset in range(self.nElements):
+                self.grp_nodeConnectivity.create_dataset("Element_"+str(iset), data=self.nodeConnectivity[iset], dtype = np.int64)      
+            
+            #----------------------------------------------------------------------
+            # Write prescribed dofs
+            #----------------------------------------------------------------------
+            
+            self.grp_prescribedDOFs = self.fh5.create_group('PrescribedDOFs')
+            
+            for iPreDof in range(self.nPresDofs):
+                self.grp_prescribedDOFs.create_dataset("Prescribed_"+str(iPreDof), data=self.presDOFs[iPreDof]) 
+                
+            #----------------------------------------------------------------------
+            # Close hdf5 file
+            #----------------------------------------------------------------------
+            
+            self.CloseFileHDF5()
+        
+        except:
+            # Close hdf5 file
+            self.CloseFileHDF5()
+            print("Some error occurred with hdf5 file handle. The file is correctly closed.")
+            
+        pass
+
+#-----------------------------------------------------------------------------#
+
+    def OpenFileHDF5(self, mode="w"):
+        """
+        Opens HDF5 file
+        """
+        
+        # TODO: Do we need this with separate input/output files?
+        
+        # #----------------------------------------------------------------------
+        # # Check if hdf5 file exists to avoid override
+        # #----------------------------------------------------------------------
         
         # path = Path(self.Simul+'.hdf5')
-        
+
         # if path.is_file():
         #     ErrString = 'File '+ self.Simul+ '.hdf5 exists. Can not override!'
         #     raise Exception(ErrString)
         
-        self.fh5 = h5py.File(self.Simul+"_in.hdf5", "w")
-        
-        # SimulationParameters -------
-        self.fh5.attrs["Simulation"] =  self.Simul
-        self.grp_Sim_Params = self.fh5.create_group('SimulationParameters')
-        self.grp_Sim_Params.create_dataset("nNodes", data=self.nNodes, dtype = np.int64)
-        self.grp_Sim_Params.create_dataset("nDim", data=self.nDim, dtype = np.int64)
-        self.grp_Sim_Params.create_dataset("nElements", data=self.nElements, dtype = np.int64)
-        self.grp_Sim_Params.create_dataset("nPresDofs", data=self.nPresDofs, dtype = np.int64)
-        self.grp_Sim_Params.create_dataset("elementType", data=self.elementType, dtype = np.int64) 
-        self.grp_Sim_Params.create_dataset("nElementSets", data=self.nElementSets, dtype = np.int64) 
-        self.grp_Sim_Params.create_dataset("elementNodes", data=self.elementNodes, dtype = np.int64) 
-
-        self.grp_Sim_Params.create_dataset("Emod", data=self.Emod) 
-        self.grp_Sim_Params.create_dataset("nu", data=self.nu) 
-        
-        # Write node coordinates
-        self.grp_nNodes = self.fh5.create_group('NodeCoordinates')
-        for iset in range(self.nNodes):
-            self.grp_nNodes.create_dataset("Node_"+str(iset), data=self.nodeCoord[iset], dtype = np.float64)   
-        
-        # Write node connectivity
-        self.grp_nodeConnectivity = self.fh5.create_group('NodeConnectivity')
-        for iset in range(self.nElements):
-            self.grp_nodeConnectivity.create_dataset("Element_"+str(iset), data=self.nodeConnectivity[iset], dtype = np.int64)      
-            
-        # Write prescribed dofs
-        self.grp_prescribedDOFs = self.fh5.create_group('PrescribedDOFs')
-        for iPreDof in range(self.nPresDofs):
-            self.grp_prescribedDOFs.create_dataset("Prescribed_"+str(iPreDof), data=self.presDOFs[iPreDof]) 
-       
-       # Close hdf5 file
-        self.CloseFileHDF5()
+        self.fh5 = h5py.File(self.Simul+"_in.hdf5", mode)
         
         pass
 
 #-----------------------------------------------------------------------------#
     
     def CloseFileHDF5(self):
+        """
+        Closes HDF5 file
+        """
         
         self.fh5.close()
         
         pass
+
+#-----------------------------------------------------------------------------#
+
+    @staticmethod
+    def TensileDisp2D(ly, yDisp, mesh):
+        """
+        Applies tensile displacement boundary conditions to a regular 
+        quadrilateral in the y direction. The origin point must be (0,0)
+        """
+        
+        #----------------------------------------------------------------------
+        # Prepare data  
+        #----------------------------------------------------------------------
+        
+        # List of prescribed degrees of freedom. Order of list [node id, dof, value]
+        presDOFs = []   
+        # Number of nodes
+        nNodes = mesh.points.shape[0]  
+        # Node coordinates
+        nodeCoord = mesh.points[:,0:2]
+        
+        #----------------------------------------------------------------------
+        # Loop through nodes  
+        #----------------------------------------------------------------------
     
+        for iNod in range(nNodes):
+            # Bottom nodes
+            if nodeCoord[iNod][1]==0:
+                # Find bottom left corner node.
+                if nodeCoord[iNod][0] == 0: 
+                    # Apply fixed BC
+                    presDOFs.append([iNod, 0, 0])
+                    presDOFs.append([iNod, 1, 0]) 
+                # Other bottom nodes
+                else :  
+                    # Y-fixed   
+                    presDOFs.append([iNod, 1, 0])
+
+            # Top nodes
+            elif nodeCoord[iNod][1]==ly:
+                # Top left corner node
+                if nodeCoord[iNod][0] == 0:
+                    # Fix-x 
+                    presDOFs.append([iNod, 0, 0])
+                    presDOFs.append([iNod, 1, yDisp])
+                # Other top nodes
+                else :
+                    # Prescribed y
+                    presDOFs.append([iNod, 1, yDisp])
+        
+        return presDOFs
+
+#-----------------------------------------------------------------------------#
+
+    # TODO: Merge with TensileDisp2D
+    @staticmethod
+    def TensileDisp3D(lz, zDisp, mesh): 
+        """
+        Applies tensile displacement boundary conditions to a regular hexahedron
+        in the z direction. The origin point must be (0,0,0)
+        """
+        
+        #----------------------------------------------------------------------
+        # Prepare data  
+        #----------------------------------------------------------------------
+        
+        # List of prescribed degrees of freedom. Order of list [node id, dof, value]
+        presDOFs = []   
+        # Number of nodes
+        nNodes = mesh.points.shape[0]  
+        # Node coordinates
+        nodeCoord = mesh.points
+        
+        #----------------------------------------------------------------------
+        # Loop through nodes  
+        #----------------------------------------------------------------------
+    
+        for iNod in range(nNodes):
+            
+            # Bottom nodes
+            if nodeCoord[iNod][2]==0:
+                # Find bottom left/front corner node.
+                if (nodeCoord[iNod][0] == 0) and (nodeCoord[iNod][1] == 0): 
+                    # Apply fixed BC
+                    presDOFs.append([iNod, 0, 0])
+                    presDOFs.append([iNod, 1, 0]) 
+                    presDOFs.append([iNod, 2, 0]) 
+
+                # Other bottom nodes
+                else :  
+                    # z-fixed   
+                    presDOFs.append([iNod, 2, 0])
+
+            # Top nodes
+            elif nodeCoord[iNod][2]==lz:
+                # Top left corner node
+                if (nodeCoord[iNod][0] == 0) and (nodeCoord[iNod][1] == 0):
+                    # Fix-x and y
+                    presDOFs.append([iNod, 0, 0])
+                    presDOFs.append([iNod, 1, 0])
+                    presDOFs.append([iNod, 2, zDisp])
+                # Other top nodes
+                else :
+                    # Prescribed y
+                    presDOFs.append([iNod, 2, zDisp])
+        
+        return presDOFs
+
+#-----------------------------------------------------------------------------#
+
+    @staticmethod
+    def WriteDispBCs(elementName, mesh, presDOFs, dispDofs=2):
+        
+        #----------------------------------------------------------------------
+        # Prepare data  
+        #----------------------------------------------------------------------
+        
+        # Number of prescribed dofs
+        nPresDofs = len(presDOFs)
+        # Number of nodes
+        nNodes = mesh.points.shape[0] 
+        # Node coordinates
+        nodeCoord = mesh.points
+        # Node connectivity
+        nodeConnectivity = mesh.cells_dict[elementName] 
+        
+        # Vector of displacement dofs values (like solution vector)
+        uDisp = np.zeros(dispDofs*nNodes)
+        # Vector of displacement dofs flag 
+        flagsDisp = np.zeros(dispDofs*nNodes, dtype=int)
+        
+        # Vector of displacement dofs values (compatible with meshio)
+        sdisp = np.zeros((nNodes, dispDofs))
+        # Vector of displacement dofs flag
+        fdisp = np.zeros((nNodes, dispDofs), dtype=int)
+
+        #----------------------------------------------------------------------
+        # Create new mesh object for writing BCs  
+        #----------------------------------------------------------------------
+        
+        cells = [
+            (elementName, nodeConnectivity),
+        ]
+        BCmesh = meshio.Mesh(
+            nodeCoord,
+            cells,
+        )
+        
+        #----------------------------------------------------------------------
+        # Arrange BCs as solution vector  
+        #----------------------------------------------------------------------
+
+        for i in range(nPresDofs):
+            pDOF = presDOFs[i][0]*dispDofs + presDOFs[i][1]
+            uDisp[pDOF] = presDOFs[i][2]
+            flagsDisp[pDOF] = 1
+            
+        #----------------------------------------------------------------------
+        # Rearrange BCs array of `nNodes x dispDofs` for meshio output
+        #----------------------------------------------------------------------
+            
+        n = nNodes*dispDofs
+
+        sdisp[:,0] = uDisp[0:n:dispDofs]
+        sdisp[:,1] = uDisp[1:n:dispDofs]         
+
+        fdisp[:,0] = flagsDisp[0:n:dispDofs]
+        fdisp[:,1] = flagsDisp[1:n:dispDofs]
+        
+        if dispDofs == 3:
+            sdisp[:,2] = uDisp[2:n:dispDofs]
+            fdisp[:,2] = flagsDisp[2:n:dispDofs]
+        
+        #----------------------------------------------------------------------
+        # Append and write to vtk
+        #----------------------------------------------------------------------
+        
+        BCmesh.point_data.update({"disp": sdisp})
+        BCmesh.point_data.update({"FlagBC": fdisp})
+        BCmesh.write("BC.vtk")
+        
+        return BCmesh
+    
+#-----------------------------------------------------------------------------#
+

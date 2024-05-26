@@ -13,7 +13,7 @@ SOURCES:=${wildcard *.cxx}
 # Name of objects
 OBJECTS:=${patsubst %.cxx,${OBJDIR}/%.o,${SOURCES}}
 
-export EXCLUDE = obj/ include/ FEM_utils/ LinearAlgebra/ #FiniteElements/ Materials/ # Solvers/
+export EXCLUDE = obj/ include/ FEM_utils/ Solvers/ #FiniteElements/ Materials/ 
 
 SUBDIRS := $(wildcard */)
 SUBDIRS :=$(sort $(dir $(wildcard */)))
@@ -26,7 +26,6 @@ obj/%.o: %.cxx
 	${CXX} $(CPPFLAGS) -c $< -o $@ -I $(INCLUDES) -I $(H5ID) -I $(EIGEN) -L $(H5LD) -lhdf5 -lhdf5_cpp
 
 $(SUBDIRS):
-	mkdir -p obj
 	$(MAKE) -C $@
 
 .PHONY: all $(SUBDIRS)

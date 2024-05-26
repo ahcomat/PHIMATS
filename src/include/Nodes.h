@@ -1,3 +1,15 @@
+/**
+ * @file Nodes.h
+ * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
+ * @brief A class for reading and storing nodal coordinates. Works for 2D and 3D.
+ * @date 2024-05-23
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ * Updates (when, what and who)
+
+ */
+
 #ifndef NODES_H
 #define NODES_H
 
@@ -11,7 +23,6 @@ class Nodes{
 public:
 
 Nodes(){};
-
 ~Nodes();
 
 /**

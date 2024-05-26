@@ -1,0 +1,69 @@
+/**
+ * @file Elastic3D.h
+ * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
+ * @brief 3D Elastic material in Voigt notation.
+ * 
+ * The class supports the following isotropies:
+ * `Isotropic` 
+ * `Cubic`
+ * 
+ * @date 2024-05-20
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ * Updates (when, what and who)
+ * 
+ */
+
+#include <iostream>
+
+#include "Materials/Mechanics/Elastic3D.h"
+
+using namespace std;
+
+Elastic3D::Elastic3D(H5IO &H5File, string isoType)
+    : BaseMechanics(isoType, "3D") {
+
+    string dsetName; 
+
+    if(isotropy=="Isotropic"){
+
+        /**
+         * Reads Young's modulus and Poisson's ratio
+         */
+        dsetName = "SimulationParameters/Emod";
+        double Emod = H5File.ReadScalar(dsetName);
+        dsetName = "SimulationParameters/nu";
+        double nu = H5File.ReadScalar(dsetName);
+
+        DMatx.setZero();
+
+        double ho = Emod*nu/((1+nu)*(1-2*nu));
+        double uo = Emod/(2*(1+nu));
+
+        DMatx(0,0) = ho+2*uo;
+        DMatx(1,1) = ho+2*uo;
+        DMatx(2,2) = ho+2*uo;
+
+        DMatx(0,1) = ho;
+        DMatx(0,2) = ho;
+        DMatx(1,0) = ho;
+        DMatx(1,2) = ho;
+        DMatx(2,0) = ho;
+        DMatx(2,1) = ho;
+        
+        DMatx(3,3) = 2*uo;
+        DMatx(4,4) = 2*uo;
+        DMatx(5,5) = 2*uo;
+
+    } else {
+        cout << "ERROR! Undefined material isotropy < " << isotropy << " >\n";
+        cout << "Terminating! \n";
+        exit(10);
+    }
+}
+
+T_DMatx Elastic3D::getDMat(){
+
+    return DMatx;
+}

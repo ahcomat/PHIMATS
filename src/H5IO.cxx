@@ -1,4 +1,19 @@
+/**
+ * @file H5IO.cxx
+ * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
+ * @brief Wrapper class for HDF5 files.
+ * @date 2024-05-23
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ * @todo Update for C++ API
+ * 
+ * Updates (when, what and who)
+ * 
+ */
+
 #include <iostream>
+#include <exception>
 #include "H5IO.h"
 
 #ifndef DEBUG
@@ -26,11 +41,12 @@ double H5IO::ReadScalar(string dsetName){
 
     const char* fileName = this->H5FileName.c_str();
     const char* dataSetName = dsetName.c_str();
-
+    
     // Open existing file
     file_id = H5Fopen(fileName, H5F_ACC_RDWR, H5P_DEFAULT);
     // Open existing data set
     dataset_id = H5Dopen2(file_id, dataSetName, H5P_DEFAULT);
+
     // Read dataset buffer
     status = H5Dread(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, Var);
     // Close dataset

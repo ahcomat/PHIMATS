@@ -1,15 +1,81 @@
+/**
+ * @file Tri3.h
+ * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
+ * @brief Class for managing tri3 elements.
+ * @date 2024-05-23
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ * Updates (when, what and who)
+ * 
+ */
+
 #ifndef TRI3_H
 #define TRI3_H
 
-// #include "../ElementSets.h"
+#include"Elements.h"
+#include"Nodes.h"
+#include"H5IO.h"
+#include"petsc.h"
 
-class Tri3{
+using namespace std;
+
+class Tri3: public Elements{
 
 public:
 
+Tri3(H5IO &H5File_in, Nodes &Nodes);   
+~Tri3() override ;
+
+/**
+ * @brief Initializes the data for the shape functions.
+ * 
+ */
+void InitShapeFunc();
+
+/**
+ * @brief Returns the int-pt values of shape functions in natural coordinates.
+ * 
+ * @param xi 
+ * @param eta 
+ * @return RowVecd3
+ */
+RowVecd3 getShapeFunc(double xi, double eta);
+
+/**
+ * @brief Returns the int-pt values of of shape function derivatives in natural coordinates.
+ * 
+ * @param xi 
+ * @param eta 
+ * @return Matd2x3 
+ */
+Matd2x3 getShapeFuncDeriv(double xi, double eta);
+
+/**
+ * @brief Reads the data `nElements`, `nElementSets` and `elemNodeConn` from hdf5 file.
+ * 
+ * @param H5File_in 
+ * @todo Consider moving to base `Elements`. `getElemDispDof` will probably have to be pure `virtual` function.
+ */
+void ReadElementsData(H5IO &H5File_in);
+
+/**
+ * @brief Returns the displacement dofs associated with element `iElem`.
+ * 
+ * @param iElem 
+ * @return vector<int> 
+ */
+vector<int> getElemDispDof(int iElem);
+
+
 private:
 
-int nDim;
+const vector<double> wts{0.5};  /// @brief Weights of the gauss points.
+
+vector<RowVecd3> shapeFunc; /// @brief Values of the shape functions at integration points in natural coordinates.
+vector<Matd2x3> shapeFuncDeriv;  /// @brief Values of the shape function derivatives at integration points in natural coordinates. 
+vector<Matd3x2> elemNodCoord;     /// @brief Node Coordinates. 
+vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements. 
 
 };
 #endif

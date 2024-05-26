@@ -1,11 +1,11 @@
 # Include makefile definitions
-include ../MakeFile.defs
+include ../../MakeFile.defs
 
 # include dir
-INCLUDES = ../include
+INCLUDES = ../../include
 
 # Objects dir
-OBJDIR := ../obj
+OBJDIR := ../../obj
 
 # Finds .cxx files in current folder
 SOURCES:=${wildcard *.cxx}
@@ -13,15 +13,8 @@ SOURCES:=${wildcard *.cxx}
 # Name of objects
 OBJECTS:=${patsubst %.cxx,${OBJDIR}/%.o,${SOURCES}}
 
-SUBDIRS := $(wildcard */)
-SUBDIRS :=$(sort $(dir $(wildcard */)))
+all: ${OBJECTS}
+	# @echo "${OBJECTS}"
 
-all: $(SUBDIRS) ${OBJECTS}
-
-$(SUBDIRS):
-	$(MAKE) -C $@
-
-../obj/%.o: %.cxx
+../../obj/%.o: %.cxx
 	${CXX} $(CFLAGS) -c $< -o $@ -I $(INCLUDES) -I $(EIGEN) -I $(H5ID) -L $(H5LD) -lhdf5 -lhdf5_cpp
-
-.PHONY: all $(SUBDIRS)
