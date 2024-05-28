@@ -22,6 +22,6 @@ $(SUBDIRS):
 	$(MAKE) -C $@
 
 ../obj/%.o: %.cxx
-	${CXX} $(CFLAGS) -c $< -o $@ -I $(INCLUDES) -I $(EIGEN) -I $(H5ID) -L $(H5LD) -lhdf5 -lhdf5_cpp
+	${CXX} $(CPPFLAGS) -c $< -o $@ -I $(INCLUDES) -I $(EIGEN) -I $(H5ID) -L $(H5LD) -lhdf5 -lhdf5_cpp
 
 .PHONY: all $(SUBDIRS)
