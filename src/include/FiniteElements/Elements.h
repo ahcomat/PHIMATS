@@ -59,6 +59,13 @@ int get_nElements() const { return nElements; };
 int get_nElDispDofs() const { return nElDispDofs; };
 
 /**
+ * @brief Get dimensions of the element. 
+ * 
+ * @return int 
+ */
+int get_nDim() const { return nDim; };
+
+/**
  * @brief Return a const reference to the `elemDispDof`. 
  * 
  * @return const vector<vector<int>>& 
