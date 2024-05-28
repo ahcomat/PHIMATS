@@ -19,7 +19,7 @@ LinearElastic::~LinearElastic(){
     KSPDestroy(&ksp);
 
     // Exit message
-    std::cout << "Solver exited correctly" << "\n";
+    std::cout << "LinearElastic solver exited correctly" << "\n";
 
 }
 
