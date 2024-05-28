@@ -279,21 +279,39 @@ class PreProcessing:
     
         for iNod in range(nNodes):
             
-            # Bottom nodes
+            # x = 0
+            if nodeCoord[iNod][0]==0:
+                presBCs.append([iNod, 0, 0])
+                # x = 0 & y = 0
+                if nodeCoord[iNod][1]==0:
+                    presBCs.append([iNod, 1, 0])
+                    # x = 0 & y = 0 & z = 0
+                    if nodeCoord[iNod][2]==0:
+                        presBCs.append([iNod, 2, 0])
+                    # x = 0 & y = 0 & z = lz
+                    elif nodeCoord[iNod][2]==lz:
+                        presBCs.append([iNod, 2, zDisp])
+                # x = 0 & z = 0
+                elif nodeCoord[iNod][2]==0:
+                    presBCs.append([iNod, 2, 0])
+                # x = 0 & z = lz
+                elif nodeCoord[iNod][2]==lz:
+                    presBCs.append([iNod, 2, zDisp])
+            # y = 0
+            elif nodeCoord[iNod][1]==0:
+                presBCs.append([iNod, 1, 0])
+                # z = 0
             if nodeCoord[iNod][2]==0:
-                # Find bottom left/front corner node.
-                if (nodeCoord[iNod][0] == 0) and (nodeCoord[iNod][1] == 0): 
-                    # Apply fixed BC
-                    presDOFs.append([iNod, 0, 0])
-                    presDOFs.append([iNod, 1, 0]) 
-                    presDOFs.append([iNod, 2, 0]) 
+                    presBCs.append([iNod, 2, 0])
+                # z = lz
+                elif nodeCoord[iNod][2]==lz:
+                    presBCs.append([iNod, 2, zDisp])
 
-                # Other bottom nodes
-                else :  
+            # z = 0
+            elif nodeCoord[iNod][2]==0:                    
                     # z-fixed   
-                    presDOFs.append([iNod, 2, 0])
-
-            # Top nodes
+                presBCs.append([iNod, 2, 0])
+            # z = lz
             elif nodeCoord[iNod][2]==lz:
                 presBCs.append([iNod, 2, zDisp])
                 
