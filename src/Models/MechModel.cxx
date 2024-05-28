@@ -24,7 +24,7 @@ MechModel::MechModel(Elements* elements){
     nTotDof = elements->get_nTotDof();
     nElements = elements->get_nElements();
     nElDispDofs = elements->get_nElDispDofs();
-    nDim = elements->get_nElDispDofs();
+    nDim = elements->get_nDim();
 
     InitializePETSc(elements);
 }
@@ -32,9 +32,7 @@ MechModel::MechModel(Elements* elements){
 MechModel::~MechModel(){
 
     PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint);
-    VecDestroy(&b);
-    VecDestroy(&x);
-    MatDestroy(&A);
+    VecDestroy(&b); VecDestroy(&x); MatDestroy(&A);
     // Exit message
     cout << "MechModel elements exited correctly" << "\n";
 }
@@ -166,6 +164,7 @@ void MechModel::InitializeDirichBC(H5IO& H5File_in){
         // Assign values
         presDofs[iPresDof] = nDim*dummy.at(0)+dummy.at(1); // nDim*iNode+dof
         presVals[iPresDof] = dummy.at(2);
+        // cout << presDofs[iPresDof] << "-->" << presVals[iPresDof] << "\n";
     }
 }
 
@@ -173,7 +172,6 @@ void MechModel::setDirichBC(){
 
     // MatZeroRowsColumns(A, nPresDofs, presDofs, 1.0, NULL, NULL);
     MatZeroRows(A, nPresDofs, presDofs, 1.0, NULL, NULL);
-
     MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
 
     // TODO: Check for incremental loads "ADD_VALUES"
