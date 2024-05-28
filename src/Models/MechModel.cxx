@@ -31,8 +31,10 @@ MechModel::MechModel(Elements* elements){
 
 MechModel::~MechModel(){
 
-    // PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint);
-    VecDestroy(&b); VecDestroy(&x); MatDestroy(&A);
+    PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint);
+    VecDestroy(&b);
+    VecDestroy(&x);
+    MatDestroy(&A);
     // Exit message
     cout << "MechModel elements exited correctly" << "\n";
 }
