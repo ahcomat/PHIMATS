@@ -121,24 +121,6 @@ void Quad4::ReadElementsData(H5IO &H5File_in){
     // for (auto& s : elemNodeConn[0])
     //     cout << s << "\n"; 
 
-    // /**
-    //  * Read Dirichlet BCs
-    //  */
-    // dsetName = "SimulationParameters/nPresDofs";
-    // nPresDofs = H5File_in.ReadScalar(dsetName);
-    // PetscMalloc1(nPresDofs, &presDofs);
-    // PetscMalloc1(nPresDofs, &presVals); 
-    // PetscMalloc1(nTotDof, &Fint); 
-
-    // vector<double> dummy2(3);
-    // for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
-    //     // Read values
-    //     dsetName = "PrescribedDOFs/Prescribed_"+to_string(iPresDof);
-    //     H5File_in.ReadFieldDoub1D(dsetName, dummy2);
-    //     // Assign values
-    //     presDofs[iPresDof] = nDim*dummy2.at(0)+dummy2.at(1); // nDim*iNode+dof
-    //     presVals[iPresDof] = dummy2.at(2);
-    // }
 }
 
 vector<int> Quad4::getElemDispDof(int iElem){
