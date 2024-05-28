@@ -14,25 +14,28 @@
 #define LINEARELASTIC_H
 
 #include <petscsys.h>
+#include <petscvec.h>
 #include <petscmat.h>
 #include <petscksp.h>
 
-class LinearElastic{
+#include "BaseSolver.h"
+
+class LinearElastic: public BaseSolver{
 
 public:
 
 LinearElastic(Mat &A);
 
-~LinearElastic();
+~LinearElastic() override;
 
 /**
- * @brief Solve the linear system `Ax=b`
+ * @brief Solve the linear system `Ax=b`.
  * 
  * @param A 
  * @param x 
  * @param b 
  */
-void Solve(Vec &x, Vec &b);
+void Solve(Vec &x, Vec &b) override;
 
 private:
 
@@ -40,7 +43,7 @@ private:
  * @brief `KSP` object.
  * 
  */
-KSP ksp;
+KSP ksp;  
 
 /**
  * @brief Pre-conditioner.

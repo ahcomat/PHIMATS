@@ -1,7 +1,7 @@
 /**
  * @file LinearElastic.cxx
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief A solver for linear elasticity.
+ * @brief A wrapper for PETSc linear solver `ksp` mainly for linear elasticity.
  * @date 2024-05-28
  * 
  * @copyright Copyright (c) 2024
@@ -21,6 +21,7 @@ LinearElastic::LinearElastic(Mat &A){
     KSPSetType(ksp, KSPPREONLY); // Direct solver for linear systems
     KSPSetFromOptions(ksp);
 
+    // Set preconditioner
     KSPGetPC(ksp, &pc);
     PCSetType(pc, PCLU); // LU preconditioner for direct solver
     PCSetFromOptions(pc);
@@ -28,16 +29,11 @@ LinearElastic::LinearElastic(Mat &A){
 
 LinearElastic::~LinearElastic(){
 
-    KSPDestroy(&ksp);
-
     // Exit message
     std::cout << "LinearElastic solver exited correctly" << "\n";
-
 }
 
 void LinearElastic::Solve(Vec &x, Vec &b){
-
-    // KSPView(ksp, PETSC_VIEWER_STDOUT_WORLD);
 
     KSPSolve(ksp, b, x);
     VecCopy(x, b);
