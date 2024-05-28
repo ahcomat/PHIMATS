@@ -10,7 +10,8 @@
  * 
  * @copyright Copyright (c) 2024
  * 
- * @todo Use a vector of `Elements` for multi-material models. 
+ * @todo - Use a vector of `Elements` for multi-material models.
+ * - Consider inheritance.
  * 
  * Updates (when, what and who)
  * 
@@ -80,6 +81,23 @@ Vec& getX();
  */
 Mat& getA();
 
+/**
+ * @brief Calculates the Fint, strains and stresses. Also evaluates the stress nodal values 
+ *        if `nodStresFlag=true`.
+ * 
+ * @param elements 
+ * @param nodStresFlag 
+ */
+void CalcStres(Elements* elements, T_DMatx DMatx, bool nodStresFlag=false);
+
+/**
+ * @brief Write nodal values.
+ * 
+ * @param elements 
+ * @param H5File_out 
+ */
+void WriteOut(Elements* elements, H5IO &H5File_out);
+
 private:
 
 int nTotDof;        /// @brief Total number of DOFs.
@@ -95,7 +113,6 @@ const PetscScalar* globalBuffer;
 PetscInt nPresDofs;     /// @brief number of prescribed dofs.
 PetscInt  *presDofs;    /// @brief Array to hold the prescribed dofs.
 PetscScalar  *presVals; /// @brief Array to hold the prescribed values.
-PetscScalar  *Fint;     /// @brief Array to hold the internal force vector.
 
 Vec b;   /// @brief RHS vector.
 Vec x;   /// @brief solution vector.

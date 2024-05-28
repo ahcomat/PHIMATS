@@ -31,7 +31,8 @@ MechModel::MechModel(Elements* elements){
 
 MechModel::~MechModel(){
 
-    PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint);
+    // Deallocate memory.
+    PetscFree(presDofs); PetscFree(presVals);
     VecDestroy(&b); VecDestroy(&x); MatDestroy(&A);
     // Exit message
     cout << "MechModel elements exited correctly" << "\n";
@@ -154,7 +155,6 @@ void MechModel::InitializeDirichBC(H5IO& H5File_in){
     nPresDofs = H5File_in.ReadScalar(dsetName);
     PetscMalloc1(nPresDofs, &presDofs);
     PetscMalloc1(nPresDofs, &presVals); 
-    PetscMalloc1(nTotDof, &Fint); 
 
     vector<double> dummy(3);
     for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
@@ -193,3 +193,19 @@ Mat& MechModel::getA(){
 
     return A;
 }
+
+void MechModel::CalcStres(Elements* elements, T_DMatx DMatx, bool nodStresFlag){
+
+    elements->CalcStres(DMatx, x, globalBuffer, nodStresFlag);
+}
+
+void MechModel::WriteOut(Elements* elements, H5IO &H5File_out){
+
+    // Displacements
+    VecGetArrayRead(x, &globalBuffer);
+    H5File_out.WriteArray_1D("Disp", nTotDof, globalBuffer);
+    VecRestoreArrayRead(x, &globalBuffer);
+
+    elements->WriteOut(H5File_out);
+}
+

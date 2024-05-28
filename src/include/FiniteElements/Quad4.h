@@ -13,10 +13,12 @@
 #ifndef QUAD4_H
 #define QUAD4_H
 
+#include <petscsys.h>
+#include"petscvec.h"
+
 #include"Elements.h"
 #include"Nodes.h"
 #include"H5IO.h"
-#include"petsc.h"
 
 using namespace std;
 
@@ -121,17 +123,18 @@ void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, double& intVol, Mat
 void CalcElemStiffMatx(T_DMatx DMatx) override ;
 
 /**
- * @brief Calculates the strains and stresses.
+ * @brief Calculates the Fint, strains and stresses. Also evaluates the stress nodal values 
+ *        if `nodStresFlag=true`.
  * 
  */
-void CalcStres(Matd3x3 DMatx, bool nodStrFlag=false);
+void CalcStres(T_DMatx DMatx, Vec &x, const PetscScalar* globalBuffer, bool nodStresFlag=false) override;
 
 /**
- * @brief Write simulation data to hdf5 file.
+ * @brief Write nodal stresses and strains.
  * 
  * @param H5File_out 
  */
-void WriteOut(H5IO &H5File_out);
+void WriteOut(H5IO &H5File_out) override;
 
 private:
 
@@ -157,15 +160,7 @@ vector<Matd8x8> elStiffMatx;        /// @brief Element stiffness matrix.
 
 // Petsc ----------------------------
 
-// const PetscScalar* globalBuffer;
-
-// // Dirichlet boundary conditions
-// PetscInt  *presDofs;    // Array to hold the prescribed dofs.
-// PetscScalar  *presVals; // Array to hold the prescribed values.
-// PetscScalar  *Fint;     // Array to hold the internal force vector.
-
-// Vec x, b; // The RHS and solution.
-// Mat A; // The global coefficient (stiffness) matrix.
+PetscScalar  *Fint;     // Array to hold the internal force vector.
 
 };
 #endif

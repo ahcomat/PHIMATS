@@ -17,9 +17,10 @@
 #ifndef ELEMENTS_H
 #define ELEMENTS_H
 
-#include<vector>
+#include <vector>
 
-#include"Matrix.h"
+#include "Matrix.h"
+#include "H5IO.h"
 
 using namespace std;
 
@@ -78,6 +79,28 @@ const vector<vector<int>>& get_elemDispDof() const { return elemDispDof; };
  * @return const vector<T_elStiffMatx>& 
  */
 const T_elStiffMatx& get_elStiffMatx() const { return elStiffMatxVariant; }
+
+/**
+ * @brief Calculates the Fint, strains and stresses. Also evaluates the stress nodal values 
+ *        if `nodStresFlag=true`.
+ * 
+ * @param DMatx 
+ * @param x 
+ * @param globalBuffer 
+ * @param nodStresFlag 
+ * 
+ * @todo 
+ * - Probably make a derived `BaseMechElements`?.
+ * - Remove `nodStresFlag`.
+ */
+virtual void CalcStres(T_DMatx DMatx, Vec &x, const PetscScalar* globalBuffer, bool nodStresFlag=false) = 0;
+
+/**
+ * @brief Write element specific int-pts output averaged over the nodes.
+ * 
+ * @param H5File_out 
+ */
+virtual void WriteOut(H5IO &H5File_out) = 0;
 
 protected:
 

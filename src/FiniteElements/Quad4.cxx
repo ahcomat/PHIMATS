@@ -33,10 +33,14 @@ Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes)
     InitShapeFunc();
     ReadElementsData(H5File_in);
     InitializeElements(Nodes);
+    // Allocate memory for `Fint`.
+    PetscMalloc1(nTotDof, &Fint); 
 }
 
 Quad4::~Quad4(){
 
+    // Deallocate memory.
+    PetscFree(Fint);
     // Exit message
     cout << "Quad4 elements exited correctly" << "\n";
 }
@@ -120,7 +124,6 @@ void Quad4::ReadElementsData(H5IO &H5File_in){
 
     // for (auto& s : elemNodeConn[0])
     //     cout << s << "\n"; 
-
 }
 
 vector<int> Quad4::getElemDispDof(int iElem){
@@ -152,7 +155,6 @@ void Quad4::InitializeElements(Nodes &Nodes){
     nodStres.resize(nNodes); nodStran.resize(nNodes); nodCount.resize(nNodes);      
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
-    // Eigen::Matrix<double, 4, 2> dummyElNodCoord; // For node coordinates.
     Matd4x2 dummyElNodCoord; // For node coordinates.
 
     gaussPtCart.resize(nElements);  // Initialize the size of the Cart Gauss points.
@@ -263,96 +265,78 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
     elStiffMatxVariant = &elStiffMatx;
 }
 
-// void Quad4::CalcStres(Matd3x3 DMatx, bool nodStrFlag){
+void Quad4::CalcStres(T_DMatx DMatx, Vec &x, const PetscScalar* globalBuffer, bool nodStresFlag){
 
-//     VecGetArrayRead(x, &globalBuffer);
+    VecGetArrayRead(x, &globalBuffer);
 
-//     ColVecd8 dummyDisp; // for element nodal displacement.
-//     ColVecd8 dummyForc; // for element nodal internal force.
+    ColVecd8 dummyDisp; // for element nodal displacement.
+    ColVecd8 dummyForc; // for element nodal internal force.
 
-//     // Set zeros, otherwise will get garbage \o/ memory values.
-//     // Internal force
-//     for(int iDof=0; iDof<nTotDof; iDof++){
-        
-//         Fint[iDof] = 0;
-//     }
-//     // Nodal stress
-//     if(nodStrFlag){
-//         for(int iNod=0; iNod<nNodes; iNod++){
-//             nodStran.at(iNod).setZero();
-//             nodStres.at(iNod).setZero();
-//             nodCount.at(iNod) = 0;
+    // Set zeros, otherwise will get garbage memory values.
+    for(int iDof=0; iDof<nTotDof; iDof++){
+        Fint[iDof] = 0;
+    }
 
-//             Fint[iNod] = 0;
-//         }
-//     }
+    // Set zeros if nodal stress flag in true.
+    if(nodStresFlag){
+        for(int iNod=0; iNod<nNodes; iNod++){
+            nodStran.at(iNod).setZero();
+            nodStres.at(iNod).setZero();
+            nodCount.at(iNod) = 0;
+        }
+    }
 
+    // Integration point values.
+    for(int iElem=0; iElem<nElements; iElem++){
 
-//     /**
-//      * Integration point values. 
-//      * 
-//      */
-//     for(int iElem=0; iElem<nElements; iElem++){
+        // Get element nodal displacements from the solution vector. 
+        for(int iDof=0; iDof<nElDispDofs; iDof++){
+            dummyDisp(iDof) = globalBuffer[elemDispDof.at(iElem).at(iDof)];
+        }
 
-//         // Get element nodal displacements from the solution vector. 
-//         for(int iDof=0; iDof<nElDispDofs; iDof++){
+        // Gauss points
+        for(int iGaus=0; iGaus<nGauss; iGaus++){
 
-//             dummyDisp(iDof) = globalBuffer[elemDispDof.at(iElem).at(iDof)];
-//         }
+            // Int pt values
+            elStran.at(iElem).at(iGaus) = BuMat.at(iElem).at(iGaus)*dummyDisp;
+            elStres.at(iElem).at(iGaus) = std::get<Matd3x3>(DMatx)*elStran.at(iElem).at(iGaus);
 
-//         // Gauss points
-//         for(int iGaus=0; iGaus<nGauss; iGaus++){
+            dummyForc = BuMat.at(iElem).at(iGaus).transpose()*elStres.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
 
-//             // Int pt values
-//             elStran.at(iElem).at(iGaus) = BuMat.at(iElem).at(iGaus)*dummyDisp;
-//             elStres.at(iElem).at(iGaus) = DMatx*elStran.at(iElem).at(iGaus);
+            // Sometimes it throws segmentation fault, have no idea why (⊙_⊙)？
+            for(int pom=0; pom<nElDispDofs; pom++){
+                Fint[elemDispDof.at(iElem).at(pom)] += dummyForc(pom);
+            }
 
-//             dummyForc = BuMat.at(iElem).at(iGaus).transpose()*elStres.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+            // Nodal values
+            if(nodStresFlag){
+                for(auto iNod=elemNodeConn.at(iElem).begin(); iNod!=elemNodeConn.at(iElem).end(); iNod++){
 
-//             // Sometimes it throws segmentation fault, have no idea why (⊙_⊙)？
-//             for(int pom=0; pom<nElDispDofs; pom++){
+                    nodStran.at(*iNod) += elStran.at(iElem).at(iGaus);
+                    nodStres.at(*iNod) += elStres.at(iElem).at(iGaus);
+                    nodCount.at(*iNod) += 1;
+                }
+            }
+        }
+    }
 
-//                 Fint[elemDispDof.at(iElem).at(pom)] += dummyForc(pom);
-//             }
+    VecRestoreArrayRead(x, &globalBuffer);
 
-//             // Nodal values
-//             if(nodStrFlag){
-//                 for(auto iNod=elemNodeConn.at(iElem).begin(); iNod!=elemNodeConn.at(iElem).end(); iNod++){
+    //Nodal value by averaging
+    if(nodStresFlag){
+        for(int iNod=0; iNod<nNodes; iNod++){
+            
+            nodStran.at(iNod) = nodStran.at(iNod)/nodCount.at(iNod);
+            nodStres.at(iNod) = nodStres.at(iNod)/nodCount.at(iNod);
+        }
+    }
+}
 
-//                     nodStran.at(*iNod) += elStran.at(iElem).at(iGaus);
-//                     nodStres.at(*iNod) += elStres.at(iElem).at(iGaus);
-//                     nodCount.at(*iNod) += 1;
-//                 }
-//             }
-//         }
-//     }
+void Quad4::WriteOut(H5IO &H5File_out){
 
-//     VecRestoreArrayRead(x, &globalBuffer);
-
-//     /**
-//      * Nodal value by averaging
-//      * 
-//      */
-
-//     if(nodStrFlag){
-//         for(int iNod=0; iNod<nNodes; iNod++){
-
-//             nodStran.at(iNod) = nodStran.at(iNod)/nodCount.at(iNod);
-//             nodStres.at(iNod) = nodStres.at(iNod)/nodCount.at(iNod);
-//         }
-//     }
-// }
-
-// void Quad4::WriteOut(H5IO &H5File_out){
-
-//     // Displacements
-//     VecGetArrayRead(x, &globalBuffer);
-//     H5File_out.WriteArray_1D("Disp", nTotDof, globalBuffer);
-//     VecRestoreArrayRead(x, &globalBuffer);
-
-//     H5File_out.WriteArray_1D("Force", nTotDof, Fint);
-
-//     // Stresses and strains
-//     H5File_out.WriteStres3("Strain", nNodes, nStres, nodStran);
-//     H5File_out.WriteStres3("Stress", nNodes, nStres, nodStres);
-// }
+    // Fint
+    H5File_out.WriteArray_1D("Force", nTotDof, Fint);
+    // Stresses and strains
+    H5File_out.WriteStres3("Strain", nNodes, nStres, nodStran);
+    H5File_out.WriteStres3("Stress", nNodes, nStres, nodStres);
+}
