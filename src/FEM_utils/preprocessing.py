@@ -16,8 +16,8 @@ class PreProcessing:
         self.mesh = inputData["mesh"]
         self.elementName = inputData["elementName"]
         self.nElementSets = inputData["nElementSets"]
-        self.presDOFs = inputData["presDOFs"]
-        self.nPresDofs = len(self.presDOFs)
+        self.presBCs = inputData["presBCs"]
+        self.nPresDofs = len(self.presBCs)
 
         #----------------------------------------------------------------------
         # Check for allowed elements and assign element data (number of nodes,
@@ -152,7 +152,7 @@ class PreProcessing:
             self.grp_prescribedDOFs = self.fh5.create_group('PrescribedDOFs')
             
             for iPreDof in range(self.nPresDofs):
-                self.grp_prescribedDOFs.create_dataset("Prescribed_"+str(iPreDof), data=self.presDOFs[iPreDof]) 
+                self.grp_prescribedDOFs.create_dataset("Prescribed_"+str(iPreDof), data=self.presBCs[iPreDof]) 
                 
             #----------------------------------------------------------------------
             # Close hdf5 file
@@ -215,7 +215,7 @@ class PreProcessing:
         #----------------------------------------------------------------------
         
         # List of prescribed degrees of freedom. Order of list [node id, dof, value]
-        presDOFs = []   
+        presBCs = []   
         # Number of nodes
         nNodes = mesh.points.shape[0]  
         # Node coordinates
@@ -231,26 +231,26 @@ class PreProcessing:
                 # Find bottom left corner node.
                 if nodeCoord[iNod][0] == 0: 
                     # Apply fixed BC
-                    presDOFs.append([iNod, 0, 0])
-                    presDOFs.append([iNod, 1, 0]) 
+                    presBCs.append([iNod, 0, 0])
+                    presBCs.append([iNod, 1, 0]) 
                 # Other bottom nodes
                 else :  
                     # Y-fixed   
-                    presDOFs.append([iNod, 1, 0])
+                    presBCs.append([iNod, 1, 0])
 
             # Top nodes
             elif nodeCoord[iNod][1]==ly:
                 # Top left corner node
                 if nodeCoord[iNod][0] == 0:
                     # Fix-x 
-                    presDOFs.append([iNod, 0, 0])
-                    presDOFs.append([iNod, 1, yDisp])
+                    presBCs.append([iNod, 0, 0])
+                    presBCs.append([iNod, 1, yDisp])
                 # Other top nodes
                 else :
                     # Prescribed y
-                    presDOFs.append([iNod, 1, yDisp])
+                    presBCs.append([iNod, 1, yDisp])
         
-        return presDOFs
+        return presBCs
 
 #-----------------------------------------------------------------------------#
 
@@ -267,7 +267,7 @@ class PreProcessing:
         #----------------------------------------------------------------------
         
         # List of prescribed degrees of freedom. Order of list [node id, dof, value]
-        presDOFs = []   
+        presBCs = []   
         # Number of nodes
         nNodes = mesh.points.shape[0]  
         # Node coordinates
@@ -311,14 +311,14 @@ class PreProcessing:
 #-----------------------------------------------------------------------------#
 
     @staticmethod
-    def WriteDispBCs(elementName, mesh, presDOFs, dispDofs=2):
+    def WriteDispBCs(elementName, mesh, presBCs, dispDofs=2):
         
         #----------------------------------------------------------------------
         # Prepare data  
         #----------------------------------------------------------------------
         
         # Number of prescribed dofs
-        nPresDofs = len(presDOFs)
+        nPresDofs = len(presBCs)
         # Number of nodes
         nNodes = mesh.points.shape[0] 
         # Node coordinates
@@ -353,8 +353,8 @@ class PreProcessing:
         #----------------------------------------------------------------------
 
         for i in range(nPresDofs):
-            pDOF = presDOFs[i][0]*dispDofs + presDOFs[i][1]
-            uDisp[pDOF] = presDOFs[i][2]
+            pDOF = presBCs[i][0]*dispDofs + presBCs[i][1]
+            uDisp[pDOF] = presBCs[i][2]
             flagsDisp[pDOF] = 1
             
         #----------------------------------------------------------------------
