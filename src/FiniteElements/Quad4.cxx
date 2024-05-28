@@ -241,7 +241,7 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
     elStiffMatx.resize(nElements); // Initialize the vector containing each element stiffness matrix.
 
     Matd3x8 dummyBu;    // dummy for strain matrix.
-    double dummydVol;   // dummy for int point volume.
+    double dummydVol;   // dummy for int-pt volume.
 
     // Loop through all elements.
     for(int iElem=0; iElem<nElements; iElem++){
@@ -259,35 +259,9 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
         }        
     }
 
-    // cout << elStiffMatx.at(10) << "\n";
+    // Pointer to the vector, not the vector itself.
     elStiffMatxVariant = &elStiffMatx;
 }
-
-// void Quad4::setDirichBC(){
-
-//     // MatZeroRowsColumns(A, nPresDofs, presDofs, 1.0, NULL, NULL);
-//     MatZeroRows(A, nPresDofs, presDofs, 1.0, NULL, NULL);
-
-//     MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
-
-//     VecSetValues(b, nPresDofs, presDofs, presVals, ADD_VALUES); // Check for incremental loads "ADD_VALUES"
-//     VecAssemblyBegin(b); VecAssemblyEnd(b);
-// }
-
-// Vec& Quad4::getB(){
-
-//     return b;
-// }
-
-// Vec& Quad4::getX(){
-
-//     return x;
-// }
-
-// Mat& Quad4::getA(){
-
-//     return A;
-// }
 
 // void Quad4::CalcStres(Matd3x3 DMatx, bool nodStrFlag){
 

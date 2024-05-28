@@ -178,3 +178,18 @@ void MechModel::setDirichBC(){
     VecSetValues(b, nPresDofs, presDofs, presVals, ADD_VALUES); 
     VecAssemblyBegin(b); VecAssemblyEnd(b);
 }
+
+Vec& MechModel::getB(){
+
+    return b;
+}
+
+Vec& MechModel::getX(){
+
+    return x;
+}
+
+Mat& MechModel::getA(){
+
+    return A;
+}

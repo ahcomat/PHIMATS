@@ -120,12 +120,6 @@ void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, double& intVol, Mat
  */
 void CalcElemStiffMatx(T_DMatx DMatx) override ;
 
-Vec& getB();
-
-Vec& getX();
-
-Mat& getA();
-
 /**
  * @brief Calculates the strains and stresses.
  * 

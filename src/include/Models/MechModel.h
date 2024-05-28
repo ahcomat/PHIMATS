@@ -59,6 +59,27 @@ void InitializeDirichBC(H5IO& H5File_in);
  */
 void setDirichBC();
 
+/**
+ * @brief Pass reference of RHS (to solver).
+ * 
+ * @return Vec& 
+ */
+Vec& getB();
+
+/**
+ * @brief Pass a reference of the solution vector (to solver).
+ * 
+ * @return Vec& 
+ */
+Vec& getX();
+
+/**
+ * @brief Pass a reference fo the stiffness matrix (to solver).
+ * 
+ * @return Mat& 
+ */
+Mat& getA();
+
 private:
 
 int nTotDof;        /// @brief Total number of DOFs.
