@@ -33,7 +33,6 @@ Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes)
     InitShapeFunc();
     ReadElementsData(H5File_in);
     InitializeElements(Nodes);
-    // InitPETSC();
 }
 
 Quad4::~Quad4(){
