@@ -282,11 +282,6 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
     elStiffMatxVariant = &elStiffMatx;
 }
 
-const T_elStiffMatx& Quad4::get_elStiffMatx() const {
-
-    return elStiffMatxVariant;
-}
-
 // void Quad4::setDirichBC(){
 
 //     // MatZeroRowsColumns(A, nPresDofs, presDofs, 1.0, NULL, NULL);

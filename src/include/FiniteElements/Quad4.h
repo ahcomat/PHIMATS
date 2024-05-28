@@ -120,19 +120,6 @@ void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, double& intVol, Mat
  */
 void CalcElemStiffMatx(T_DMatx DMatx) override ;
 
-/**
- * @brief Return the vector of element stiffness matrix k_ll.
- * 
- * @return const vector<T_elStiffMatx>& 
- */
-const T_elStiffMatx& get_elStiffMatx() const override;
-
-/**
- * @brief Set Dirichlet boundary conditions.
- * 
- */
-void setDirichBC();
-
 Vec& getB();
 
 Vec& getX();

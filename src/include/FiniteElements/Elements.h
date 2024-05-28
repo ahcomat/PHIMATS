@@ -66,11 +66,11 @@ int get_nElDispDofs() const { return nElDispDofs; };
 const vector<vector<int>>& get_elemDispDof() const { return elemDispDof; };
 
 /**
- * @brief Return a const reference to the `elStiffMatx`.
+ * @brief Return const reference to the vector of element stiffness matrix k_ll.
  * 
  * @return const vector<T_elStiffMatx>& 
  */
-virtual const T_elStiffMatx& get_elStiffMatx() const = 0;
+const T_elStiffMatx& get_elStiffMatx() const { return elStiffMatxVariant; }
 
 protected:
 
