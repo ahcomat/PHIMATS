@@ -13,7 +13,7 @@ SOURCES:=${wildcard *.cxx}
 # Name of objects
 OBJECTS:=${patsubst %.cxx,${OBJDIR}/%.o,${SOURCES}}
 
-export EXCLUDE = obj/ include/ FEM_utils/ Solvers/ #FiniteElements/ Materials/ 
+export EXCLUDE = obj/ include/ FEM_utils/ #Solvers/ FiniteElements/ Materials/ 
 
 SUBDIRS := $(wildcard */)
 SUBDIRS :=$(sort $(dir $(wildcard */)))
