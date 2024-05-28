@@ -41,10 +41,23 @@ MechModel(Elements* elements);
 void InitializePETSc(Elements* elements);
 
 /**
- * @brief Assemble the global stiffness matrix
+ * @brief Assemble the global stiffness matrix.
  * 
  */
 void Assemble(Elements* elements);
+
+/**
+ * @brief Reads and initializes Dirichlet BCs.
+ * 
+ * @param H5File_in 
+ */
+void InitializeDirichBC(H5IO& H5File_in);
+
+/**
+ * @brief Set Dirichlet boundary conditions in the RHS `b` and global stiffness matrix `A`.
+ * 
+ */
+void setDirichBC();
 
 private:
 
