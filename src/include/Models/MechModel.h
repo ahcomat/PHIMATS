@@ -28,10 +28,17 @@ class MechModel
 
 public:
 
-MechModel(Elements* elements, H5IO& H5File_in);
+MechModel(Elements* elements);
 ~MechModel();
 
-void initializePETSc(Elements* elements, H5IO& H5File_in);
+/**
+ * @brief Initializes and preallocates the RHS `b`, solution `x` and 
+ *        stiffness matrix `A.
+ * 
+ * @param elements 
+ * @param H5File_in 
+ */
+void InitializePETSc(Elements* elements);
 
 /**
  * @brief Assemble the global stiffness matrix
@@ -44,20 +51,21 @@ private:
 int nTotDof;        /// @brief Total number of DOFs.
 int nElDispDofs;    /// @brief Number of element displacement dofs.
 int nElements;      /// @brief Total number of elements.
+int nDim;           /// @brief Spatial dimensions of the model.
 
 // PETSc ------------------------
 
 const PetscScalar* globalBuffer;
 
 // Boundary conditions
+PetscInt nPresDofs;     /// @brief number of prescribed dofs.
 PetscInt  *presDofs;    /// @brief Array to hold the prescribed dofs.
 PetscScalar  *presVals; /// @brief Array to hold the prescribed values.
 PetscScalar  *Fint;     /// @brief Array to hold the internal force vector.
 
 Vec b;   /// @brief RHS vector.
-Vec x; // @brief solution vector.
-
-Mat A; /// @brief The global coefficient (stiffness) matrix.
+Vec x;   /// @brief solution vector.
+Mat A;   /// @brief The global coefficient (stiffness) matrix.
 
 };
 #endif

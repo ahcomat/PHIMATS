@@ -19,13 +19,14 @@
 
 using namespace std;
 
-MechModel::MechModel(Elements* elements, H5IO& H5File_in){
+MechModel::MechModel(Elements* elements){
 
     nTotDof = elements->get_nTotDof();
     nElements = elements->get_nElements();
     nElDispDofs = elements->get_nElDispDofs();
+    nDim = elements->get_nElDispDofs();
 
-    initializePETSc(elements, H5File_in);
+    InitializePETSc(elements);
 }
 
 MechModel::~MechModel(){
@@ -36,7 +37,7 @@ MechModel::~MechModel(){
     cout << "MechModel elements exited correctly" << "\n";
 }
 
-void MechModel::initializePETSc(Elements* elements, H5IO& H5File_in){
+void MechModel::InitializePETSc(Elements* elements){
 
     const vector<vector<int>>& elemDispDof = elements->get_elemDispDof();
 
@@ -143,4 +144,37 @@ void MechModel::Assemble(Elements* elements){
     }
 
     MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
+}
+
+void MechModel::InitializeDirichBC(H5IO& H5File_in){
+
+    // Read Dirichlet BCs
+    string dsetName;
+    dsetName = "SimulationParameters/nPresDofs";
+    nPresDofs = H5File_in.ReadScalar(dsetName);
+    PetscMalloc1(nPresDofs, &presDofs);
+    PetscMalloc1(nPresDofs, &presVals); 
+    PetscMalloc1(nTotDof, &Fint); 
+
+    vector<double> dummy(3);
+    for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
+        // Read values
+        dsetName = "PrescribedDOFs/Prescribed_"+to_string(iPresDof);
+        H5File_in.ReadFieldDoub1D(dsetName, dummy);
+        // Assign values
+        presDofs[iPresDof] = nDim*dummy.at(0)+dummy.at(1); // nDim*iNode+dof
+        presVals[iPresDof] = dummy.at(2);
+    }
+}
+
+void MechModel::setDirichBC(){
+
+    // MatZeroRowsColumns(A, nPresDofs, presDofs, 1.0, NULL, NULL);
+    MatZeroRows(A, nPresDofs, presDofs, 1.0, NULL, NULL);
+
+    MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
+
+    // TODO: Check for incremental loads "ADD_VALUES"
+    VecSetValues(b, nPresDofs, presDofs, presVals, ADD_VALUES); 
+    VecAssemblyBegin(b); VecAssemblyEnd(b);
 }
