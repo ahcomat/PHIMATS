@@ -301,15 +301,15 @@ class PreProcessing:
             elif nodeCoord[iNod][1]==0:
                 presBCs.append([iNod, 1, 0])
                 # z = 0
-            if nodeCoord[iNod][2]==0:
+                if nodeCoord[iNod][2]==0:
                     presBCs.append([iNod, 2, 0])
                 # z = lz
                 elif nodeCoord[iNod][2]==lz:
                     presBCs.append([iNod, 2, zDisp])
-
+                    
             # z = 0
             elif nodeCoord[iNod][2]==0:                    
-                    # z-fixed   
+                # z-fixed   
                 presBCs.append([iNod, 2, 0])
             # z = lz
             elif nodeCoord[iNod][2]==lz:
