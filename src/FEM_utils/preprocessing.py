@@ -295,18 +295,9 @@ class PreProcessing:
 
             # Top nodes
             elif nodeCoord[iNod][2]==lz:
-                # Top left corner node
-                if (nodeCoord[iNod][0] == 0) and (nodeCoord[iNod][1] == 0):
-                    # Fix-x and y
-                    presDOFs.append([iNod, 0, 0])
-                    presDOFs.append([iNod, 1, 0])
-                    presDOFs.append([iNod, 2, zDisp])
-                # Other top nodes
-                else :
-                    # Prescribed y
-                    presDOFs.append([iNod, 2, zDisp])
-        
-        return presDOFs
+                presBCs.append([iNod, 2, zDisp])
+                
+        return presBCs
 
 #-----------------------------------------------------------------------------#
 
