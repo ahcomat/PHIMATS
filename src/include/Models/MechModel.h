@@ -107,7 +107,7 @@ int nDim;           /// @brief Spatial dimensions of the model.
 
 // PETSc ------------------------
 
-const PetscScalar* globalBuffer;
+const double* globalBuffer;
 
 // Boundary conditions
 PetscInt nPresDofs;     /// @brief number of prescribed dofs.

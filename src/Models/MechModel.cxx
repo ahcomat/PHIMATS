@@ -196,7 +196,9 @@ Mat& MechModel::getA(){
 
 void MechModel::CalcStres(BaseElemMech* elements, T_DMatx DMatx, bool nodStresFlag){
 
-    elements->CalcStres(DMatx, x, globalBuffer, nodStresFlag);
+    VecGetArrayRead(x, &globalBuffer);
+    elements->CalcStres(DMatx, globalBuffer, nodStresFlag);
+    VecRestoreArrayRead(x, &globalBuffer);
 }
 
 void MechModel::WriteOut(BaseElemMech* elements, H5IO &H5File_out){

@@ -61,7 +61,7 @@ const vector<vector<int>>& get_elemDispDof() const { return elemDispDof; };
  * @todo 
  * - Remove `nodStresFlag`.
  */
-virtual void CalcStres(T_DMatx DMatx, Vec &x, const PetscScalar* globalBuffer, bool nodStresFlag=false) = 0;
+virtual void CalcStres(T_DMatx DMatx, const double* globalBuffer, bool nodStresFlag=false) = 0;
 
 protected:
 

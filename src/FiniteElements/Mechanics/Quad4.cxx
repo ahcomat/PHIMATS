@@ -265,9 +265,7 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
     elStiffMatxVariant = &elStiffMatx;
 }
 
-void Quad4::CalcStres(T_DMatx DMatx, Vec &x, const PetscScalar* globalBuffer, bool nodStresFlag){
-
-    VecGetArrayRead(x, &globalBuffer);
+void Quad4::CalcStres(T_DMatx DMatx, const PetscScalar* globalBuffer, bool nodStresFlag){
 
     ColVecd8 dummyDisp; // for element nodal displacement.
     ColVecd8 dummyForc; // for element nodal internal force.
@@ -319,8 +317,6 @@ void Quad4::CalcStres(T_DMatx DMatx, Vec &x, const PetscScalar* globalBuffer, bo
             }
         }
     }
-
-    VecRestoreArrayRead(x, &globalBuffer);
 
     //Nodal value by averaging
     if(nodStresFlag){
