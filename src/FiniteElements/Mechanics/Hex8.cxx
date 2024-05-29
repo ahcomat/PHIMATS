@@ -12,7 +12,7 @@
 
 #include<iostream>
 
-#include"FiniteElements/Hex8.h"
+#include"FiniteElements/Mechanics/Hex8.h"
 
 #ifndef DEBUG
 #define at(x) operator[](x)
@@ -27,7 +27,7 @@
 */
 
 Hex8::Hex8(H5IO &H5File_in, Nodes &Nodes)
-    : Elements(2, 4, 2, 3, 8, 4){ // nDim, nElNodes, dispDofs, nStres, nElDispDofs, nGauss
+    : BaseElemMech(2, 4, 2, 3, 8, 4){ // nDim, nElNodes, dispDofs, nStres, nElDispDofs, nGauss
 
     // InitShapeFunc();
     // ReadElementsData(H5File_in);

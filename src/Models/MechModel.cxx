@@ -3,7 +3,7 @@
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
  * @brief A class based on mechanical models to interface with PETSc based global
  *        stiffness matrix, solution vector and boundary conditions. It calls
- *        `Elements::CalcElemStiffMatx` to build the local stiffness matrix. 
+ *        `BaseElemMech::CalcElemStiffMatx` to build the local stiffness matrix. 
  *        It also manages the output by writing to H5file_out. 
  *          
  * @date 2024-05-24
@@ -19,7 +19,7 @@
 
 using namespace std;
 
-MechModel::MechModel(Elements* elements){
+MechModel::MechModel(BaseElemMech* elements){
 
     nTotDof = elements->get_nTotDof();
     nElements = elements->get_nElements();
@@ -38,7 +38,7 @@ MechModel::~MechModel(){
     cout << "MechModel elements exited correctly" << "\n";
 }
 
-void MechModel::InitializePETSc(Elements* elements){
+void MechModel::InitializePETSc(BaseElemMech* elements){
 
     const vector<vector<int>>& elemDispDof = elements->get_elemDispDof();
 
@@ -106,7 +106,7 @@ void MechModel::InitializePETSc(Elements* elements){
     MatSetOption(A, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_FALSE); 
 }
 
-void MechModel::Assemble(Elements* elements){
+void MechModel::Assemble(BaseElemMech* elements){
 
     const vector<vector<int>>& elemDispDof = elements->get_elemDispDof();
 
@@ -194,12 +194,12 @@ Mat& MechModel::getA(){
     return A;
 }
 
-void MechModel::CalcStres(Elements* elements, T_DMatx DMatx, bool nodStresFlag){
+void MechModel::CalcStres(BaseElemMech* elements, T_DMatx DMatx, bool nodStresFlag){
 
     elements->CalcStres(DMatx, x, globalBuffer, nodStresFlag);
 }
 
-void MechModel::WriteOut(Elements* elements, H5IO &H5File_out){
+void MechModel::WriteOut(BaseElemMech* elements, H5IO &H5File_out){
 
     // Displacements
     VecGetArrayRead(x, &globalBuffer);

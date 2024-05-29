@@ -13,7 +13,7 @@
 #include<iostream>
 #include<algorithm>
 
-#include"FiniteElements/Quad4.h"
+#include"FiniteElements/Mechanics/Quad4.h"
 
 #ifndef DEBUG
 #define at(x) operator[](x)
@@ -28,7 +28,7 @@
 */
 
 Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes)
-    : Elements(2, 4, 2, 3, 8, 4){ // nDim, nElNodes, dispDofs, nStres, nElDispDofs, nGauss
+    : BaseElemMech(2, 4, 2, 3, 8, 4){ // nDim, nElNodes, dispDofs, nStres, nElDispDofs, nGauss
 
     InitShapeFunc();
     ReadElementsData(H5File_in);

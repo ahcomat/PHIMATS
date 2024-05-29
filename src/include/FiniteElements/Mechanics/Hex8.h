@@ -13,14 +13,12 @@
 #ifndef HEX8_H
 #define HEX8_H
 
-#include "Elements.h"
+#include "BaseElemMech.h"
 #include "Nodes.h"
-#include "H5IO.h"
-#include "petsc.h"
 
 using namespace std;
 
-class Hex8: public Elements{
+class Hex8: public BaseElemMech{
 
 public:
 

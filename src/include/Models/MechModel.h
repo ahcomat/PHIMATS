@@ -3,14 +3,14 @@
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
  * @brief A class based on mechanical models to interface with PETSc based global
  *        stiffness matrix, solution vector and boundary conditions. It calls
- *        `Elements::CalcElemStiffMatx` to build the local stiffness matrix. 
+ *        `BaseElemMech::CalcElemStiffMatx` to build the local stiffness matrix. 
  *        It also manages the output by writing to H5file_out. 
  *          
  * @date 2024-05-24
  * 
  * @copyright Copyright (c) 2024
  * 
- * @todo - Use a vector of `Elements` for multi-material models.
+ * @todo - Use a vector of `BaseElemMech` for multi-material models.
  * - Consider inheritance.
  * 
  * Updates (when, what and who)
@@ -22,14 +22,14 @@
 
 #include"petsc.h"
 #include"H5IO.h"
-#include"FiniteElements/Elements.h"
+#include"FiniteElements/Mechanics/BaseElemMech.h"
 
 class MechModel
 {
 
 public:
 
-MechModel(Elements* elements);
+MechModel(BaseElemMech* elements);
 ~MechModel();
 
 /**
@@ -39,13 +39,13 @@ MechModel(Elements* elements);
  * @param elements 
  * @param H5File_in 
  */
-void InitializePETSc(Elements* elements);
+void InitializePETSc(BaseElemMech* elements);
 
 /**
  * @brief Assemble the global stiffness matrix.
  * 
  */
-void Assemble(Elements* elements);
+void Assemble(BaseElemMech* elements);
 
 /**
  * @brief Reads and initializes Dirichlet BCs.
@@ -88,7 +88,7 @@ Mat& getA();
  * @param elements 
  * @param nodStresFlag 
  */
-void CalcStres(Elements* elements, T_DMatx DMatx, bool nodStresFlag=false);
+void CalcStres(BaseElemMech* elements, T_DMatx DMatx, bool nodStresFlag=false);
 
 /**
  * @brief Write nodal values.
@@ -96,7 +96,7 @@ void CalcStres(Elements* elements, T_DMatx DMatx, bool nodStresFlag=false);
  * @param elements 
  * @param H5File_out 
  */
-void WriteOut(Elements* elements, H5IO &H5File_out);
+void WriteOut(BaseElemMech* elements, H5IO &H5File_out);
 
 private:
 

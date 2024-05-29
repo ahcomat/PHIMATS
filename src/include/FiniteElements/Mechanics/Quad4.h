@@ -13,16 +13,12 @@
 #ifndef QUAD4_H
 #define QUAD4_H
 
-#include <petscsys.h>
-#include"petscvec.h"
-
-#include"Elements.h"
+#include"BaseElemMech.h"
 #include"Nodes.h"
-#include"H5IO.h"
 
 using namespace std;
 
-class Quad4: public Elements{
+class Quad4: public BaseElemMech{
 
 public:
 

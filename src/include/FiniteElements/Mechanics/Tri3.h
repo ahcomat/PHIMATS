@@ -13,18 +13,17 @@
 #ifndef TRI3_H
 #define TRI3_H
 
-#include"Elements.h"
+#include"BaseElemMech.h"
 #include"Nodes.h"
-#include"H5IO.h"
-#include"petsc.h"
 
 using namespace std;
 
-class Tri3: public Elements{
+class Tri3: public BaseElemMech{
 
 public:
 
 Tri3(H5IO &H5File_in, Nodes &Nodes);   
+
 ~Tri3() override ;
 
 /**

@@ -13,7 +13,7 @@
 #include<iostream>
 #include<algorithm>
 
-#include"FiniteElements/Tri3.h"
+#include"FiniteElements/Mechanics/Tri3.h"
 
 #ifndef DEBUG
 #define at(x) operator[](x)
@@ -28,7 +28,7 @@
 */
 
 Tri3::Tri3(H5IO &H5File_in, Nodes &Nodes)
-    : Elements(2, 3, 2, 3, 6, 1){ // nDim, nElNodes, dispDofs, nStres, nElDispDofs, nGauss
+    : BaseElemMech(2, 3, 2, 3, 6, 1){ // nDim, nElNodes, dispDofs, nStres, nElDispDofs, nGauss
 
     InitShapeFunc();
     ReadElementsData(H5File_in);
