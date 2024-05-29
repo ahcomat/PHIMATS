@@ -109,7 +109,7 @@ RowVecd2 getGaussCart(RowVecd4& sFunc, Matd4x2& elCoord);
  * @param cartDeriv 
  * @param strainMat 
  */
-void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, double& intVol, Matd2x4& cartDeriv, Matd3x8& strainMat);
+void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double& wt, double& intVol, Matd2x4& cartDeriv, Matd3x8& strainMat);
 
 /**
  * @brief Evaluates the element stiffness matrix for all elements.

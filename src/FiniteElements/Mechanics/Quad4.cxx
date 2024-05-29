@@ -187,7 +187,7 @@ void Quad4::InitializeElements(Nodes &Nodes){
         
             // Cart coord of iGauss point.
             dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
-            CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss), BuMat.at(iElem).at(iGauss));
+            CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss), BuMat.at(iElem).at(iGauss));
         }
         gaussPtCart.at(iElem) = dummyElemGauss;
         intPtVol.at(iElem) = dummyIntVol;
@@ -204,7 +204,7 @@ RowVecd2 Quad4::getGaussCart(RowVecd4& sFunc, Matd4x2& elNodCoord){
     return sFunc*elNodCoord;  // N_i x_ij
 }
 
-void Quad4::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, double& intVol, Matd2x4& cartDeriv, Matd3x8& strainMat){
+void Quad4::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double& wt, double& intVol, Matd2x4& cartDeriv, Matd3x8& strainMat){
 
     // Calculates the jacobian matrix J_jj = dN_ji x_ij
     Matd2x2 jacMat = sFuncDeriv*elNodCoord;
