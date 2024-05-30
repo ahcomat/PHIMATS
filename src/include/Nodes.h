@@ -42,7 +42,7 @@ vector<double> getNodCoord(int nod);
  * @brief returns the total number of nodes.
  * 
  */
-int getNNodes();
+int get_nNodes();
 
 private:
 

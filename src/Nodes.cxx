@@ -34,7 +34,7 @@ vector<double> Nodes::getNodCoord(int nod){
     return nodeCoordinates.at(nod); 
 }
 
-int Nodes::getNNodes(){
+int Nodes::get_nNodes(){
 
     return nNodes;
 }

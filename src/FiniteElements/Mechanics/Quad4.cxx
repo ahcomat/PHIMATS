@@ -133,7 +133,7 @@ vector<int> Quad4::getElemDispDof(int iElem){
 
 void Quad4::InitializeElements(Nodes &Nodes){
 
-    nNodes = Nodes.getNNodes();   // Get total number of nodes. 
+    nNodes = Nodes.get_nNodes();   // Get total number of nodes. 
     nTotDof = dispDofs*nNodes;    // Calc total number of DOFs.
 
     // Initialize the storages for int-pt stresses/strains
