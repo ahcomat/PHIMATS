@@ -100,8 +100,8 @@ void MechModel::Assemble(BaseElemMech* elements){
     PetscInt   i1[nElDispDofs], j1[nElDispDofs]; // Indices for row and columns to insert.
     PetscScalar vals[nElDispDofs*nElDispDofs];   // values.
 
-    // `T_elStiffMatx` variant that holds a pointer to the vector.
-    const T_elStiffMatx& elStiffMatx_ptr = elements->get_elStiffMatx();
+    // `T_ElStiffMatx` variant that holds a pointer to the vector.
+    const T_ElStiffMatx& elStiffMatx_ptr = elements->getElStiffMatx();
 
     if (std::holds_alternative<vector<Matd8x8>*>(elStiffMatx_ptr)){
 

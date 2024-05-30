@@ -52,9 +52,9 @@ virtual void CalcElemStiffMatx(T_DMatx DMatx) = 0;
 /**
  * @brief Return const reference to the vector of element stiffness matrix k_ll.
  * 
- * @return const vector<T_elStiffMatx>& 
+ * @return const vector<T_ElStiffMatx>& 
  */
-const T_elStiffMatx& get_elStiffMatx() const { return elStiffMatxVariant; }
+const T_ElStiffMatx& getElStiffMatx() const { return elStiffMatxVariant; }
 
 /**
  * @brief Write element specific int-pts output averaged over the nodes.
@@ -74,7 +74,7 @@ int nPresDofs;      /// @brief Number of prescribed displacement dofs.
 vector<vector<double>> gaussPts;    /// @brief Gauss points in natural coordinates. 
 vector<vector<int>> elemNodeConn;   /// @brief Node connectivity.
 
-T_elStiffMatx elStiffMatxVariant;   /// @brief Variant for returning elStiffMatx. 
+T_ElStiffMatx elStiffMatxVariant;   /// @brief Variant for returning elStiffMatx. 
 
 };
 #endif
