@@ -64,6 +64,19 @@ void ReadElementsData(H5IO &H5File_in);
  */
 vector<int> getElemDispDof(int iElem);
 
+/**
+ * @brief Initializes the data for all elements: `elemNodCoord`, `gaussPtCart`, `BMat`, `BuMat`
+ *  and `intPtVol`.
+ * 
+ * @param Nodes 
+ */
+void InitializeElements(Nodes& Nodes);
+
+void CalcElemStiffMatx(T_DMatx DMatx) override;
+
+void CalcStres(T_DMatx DMatx, const double* globalBuffer, bool nodStresFlag=false) override;
+
+void WriteOut(H5IO &H5File_out) override;
 
 private:
 
@@ -73,6 +86,21 @@ vector<RowVecd3> shapeFunc; /// @brief Values of the shape functions at integrat
 vector<Matd2x3> shapeFuncDeriv;  /// @brief Values of the shape function derivatives at integration points in natural coordinates. 
 vector<Matd3x2> elemNodCoord;     /// @brief Node Coordinates. 
 vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements. 
+
+vector<vector<ColVecd3>> elStran;   /// @brief Int-pt strains.
+vector<vector<ColVecd3>> elStres;   /// @brief Int-pt stresses.
+vector<ColVecd3> nodStran;          /// @brief Nod-pt strains.
+vector<ColVecd3> nodStres;          /// @brief Nod-pt stresses.
+vector<int> nodCount;     /// @brief Counter for integration points surrounding nodes.
+
+vector<vector<Matd2x3>> BMat;       /// @brief Derivatives (scalar) matrix.
+vector<vector<Matd3x6>> BuMat;      /// @brief Strain matrix.
+vector<vector<double>> intPtVol;    /// @brief Int-pt volume.
+vector<Matd6x6> elStiffMatx;        /// @brief Element stiffness matrix.
+
+// Petsc ----------------------------
+
+PetscScalar* Fint;     // Array to hold the internal force vector.
 
 };
 #endif

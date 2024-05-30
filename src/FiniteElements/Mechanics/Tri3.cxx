@@ -1,15 +1,3 @@
-/**
- * @file Tri3.h
- * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief Class for managing tri3 elements.
- * @date 2024-05-23
- * 
- * @copyright Copyright (c) 2024
- * 
- * Updates (when, what and who)
- * 
- */
-
 #include<iostream>
 #include<algorithm>
 
@@ -33,13 +21,12 @@ Tri3::Tri3(H5IO &H5File_in, Nodes &Nodes)
     InitShapeFunc();
     ReadElementsData(H5File_in);
     // InitializeElements(Nodes);
-    // InitPETSC();
 }
 
 Tri3::~Tri3(){
 
-    // PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint);
-    // VecDestroy(&b); MatDestroy(&A);
+    // Deallocation
+    PetscFree(Fint);
     // Exit message
     cout << "Tri3 elements exited correctly" << "\n";
 }
@@ -61,7 +48,6 @@ void Tri3::InitShapeFunc(){
         shapeFunc.at(i) = getShapeFunc(gaussPts.at(i).at(0), gaussPts.at(i).at(1));
         shapeFuncDeriv.at(i) = getShapeFuncDeriv(gaussPts.at(i).at(0), gaussPts.at(i).at(1));
     }
-
 }
 
 RowVecd3 Tri3::getShapeFunc(double xi, double eta){
@@ -94,7 +80,7 @@ Matd2x3 Tri3::getShapeFuncDeriv(double xi, double eta){
 
 void Tri3::ReadElementsData(H5IO &H5File_in){
 
-        string dsetName;
+    string dsetName;
     dsetName = "SimulationParameters/nElements";
     nElements = H5File_in.ReadScalar(dsetName);
 
@@ -115,8 +101,8 @@ void Tri3::ReadElementsData(H5IO &H5File_in){
         elemDispDof.at(iElem) = getElemDispDof(iElem);
     }
 
-    for (auto& s : elemNodeConn[0])
-        cout << s << "\n";
+    // for (auto& s : elemNodeConn[0])
+    //     cout << s << "\n";
 }
 
 vector<int> Tri3::getElemDispDof(int iElem){
@@ -130,3 +116,16 @@ vector<int> Tri3::getElemDispDof(int iElem){
 
     return dispDof;
 }
+
+void Tri3::CalcElemStiffMatx(T_DMatx DMatx){
+
+}
+
+void Tri3::CalcStres(T_DMatx DMatx, const double* globalBuffer, bool nodStresFlag){
+
+}
+
+void Tri3::WriteOut(H5IO &H5File_out){
+
+}
+

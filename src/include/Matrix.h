@@ -31,6 +31,7 @@ typedef Eigen::RowVector<double, 4> RowVecd4;
 typedef Eigen::Matrix<double, 2, 2> Matd2x2;
 typedef Eigen::Matrix<double, 3, 3> Matd3x3; 
 typedef Eigen::Matrix<double, 6, 6> Matd6x6;
+typedef Eigen::Matrix<double, 8, 8> Matd8x8;
 
 typedef Eigen::Matrix<double, 4, 2> Matd4x2;           
 typedef Eigen::Matrix<double, 2, 4> Matd2x4;  
@@ -38,9 +39,10 @@ typedef Eigen::Matrix<double, 2, 4> Matd2x4;
 typedef Eigen::Matrix<double, 2, 3> Matd2x3;            
 typedef Eigen::Matrix<double, 3, 2> Matd3x2;   
 
-typedef Eigen::Matrix<double, 3, 8> Matd3x8;     
+typedef Eigen::Matrix<double, 3, 6> Matd3x6;     
+typedef Eigen::Matrix<double, 3, 8> Matd3x8;
 
-typedef Eigen::Matrix<double, 8, 8, Eigen::RowMajor> Matd8x8;  
+// typedef Eigen::Matrix<double, 8, 8, Eigen::RowMajor> Matd8x8;  
 // typedef Eigen::Matrix<double, 6, 6, Eigen::RowMajor> Matd6x6;  
 
 // Aliases based on `std::variant`.
