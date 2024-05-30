@@ -11,8 +11,6 @@
  * 
  * @copyright Copyright (c) 2024
  * 
- * Updates (when, what and who)
- * 
  */
 
 #ifndef ELASTIC3D_H

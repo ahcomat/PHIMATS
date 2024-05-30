@@ -7,9 +7,7 @@
  * @copyright Copyright (c) 2024
  * 
  * @todo Update for C++ API
- * 
- * Updates (when, what and who)
- * 
+ *  
  */
 
 #ifndef H5IO_H

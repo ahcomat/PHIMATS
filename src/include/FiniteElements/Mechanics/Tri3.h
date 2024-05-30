@@ -5,9 +5,7 @@
  * @date 2024-05-23
  * 
  * @copyright Copyright (c) 2024
- * 
- * Updates (when, what and who)
- * 
+ *  
  */
 
 #ifndef TRI3_H

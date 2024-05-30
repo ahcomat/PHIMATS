@@ -1,20 +1,3 @@
-/**
- * @file Elastic3D.h
- * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief 3D Elastic material in Voigt notation.
- * 
- * The class supports the following isotropies:
- * `Isotropic` 
- * `Cubic`
- * 
- * @date 2024-05-20
- * 
- * @copyright Copyright (c) 2024
- * 
- * Updates (when, what and who)
- * 
- */
-
 #include <iostream>
 
 #include "Materials/Mechanics/Elastic3D.h"

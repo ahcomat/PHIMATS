@@ -1,15 +1,3 @@
-/**
- * @file Hex8.h
- * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief Class for managing hex8 elements. 
- * @date 2024-05-23
- * 
- * @copyright Copyright (c) 2024
- * 
- * Updates (when, what and who)
- * 
- */
-
 #include<iostream>
 
 #include"FiniteElements/Mechanics/Hex8.h"

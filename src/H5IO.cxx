@@ -1,17 +1,3 @@
-/**
- * @file H5IO.cxx
- * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief Wrapper class for HDF5 files.
- * @date 2024-05-23
- * 
- * @copyright Copyright (c) 2024
- * 
- * @todo Update for C++ API
- * 
- * Updates (when, what and who)
- * 
- */
-
 #include <iostream>
 #include <exception>
 #include "H5IO.h"

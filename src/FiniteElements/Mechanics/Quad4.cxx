@@ -1,15 +1,3 @@
-/**
- * @file Quad4.h
- * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief Class for managing quad4 elements. 
- * @date 2024-05-22
- * 
- * @copyright Copyright (c) 2024
- * 
- * Updates (when, what and who)
- * 
- */
-
 #include<iostream>
 #include<algorithm>
 

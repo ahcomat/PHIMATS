@@ -1,16 +1,3 @@
-/**
- * @file PlaneStress.h
- * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief Elastic plane-stress model.
- * 
- * @date 2024-05-18
- * 
- * @copyright Copyright (c) 2024
- * 
- * Updates (when, what and who)
- * 
- */
-
 #include <iostream>
 
 #include "Materials/Mechanics/PlaneStress.h"

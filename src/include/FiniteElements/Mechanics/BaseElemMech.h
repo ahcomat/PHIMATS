@@ -5,9 +5,7 @@
  * @date 2024-05-22
  * 
  * @copyright Copyright (c) 2024 
- * 
- * Updates (when, what and who)
- * 
+ *  
  */
 
 #ifndef BASEELEMMECH_H
@@ -50,7 +48,7 @@ int get_nElDispDofs() const { return nElDispDofs; };
 const vector<vector<int>>& get_elemDispDof() const { return elemDispDof; };
 
 /**
- * @brief Calculates the Fint, strains and stresses. Also evaluates the stress nodal values 
+ * @brief Calculates the `Fint`, strains and stresses. Also evaluates the stress nodal values 
  *        if `nodStresFlag=true`.
  * 
  * @param DMatx 

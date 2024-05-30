@@ -1,19 +1,3 @@
-/**
- * @file MechModel.h
- * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief A class based on mechanical models to interface with PETSc based global
- *        stiffness matrix, solution vector and boundary conditions. It calls
- *        `BaseElemMech::CalcElemStiffMatx` to build the local stiffness matrix. 
- *        It also manages the output by writing to H5file_out. 
- *          
- * @date 2024-05-24
- * 
- * @copyright Copyright (c) 2024
- * 
- * Updates (when, what and who)
- * 
- */
-
 #include<iostream>
 #include"Models/MechModel.h"
 

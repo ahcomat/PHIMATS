@@ -5,9 +5,7 @@
  * @date 2024-05-22
  * 
  * @copyright Copyright (c) 2024
- * 
- * Updates (when, what and who)
- * 
+ *
  */
 
 #ifndef QUAD4_H

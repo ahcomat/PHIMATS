@@ -12,9 +12,7 @@
  * 
  * @todo - Use a vector of `BaseElemMech` for multi-material models.
  * - Consider inheritance.
- * 
- * Updates (when, what and who)
- * 
+ *  
  */
 
 #ifndef MECHMODEL_H
