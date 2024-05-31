@@ -118,6 +118,7 @@ vector<int> Tri3::getElemDispDof(int iElem){
 }
 
 void Tri3::CalcElemStiffMatx(T_DMatx DMatx){
+    // Testing
 
 }
 
