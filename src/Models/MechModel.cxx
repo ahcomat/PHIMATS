@@ -178,10 +178,10 @@ Mat& MechModel::getA(){
     return A;
 }
 
-void MechModel::CalcStres(BaseElemMech* elements, T_DMatx DMatx, bool nodStresFlag){
+void MechModel::CalcStres(BaseElemMech* elements, T_DMatx DMatx){
 
     VecGetArrayRead(x, &globalBuffer);
-    elements->CalcStres(DMatx, globalBuffer, nodStresFlag);
+    elements->CalcStres(DMatx, globalBuffer);
     VecRestoreArrayRead(x, &globalBuffer);
 }
 

@@ -253,7 +253,7 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
     elStiffMatxVariant = &elStiffMatx;
 }
 
-void Quad4::CalcStres(T_DMatx DMatx, const PetscScalar* globalBuffer, bool nodStresFlag){
+void Quad4::CalcStres(T_DMatx DMatx, const PetscScalar* globalBuffer){
 
     ColVecd8 dummyDisp; // for element nodal displacement.
     ColVecd8 dummyForc; // for element nodal internal force.
@@ -263,13 +263,10 @@ void Quad4::CalcStres(T_DMatx DMatx, const PetscScalar* globalBuffer, bool nodSt
         Fint[iDof] = 0;
     }
 
-    // Set zeros if nodal stress flag in true.
-    if(nodStresFlag){
-        for(int iNod=0; iNod<nNodes; iNod++){
-            nodStran.at(iNod).setZero();
-            nodStres.at(iNod).setZero();
-            nodCount.at(iNod) = 0;
-        }
+    for(int iNod=0; iNod<nNodes; iNod++){
+        nodStran.at(iNod).setZero();
+        nodStres.at(iNod).setZero();
+        nodCount.at(iNod) = 0;
     }
 
     // Integration point values.
@@ -295,24 +292,21 @@ void Quad4::CalcStres(T_DMatx DMatx, const PetscScalar* globalBuffer, bool nodSt
             }
 
             // Nodal values
-            if(nodStresFlag){
-                for(auto iNod=elemNodeConn.at(iElem).begin(); iNod!=elemNodeConn.at(iElem).end(); iNod++){
+            for(auto iNod=elemNodeConn.at(iElem).begin(); iNod!=elemNodeConn.at(iElem).end(); iNod++){
 
-                    nodStran.at(*iNod) += elStran.at(iElem).at(iGaus);
-                    nodStres.at(*iNod) += elStres.at(iElem).at(iGaus);
-                    nodCount.at(*iNod) += 1;
-                }
+                nodStran.at(*iNod) += elStran.at(iElem).at(iGaus);
+                nodStres.at(*iNod) += elStres.at(iElem).at(iGaus);
+                nodCount.at(*iNod) += 1;
             }
+            
         }
     }
 
-    //Nodal value by averaging
-    if(nodStresFlag){
-        for(int iNod=0; iNod<nNodes; iNod++){
-            
-            nodStran.at(iNod) = nodStran.at(iNod)/nodCount.at(iNod);
-            nodStres.at(iNod) = nodStres.at(iNod)/nodCount.at(iNod);
-        }
+    // Number averaging the nodal values
+    for(int iNod=0; iNod<nNodes; iNod++){
+        
+        nodStran.at(iNod) = nodStran.at(iNod)/nodCount.at(iNod);
+        nodStres.at(iNod) = nodStres.at(iNod)/nodCount.at(iNod);
     }
 }
 

@@ -121,7 +121,7 @@ void CalcElemStiffMatx(T_DMatx DMatx) override ;
  *        if `nodStresFlag=true`.
  * 
  */
-void CalcStres(T_DMatx DMatx, const double* globalBuffer, bool nodStresFlag=false) override;
+void CalcStres(T_DMatx DMatx, const double* globalBuffer) override;
 
 /**
  * @brief Write nodal stresses and strains.

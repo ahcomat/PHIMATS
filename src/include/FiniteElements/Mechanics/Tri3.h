@@ -74,7 +74,7 @@ void InitializeElements(Nodes& Nodes);
 
 void CalcElemStiffMatx(T_DMatx DMatx) override;
 
-void CalcStres(T_DMatx DMatx, const double* globalBuffer, bool nodStresFlag=false) override;
+void CalcStres(T_DMatx DMatx, const double* globalBuffer) override;
 
 void WriteOut(H5IO &H5File_out) override;
 

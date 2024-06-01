@@ -85,7 +85,7 @@ Mat& getA();
  * @param elements 
  * @param nodStresFlag 
  */
-void CalcStres(BaseElemMech* elements, T_DMatx DMatx, bool nodStresFlag=false);
+void CalcStres(BaseElemMech* elements, T_DMatx DMatx);
 
 /**
  * @brief Write nodal values.
