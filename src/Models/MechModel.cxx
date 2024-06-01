@@ -22,6 +22,11 @@ MechModel::~MechModel(){
     cout << "MechModel elements exited correctly" << "\n";
 }
 
+void MechModel::CalcElemStiffMatx(BaseElemMech* elements, T_DMatx DMatx){
+
+    elements->CalcElemStiffMatx(DMatx);
+}
+
 void MechModel::InitializePETSc(BaseElemMech* elements){
 
     const vector<vector<int>>& elemDispDof = elements->get_elemDispDof();

@@ -31,7 +31,16 @@ class MechModel{
 public:
 
 MechModel(BaseElemMech* elements);
+
 ~MechModel();
+
+/**
+ * @brief Calculates the element stiffness matrix. 
+ * 
+ * @param elements 
+ * @param DMatx 
+ */
+void CalcElemStiffMatx(BaseElemMech* elements, T_DMatx DMatx);
 
 /**
  * @brief Initializes and preallocates the RHS `b`, solution `x` and 
