@@ -88,7 +88,7 @@ void MechModel::InitializePETSc(BaseElemMech* elements){
     }
 
     // Preallocate the stiffness matrix.
-    MatSeqAIJSetPreallocation(A, NULL, nnz); 
+    MatSeqAIJSetPreallocation(A, PETSC_DEFAULT, nnz); 
     PetscFree(nnz); 
 
     // Throw error if unallocated entry is accessed.
