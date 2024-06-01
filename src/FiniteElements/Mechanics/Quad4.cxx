@@ -38,8 +38,8 @@ void Quad4::InitShapeFunc(){
     // Initialize the Gauss points vectors.
     vector<double> ip = {-0.57735027, 0.57735027};
     vector<double> dummy(nDim);
-    for(int iGauss=0; iGauss<ip.size(); iGauss++){
-        for(int jGauss=0; jGauss<ip.size(); jGauss++){
+    for(std::size_t iGauss=0; iGauss<ip.size(); iGauss++){
+        for(std::size_t jGauss=0; jGauss<ip.size(); jGauss++){
             dummy.at(0) = ip.at(iGauss);
             dummy.at(1) = ip.at(jGauss);
             gaussPts.push_back(dummy);
