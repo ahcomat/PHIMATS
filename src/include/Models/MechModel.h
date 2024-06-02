@@ -71,6 +71,13 @@ void InitializeDirichBC(H5IO& H5File_in);
 void setDirichBC();
 
 /**
+ * @brief Get the number of steps to apply load.
+ * 
+ * @return int 
+ */
+int get_nSteps() const;
+
+/**
  * @brief Pass reference of RHS (to solver).
  * 
  * @return Vec& 
@@ -114,6 +121,7 @@ int nTotDof;        /// @brief Total number of DOFs.
 int nElDispDofs;    /// @brief Number of element displacement dofs.
 int nElements;      /// @brief Total number of elements.
 int nDim;           /// @brief Spatial dimensions of the model.
+int nSteps;         /// @brief Number of steps to apply the load.
 
 // PETSc ------------------------
 

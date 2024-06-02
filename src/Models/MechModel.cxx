@@ -144,6 +144,8 @@ void MechModel::InitializeDirichBC(H5IO& H5File_in){
     nPresDofs = H5File_in.ReadScalar(dsetName);
     PetscMalloc1(nPresDofs, &presDofs);
     PetscMalloc1(nPresDofs, &presVals); 
+    dsetName = "SimulationParameters/nSteps";
+    nSteps = H5File_in.ReadScalar(dsetName);
 
     vector<double> dummy(3);
     for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
@@ -167,6 +169,12 @@ void MechModel::setDirichBC(){
     VecSetValues(b, nPresDofs, presDofs, presVals, ADD_VALUES); 
     VecAssemblyBegin(b); VecAssemblyEnd(b);
 }
+
+int MechModel::get_nSteps() const{
+    
+    return nSteps;
+}
+
 
 Vec& MechModel::getB(){
 

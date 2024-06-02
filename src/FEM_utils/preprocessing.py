@@ -4,6 +4,7 @@ from pathlib import Path
 import h5py
 import numpy as np
 
+
 class PreProcessing:
     
     def __init__(self, inputData):
@@ -18,13 +19,14 @@ class PreProcessing:
         self.nElementSets = inputData["nElementSets"]
         self.presBCs = inputData["presBCs"]
         self.nPresDofs = len(self.presBCs)
+        self.nSteps = inputData["nSteps"]
 
         #----------------------------------------------------------------------
         # Check for allowed elements and assign element data (number of nodes,
         # dimension and order) 
         #----------------------------------------------------------------------
 
-        # Allowed elements (naming should match with Gmsh)
+        # Allowed elements (naming should match with meshio)
         allowedElements = ["quad", "quad8", "triangle", "hexahedron"]
         # 2D elements
         elements2D = ["quad", "quad8", "triangle"]
@@ -119,10 +121,10 @@ class PreProcessing:
             self.grp_Sim_Params.create_dataset("nDim", data=self.nDim, dtype = np.int64)
             self.grp_Sim_Params.create_dataset("nElements", data=self.nElements, dtype = np.int64)
             self.grp_Sim_Params.create_dataset("nPresDofs", data=self.nPresDofs, dtype = np.int64)
-            self.grp_Sim_Params.create_dataset("nElementSets", data=self.nElementSets, dtype = np.int64) 
-            # self.grp_Sim_Params.create_dataset("elementNodes", data=self.elementNodes, dtype = np.int64) 
-            # self.grp_Sim_Params.create_dataset("elementType", data=self.elementType, dtype = np.int64) 
-            
+            self.grp_Sim_Params.create_dataset("nElementSets", data=self.nElementSets, dtype = np.int64)
+            self.grp_Sim_Params.create_dataset("nSteps", data=self.nSteps, dtype = np.int64)
+
+            #----------------------------------------------------------------------
             # Material data
             self.grp_Sim_Params.create_dataset("Emod", data=self.Emod) 
             self.grp_Sim_Params.create_dataset("nu", data=self.nu) 
