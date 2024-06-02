@@ -21,7 +21,7 @@ public:
 
 BaseMechanics(string isoType, string dimensions): BaseMaterial(isoType,dimensions) {};
 
-virtual T_DMatx getDMat() = 0;
+virtual T_DMatx getDMatx() = 0;
 
 };
 #endif

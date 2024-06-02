@@ -35,7 +35,7 @@ PlaneStress::PlaneStress(H5IO &H5File, string isoType)
     }
 }
 
-T_DMatx PlaneStress::getDMat(){
+T_DMatx PlaneStress::getDMatx(){
 
     return DMatx;
 }

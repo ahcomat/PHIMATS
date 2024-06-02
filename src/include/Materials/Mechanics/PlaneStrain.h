@@ -36,7 +36,7 @@ PlaneStrain(H5IO &H5File, string isoType="Isotropic");
 /**
  * @brief Returns the 2D stiffness matrix in Voigt notation.
  */
-T_DMatx getDMat() override;
+T_DMatx getDMatx() override;
 
 private:
 

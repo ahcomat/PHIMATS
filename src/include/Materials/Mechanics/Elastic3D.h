@@ -36,7 +36,7 @@ Elastic3D(H5IO &H5File, string isoType="Isotropic");
  * 
  * @return Matd6x6 
  */
-T_DMatx getDMat() override;
+T_DMatx getDMatx() override;
 
 private:
 

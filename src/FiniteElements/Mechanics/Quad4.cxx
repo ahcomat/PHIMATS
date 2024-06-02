@@ -23,7 +23,7 @@ Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes)
     InitializeElements(Nodes);
     // Allocate memory for `Fint`.
     PetscMalloc1(nTotDof, &Fint); 
-}
+}   
 
 Quad4::~Quad4(){
 
