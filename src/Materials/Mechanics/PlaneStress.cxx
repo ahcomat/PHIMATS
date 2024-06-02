@@ -4,7 +4,7 @@
 
 using namespace std;
 
-PlaneStress::PlaneStress(H5IO &H5File, string isoType)
+PlaneStress::PlaneStress(H5IO &H5File,int tStep, string isoType)
     : BaseMechanics(isoType, "2D"){
     
     string dsetName; 
@@ -14,9 +14,9 @@ PlaneStress::PlaneStress(H5IO &H5File, string isoType)
         /**
          * Reads Young's modulus and Poisson's ratio
          */
-        dsetName = "SimulationParameters/Emod";
+        dsetName = "Materials/Material_"+ std::to_string(tStep)+"/Emod";
         double Emod = H5File.ReadScalar(dsetName);
-        dsetName = "SimulationParameters/nu";
+        dsetName = "Materials/Material_"+ std::to_string(tStep)+"/nu";
         double nu = H5File.ReadScalar(dsetName);
 
         DMatx.setZero();

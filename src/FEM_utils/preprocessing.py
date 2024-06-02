@@ -88,8 +88,7 @@ class PreProcessing:
         # Read material data
         #----------------------------------------------------------------------
         
-        self.Emod = inputData["Emod"]
-        self.nu = inputData["nu"]
+        self.Materials = inputData["Materials"]
 
         pass
     
@@ -126,8 +125,14 @@ class PreProcessing:
 
             #----------------------------------------------------------------------
             # Material data
-            self.grp_Sim_Params.create_dataset("Emod", data=self.Emod) 
-            self.grp_Sim_Params.create_dataset("nu", data=self.nu) 
+            #----------------------------------------------------------------------
+            self.grp_Materials = self.fh5.create_group('Materials')
+            
+            counter = 0
+            for mat in self.Materials:
+                counter+=1
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/Emod", data=self.Materials[mat]["Emod"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/nu", data=self.Materials[mat]["nu"])
             
             #----------------------------------------------------------------------
             # Write node coordinates 
