@@ -129,8 +129,8 @@ const double* globalBuffer;
 
 // Boundary conditions
 PetscInt nPresDofs;     /// @brief number of prescribed dofs.
-PetscInt  *presDofs;    /// @brief Array to hold the prescribed dofs.
-PetscScalar  *presVals; /// @brief Array to hold the prescribed values.
+PetscInt  *presDofs = NULL;    /// @brief Array to hold the prescribed dofs.
+PetscScalar  *presVals = NULL; /// @brief Array to hold the prescribed values.
 
 Vec b;   /// @brief RHS vector.
 Vec x;   /// @brief solution vector.
