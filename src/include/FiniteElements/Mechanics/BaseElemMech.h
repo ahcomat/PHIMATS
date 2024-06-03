@@ -41,11 +41,11 @@ int get_nDim() const { return nDim; };
 int get_nElDispDofs() const { return nElDispDofs; };
 
 /**
- * @brief Return a const reference to the `elemDispDof`. 
+ * @brief Return a const reference to the disp DOFs of element `iElem`. 
  * 
  * @return const vector<vector<int>>& 
  */
-const vector<vector<int>>& get_elemDispDof() const { return elemDispDof; };
+const vector<int>& get_elemDispDof(int iElem) const { return elemDispDof.at(iElem); };
 
 /**
  * @brief Calculates the `Fint`, strains and stresses. Also evaluates the stress nodal values 
