@@ -56,7 +56,7 @@ void Quad4::InitShapeFunc(){
     }
 }
 
-RowVecd4 Quad4::getShapeFunc(double xi, double eta){
+RowVecd4 Quad4:: CalcShapeFunc(double xi, double eta){
 
     // N_i
     RowVecd4 shape;
@@ -69,7 +69,7 @@ RowVecd4 Quad4::getShapeFunc(double xi, double eta){
     return shape;
 }
 
-Matd2x4 Quad4::getShapeFuncDeriv(double xi, double eta){
+Matd2x4 Quad4::CalcShapeFuncDeriv(double xi, double eta){
 
     // dN_ji
     Matd2x4 shapeDeriv;

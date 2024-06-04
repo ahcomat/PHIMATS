@@ -37,16 +37,16 @@ void InitShapeFunc();
  * @param eta 
  * @return RowVecd4
  */
-RowVecd4 getShapeFunc(double xi, double eta);
+RowVecd4  CalcShapeFunc(double xi, double eta);
 
 /**
- * @brief Returns the int-pt values of of shape function derivatives in natural coordinates.
+ * @brief Returns the shape function derivatives of int-pts in natural coordinates.
  * 
  * @param xi 
  * @param eta 
  * @return Matd2x4 
  */
-Matd2x4 getShapeFuncDeriv(double xi, double eta);
+Matd2x4 CalcShapeFuncDeriv(double xi, double eta);
 
 /**
  * @brief Reads the data `nElements`, `nElementSets` and `elemNodeConn` from hdf5 file.
@@ -62,7 +62,7 @@ void ReadElementsData(H5IO &H5File_in);
  * @param iElem 
  * @return vector<int> 
  */
-vector<int> getElemDispDof(int iElem);
+vector<int> CalcElemDispDof(int iElem);
 
 // /**
 //  * @brief Returns the node connectivity of element iElem.
