@@ -31,7 +31,7 @@ Quad4(H5IO &H5File_in, Nodes &Nodes);
 void InitShapeFunc();
 
 /**
- * @brief Returns the int-pt values of shape functions in natural coordinates.
+ * @brief Returns the shape functions of int-pts in natural coordinates.
  * 
  * @param xi 
  * @param eta 
@@ -51,8 +51,7 @@ Matd2x4 CalcShapeFuncDeriv(double xi, double eta);
 /**
  * @brief Reads the data `nElements`, `nElementSets` and `elemNodeConn` from hdf5 file.
  * 
- * @param H5File_in 
- * @todo Consider moving to base `Elements`. `getElemDispDof` will probably have to be pure `virtual` function.  
+ * @param H5File_in  
  */
 void ReadElementsData(H5IO &H5File_in);
 
@@ -99,7 +98,7 @@ void InitializeElements(Nodes& Nodes);
 RowVecd2 getGaussCart(RowVecd4& sFunc, Matd4x2& elCoord);
 
 /**
- * @brief Evaluates `intPtVol`, `BMat` and `BuMat`.
+ * @brief Calculates `intPtVol`, `BMat` and `BuMat`.
  * 
  * @param elNodCoord 
  * @param sFuncDeriv 
@@ -110,14 +109,14 @@ RowVecd2 getGaussCart(RowVecd4& sFunc, Matd4x2& elCoord);
 void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double& wt, double& intVol, Matd2x4& cartDeriv, Matd3x8& strainMat);
 
 /**
- * @brief Evaluates the element stiffness matrix for all elements.
+ * @brief Calculates the element stiffness matrix for all elements.
  * 
  * @param DMatx 
  */
 void CalcElemStiffMatx(T_DMatx DMatx) override ;
 
 /**
- * @brief Calculates the Fint, strains and stresses. Also evaluates the stress nodal values 
+ * @brief Calculates the Fint, strains and stresses. Also Calculates the stress nodal values 
  *        if `nodStresFlag=true`.
  * 
  */

@@ -22,7 +22,7 @@ Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes)
     ReadElementsData(H5File_in);
     InitializeElements(Nodes);
     // Allocate memory for `Fint`.
-    PetscMalloc1(nTotDof, &Fint); 
+    PetscMalloc1(nDof, &Fint); 
 }   
 
 Quad4::~Quad4(){
@@ -51,8 +51,8 @@ void Quad4::InitShapeFunc(){
     shapeFuncDeriv.resize(nGauss);
 
     for(int i=0; i<nGauss; i++){
-        shapeFunc.at(i) = getShapeFunc(gaussPts.at(i).at(0), gaussPts.at(i).at(1));
-        shapeFuncDeriv.at(i) = getShapeFuncDeriv(gaussPts.at(i).at(0), gaussPts.at(i).at(1));
+        shapeFunc.at(i) =  CalcShapeFunc(gaussPts.at(i).at(0), gaussPts.at(i).at(1));
+        shapeFuncDeriv.at(i) = CalcShapeFuncDeriv(gaussPts.at(i).at(0), gaussPts.at(i).at(1));
     }
 }
 
@@ -92,6 +92,8 @@ void Quad4::ReadElementsData(H5IO &H5File_in){
     string dsetName;
     dsetName = "SimulationParameters/nElements";
     nElements = H5File_in.ReadScalar(dsetName);
+    dsetName = "Elements/ElementSet_"+std::to_string(iSet)+"/nNodes";
+    nNodes = H5File_in.ReadScalar(dsetName);
 
     // Initialize the size.
     elemNodeConn.resize(nElements);  
@@ -107,20 +109,20 @@ void Quad4::ReadElementsData(H5IO &H5File_in){
         H5File_in.ReadFieldInt1D(dsetName, dummy);
 
         elemNodeConn.at(iElem) = dummy;
-        elemDispDof.at(iElem) = getElemDispDof(iElem);
+        elemDispDof.at(iElem) = CalcElemDispDof(iElem);
     }
 
     // for (auto& s : elemNodeConn[0])
     //     cout << s << "\n"; 
 }
 
-vector<int> Quad4::getElemDispDof(int iElem){
+vector<int> Quad4::CalcElemDispDof(int iElem){
 
     vector<int> dispDof(nElDispDofs);
     for(int iNod=0; iNod<nElNodes; iNod++){
 
-        dispDof.at(2*iNod) = 2*elemNodeConn.at(iElem).at(iNod);
-        dispDof.at(2*iNod+1) = 2*elemNodeConn.at(iElem).at(iNod)+1;
+        dispDof.at(nDim*iNod) = nDim*elemNodeConn.at(iElem).at(iNod);
+        dispDof.at(nDim*iNod+1) = nDim*elemNodeConn.at(iElem).at(iNod)+1;
     }
 
     return dispDof;
@@ -133,8 +135,7 @@ vector<int> Quad4::getElemDispDof(int iElem){
 
 void Quad4::InitializeElements(Nodes &Nodes){
 
-    nNodes = Nodes.get_nNodes();   // Get total number of nodes. 
-    nTotDof = dispDofs*nNodes;    // Calc total number of DOFs.
+    nDof = dispDofs*nNodes;      // Calc total number of dips DOFs for element set.
 
     // Initialize the storages for int-pt stresses/strains
     elStres.resize(nElements); elStran.resize(nElements);
@@ -249,6 +250,8 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
         }        
     }
 
+    // cout << elStiffMatx.at(0) << "\n\n";
+
     // Pointer to the vector, not the vector itself.
     elStiffMatxVariant = &elStiffMatx;
 }
@@ -259,7 +262,7 @@ void Quad4::CalcStres(T_DMatx DMatx, const PetscScalar* globalBuffer){
     ColVecd8 dummyForc; // for element nodal internal force.
 
     // Set zeros, otherwise will get garbage memory values.
-    for(int iDof=0; iDof<nTotDof; iDof++){
+    for(int iDof=0; iDof<nDof; iDof++){
         Fint[iDof] = 0;
     }
 

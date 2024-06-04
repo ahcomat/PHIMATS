@@ -46,7 +46,7 @@ int get_nNodes();
 
 private:
 
-int nNodes;      /// Total number of nodes.
+int nTotNodes;      /// Total number of nodes.
 int nDim;        /// Simulation dimensions.
 
 vector<vector<double>> nodeCoordinates; 

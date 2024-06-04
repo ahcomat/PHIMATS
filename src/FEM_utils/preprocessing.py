@@ -67,7 +67,7 @@ class PreProcessing:
         #----------------------------------------------------------------------
         
         # Total number of nodes
-        self.nNodes = self.mesh.points.shape[0]  
+        self.nTotNodes = self.mesh.points.shape[0]  
         # Node connectivity
         self.nodeConnectivity = self.mesh.cells_dict[self.elementName] 
         
@@ -82,7 +82,7 @@ class PreProcessing:
         #----------------------------------------------------------------------
         
         # Total number of elements
-        self.nElements = self.mesh.cells_dict[self.elementName].data.shape[0]  
+        self.nTotElements = self.mesh.cells_dict[self.elementName].data.shape[0]  
 
         #----------------------------------------------------------------------
         # Read material data
@@ -116,9 +116,9 @@ class PreProcessing:
             
             self.grp_Sim_Params = self.fh5.create_group('SimulationParameters')
 
-            self.grp_Sim_Params.create_dataset("nNodes", data=self.nNodes, dtype = np.int64)
+            self.grp_Sim_Params.create_dataset("nTotNodes", data=self.nTotNodes, dtype = np.int64)
             self.grp_Sim_Params.create_dataset("nDim", data=self.nDim, dtype = np.int64)
-            self.grp_Sim_Params.create_dataset("nElements", data=self.nElements, dtype = np.int64)
+            self.grp_Sim_Params.create_dataset("nTotElements", data=self.nTotElements, dtype = np.int64)
             self.grp_Sim_Params.create_dataset("nPresDofs", data=self.nPresDofs, dtype = np.int64)
             self.grp_Sim_Params.create_dataset("nElementSets", data=self.nElementSets, dtype = np.int64)
             self.grp_Sim_Params.create_dataset("nSteps", data=self.nSteps, dtype = np.int64)
@@ -140,11 +140,11 @@ class PreProcessing:
             
             self.grp_nNodes = self.fh5.create_group('NodeCoordinates')
             
-            for iset in range(self.nNodes):
-                self.grp_nNodes.create_dataset("Node_"+str(iset), data=self.nodeCoord[iset], dtype = np.float64)   
+            for iNod in range(self.nTotNodes):
+                self.grp_nNodes.create_dataset("Node_"+str(iNod), data=self.nodeCoord[iNod], dtype = np.float64)   
                        
             #----------------------------------------------------------------------
-            # Write node connectivity
+            # Write element node connectivity
             #----------------------------------------------------------------------
             
             self.grp_nodeConnectivity = self.fh5.create_group('NodeConnectivity')

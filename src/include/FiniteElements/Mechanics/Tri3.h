@@ -37,7 +37,7 @@ void InitShapeFunc();
  * @param eta 
  * @return RowVecd3
  */
-RowVecd3 getShapeFunc(double xi, double eta);
+RowVecd3  CalcShapeFunc(double xi, double eta);
 
 /**
  * @brief Returns the int-pt values of of shape function derivatives in natural coordinates.
@@ -46,13 +46,13 @@ RowVecd3 getShapeFunc(double xi, double eta);
  * @param eta 
  * @return Matd2x3 
  */
-Matd2x3 getShapeFuncDeriv(double xi, double eta);
+Matd2x3 CalcShapeFuncDeriv(double xi, double eta);
 
 /**
  * @brief Reads the data `nElements`, `nElementSets` and `elemNodeConn` from hdf5 file.
  * 
  * @param H5File_in 
- * @todo Consider moving to base `Elements`. `getElemDispDof` will probably have to be pure `virtual` function.
+ * @todo Consider moving to base `Elements`. `CalcElemDispDof` will probably have to be pure `virtual` function.
  */
 void ReadElementsData(H5IO &H5File_in);
 
@@ -62,7 +62,7 @@ void ReadElementsData(H5IO &H5File_in);
  * @param iElem 
  * @return vector<int> 
  */
-vector<int> getElemDispDof(int iElem);
+vector<int> CalcElemDispDof(int iElem);
 
 /**
  * @brief Initializes the data for all elements: `elemNodCoord`, `gaussPtCart`, `BMat`, `BuMat`

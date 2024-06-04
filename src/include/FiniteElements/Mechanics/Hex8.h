@@ -36,7 +36,7 @@ void InitShapeFunc();
  * @param eta 
  * @return RowVecd4
  */
-RowVecd4 getShapeFunc(double xi, double eta);
+RowVecd4  CalcShapeFunc(double xi, double eta);
 
 /**
  * @brief Returns the integration pointe values of of shape function derivatives in natural coordinates.
@@ -45,7 +45,7 @@ RowVecd4 getShapeFunc(double xi, double eta);
  * @param eta 
  * @return Matd2x4 
  */
-Matd2x4 getShapeFuncDeriv(double xi, double eta);
+Matd2x4 CalcShapeFuncDeriv(double xi, double eta);
 
 private:
 

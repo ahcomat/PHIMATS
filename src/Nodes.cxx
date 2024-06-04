@@ -14,15 +14,15 @@ Nodes::~Nodes(){
 void Nodes::ReadNodes(H5IO &H5File){
 
     string dsetName;
-    dsetName = "SimulationParameters/nNodes";
-    nNodes = H5File.ReadScalar(dsetName);
+    dsetName = "SimulationParameters/nTotNodes";
+    nTotNodes = H5File.ReadScalar(dsetName);
 
     dsetName = "SimulationParameters/nDim";
     nDim = H5File.ReadScalar(dsetName);
 
     vector<double> dummy1(nDim);
 
-    for (int iNod=0; iNod<nNodes; iNod++){
+    for (int iNod=0; iNod<nTotNodes; iNod++){
         dsetName = "NodeCoordinates/Node_"+to_string(iNod);
         H5File.ReadFieldDoub1D(dsetName, dummy1);
         nodeCoordinates.push_back(dummy1);
@@ -36,5 +36,5 @@ vector<double> Nodes::getNodCoord(int nod){
 
 int Nodes::get_nNodes(){
 
-    return nNodes;
+    return nTotNodes;
 }
