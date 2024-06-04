@@ -77,6 +77,9 @@ class PreProcessing:
         elif self.nDim == 3:    
             self.nodeCoord = self.mesh.points
         
+        # Total number of Dofs
+        self.nTotDofs = self.nTotNodes*self.nDim
+        
         #----------------------------------------------------------------------
         # Read number of elements  
         #----------------------------------------------------------------------
@@ -116,8 +119,9 @@ class PreProcessing:
             
             self.grp_Sim_Params = self.fh5.create_group('SimulationParameters')
 
-            self.grp_Sim_Params.create_dataset("nTotNodes", data=self.nTotNodes, dtype = np.int64)
             self.grp_Sim_Params.create_dataset("nDim", data=self.nDim, dtype = np.int64)
+            self.grp_Sim_Params.create_dataset("nTotNodes", data=self.nTotNodes, dtype = np.int64)
+            self.grp_Sim_Params.create_dataset("nTotDofs", data=self.nTotDofs, dtype = np.int64)
             self.grp_Sim_Params.create_dataset("nTotElements", data=self.nTotElements, dtype = np.int64)
             self.grp_Sim_Params.create_dataset("nPresDofs", data=self.nPresDofs, dtype = np.int64)
             self.grp_Sim_Params.create_dataset("nElementSets", data=self.nElementSets, dtype = np.int64)
@@ -147,6 +151,7 @@ class PreProcessing:
             # Write element node connectivity
             #----------------------------------------------------------------------
             
+            # All elements
             self.grp_nodeConnectivity = self.fh5.create_group('NodeConnectivity')
             
             for iset in range(self.nElements):
