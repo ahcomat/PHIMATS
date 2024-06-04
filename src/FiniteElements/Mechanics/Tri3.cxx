@@ -45,12 +45,12 @@ void Tri3::InitShapeFunc(){
     shapeFuncDeriv.resize(nElNodes);
 
     for(int i=0; i<nGauss; i++){
-        shapeFunc.at(i) = getShapeFunc(gaussPts.at(i).at(0), gaussPts.at(i).at(1));
-        shapeFuncDeriv.at(i) = getShapeFuncDeriv(gaussPts.at(i).at(0), gaussPts.at(i).at(1));
+        shapeFunc.at(i) =  CalcShapeFunc(gaussPts.at(i).at(0), gaussPts.at(i).at(1));
+        shapeFuncDeriv.at(i) = CalcShapeFuncDeriv(gaussPts.at(i).at(0), gaussPts.at(i).at(1));
     }
 }
 
-RowVecd3 Tri3::getShapeFunc(double xi, double eta){
+RowVecd3 Tri3:: CalcShapeFunc(double xi, double eta){
 
     // N_i
     RowVecd3 shape;
@@ -62,7 +62,7 @@ RowVecd3 Tri3::getShapeFunc(double xi, double eta){
     return shape;
 }
 
-Matd2x3 Tri3::getShapeFuncDeriv(double xi, double eta){
+Matd2x3 Tri3::CalcShapeFuncDeriv(double xi, double eta){
 
     // dN_ji
     Matd2x3 shapeDeriv;
@@ -105,7 +105,7 @@ void Tri3::ReadElementsData(H5IO &H5File_in){
     //     cout << s << "\n";
 }
 
-vector<int> Tri3::getElemDispDof(int iElem){
+vector<int> Tri3::CalcElemDispDof(int iElem){
 
     vector<int> dispDof(nElDispDofs);
     for(int iNod=0; iNod<nElNodes; iNod++){
