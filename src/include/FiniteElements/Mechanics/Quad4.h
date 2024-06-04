@@ -120,7 +120,7 @@ void CalcElemStiffMatx(T_DMatx DMatx) override ;
  *        if `nodStresFlag=true`.
  * 
  */
-void CalcStres(T_DMatx DMatx, const double* globalBuffer) override;
+void CalcStres(T_DMatx DMatx, const double* globalBuffer, PetscScalar* Fint) override;
 
 /**
  * @brief Write nodal stresses and strains.
@@ -150,10 +150,6 @@ vector<vector<Matd2x4>> BMat;       /// @brief Derivatives (scalar) matrix.
 vector<vector<Matd3x8>> BuMat;      /// @brief Strain matrix.
 vector<vector<double>> intPtVol;    /// @brief Int-pt volume.
 vector<Matd8x8> elStiffMatx;        /// @brief Element stiffness matrix.
-
-// Petsc ----------------------------
-
-PetscScalar* Fint;     // Array to hold the internal force vector.
 
 };
 #endif

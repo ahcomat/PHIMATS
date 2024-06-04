@@ -125,12 +125,13 @@ int nSteps;         /// @brief Number of steps to apply the load.
 
 // PETSc ------------------------
 
-const double* globalBuffer;
+const double* globalBuffer;  /// @brief buffer array for PETSc data
+PetscScalar* Fint = NULL;    /// @brief For calculating the internal force vector.
 
 // Boundary conditions
-PetscInt nPresDofs;     /// @brief number of prescribed dofs.
-PetscInt  *presDofs = NULL;    /// @brief Array to hold the prescribed dofs.
-PetscScalar  *presVals = NULL; /// @brief Array to hold the prescribed values.
+PetscInt nPresDofs;            /// @brief number of prescribed dofs.
+PetscInt* presDofs = NULL;     /// @brief Array to hold the prescribed dofs.
+PetscScalar* presVals = NULL;  /// @brief Array to hold the prescribed values.
 
 Vec b;   /// @brief RHS vector.
 Vec x;   /// @brief solution vector.

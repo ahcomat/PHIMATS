@@ -21,14 +21,11 @@ Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes)
     InitShapeFunc();
     ReadElementsData(H5File_in);
     InitializeElements(Nodes);
-    // Allocate memory for `Fint`.
-    PetscMalloc1(nDof, &Fint); 
 }   
 
 Quad4::~Quad4(){
 
-    // Deallocate memory.
-    PetscFree(Fint);
+
     // Exit message
     cout << "Quad4 elements exited correctly" << "\n";
 }
@@ -256,15 +253,10 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
     elStiffMatxVariant = &elStiffMatx;
 }
 
-void Quad4::CalcStres(T_DMatx DMatx, const PetscScalar* globalBuffer){
+void Quad4::CalcStres(T_DMatx DMatx, const PetscScalar* globalBuffer, PetscScalar* Fint){
 
     ColVecd8 dummyDisp; // for element nodal displacement.
     ColVecd8 dummyForc; // for element nodal internal force.
-
-    // Set zeros, otherwise will get garbage memory values.
-    for(int iDof=0; iDof<nDof; iDof++){
-        Fint[iDof] = 0;
-    }
 
     for(int iNod=0; iNod<nNodes; iNod++){
         nodStran.at(iNod).setZero();
@@ -315,8 +307,6 @@ void Quad4::CalcStres(T_DMatx DMatx, const PetscScalar* globalBuffer){
 
 void Quad4::WriteOut(H5IO &H5File_out){
 
-    // Fint
-    H5File_out.WriteArray_1D("Force", nTotDof, Fint);
     // Stresses and strains
     H5File_out.WriteStres3("Strain", nNodes, nStres, nodStran);
     H5File_out.WriteStres3("Stress", nNodes, nStres, nodStres);

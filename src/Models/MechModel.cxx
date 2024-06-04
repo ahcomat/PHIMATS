@@ -16,7 +16,7 @@ MechModel::MechModel(BaseElemMech* elements){
 MechModel::~MechModel(){
 
     // Deallocate memory.
-    PetscFree(presDofs); PetscFree(presVals);
+    PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint);
     VecDestroy(&b); VecDestroy(&x); MatDestroy(&A);
     // Exit message
     cout << "MechModel elements exited correctly" << "\n";
@@ -194,7 +194,10 @@ Mat& MechModel::getA(){
 void MechModel::CalcStres(BaseElemMech* elements, T_DMatx DMatx){
 
     VecGetArrayRead(x, &globalBuffer);
-    elements->CalcStres(DMatx, globalBuffer);
+
+    for (int iSet=0; iSet<nElementSets; iSet++)
+      elements[iSet]->CalcStres(mats[iSet]->getDMatx(), globalBuffer, Fint);
+
     VecRestoreArrayRead(x, &globalBuffer);
 }
 
@@ -202,8 +205,9 @@ void MechModel::WriteOut(BaseElemMech* elements, H5IO &H5File_out){
 
     // Displacements
     VecGetArrayRead(x, &globalBuffer);
-    H5File_out.WriteArray_1D("Disp", nTotDof, globalBuffer);
+    H5File_out.WriteArray_1D("Disp", nTotDofs, globalBuffer);
     VecRestoreArrayRead(x, &globalBuffer);
+    H5File_out.WriteArray_1D("Force", nTotDofs, Fint);
 
     elements->WriteOut(H5File_out);
 }
