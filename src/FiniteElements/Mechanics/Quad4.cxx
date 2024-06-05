@@ -253,7 +253,7 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
     elStiffMatxVariant = &elStiffMatx;
 }
 
-void Quad4::CalcStres(T_DMatx DMatx, const PetscScalar* globalBuffer, PetscScalar* Fint){
+void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint){
 
     ColVecd8 dummyDisp; // for element nodal displacement.
     ColVecd8 dummyForc; // for element nodal internal force.

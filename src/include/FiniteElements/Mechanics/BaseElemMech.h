@@ -11,8 +11,8 @@
 #ifndef BASEELEMMECH_H
 #define BASEELEMMECH_H
 
-#include <petscsys.h>
-#include <petscvec.h>
+// #include <petscsys.h>
+// #include <petscvec.h>
 
 #include "FiniteElements/BaseElements.h"
 
@@ -59,7 +59,7 @@ const vector<int>& get_elemDispDof(int iElem) const { return elemDispDof.at(iEle
  * @todo 
  * - Remove `nodStresFlag`.
  */
-virtual void CalcStres(T_DMatx DMatx, const double* globalBuffer) = 0;
+virtual void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint) = 0;
 
 protected:
 
