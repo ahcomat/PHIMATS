@@ -101,9 +101,9 @@ void MechModel::Assemble(BaseElemMech* elements){
 
     MatZeroEntries(A);  // Set all entries to zero.
 
-    //  Assemble the coefficient matrix.
-    PetscInt   i1[nElDispDofs], j1[nElDispDofs]; // Indices for row and columns to insert.
-    PetscScalar vals[nElDispDofs*nElDispDofs];   // values.
+        //  Assemble the coefficient matrix.
+        PetscInt   i1[nElDispDofs], j1[nElDispDofs]; // Indices for row and columns to insert.
+        PetscScalar vals[nElDispDofs*nElDispDofs];   // values.
 
     // `T_ElStiffMatx` variant that holds a pointer to the vector.
     const T_ElStiffMatx& elStiffMatx_ptr = elements->getElStiffMatx();
