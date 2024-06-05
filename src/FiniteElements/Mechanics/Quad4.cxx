@@ -109,6 +109,7 @@ void Quad4::ReadElementsData(H5IO &H5File_in){
         elemDispDof.at(iElem) = CalcElemDispDof(iElem);
     }
 
+    // TODO: For debug!
     // for (auto& s : elemNodeConn[0])
     //     cout << s << "\n"; 
 }
@@ -247,6 +248,7 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
         }        
     }
 
+    // TODO: For debug!
     // cout << elStiffMatx.at(0) << "\n\n";
 
     // Pointer to the vector, not the vector itself.
@@ -289,10 +291,11 @@ void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint){
             // Nodal values
             for(auto iNod=elemNodeConn.at(iElem).begin(); iNod!=elemNodeConn.at(iElem).end(); iNod++){
 
-                nodStran.at(*iNod) += elStran.at(iElem).at(iGaus);
-                nodStres.at(*iNod) += elStres.at(iElem).at(iGaus);
-                nodCount.at(*iNod) += 1;
-            }
+            //     // cout << *iNod2 << "\n";
+            //     nodStran.at(*iNod2) += elStran.at(iElem).at(iGaus);
+            //     nodStres.at(*iNod2) += elStres.at(iElem).at(iGaus);
+            //     nodCount.at(*iNod2) += 1;
+            // }
             
         }
     }
@@ -300,9 +303,12 @@ void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint){
     // Number averaging the nodal values
     for(int iNod=0; iNod<nNodes; iNod++){
         
-        nodStran.at(iNod) = nodStran.at(iNod)/nodCount.at(iNod);
-        nodStres.at(iNod) = nodStres.at(iNod)/nodCount.at(iNod);
-    }
+    //     nodStran.at(iNod) = nodStran.at(iNod)/nodCount.at(iNod);
+    //     nodStres.at(iNod) = nodStres.at(iNod)/nodCount.at(iNod);
+    // }
+
+    // TODO: For debug!
+    cout << elStran.at(0).at(0) << "\n";
 }
 
 void Quad4::WriteOut(H5IO &H5File_out){

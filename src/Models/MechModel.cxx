@@ -155,6 +155,7 @@ void MechModel::InitializeDirichBC(H5IO& H5File_in){
         // Assign values
         presDofs[iPresDof] = nDim*dummy.at(0)+dummy.at(1); // nDim*iNode+dof
         presVals[iPresDof] = dummy.at(2);
+        // TODO: For debug!
         // cout << presDofs[iPresDof] << "-->" << presVals[iPresDof] << "\n";
     }
 }
