@@ -120,14 +120,7 @@ void CalcElemStiffMatx(T_DMatx DMatx) override ;
  *        if `nodStresFlag=true`.
  * 
  */
-void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint) override;
-
-/**
- * @brief Write nodal stresses and strains.
- * 
- * @param H5File_out 
- */
-void WriteOut(H5IO &H5File_out) override;
+void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) override;
 
 private:
 
@@ -142,9 +135,9 @@ vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss
 
 vector<vector<ColVecd3>> elStran;   /// @brief Int-pt strains.
 vector<vector<ColVecd3>> elStres;   /// @brief Int-pt stresses.
-vector<ColVecd3> nodStran;          /// @brief Nod-pt strains.
-vector<ColVecd3> nodStres;          /// @brief Nod-pt stresses.
-vector<int> nodCount;     /// @brief Counter for integration points surrounding nodes.
+// vector<ColVecd3> nodStran;          /// @brief Nod-pt strains.
+// vector<ColVecd3> nodStres;          /// @brief Nod-pt stresses.
+// vector<int> nodCount;     /// @brief Counter for integration points surrounding nodes.
 
 vector<vector<Matd2x4>> BMat;       /// @brief Derivatives (scalar) matrix.
 vector<vector<Matd3x8>> BuMat;      /// @brief Strain matrix.

@@ -7,10 +7,54 @@ using namespace std;
 
 MechModel::MechModel(BaseElemMech* elements){
 
-    nTotDof = elements->get_nTotDof();
-    nElements = elements->get_nElements();
-    nElDispDofs = elements->get_nElDispDofs();
-    nDim = elements->get_nDim();
+    string dsetName;
+    // dsetName = "SimulationParameters/nSteps";
+    // nSteps = H5File_in.ReadScalar(dsetName);
+    dsetName = "SimulationParameters/nDim";
+    nDim = H5File_in.ReadScalar(dsetName);
+    dsetName = "SimulationParameters/nTotElements";
+    nTotElements = H5File_in.ReadScalar(dsetName);
+    dsetName = "SimulationParameters/nElementSets";
+    nElementSets = H5File_in.ReadScalar(dsetName);
+    dsetName = "SimulationParameters/nTotDofs";
+    nTotDofs = H5File_in.ReadScalar(dsetName);
+    dsetName = "SimulationParameters/nTotNodes";
+    nTotNodes = H5File_in.ReadScalar(dsetName);
+
+    // Set the type and initiate size
+    nodCount.resize(nTotNodes);
+    if (nDim == 2){ // Case 2D model
+
+        nodStres = vector<ColVecd3>(nTotNodes);
+        nodStran = vector<ColVecd3>(nTotNodes);
+
+        for(int iNod=0; iNod<nTotNodes; iNod++){
+
+            std::get<std::vector<ColVecd3>>(nodStran).at(iNod).setZero();
+            std::get<std::vector<ColVecd3>>(nodStres).at(iNod).setZero();
+            nodCount.at(iNod) = 0;
+
+        }
+    } else if (nDim == 3){ // Case 3D
+
+        nodStres = vector<ColVecd6>(nTotNodes);
+        nodStran = vector<ColVecd6>(nTotNodes);
+
+        for(int iNod=0; iNod<nTotNodes; iNod++){
+
+            std::get<std::vector<ColVecd6>>(nodStran).at(iNod).setZero();
+            std::get<std::vector<ColVecd6>>(nodStres).at(iNod).setZero();
+            nodCount.at(iNod) = 0;
+            
+        }
+    }
+
+    // Allocate memory for `Fint`.
+    PetscMalloc1(nTotDofs, &Fint);
+    // Initialize to zeros, otherwise will get garbage memory values.
+    for(int iDof=0; iDof<nTotDofs; iDof++){
+        Fint[iDof] = 0;
+    }
 
     InitializePETSc(elements);
 }
@@ -194,17 +238,22 @@ Mat& MechModel::getA(){
     return A;
 }
 
-void MechModel::CalcStres(BaseElemMech* elements, T_DMatx DMatx){
+void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats){
 
     VecGetArrayRead(x, &globalBuffer);
 
-    for (int iSet=0; iSet<nElementSets; iSet++)
-      elements[iSet]->CalcStres(mats[iSet]->getDMatx(), globalBuffer, Fint);
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        
+        elements[iSet]->CalcStres(mats[iSet]->getDMatx(), globalBuffer, Fint, nodStres, nodStran, nodCount);
+    }
+
+    // TODO: For debug!
+    // cout << std::get<std::vector<ColVecd3>>(nodStran).at(0) << "\n";
 
     VecRestoreArrayRead(x, &globalBuffer);
 }
 
-void MechModel::WriteOut(BaseElemMech* elements, H5IO &H5File_out){
+void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out){
 
     // Displacements
     VecGetArrayRead(x, &globalBuffer);
@@ -212,6 +261,13 @@ void MechModel::WriteOut(BaseElemMech* elements, H5IO &H5File_out){
     VecRestoreArrayRead(x, &globalBuffer);
     H5File_out.WriteArray_1D("Force", nTotDofs, Fint);
 
-    elements->WriteOut(H5File_out);
+    // Stresses and strains
+    if (nDim==2){
+        H5File_out.WriteStres("Strain", nTotNodes, 3, nodStran);
+        H5File_out.WriteStres("Stress", nTotNodes, 3, nodStres);
+    } else if (nDim==3) {
+        H5File_out.WriteStres("Strain", nTotNodes, 6, nodStran);
+        H5File_out.WriteStres("Stress", nTotNodes, 6, nodStres);
+    }
 }
 

@@ -59,4 +59,9 @@ using T_DMatx = std::variant<Matd2x2, Matd3x3, Matd6x6>;
  * 
  */
 using T_ElStiffMatx = std::variant<vector<Matd8x8>*, vector<Matd6x6>*>;
-// 
+
+/**
+ * @brief Variants `nodStres`.
+ * 
+ */
+using T_nodStres = std::variant<vector<ColVecd3>, vector<ColVecd6>>;

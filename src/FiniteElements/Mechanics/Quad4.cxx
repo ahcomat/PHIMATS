@@ -255,16 +255,10 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
     elStiffMatxVariant = &elStiffMatx;
 }
 
-void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint){
+void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount){
 
     ColVecd8 dummyDisp; // for element nodal displacement.
     ColVecd8 dummyForc; // for element nodal internal force.
-
-    for(int iNod=0; iNod<nNodes; iNod++){
-        nodStran.at(iNod).setZero();
-        nodStres.at(iNod).setZero();
-        nodCount.at(iNod) = 0;
-    }
 
     // Integration point values.
     for(int iElem=0; iElem<nElements; iElem++){
@@ -289,13 +283,12 @@ void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint){
             }
 
             // Nodal values
-            for(auto iNod=elemNodeConn.at(iElem).begin(); iNod!=elemNodeConn.at(iElem).end(); iNod++){
+            for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
 
-            //     // cout << *iNod2 << "\n";
-            //     nodStran.at(*iNod2) += elStran.at(iElem).at(iGaus);
-            //     nodStres.at(*iNod2) += elStres.at(iElem).at(iGaus);
-            //     nodCount.at(*iNod2) += 1;
-            // }
+                std::get<std::vector<ColVecd3>>(nodStran).at(*iNod2) += elStran.at(iElem).at(iGaus);
+                std::get<std::vector<ColVecd3>>(nodStres).at(*iNod2) += elStres.at(iElem).at(iGaus);
+                nodCount.at(*iNod2) += 1;
+            }
             
         }
     }
@@ -303,17 +296,10 @@ void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint){
     // Number averaging the nodal values
     for(int iNod=0; iNod<nNodes; iNod++){
         
-    //     nodStran.at(iNod) = nodStran.at(iNod)/nodCount.at(iNod);
-    //     nodStres.at(iNod) = nodStres.at(iNod)/nodCount.at(iNod);
-    // }
+        std::get<std::vector<ColVecd3>>(nodStran).at(iNod) = std::get<std::vector<ColVecd3>>(nodStran).at(iNod)/nodCount.at(iNod);
+        std::get<std::vector<ColVecd3>>(nodStres).at(iNod) = std::get<std::vector<ColVecd3>>(nodStres).at(iNod)/nodCount.at(iNod);
+    }
 
     // TODO: For debug!
-    cout << elStran.at(0).at(0) << "\n";
-}
-
-void Quad4::WriteOut(H5IO &H5File_out){
-
-    // Stresses and strains
-    H5File_out.WriteStres3("Strain", nNodes, nStres, nodStran);
-    H5File_out.WriteStres3("Stress", nNodes, nStres, nodStres);
+    // cout << nodStran.at(0).at(0) << "\n\n";
 }
