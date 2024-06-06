@@ -124,7 +124,7 @@ void H5IO::WriteArray_1D(std::string dsetName, int xSize, const double *Array){
     status = H5Fclose(file_id);
 }
 
-void H5IO::WriteStres3(string dsetName, int nNodes, int nStres, vector<ColVecd3> &Array){
+void H5IO::WriteStres(string dsetName, int nNodes, int nStres, const T_nodStres& Array){
 
     hid_t  file_id, dataset_id, dataspace_id;
     herr_t status;
@@ -138,10 +138,20 @@ void H5IO::WriteStres3(string dsetName, int nNodes, int nStres, vector<ColVecd3>
 
     double BufferField [nNodes][nStres];
 
-    for (int i=0; i<nNodes; i++){
-        for (int j=0; j<nStres; j++){
-            BufferField[i][j] = Array.at(i)(j);
+    if(nStres==3){
+
+        for (int i=0; i<nNodes; i++){
+            for (int j=0; j<nStres; j++){
+                BufferField[i][j] = std::get<std::vector<ColVecd3>>(Array).at(i)(j);
+            }
         }
+    } else if(nStres==6) {
+
+        for (int i=0; i<nNodes; i++){
+            for (int j=0; j<nStres; j++){
+                BufferField[i][j] = std::get<std::vector<ColVecd3>>(Array).at(i)(j);
+            }
+        }        
     }
 
     file_id = H5Fopen(fileName, H5F_ACC_RDWR, H5P_DEFAULT);
@@ -158,38 +168,3 @@ void H5IO::WriteStres3(string dsetName, int nNodes, int nStres, vector<ColVecd3>
     status = H5Sclose(dataspace_id);
     status = H5Fclose(file_id);
 }
-
-// void H5IO::WriteArray_3D(std::string dsetName, int xSize, int ySize, int zSize, const double *Array){
-
-//     hid_t  file_id, dataset_id, dataspace_id;
-//     herr_t status;
-//     hsize_t dims[3];
-
-//     dims[0] = xSize;
-//     dims[1] = ySize;
-//     dims[2] = zSize;
-
-//     float *outBuffer = new float[xSize*ySize*zSize];
-
-//     for (int i=0; i<xSize*ySize*zSize; i++){
-
-//         outBuffer[i] = (float)Array[i];
-//     }
-
-//     const char* fileName = this->H5FileName.c_str();
-//     const char* dataSetName = dsetName.c_str();
-
-//     file_id = H5Fopen(fileName, H5F_ACC_RDWR, H5P_DEFAULT);
-
-//     dataspace_id = H5Screate_simple(3, dims, NULL);
-
-//     dataset_id = H5Dcreate2(file_id, dataSetName, H5T_NATIVE_FLOAT, dataspace_id, 
-//                     H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-             
-//     status = H5Dwrite(dataset_id, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL,
-//              H5P_DEFAULT, outBuffer);
-
-//     status = H5Dclose(dataset_id);
-//     status = H5Sclose(dataspace_id);
-//     status = H5Fclose(file_id);
-// }

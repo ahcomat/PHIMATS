@@ -48,16 +48,11 @@ void ReadFieldDoub1D(string dsetName, vector<double>& Field);
 
 void WriteArray_1D(string dsetName, int xSize, const double *Array);
 
-void WriteStres3(string dsetName, int xSize, int ySize, vector<ColVecd3> &Array);
-void WriteStres6(string dsetName, int xSize, int ySize, vector<ColVecd6> &Array);
-
-
-// void WriteArray_3D(std::string dsetName, int xSize, int ySize, int zSize, const double *Array);
+void WriteStres(string dsetName, int xSize, int ySize, const T_nodStres& Array);
 
 private:
 
-const string H5FileName;         /// Name of HDF file. 
-
+const string H5FileName;         /// @brief Name of HDF file. 
 
 };
 
