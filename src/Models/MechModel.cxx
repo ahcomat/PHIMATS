@@ -227,7 +227,7 @@ void MechModel::InitializeDirichBC(H5IO& H5File_in){
         H5File_in.ReadFieldDoub1D(dsetName, dummy);
         // Assign values
         presDofs[iPresDof] = nDim*dummy.at(0)+dummy.at(1); // nDim*iNode+dof
-        presVals[iPresDof] = dummy.at(2);
+        presVals[iPresDof] = dummy.at(2)/nSteps;
         // TODO: For debug!
         // cout << presDofs[iPresDof] << "-->" << presVals[iPresDof] << "\n";
     }
@@ -244,11 +244,10 @@ void MechModel::setDirichBC(){
     VecAssemblyBegin(b); VecAssemblyEnd(b);
 }
 
-// int MechModel::get_nSteps() const{
+int MechModel::get_nSteps() const{
     
-//     return nSteps;
-// }
-
+    return nSteps;
+}
 
 Vec& MechModel::getB(){
 
@@ -287,21 +286,21 @@ void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     VecRestoreArrayRead(x, &globalBuffer);
 }
 
-void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out){
+void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, string iStep){
 
     // Displacements
     VecGetArrayRead(x, &globalBuffer);
-    H5File_out.WriteArray_1D("Disp", nTotDofs, globalBuffer);
+    H5File_out.WriteArray_1D("Disp/Step_"+iStep, nTotDofs, globalBuffer);
     VecRestoreArrayRead(x, &globalBuffer);
-    H5File_out.WriteArray_1D("Force", nTotDofs, Fint);
+    H5File_out.WriteArray_1D("Force/Step_"+iStep, nTotDofs, Fint);
 
     // Stresses and strains
     if (nDim==2){
-        H5File_out.WriteStres("Strain", nTotNodes, 3, nodStran);
-        H5File_out.WriteStres("Stress", nTotNodes, 3, nodStres);
+        H5File_out.WriteStres("Strain/Step_"+iStep, nTotNodes, 3, nodStran);
+        H5File_out.WriteStres("Stress/Step_"+iStep, nTotNodes, 3, nodStres);
     } else if (nDim==3) {
-        H5File_out.WriteStres("Strain", nTotNodes, 6, nodStran);
-        H5File_out.WriteStres("Stress", nTotNodes, 6, nodStres);
+        H5File_out.WriteStres("Strain/Step_"+iStep, nTotNodes, 6, nodStran);
+        H5File_out.WriteStres("Stress/Step_"+iStep, nTotNodes, 6, nodStres);
     }
 }
 
