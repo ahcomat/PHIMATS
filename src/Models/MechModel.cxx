@@ -286,7 +286,7 @@ void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     VecRestoreArrayRead(x, &globalBuffer);
 }
 
-void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, string iStep){
+void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const string iStep){
 
     // Displacements
     VecGetArrayRead(x, &globalBuffer);

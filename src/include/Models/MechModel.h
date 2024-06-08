@@ -113,7 +113,7 @@ void CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats);
  * @param elements 
  * @param H5File_out 
  */
-void WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, string iStep);
+void WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const string iStep);
 
 private:
 
