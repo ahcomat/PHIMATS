@@ -83,56 +83,6 @@ Matd2x4 Quad4::CalcShapeFuncDeriv(double xi, double eta){
     return shapeDeriv;
 }
 
-void Quad4::ReadElementsData(H5IO &H5File_in, int iSet){
-
-    string dsetName;
-    dsetName = "Elements/ElementSet_"+std::to_string(iSet)+"/nElements";
-    nElements = H5File_in.ReadScalar(dsetName);
-    dsetName = "Elements/ElementSet_"+std::to_string(iSet)+"/nNodes";
-    nNodes = H5File_in.ReadScalar(dsetName);
-
-    // Initialize the size.
-    elemNodeConn.resize(nElements);  
-    elemDispDof.resize(nElements);
-    elemIDs.resize(nElements);
-    // Read global element IDs.
-    dsetName = "Elements/ElementSet_"+std::to_string(iSet)+"/ElementSetIDs";
-    H5File_in.ReadFieldInt1D(dsetName, elemIDs);
-
-    // Read node connectivity.
-    vector<int> dummy(nElNodes);
-
-    for (int iElem=0; iElem<nElements; iElem++){
-
-        dsetName = "NodeConnectivity/Element_"+to_string(elemIDs.at(iElem));
-        H5File_in.ReadFieldInt1D(dsetName, dummy);
-
-        elemNodeConn.at(iElem) = dummy;
-        elemDispDof.at(iElem) = CalcElemDispDof(iElem);
-    }
-
-    // TODO: For debug!
-    // for (auto& s : elemNodeConn[0])
-    //     cout << s << "\n"; 
-}
-
-vector<int> Quad4::CalcElemDispDof(int iElem){
-
-    vector<int> dispDof(nElDispDofs);
-    for(int iNod=0; iNod<nElNodes; iNod++){
-
-        dispDof.at(nDim*iNod) = nDim*elemNodeConn.at(iElem).at(iNod);
-        dispDof.at(nDim*iNod+1) = nDim*elemNodeConn.at(iElem).at(iNod)+1;
-    }
-
-    return dispDof;
-}
-
-// vector<int> Quad4::getNodeConnect(int iElem){
-
-//     return elemNodeConn.at(iElem);
-// }
-
 void Quad4::InitializeElements(Nodes &Nodes){
 
     nDof = dispDofs*nNodes;      // Calc total number of dips DOFs for element set.
@@ -180,11 +130,6 @@ void Quad4::InitializeElements(Nodes &Nodes){
     }
 }
 
-// Matd4x2 Quad4::getElemNodCoord(int iElem){
-    
-//     return elemNodCoord.at(iElem);
-// }
-
 RowVecd2 Quad4::getGaussCart(RowVecd4& sFunc, Matd4x2& elNodCoord){
 
     return sFunc*elNodCoord;  // N_i x_ij
@@ -195,7 +140,7 @@ void Quad4::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double
     // Calculates the jacobian matrix J_jj = dN_ji x_ij
     Matd2x2 jacMat = sFuncDeriv*elNodCoord;
 
-    // Jacobian determinant. Since all the weights for quad4 are "1", it is also the volume of the integration point. 
+    // Jacobian determinant.
     intVol = jacMat.determinant();
         
 #ifdef DEBUG

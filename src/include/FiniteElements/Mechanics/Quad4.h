@@ -49,44 +49,12 @@ RowVecd4  CalcShapeFunc(double xi, double eta);
 Matd2x4 CalcShapeFuncDeriv(double xi, double eta);
 
 /**
- * @brief Reads the data `nElements`, `nElementSets` and `elemNodeConn` from hdf5 file.
- * 
- * @param H5File_in  
- */
-void ReadElementsData(H5IO &H5File_in, int iSet);
-
-/**
- * @brief Returns the displacement dofs associated with element `iElem`.
- * 
- * @param iElem 
- * @return vector<int> 
- */
-vector<int> CalcElemDispDof(int iElem);
-
-// /**
-//  * @brief Returns the node connectivity of element iElem.
-//  * 
-//  * @param iElem 
-//  * @return vector<int> 
-//  * @todo Possibly move to base `Elements`.
-//  */
-// vector<int> getNodeConnect(int iElem);
-
-/**
  * @brief Initializes the data for all elements: `elemNodCoord`, `gaussPtCart`, `BMat`, `BuMat`
  *  and `intPtVol`.
  * 
  * @param Nodes 
  */
 void InitializeElements(Nodes& Nodes);
-
-// /**
-//  * @brief Get the node coordinates of a given element.
-//  * 
-//  * @param iElem 
-//  * @return Matd4x2 
-//  */
-// Matd4x2 getElemNodCoord(int iElem);
 
 /**
  * @brief Get the cartesian coordinates of gauss points `N_i x_ij`.
@@ -131,13 +99,8 @@ vector<Matd2x4> shapeFuncDeriv;  /// @brief Values of the shape function derivat
 vector<Matd4x2> elemNodCoord;     /// @brief Node Coordinates. 
 vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements. 
 
-// vector<vector<Eigen::Vector<double, 4>>> ShapeFuncCart;    /// Cartesian shape functions at integration points.
-
 vector<vector<ColVecd3>> elStran;   /// @brief Int-pt strains.
 vector<vector<ColVecd3>> elStres;   /// @brief Int-pt stresses.
-// vector<ColVecd3> nodStran;          /// @brief Nod-pt strains.
-// vector<ColVecd3> nodStres;          /// @brief Nod-pt stresses.
-// vector<int> nodCount;     /// @brief Counter for integration points surrounding nodes.
 
 vector<vector<Matd2x4>> BMat;       /// @brief Derivatives (scalar) matrix.
 vector<vector<Matd3x8>> BuMat;      /// @brief Strain matrix.

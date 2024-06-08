@@ -47,10 +47,23 @@ int get_nElDispDofs() const { return nElDispDofs; };
  */
 const vector<vector<int>>& get_elemDispDof() const { return elemDispDof; };
 
+/**
+ * @brief Reads the data `nElements`, `nElementSets` and `elemNodeConn` from hdf5 file.
+ * 
+ * @param H5File_in  
+ */
+void ReadElementsData(H5IO &H5File_in, int iSet);
 
 /**
- * @brief Calculates the `Fint`, strains and stresses. Also evaluates the stress nodal values 
- *        if `nodStresFlag=true`.
+ * @brief Returns the displacement dofs associated with element `iElem`.
+ * 
+ * @param iElem 
+ * @return vector<int> 
+ */
+vector<int> CalcElemDispDof(int iElem);
+
+/**
+ * @brief Calculates the `Fint`, strains and stresses. Also evaluates the stress nodal values.
  * 
  * @param DMatx 
  * @param x 
