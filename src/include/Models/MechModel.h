@@ -118,13 +118,13 @@ void WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out);
 private:
 
 int nElementSets;   /// @brief Number of element sets
-int nTotNodes;       /// @brief Total number of DOFs.
+int nTotNodes;      /// @brief Total number of DOFs.
 int nTotDofs;       /// @brief Total number of DOFs.
 int nTotElements;   /// @brief Total number of elements.
 int nDim;           /// @brief Spatial dimensions of the model.
 int nElDispDofs;    /// @brief Number of element displacement dofs.
 int nElements;      /// @brief Number of elements per element set. 
-// int nSteps;      /// @brief Number of steps to apply the load.
+int nSteps;         /// @brief Number of steps to apply the load.
 
 T_nodStres nodStres;      /// @brief Nodal stress.
 T_nodStres nodStran;      /// @brief Nodal strain.

@@ -8,8 +8,8 @@ using namespace std;
 MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in){
 
     string dsetName;
-    // dsetName = "SimulationParameters/nSteps";
-    // nSteps = H5File_in.ReadScalar(dsetName);
+    dsetName = "SimulationParameters/nSteps";
+    nSteps = H5File_in.ReadScalar(dsetName);
     dsetName = "SimulationParameters/nDim";
     nDim = H5File_in.ReadScalar(dsetName);
     dsetName = "SimulationParameters/nTotElements";
@@ -157,16 +157,20 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
 
     for (auto* elem : elements){  // Loop through element sets
 
-        // Pointer to the element dip DOFs. Will vanish out the "for" scope.
+        // Pointer to the element dip DOFs. Will vanish out the "for" element set loop.
         const vector<vector<int>>& elemDispDof_ptr = elem->get_elemDispDof();
         // Get the number of element dips DOFs. 
         nElDispDofs = elem->get_nElDispDofs();
         // Get the number of elements in the set. 
         nElements = elem->get_nElements();
 
-        //  Assemble the coefficient matrix.
-        PetscInt   i1[nElDispDofs], j1[nElDispDofs]; // Indices for row and columns to insert.
-        PetscScalar vals[nElDispDofs*nElDispDofs];   // values.
+        //  Assemble the coefficient matrix.        
+        PetscInt* i1; PetscInt* j1; // Indices for row and columns to insert.
+        PetscMalloc1(nElDispDofs, &i1);
+        PetscMalloc1(nElDispDofs, &j1);
+
+        PetscScalar* vals;   // values.
+        PetscMalloc1(nElDispDofs*nElDispDofs, &vals);
 
         // `T_ElStiffMatx` variant that holds a pointer to the vector.
         const T_ElStiffMatx& elStiffMatx_ptr = elem->getElStiffMatx();
@@ -197,6 +201,11 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
                 MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, vals, ADD_VALUES);
             }
         }
+
+        // Free memory
+        PetscFree(i1);
+        PetscFree(j1);
+        PetscFree(vals);
     }
 
     MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
