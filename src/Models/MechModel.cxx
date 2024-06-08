@@ -5,7 +5,7 @@
 
 using namespace std;
 
-MechModel::MechModel(BaseElemMech* elements){
+MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in){
 
     string dsetName;
     // dsetName = "SimulationParameters/nSteps";
@@ -68,21 +68,16 @@ MechModel::~MechModel(){
     cout << "MechModel elements exited correctly" << "\n";
 }
 
-void MechModel::CalcElemStiffMatx(BaseElemMech* elements, T_DMatx DMatx){
+void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
 
-    elements->CalcElemStiffMatx(DMatx);
-}
-
-void MechModel::InitializePETSc(BaseElemMech* elements){
-
-    const vector<vector<int>>& elemDispDof = elements->get_elemDispDof();
-
-    // for (int dispDof : elemDispDof[0])
-    //     cout << dispDof << "\n";
+    // TODO: For debug!
+    // for(auto* elem : elements)
+    //     for (int dispDof : elem->get_elemDispDof(0))
+    //         cout << dispDof << "\n";
 
     // Initialize the vectors
     VecCreate(PETSC_COMM_WORLD, &b);
-    VecSetSizes(b, PETSC_DECIDE, nTotDof);
+    VecSetSizes(b, PETSC_DECIDE, nTotDofs);
 
     // Since we are interested in sequential implementation for now.
     VecSetType(b, VECSEQ);
@@ -94,7 +89,7 @@ void MechModel::InitializePETSc(BaseElemMech* elements){
 
     // Initialize the coefficient matrix.
     MatCreate(PETSC_COMM_WORLD, &A);
-    MatSetSizes(A, PETSC_DECIDE, PETSC_DECIDE, nTotDof, nTotDof);
+    MatSetSizes(A, PETSC_DECIDE, PETSC_DECIDE, nTotDofs, nTotDofs);
     
     // Since we are interested in only sequential in this implementation. 
     MatSetType(A, MATSEQAIJ);
@@ -104,32 +99,41 @@ void MechModel::InitializePETSc(BaseElemMech* elements){
     MatSetOption(A, MAT_SYMMETRIC, PETSC_TRUE);
 
     // Preallocate the coefficient matrix.
-    vector<vector<int>> gDofs(nTotDof); // vector to store dofs per row.
+    vector<vector<int>> gDofs(nTotDofs); // vector to store dofs per row.
     int itotv, jtotv; // for global row and colum dof.
     PetscInt *nnz; // Array for the number of zeros per row
-    PetscMalloc1(nTotDof, &nnz); // Allocates the size of nnz
+    PetscMalloc1(nTotDofs, &nnz); // Allocates the size of nnz
     
-    // Find the number of non zeros (columns) per row for preallocation. 
-    for (int iElem=0; iElem<nElements; iElem++){
-        // Row.
-        for (int idof=0; idof<nElDispDofs; idof++){
+    // Find the number of non zeros (columns) per row for preallocation.
+    // TODO: Make a check for elements.size()==nElementSets?
+    for (auto* elem : elements){  // Loop through element sets
 
-            itotv = elemDispDof.at(iElem).at(idof); // global row number
-            // Column.
-            for (int jdof=0; jdof<nElDispDofs; jdof++){
+        nElDispDofs = elem->get_nElDispDofs();
+        nElements = elem->get_nElements();
+        const vector<vector<int>>& elemDispDof_ptr = elem->get_elemDispDof();
+    
+        for (int iElem=0; iElem<elem->get_nElements(); iElem++){ // Loop through all elements per element set
 
-                jtotv = elemDispDof.at(iElem).at(jdof); // global column number
+            for (int idof=0; idof<nElDispDofs; idof++){ // Row
 
-                // If jtotv is not in gDofs.at(itotv)
-                if (find(gDofs.at(itotv).begin(), gDofs.at(itotv).end(), jtotv) == gDofs.at(itotv).end()){
-                    gDofs.at(itotv).push_back(jtotv);
+                itotv = elemDispDof_ptr.at(iElem).at(idof); // global row number
+                
+                for (int jdof=0; jdof<nElDispDofs; jdof++){// Column.
+
+                    jtotv = elemDispDof_ptr.at(iElem).at(jdof); // global column number
+
+                    // If jtotv is not in gDofs.at(itotv)
+                    if (find(gDofs.at(itotv).begin(), gDofs.at(itotv).end(), jtotv) == gDofs.at(itotv).end()){
+
+                        gDofs.at(itotv).push_back(jtotv);
+                    }
                 }
             }
         }
-    }
+    }   
 
     // Add the number of non zero columns to nnz
-    for (int iDof=0; iDof<nTotDof; iDof++){
+    for (int iDof=0; iDof<nTotDofs; iDof++){
         nnz[iDof] = gDofs.at(iDof).size();
     }
 
@@ -141,41 +145,57 @@ void MechModel::InitializePETSc(BaseElemMech* elements){
     MatSetOption(A, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_FALSE); 
 }
 
-void MechModel::Assemble(BaseElemMech* elements){
+void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats){
 
-    const vector<vector<int>>& elemDispDof = elements->get_elemDispDof();
+    for (int iSet=0; iSet<nElementSets; iSet++)
+      elements[iSet]->CalcElemStiffMatx(mats[iSet]->getDMatx());
+}
+
+void MechModel::Assemble(vector<BaseElemMech*> elements){
 
     MatZeroEntries(A);  // Set all entries to zero.
+
+    for (auto* elem : elements){  // Loop through element sets
+
+        // Pointer to the element dip DOFs. Will vanish out the "for" scope.
+        const vector<vector<int>>& elemDispDof_ptr = elem->get_elemDispDof();
+        // Get the number of element dips DOFs. 
+        nElDispDofs = elem->get_nElDispDofs();
+        // Get the number of elements in the set. 
+        nElements = elem->get_nElements();
 
         //  Assemble the coefficient matrix.
         PetscInt   i1[nElDispDofs], j1[nElDispDofs]; // Indices for row and columns to insert.
         PetscScalar vals[nElDispDofs*nElDispDofs];   // values.
 
-    // `T_ElStiffMatx` variant that holds a pointer to the vector.
-    const T_ElStiffMatx& elStiffMatx_ptr = elements->getElStiffMatx();
+        // `T_ElStiffMatx` variant that holds a pointer to the vector.
+        const T_ElStiffMatx& elStiffMatx_ptr = elem->getElStiffMatx();
 
-    if (std::holds_alternative<vector<Matd8x8>*>(elStiffMatx_ptr)){
+        if (std::holds_alternative<vector<Matd8x8>*>(elStiffMatx_ptr)){  // Quad4 elements.
 
-        /* The "*" operator dereferences the pointer to get the actual variable that the 
-           pointer is pointing to. const auto& binds the dereferenced vector to a constant reference. 
-           This way avoids copying the vector and can safely read from it without modifying it.
-        */ 
-        const vector<Matd8x8> elStiffMatx_ref = *std::get<vector<Matd8x8>*>(elStiffMatx_ptr);
+            /* The "*" operator dereferences the pointer to get the actual variable that the 
+            pointer is pointing to. const auto& binds the dereferenced vector to a constant reference. 
+            This way avoids copying the vector and can safely read from it without modifying it.
+            */ 
+            const vector<Matd8x8> elStiffMatx_ref = *std::get<vector<Matd8x8>*>(elStiffMatx_ptr);
 
-        Matd8x8 dummyVals;
+            Matd8x8 dummyVals;
 
-        for (int iElem =0; iElem<nElements; iElem++){
-            // Get the disp dofs associated with the element
-            for(int iElDof=0; iElDof<nElDispDofs; iElDof++){
-                i1[iElDof] = elemDispDof.at(iElem).at(iElDof);
-                j1[iElDof] = elemDispDof.at(iElem).at(iElDof);
+            for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
+
+                // Get the disp dofs associated with the element
+                for(int iElDof=0; iElDof<nElDispDofs; iElDof++){
+
+                    i1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
+                    j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
+                }
+
+                // Get the element stiffness matrix
+                dummyVals = elStiffMatx_ref.at(iElem);
+
+                Matd8x8::Map(vals, dummyVals.rows(), dummyVals.cols()) = dummyVals;
+                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, vals, ADD_VALUES);
             }
-
-            // Get the element stiffness matrix
-            dummyVals = elStiffMatx_ref.at(iElem);
-
-            Matd8x8::Map(vals, dummyVals.rows(), dummyVals.cols()) = dummyVals;
-            MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, vals, ADD_VALUES);
         }
     }
 
@@ -190,8 +210,6 @@ void MechModel::InitializeDirichBC(H5IO& H5File_in){
     nPresDofs = H5File_in.ReadScalar(dsetName);
     PetscMalloc1(nPresDofs, &presDofs);
     PetscMalloc1(nPresDofs, &presVals); 
-    dsetName = "SimulationParameters/nSteps";
-    nSteps = H5File_in.ReadScalar(dsetName);
 
     vector<double> dummy(3);
     for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
@@ -217,10 +235,10 @@ void MechModel::setDirichBC(){
     VecAssemblyBegin(b); VecAssemblyEnd(b);
 }
 
-int MechModel::get_nSteps() const{
+// int MechModel::get_nSteps() const{
     
-    return nSteps;
-}
+//     return nSteps;
+// }
 
 
 Vec& MechModel::getB(){
@@ -245,6 +263,13 @@ void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     for (int iSet=0; iSet<nElementSets; iSet++){
         
         elements[iSet]->CalcStres(mats[iSet]->getDMatx(), globalBuffer, Fint, nodStres, nodStran, nodCount);
+    }
+
+    // Number averaging the nodal values
+    for(int iNod=0; iNod<nTotNodes; iNod++){
+        
+        std::get<std::vector<ColVecd3>>(nodStran).at(iNod) = std::get<std::vector<ColVecd3>>(nodStran).at(iNod)/nodCount.at(iNod);
+        std::get<std::vector<ColVecd3>>(nodStres).at(iNod) = std::get<std::vector<ColVecd3>>(nodStres).at(iNod)/nodCount.at(iNod);
     }
 
     // TODO: For debug!

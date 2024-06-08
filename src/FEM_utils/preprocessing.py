@@ -154,8 +154,29 @@ class PreProcessing:
             # All elements
             self.grp_nodeConnectivity = self.fh5.create_group('NodeConnectivity')
             
-            for iset in range(self.nElements):
-                self.grp_nodeConnectivity.create_dataset("Element_"+str(iset), data=self.nodeConnectivity[iset], dtype = np.int64)      
+            for iElem in range(self.nTotElements):
+                self.grp_nodeConnectivity.create_dataset("Element_"+str(iElem), data=self.nodeConnectivity[iElem], dtype = np.int64)      
+
+            # Data per element set
+            # element connectivity
+            counter = 0
+            for elSet in self.mesh.cell_sets_dict.values():
+                counter+=1
+                self.grp_elemSet = self.fh5.create_group('Elements/ElementSet_'+str(counter))
+                elemIDs = list(elSet.values())[0]
+                nElems = elemIDs.shape[0]
+                print(nElems)
+                self.grp_elemSet.create_dataset("nElements", data=nElems, dtype = np.int64)
+                self.grp_elemSet.create_dataset("ElementSetIDs", data=elemIDs, dtype = np.int64)  
+            # Nodes
+            counter = 0
+            for pSet in self.mesh.point_sets:
+                counter+=1
+                elNodes = self.mesh.point_sets[pSet]
+                nElTotNodes = len(elNodes)
+                print(len(self.mesh.point_sets[pSet]))
+                self.fh5.create_dataset('Elements/ElementSet_'+str(counter)+'/nNodes', data=nElTotNodes, dtype = np.int64)
+                self.fh5.create_dataset('Elements/ElementSet_'+str(counter)+'/NodeSetIDs', data=elNodes, dtype = np.int64)  
             
             #----------------------------------------------------------------------
             # Write prescribed dofs
@@ -332,7 +353,7 @@ class PreProcessing:
 #-----------------------------------------------------------------------------#
 
     @staticmethod
-    def WriteDispBCs(elementName, mesh, presBCs, dispDofs=2):
+    def WriteDispBCs(Simul, elementName, mesh, presBCs, dispDofs=2):
         
         #----------------------------------------------------------------------
         # Prepare data  
@@ -400,7 +421,7 @@ class PreProcessing:
         
         BCmesh.point_data.update({"disp": sdisp})
         BCmesh.point_data.update({"FlagBC": fdisp})
-        BCmesh.write("BC.vtk")
+        BCmesh.write(Simul+"_BC.vtk")
         
         return BCmesh
     

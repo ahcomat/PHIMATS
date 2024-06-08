@@ -15,11 +15,11 @@ This is a list for planned features and developments to be added to `PhiMATS`. S
 
 ## FEM
 
-- [ ] Element sets for different materials
 - [ ] DM and DMPlex in PETSc
 - [ ] Parallel
 - [ ] Adaptive meshing
 - [x] 2D and 3D nodes
+- [x] Multi-material/multi-element sets
 
 ## Software
 

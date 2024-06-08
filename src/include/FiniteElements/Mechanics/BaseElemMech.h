@@ -41,11 +41,12 @@ int get_nDim() const { return nDim; };
 int get_nElDispDofs() const { return nElDispDofs; };
 
 /**
- * @brief Return a const reference to the disp DOFs of element `iElem`. 
+ * @brief Return a const reference to the `elemDispDof`. 
  * 
  * @return const vector<vector<int>>& 
  */
-const vector<int>& get_elemDispDof(int iElem) const { return elemDispDof.at(iElem); };
+const vector<vector<int>>& get_elemDispDof() const { return elemDispDof; };
+
 
 /**
  * @brief Calculates the `Fint`, strains and stresses. Also evaluates the stress nodal values 
@@ -59,13 +60,13 @@ const vector<int>& get_elemDispDof(int iElem) const { return elemDispDof.at(iEle
  * @todo 
  * - Remove `nodStresFlag`.
  */
-virtual void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint) = 0;
+virtual void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) = 0;
 
 protected:
 
 const int nDim;           /// @brief Spatial dimensions of the element.
 const int nElNodes;       /// @brief Number of nodes per element.
-const int dispDofs;       /// @brief Number of displacement dofs. 
+const int dispDofs;       /// @brief Number of displacement dofs per node. 
 const int nStres;         /// @brief Stress/strain components.
 const int nElDispDofs;    /// @brief Number of element displacement dofs.
 const int nGauss;         /// @brief Number of gauss points.

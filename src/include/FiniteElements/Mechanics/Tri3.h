@@ -74,9 +74,9 @@ void InitializeElements(Nodes& Nodes);
 
 void CalcElemStiffMatx(T_DMatx DMatx) override;
 
-void CalcStres(T_DMatx DMatx, const double* globalBuffer) override;
+// void CalcStres(T_DMatx DMatx, const double* globalBuffer) override;
 
-void WriteOut(H5IO &H5File_out) override;
+// void WriteOut(H5IO &H5File_out) override;
 
 private:
 
@@ -97,10 +97,6 @@ vector<vector<Matd2x3>> BMat;       /// @brief Derivatives (scalar) matrix.
 vector<vector<Matd3x6>> BuMat;      /// @brief Strain matrix.
 vector<vector<double>> intPtVol;    /// @brief Int-pt volume.
 vector<Matd6x6> elStiffMatx;        /// @brief Element stiffness matrix.
-
-// Petsc ----------------------------
-
-PetscScalar* Fint;     // Array to hold the internal force vector.
 
 };
 #endif

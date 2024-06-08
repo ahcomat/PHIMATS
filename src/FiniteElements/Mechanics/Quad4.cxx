@@ -15,16 +15,15 @@
  l -> total displacement dofs.
 */
 
-Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes)
+Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes, int iSet)
     : BaseElemMech(2, 4, 2, 3, 8, 4){ // nDim, nElNodes, dispDofs, nStres, nElDispDofs, nGauss
 
     InitShapeFunc();
-    ReadElementsData(H5File_in);
+    ReadElementsData(H5File_in, iSet);
     InitializeElements(Nodes);
 }   
 
 Quad4::~Quad4(){
-
 
     // Exit message
     cout << "Quad4 elements exited correctly" << "\n";
@@ -84,10 +83,10 @@ Matd2x4 Quad4::CalcShapeFuncDeriv(double xi, double eta){
     return shapeDeriv;
 }
 
-void Quad4::ReadElementsData(H5IO &H5File_in){
+void Quad4::ReadElementsData(H5IO &H5File_in, int iSet){
 
     string dsetName;
-    dsetName = "SimulationParameters/nElements";
+    dsetName = "Elements/ElementSet_"+std::to_string(iSet)+"/nElements";
     nElements = H5File_in.ReadScalar(dsetName);
     dsetName = "Elements/ElementSet_"+std::to_string(iSet)+"/nNodes";
     nNodes = H5File_in.ReadScalar(dsetName);
@@ -95,14 +94,17 @@ void Quad4::ReadElementsData(H5IO &H5File_in){
     // Initialize the size.
     elemNodeConn.resize(nElements);  
     elemDispDof.resize(nElements);
-
-    dsetName = "SimulationParameters/nElementSets";
-    nElementSets = H5File_in.ReadScalar(dsetName);
+    elemIDs.resize(nElements);
+    // Read global element IDs.
+    dsetName = "Elements/ElementSet_"+std::to_string(iSet)+"/ElementSetIDs";
+    H5File_in.ReadFieldInt1D(dsetName, elemIDs);
 
     // Read node connectivity.
     vector<int> dummy(nElNodes);
+
     for (int iElem=0; iElem<nElements; iElem++){
-        dsetName = "NodeConnectivity/Element_"+to_string(iElem);
+
+        dsetName = "NodeConnectivity/Element_"+to_string(elemIDs.at(iElem));
         H5File_in.ReadFieldInt1D(dsetName, dummy);
 
         elemNodeConn.at(iElem) = dummy;
@@ -136,10 +138,7 @@ void Quad4::InitializeElements(Nodes &Nodes){
     nDof = dispDofs*nNodes;      // Calc total number of dips DOFs for element set.
 
     // Initialize the storages for int-pt stresses/strains
-    elStres.resize(nElements); elStran.resize(nElements);
-
-    // Initialize the storages for nodal stresses/strains and counts
-    nodStres.resize(nNodes); nodStran.resize(nNodes); nodCount.resize(nNodes);      
+    elStres.resize(nElements); elStran.resize(nElements);      
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd4x2 dummyElNodCoord; // For node coordinates.
@@ -235,7 +234,7 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
     // Loop through all elements.
     for(int iElem=0; iElem<nElements; iElem++){
 
-        elStiffMatx.at(iElem).setZero(); // Must be populated with zeros.
+        elStiffMatx.at(iElem).setZero(); // Must be populated with zeros.         
 
         // Integration over all Gauss points.
         for (int iGauss=0; iGauss<nGauss; iGauss++){
@@ -245,11 +244,12 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
 
             // [B_kl]^T D_kk B_kl
             elStiffMatx.at(iElem) += dummyBu.transpose()*std::get<Matd3x3>(DMatx)*dummyBu*dummydVol;
-        }        
+        }  
     }
 
-    // TODO: For debug!
-    // cout << elStiffMatx.at(0) << "\n\n";
+    // // TODO: For debug!
+    // for (auto& iStifMat : elStiffMatx)
+    //     cout << iStifMat << "\n\n";
 
     // Pointer to the vector, not the vector itself.
     elStiffMatxVariant = &elStiffMatx;
@@ -289,17 +289,9 @@ void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T
                 std::get<std::vector<ColVecd3>>(nodStres).at(*iNod2) += elStres.at(iElem).at(iGaus);
                 nodCount.at(*iNod2) += 1;
             }
-            
         }
     }
 
-    // Number averaging the nodal values
-    for(int iNod=0; iNod<nNodes; iNod++){
-        
-        std::get<std::vector<ColVecd3>>(nodStran).at(iNod) = std::get<std::vector<ColVecd3>>(nodStran).at(iNod)/nodCount.at(iNod);
-        std::get<std::vector<ColVecd3>>(nodStres).at(iNod) = std::get<std::vector<ColVecd3>>(nodStres).at(iNod)/nodCount.at(iNod);
-    }
-
-    // TODO: For debug!
-    // cout << nodStran.at(0).at(0) << "\n\n";
+    // // TODO: For debug!
+    // cout << elStran.at(0).at(0) << "\n\n";
 }

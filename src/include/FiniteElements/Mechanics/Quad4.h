@@ -20,7 +20,7 @@ class Quad4: public BaseElemMech{
 
 public:
 
-Quad4(H5IO &H5File_in, Nodes &Nodes);   
+Quad4(H5IO &H5File_in, Nodes &Nodes, int iSet);   
 
 ~Quad4() override ;
 
@@ -53,7 +53,7 @@ Matd2x4 CalcShapeFuncDeriv(double xi, double eta);
  * 
  * @param H5File_in  
  */
-void ReadElementsData(H5IO &H5File_in);
+void ReadElementsData(H5IO &H5File_in, int iSet);
 
 /**
  * @brief Returns the displacement dofs associated with element `iElem`.

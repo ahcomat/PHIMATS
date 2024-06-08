@@ -25,8 +25,6 @@ Tri3::Tri3(H5IO &H5File_in, Nodes &Nodes)
 
 Tri3::~Tri3(){
 
-    // Deallocation
-    PetscFree(Fint);
     // Exit message
     cout << "Tri3 elements exited correctly" << "\n";
 }
@@ -80,26 +78,26 @@ Matd2x3 Tri3::CalcShapeFuncDeriv(double xi, double eta){
 
 void Tri3::ReadElementsData(H5IO &H5File_in){
 
-    string dsetName;
-    dsetName = "SimulationParameters/nElements";
-    nElements = H5File_in.ReadScalar(dsetName);
+    // string dsetName;
+    // dsetName = "SimulationParameters/nElements";
+    // nElements = H5File_in.ReadScalar(dsetName);
 
-    // Initialize the size.
-    elemNodeConn.resize(nElements);  
-    elemDispDof.resize(nElements);
+    // // Initialize the size.
+    // elemNodeConn.resize(nElements);  
+    // elemDispDof.resize(nElements);
 
-    dsetName = "SimulationParameters/nElementSets";
-    nElementSets = H5File_in.ReadScalar(dsetName);
+    // dsetName = "SimulationParameters/nElementSets";
+    // nElementSets = H5File_in.ReadScalar(dsetName);
 
-    // Read node connectivity.
-    vector<int> dummy(nElNodes);
-    for (int iElem=0; iElem<nElements; iElem++){
-        dsetName = "NodeConnectivity/Element_"+to_string(iElem);
-        H5File_in.ReadFieldInt1D(dsetName, dummy);
+    // // Read node connectivity.
+    // vector<int> dummy(nElNodes);
+    // for (int iElem=0; iElem<nElements; iElem++){
+    //     dsetName = "NodeConnectivity/Element_"+to_string(iElem);
+    //     H5File_in.ReadFieldInt1D(dsetName, dummy);
 
-        elemNodeConn.at(iElem) = dummy;
-        elemDispDof.at(iElem) = getElemDispDof(iElem);
-    }
+    //     elemNodeConn.at(iElem) = dummy;
+    //     elemDispDof.at(iElem) = CalcElemDispDof(iElem);
+    // }
 
     // for (auto& s : elemNodeConn[0])
     //     cout << s << "\n";
@@ -121,13 +119,13 @@ void Tri3::CalcElemStiffMatx(T_DMatx DMatx){
 
 }
 
-void Tri3::CalcStres(T_DMatx DMatx, const double* globalBuffer){
+// void Tri3::CalcStres(T_DMatx DMatx, const double* globalBuffer){
 
-}
+// }
 
-void Tri3::WriteOut(H5IO &H5File_out){
+// void Tri3::WriteOut(H5IO &H5File_out){
 
-    // This is final check
+//     // This is final check
 
-}
+// }
 

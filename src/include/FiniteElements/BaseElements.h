@@ -56,12 +56,12 @@ virtual void CalcElemStiffMatx(T_DMatx DMatx) = 0;
  */
 const T_ElStiffMatx& getElStiffMatx() const { return elStiffMatxVariant; }
 
-/**
- * @brief Write element specific int-pts output averaged over the nodes.
- * 
- * @param H5File_out 
- */
-virtual void WriteOut(H5IO &H5File_out) = 0;
+// /**
+//  * @brief Write element specific int-pts output averaged over the nodes.
+//  * 
+//  * @param H5File_out 
+//  */
+// virtual void WriteOut(H5IO &H5File_out) = 0;
 
 protected:
 
@@ -70,8 +70,10 @@ int nNodes;            /// @brief Total number of nodes for element set.
 int nDof;              /// @brief Total number of DOFs for element set.
 // int nPresDofs;      /// @brief Number of prescribed displacement dofs.
 
+
 vector<vector<double>> gaussPts;    /// @brief Gauss points in natural coordinates. 
 vector<vector<int>> elemNodeConn;   /// @brief Node connectivity.
+vector<int> elemIDs;                   /// @brief Global element IDs. 
 
 T_ElStiffMatx elStiffMatxVariant;   /// @brief Variant for returning elStiffMatx. 
 

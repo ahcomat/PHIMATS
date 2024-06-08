@@ -25,22 +25,14 @@
 #include "petsc.h"
 #include "H5IO.h"
 #include "FiniteElements/Mechanics/BaseElemMech.h"
+#include "Materials/Mechanics/BaseMechanics.h"
 
 class MechModel{
 
 public:
 
-MechModel(BaseElemMech* elements);
-
+MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in);
 ~MechModel();
-
-/**
- * @brief Calculates the element stiffness matrix. 
- * 
- * @param elements 
- * @param DMatx 
- */
-void CalcElemStiffMatx(BaseElemMech* elements, T_DMatx DMatx);
 
 /**
  * @brief Initializes and preallocates the RHS `b`, solution `x` and 
@@ -49,13 +41,21 @@ void CalcElemStiffMatx(BaseElemMech* elements, T_DMatx DMatx);
  * @param elements 
  * @param H5File_in 
  */
-void InitializePETSc(BaseElemMech* elements);
+void InitializePETSc(vector<BaseElemMech*> elements);
+
+/**
+ * @brief Calculates the element stiffness matrix. 
+ * 
+ * @param elements 
+ * @param mats 
+ */
+void CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats);
 
 /**
  * @brief Assemble the global stiffness matrix.
  * 
  */
-void Assemble(BaseElemMech* elements);
+void Assemble(vector<BaseElemMech*> elements);
 
 /**
  * @brief Reads and initializes Dirichlet BCs.
@@ -99,13 +99,13 @@ Vec& getX();
 Mat& getA();
 
 /**
- * @brief Calculates the Fint, strains and stresses. Also evaluates the stress nodal values 
+ * @brief Calculates the Fint, strains and stresses. Also Calculates the stress nodal values 
  *        if `nodStresFlag=true`.
  * 
  * @param elements 
  * @param nodStresFlag 
  */
-void CalcStres(BaseElemMech* elements, T_DMatx DMatx);
+void CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats);
 
 /**
  * @brief Write nodal values.
@@ -113,20 +113,27 @@ void CalcStres(BaseElemMech* elements, T_DMatx DMatx);
  * @param elements 
  * @param H5File_out 
  */
-void WriteOut(BaseElemMech* elements, H5IO &H5File_out);
+void WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out);
 
 private:
 
-int nTotDof;        /// @brief Total number of DOFs.
-int nElDispDofs;    /// @brief Number of element displacement dofs.
-int nElements;      /// @brief Total number of elements.
+int nElementSets;   /// @brief Number of element sets
+int nTotNodes;       /// @brief Total number of DOFs.
+int nTotDofs;       /// @brief Total number of DOFs.
+int nTotElements;   /// @brief Total number of elements.
 int nDim;           /// @brief Spatial dimensions of the model.
-int nSteps;         /// @brief Number of steps to apply the load.
+int nElDispDofs;    /// @brief Number of element displacement dofs.
+int nElements;      /// @brief Number of elements per element set. 
+// int nSteps;      /// @brief Number of steps to apply the load.
+
+T_nodStres nodStres;      /// @brief Nodal stress.
+T_nodStres nodStran;      /// @brief Nodal strain.
+vector<int> nodCount;     /// @brief Counter for integration points surrounding nodes.
 
 // PETSc ------------------------
 
 const double* globalBuffer;  /// @brief buffer array for PETSc data
-PetscScalar* Fint = NULL;    /// @brief For calculating the internal force vector.
+double* Fint = NULL;         /// @brief For calculating the internal force vector.
 
 // Boundary conditions
 PetscInt nPresDofs;            /// @brief number of prescribed dofs.
