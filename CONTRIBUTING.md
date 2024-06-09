@@ -8,6 +8,9 @@
 
 ## `C++` style
 
+- Element specific data begin with `nEl`.
+- Total model data begin with `nTot`.
+- Element set data begin with `n`.
 - Use `camelCase` for variables and `PascalCase` for function names.
 - For `get_` and `set_` for getters and setters for private variables.
 - Use `setAction_` for setting an action on private variable.
