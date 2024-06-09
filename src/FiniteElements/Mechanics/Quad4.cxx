@@ -16,7 +16,7 @@
 */
 
 Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes, int iSet)
-    : BaseElemMech(2, 4, 2, 3, 8, 4){ // nDim, nElNodes, dispDofs, nStres, nElDispDofs, nGauss
+    : BaseElemMech(2, 4, 2, 3, 8, 4){ // nElDim, nElNodes, dispDofs, nElStres, nElDispDofs, nElGauss
 
     InitShapeFunc();
     ReadElementsData(H5File_in, iSet);
@@ -33,7 +33,7 @@ void Quad4::InitShapeFunc(){
 
     // Initialize the Gauss points vectors.
     vector<double> ip = {-0.57735027, 0.57735027};
-    vector<double> dummy(nDim);
+    vector<double> dummy(nElDim);
     for(std::size_t iGauss=0; iGauss<ip.size(); iGauss++){
         for(std::size_t jGauss=0; jGauss<ip.size(); jGauss++){
             dummy.at(0) = ip.at(iGauss);
@@ -43,10 +43,10 @@ void Quad4::InitShapeFunc(){
     }
 
     //Initialize shape functions and derivatives in natural coordinates.
-    shapeFunc.resize(nGauss);
-    shapeFuncDeriv.resize(nGauss);
+    shapeFunc.resize(nElGauss);
+    shapeFuncDeriv.resize(nElGauss);
 
-    for(int i=0; i<nGauss; i++){
+    for(int i=0; i<nElGauss; i++){
         shapeFunc.at(i) =  CalcShapeFunc(gaussPts.at(i).at(0), gaussPts.at(i).at(1));
         shapeFuncDeriv.at(i) = CalcShapeFuncDeriv(gaussPts.at(i).at(0), gaussPts.at(i).at(1));
     }
@@ -94,21 +94,21 @@ void Quad4::InitializeElements(Nodes &Nodes){
     Matd4x2 dummyElNodCoord; // For node coordinates.
 
     gaussPtCart.resize(nElements);  // Initialize the size of the Cart Gauss points.
-    vector<RowVecd2> dummyElemGauss(nGauss); // For element Gauss points.
+    vector<RowVecd2> dummyElemGauss(nElGauss); // For element Gauss points.
 
     BMat.resize(nElements);   // Initialize the size of BMatrix.
     BuMat.resize(nElements);  // Initialize the size of BuMatrix.
 
     intPtVol.resize(nElements);   
-    vector<double> dummyIntVol(nGauss);  // For integration point volume.
+    vector<double> dummyIntVol(nElGauss);  // For integration point volume.
 
     // Loop through elements.
     for(int iElem=0; iElem<nElements; iElem++){
 
-        elStres.at(iElem).resize(nGauss);
-        elStran.at(iElem).resize(nGauss);
-        BMat.at(iElem).resize(nGauss);
-        BuMat.at(iElem).resize(nGauss);
+        elStres.at(iElem).resize(nElGauss);
+        elStran.at(iElem).resize(nElGauss);
+        BMat.at(iElem).resize(nElGauss);
+        BuMat.at(iElem).resize(nElGauss);
 
         // Loop through nodes to get coordinates.
         for(int iNod=0; iNod<nElNodes; iNod++){
@@ -119,7 +119,7 @@ void Quad4::InitializeElements(Nodes &Nodes){
         elemNodCoord.at(iElem) = dummyElNodCoord;
 
         // Loop through integration points.
-        for(int iGauss=0; iGauss<nGauss; iGauss++){
+        for(int iGauss=0; iGauss<nElGauss; iGauss++){
         
             // Cart coord of iGauss point.
             dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
@@ -182,7 +182,7 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
         elStiffMatx.at(iElem).setZero(); // Must be populated with zeros.         
 
         // Integration over all Gauss points.
-        for (int iGauss=0; iGauss<nGauss; iGauss++){
+        for (int iGauss=0; iGauss<nElGauss; iGauss++){
 
             dummyBu = BuMat.at(iElem).at(iGauss); // Strain matrix for the given gauss point.
             dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current integration point 
@@ -214,7 +214,7 @@ void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T
         }
 
         // Gauss points
-        for(int iGaus=0; iGaus<nGauss; iGaus++){
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
             // Int pt values
             elStran.at(iElem).at(iGaus) = BuMat.at(iElem).at(iGaus)*dummyDisp;
