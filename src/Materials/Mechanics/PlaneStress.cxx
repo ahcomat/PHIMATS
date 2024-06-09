@@ -4,7 +4,7 @@
 
 using namespace std;
 
-PlaneStress::PlaneStress(H5IO &H5File,int iSet, string isoType)
+PlaneStress::PlaneStress(H5IO &H5File, int iSet, string isoType)
     : BaseMechanics(isoType, "2D"){
     
     string dsetName; 

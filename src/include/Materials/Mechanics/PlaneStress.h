@@ -25,7 +25,7 @@ public:
  * @param H5File Input file.
  * @param matType Material isotropy.
  */
-PlaneStress(H5IO &H5File,int iSet, string isoType="Isotropic");
+PlaneStress(H5IO &H5File, int iSet, string isoType="Isotropic");
 
 /**
  * @brief Destructor.
