@@ -92,20 +92,20 @@ void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStr
 
 private:
 
-const vector<double> wts{1.0, 1.0, 1.0, 1.0};  /// @brief Weights of the gauss points.
+const vector<double> wts{1.0, 1.0, 1.0, 1.0};  /// @brief Weights of the gauss points [nElGauss].
 
-vector<RowVecd4> shapeFunc; /// @brief Values of the shape functions at integration points in natural coordinates.
-vector<Matd2x4> shapeFuncDeriv;  /// @brief Values of the shape function derivatives at integration points in natural coordinates. 
-vector<Matd4x2> elemNodCoord;     /// @brief Node Coordinates. 
-vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements. 
+vector<RowVecd4> shapeFunc; /// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
+vector<Matd2x4> shapeFuncDeriv;  /// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
+vector<Matd4x2> elemNodCoord;     /// @brief Node Coordinates [nElDim, nElNodes]. 
+vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
 
-vector<vector<ColVecd3>> elStran;   /// @brief Int-pt strains.
-vector<vector<ColVecd3>> elStres;   /// @brief Int-pt stresses.
+vector<vector<ColVecd3>> elStran;   /// @brief Int-pt strains [nElStres].
+vector<vector<ColVecd3>> elStres;   /// @brief Int-pt stresses [nElStres].
 
-vector<vector<Matd2x4>> BMat;       /// @brief Derivatives (scalar) matrix.
-vector<vector<Matd3x8>> BuMat;      /// @brief Strain matrix.
+vector<vector<Matd2x4>> BMat;       /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
+vector<vector<Matd3x8>> BuMat;      /// @brief Strain matrix [nElStres, nElDispDofs].
 vector<vector<double>> intPtVol;    /// @brief Int-pt volume.
-vector<Matd8x8> elStiffMatx;        /// @brief Element stiffness matrix.
+vector<Matd8x8> elStiffMatx;        /// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].
 
 };
 #endif

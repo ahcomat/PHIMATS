@@ -92,20 +92,20 @@ void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStr
 
 private:
 
-const vector<double> wts{0.5};  /// @brief Weights of the gauss points.
+const vector<double> wts{0.5};  /// @brief Weights of the gauss points [nElGauss].
 
-vector<RowVecd3> shapeFunc; /// @brief Values of the shape functions at integration points in natural coordinates.
-vector<Matd2x3> shapeFuncDeriv;  /// @brief Values of the shape function derivatives at integration points in natural coordinates. 
-vector<Matd3x2> elemNodCoord;     /// @brief Node Coordinates. 
-vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements. 
+vector<RowVecd3> shapeFunc; /// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
+vector<Matd2x3> shapeFuncDeriv;  /// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
+vector<Matd3x2> elemNodCoord;     /// @brief Node Coordinates [nElDim, nElNodes]. 
+vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
 
-vector<vector<ColVecd3>> elStran;   /// @brief Int-pt strains.
-vector<vector<ColVecd3>> elStres;   /// @brief Int-pt stresses.
+vector<vector<ColVecd3>> elStran;   /// @brief Int-pt strains [nElStres].
+vector<vector<ColVecd3>> elStres;   /// @brief Int-pt stresses [nElStres].
 
-vector<vector<Matd2x3>> BMat;       /// @brief Derivatives (scalar) matrix.
-vector<vector<Matd3x6>> BuMat;      /// @brief Strain matrix.
+vector<vector<Matd2x3>> BMat;       /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
+vector<vector<Matd3x6>> BuMat;      /// @brief Strain matrix [nElStres, nElDispDofs].
 vector<vector<double>> intPtVol;    /// @brief Int-pt volume.
-vector<Matd6x6> elStiffMatx;        /// @brief Element stiffness matrix.
+vector<Matd6x6> elStiffMatx;        /// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].
 
 };
 #endif
