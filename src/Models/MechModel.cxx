@@ -21,33 +21,22 @@ MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in){
     dsetName = "SimulationParameters/nTotNodes";
     nTotNodes = H5File_in.ReadScalar(dsetName);
 
-    // Set the type and initiate size
+    // Set the type and size
     nodCount.resize(nTotNodes);
     if (nDim == 2){ // Case 2D model
 
         nodStres = vector<ColVecd3>(nTotNodes);
         nodStran = vector<ColVecd3>(nTotNodes);
 
-        for(int iNod=0; iNod<nTotNodes; iNod++){
-
-            std::get<std::vector<ColVecd3>>(nodStran).at(iNod).setZero();
-            std::get<std::vector<ColVecd3>>(nodStres).at(iNod).setZero();
-            nodCount.at(iNod) = 0;
-
-        }
     } else if (nDim == 3){ // Case 3D
 
         nodStres = vector<ColVecd6>(nTotNodes);
         nodStran = vector<ColVecd6>(nTotNodes);
 
-        for(int iNod=0; iNod<nTotNodes; iNod++){
-
-            std::get<std::vector<ColVecd6>>(nodStran).at(iNod).setZero();
-            std::get<std::vector<ColVecd6>>(nodStres).at(iNod).setZero();
-            nodCount.at(iNod) = 0;
-            
-        }
     }
+
+    // Initialize to zeros
+    setZero_nodStres();
 
     // Allocate memory for `Fint`.
     PetscMalloc1(nTotDofs, &Fint);
@@ -66,6 +55,29 @@ MechModel::~MechModel(){
     VecDestroy(&b); VecDestroy(&x); MatDestroy(&A);
     // Exit message
     cout << "MechModel elements exited correctly" << "\n";
+}
+
+void MechModel::setZero_nodStres(){
+
+    if (nDim == 2){ // Case 2D model
+
+        for(int iNod=0; iNod<nTotNodes; iNod++){
+
+            std::get<std::vector<ColVecd3>>(nodStran).at(iNod).setZero();
+            std::get<std::vector<ColVecd3>>(nodStres).at(iNod).setZero();
+            nodCount.at(iNod) = 0;
+
+        }
+    } else if (nDim == 3){ // Case 3D
+
+        for(int iNod=0; iNod<nTotNodes; iNod++){
+
+            std::get<std::vector<ColVecd6>>(nodStran).at(iNod).setZero();
+            std::get<std::vector<ColVecd6>>(nodStres).at(iNod).setZero();
+            nodCount.at(iNod) = 0;
+            
+        }
+    }
 }
 
 void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
@@ -323,5 +335,8 @@ void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const
         H5File_out.WriteStres("Strain/Step_"+iStep, nTotNodes, 6, nodStran);
         H5File_out.WriteStres("Stress/Step_"+iStep, nTotNodes, 6, nodStres);
     }
+
+    // set zeros
+    setZero_nodStres();
 }
 
