@@ -22,16 +22,16 @@ class BaseElemMech: public BaseElements{
 
 public:
 
-BaseElemMech(int nDim, int nElNodes, int dispDofs, int nStres, int nElDispDofs, int nGauss)
-    : nDim(nDim), nElNodes(nElNodes), dispDofs(dispDofs), nStres(nStres),
-      nElDispDofs(nElDispDofs), nGauss(nGauss) {};
+BaseElemMech(int nElDim, int nElNodes, int dispDofs, int nStres, int nElDispDofs, int nElGauss)
+    : nElDim(nElDim), nElNodes(nElNodes), dispDofs(dispDofs), nStres(nStres),
+      nElDispDofs(nElDispDofs), nElGauss(nElGauss) {};
 
 /**
  * @brief Get dimensions of the element. 
  * 
  * @return int 
  */
-int get_nDim() const { return nDim; };
+int get_nDim() const { return nElDim; };
 
 /**
  * @brief Get the number of element disp DOFs. 
@@ -77,12 +77,12 @@ virtual void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, 
 
 protected:
 
-const int nDim;           /// @brief Spatial dimensions of the element.
+const int nElDim;           /// @brief Spatial dimensions of the element.
 const int nElNodes;       /// @brief Number of nodes per element.
 const int dispDofs;       /// @brief Number of displacement dofs per node. 
 const int nStres;         /// @brief Stress/strain components.
 const int nElDispDofs;    /// @brief Number of element displacement dofs.
-const int nGauss;         /// @brief Number of gauss points.
+const int nElGauss;         /// @brief Number of gauss points.
 
 vector<vector<int>> elemDispDof;    /// @brief Element displacement dofs.
 
