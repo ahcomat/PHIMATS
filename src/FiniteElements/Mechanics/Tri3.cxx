@@ -15,12 +15,12 @@
  l -> total displacement dofs.
 */
 
-Tri3::Tri3(H5IO &H5File_in, Nodes &Nodes)
+Tri3::Tri3(H5IO &H5File_in, Nodes &Nodes, int iSet)
     : BaseElemMech(2, 3, 2, 3, 6, 1){ // nDim, nElNodes, dispDofs, nStres, nElDispDofs, nGauss
 
     InitShapeFunc();
-    ReadElementsData(H5File_in);
-    // InitializeElements(Nodes);
+    ReadElementsData(H5File_in, iSet);
+    InitializeElements(Nodes);
 }
 
 Tri3::~Tri3(){
@@ -76,56 +76,159 @@ Matd2x3 Tri3::CalcShapeFuncDeriv(double xi, double eta){
     return shapeDeriv;
 }
 
-void Tri3::ReadElementsData(H5IO &H5File_in){
+void Tri3::InitializeElements(Nodes &Nodes){
 
-    // string dsetName;
-    // dsetName = "SimulationParameters/nElements";
-    // nElements = H5File_in.ReadScalar(dsetName);
+    nDof = dispDofs*nNodes;      // Calc total number of dips DOFs for element set.
 
-    // // Initialize the size.
-    // elemNodeConn.resize(nElements);  
-    // elemDispDof.resize(nElements);
+    // Initialize the storages for int-pt stresses/strains
+    elStres.resize(nElements); elStran.resize(nElements);      
 
-    // dsetName = "SimulationParameters/nElementSets";
-    // nElementSets = H5File_in.ReadScalar(dsetName);
+    elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
+    Matd3x2 dummyElNodCoord; // For node coordinates.
 
-    // // Read node connectivity.
-    // vector<int> dummy(nElNodes);
-    // for (int iElem=0; iElem<nElements; iElem++){
-    //     dsetName = "NodeConnectivity/Element_"+to_string(iElem);
-    //     H5File_in.ReadFieldInt1D(dsetName, dummy);
+    gaussPtCart.resize(nElements);  // Initialize the size of the Cart Gauss points.
+    vector<RowVecd2> dummyElemGauss(nGauss); // For element Gauss points.
 
-    //     elemNodeConn.at(iElem) = dummy;
-    //     elemDispDof.at(iElem) = CalcElemDispDof(iElem);
-    // }
+    BMat.resize(nElements);   // Initialize the size of BMatrix.
+    BuMat.resize(nElements);  // Initialize the size of BuMatrix.
 
-    // for (auto& s : elemNodeConn[0])
-    //     cout << s << "\n";
+    intPtVol.resize(nElements);   
+    vector<double> dummyIntVol(nGauss);  // For integration point volume.
+
+    // Loop through elements.
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        elStres.at(iElem).resize(nGauss);
+        elStran.at(iElem).resize(nGauss);
+        BMat.at(iElem).resize(nGauss);
+        BuMat.at(iElem).resize(nGauss);
+
+        // Loop through nodes to get coordinates.
+        for(int iNod=0; iNod<nElNodes; iNod++){
+
+            dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
+            dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
+        }
+        elemNodCoord.at(iElem) = dummyElNodCoord;
+
+        // Loop through integration points.
+        for(int iGauss=0; iGauss<nGauss; iGauss++){
+        
+            // Cart coord of iGauss point.
+            dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+            CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss), BuMat.at(iElem).at(iGauss));
+        }
+        gaussPtCart.at(iElem) = dummyElemGauss;
+        intPtVol.at(iElem) = dummyIntVol;
+    }
 }
 
-vector<int> Tri3::CalcElemDispDof(int iElem){
+RowVecd2 Tri3::getGaussCart(RowVecd3& sFunc, Matd3x2& elNodCoord){
 
-    vector<int> dispDof(nElDispDofs);
-    for(int iNod=0; iNod<nElNodes; iNod++){
+    return sFunc*elNodCoord;  // N_i x_ij
+}
 
-        dispDof.at(2*iNod) = 2*elemNodeConn.at(iElem).at(iNod);
-        dispDof.at(2*iNod+1) = 2*elemNodeConn.at(iElem).at(iNod)+1;
+void Tri3::CalcCartDeriv(Matd3x2& elNodCoord, Matd2x3& sFuncDeriv, const double& wt, double& intVol, Matd2x3& cartDeriv, Matd3x6& strainMat){
+
+    // Calculates the jacobian matrix J_jj = dN_ji x_ij
+    Matd2x2 jacMat = sFuncDeriv*elNodCoord;
+
+    // Jacobian determinant.
+    intVol = jacMat.determinant();
+        
+#ifdef DEBUG
+
+    if(intVol<=0){
+
+        cerr << "Error: Negative jacobian determinant resulting in negative area.\n"
+             << "Terminating!\n\n";
+        exit(10);
     }
 
-    return dispDof;
+#endif
+
+    // Cartesian derivatives for the current integration point dx_ji = [J^-1]_jj dN_ji
+    cartDeriv = jacMat.inverse()*sFuncDeriv;
+
+    // Strain matrix of the current integration point du_kl.
+    for(int iNod=0; iNod<nElNodes; iNod++){
+
+        strainMat(0,2*iNod)   = cartDeriv(0,iNod);
+        strainMat(0,2*iNod+1) = 0;
+        strainMat(1,2*iNod)   = 0;
+        strainMat(1,2*iNod+1) = cartDeriv(1,iNod);
+        strainMat(2,2*iNod)   = cartDeriv(1,iNod);
+        strainMat(2,2*iNod+1) = cartDeriv(0,iNod);
+    }
 }
 
 void Tri3::CalcElemStiffMatx(T_DMatx DMatx){
 
+    elStiffMatx.resize(nElements); // Initialize the vector containing each element stiffness matrix.
+
+    Matd3x6 dummyBu;    // dummy for strain matrix.
+    double dummydVol;   // dummy for int-pt volume.
+
+    // Loop through all elements.
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        elStiffMatx.at(iElem).setZero(); // Must be populated with zeros.         
+
+        // Integration over all Gauss points.
+        for (int iGauss=0; iGauss<nGauss; iGauss++){
+
+            dummyBu = BuMat.at(iElem).at(iGauss); // Strain matrix for the given gauss point.
+            dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current integration point 
+
+            // [B_kl]^T D_kk B_kl
+            elStiffMatx.at(iElem) += dummyBu.transpose()*std::get<Matd3x3>(DMatx)*dummyBu*dummydVol;
+        }  
+    }
+
+    // // TODO: For debug!
+    // for (auto& iStifMat : elStiffMatx)
+    //     cout << iStifMat << "\n\n";
+
+    // Pointer to the vector, not the vector itself.
+    elStiffMatxVariant = &elStiffMatx;
 }
 
-// void Tri3::CalcStres(T_DMatx DMatx, const double* globalBuffer){
+void Tri3::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount){
 
-// }
+    ColVecd6 dummyDisp; // for element nodal displacement.
+    ColVecd6 dummyForc; // for element nodal internal force.
 
-// void Tri3::WriteOut(H5IO &H5File_out){
+    // Integration point values.
+    for(int iElem=0; iElem<nElements; iElem++){
 
-//     // This is final check
+        // Get element nodal displacements from the solution vector. 
+        for(int iDof=0; iDof<nElDispDofs; iDof++){
+            dummyDisp(iDof) = globalBuffer[elemDispDof.at(iElem).at(iDof)];
+        }
 
-// }
+        // Gauss points
+        for(int iGaus=0; iGaus<nGauss; iGaus++){
 
+            // Int pt values
+            elStran.at(iElem).at(iGaus) = BuMat.at(iElem).at(iGaus)*dummyDisp;
+            elStres.at(iElem).at(iGaus) = std::get<Matd3x3>(DMatx)*elStran.at(iElem).at(iGaus);
+
+            dummyForc = BuMat.at(iElem).at(iGaus).transpose()*elStres.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+
+            for(int pom=0; pom<nElDispDofs; pom++){
+                Fint[elemDispDof.at(iElem).at(pom)] += dummyForc(pom);
+            }
+
+            // Nodal values
+            for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
+
+                std::get<std::vector<ColVecd3>>(nodStran).at(*iNod2) += elStran.at(iElem).at(iGaus);
+                std::get<std::vector<ColVecd3>>(nodStres).at(*iNod2) += elStres.at(iElem).at(iGaus);
+                nodCount.at(*iNod2) += 1;
+            }
+        }
+    }
+
+    // // TODO: For debug!
+    // cout << elStran.at(0).at(0) << "\n\n";
+}

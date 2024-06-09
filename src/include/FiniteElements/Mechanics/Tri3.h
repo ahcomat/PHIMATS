@@ -20,7 +20,7 @@ class Tri3: public BaseElemMech{
 
 public:
 
-Tri3(H5IO &H5File_in, Nodes &Nodes);   
+Tri3(H5IO &H5File_in, Nodes &Nodes, int iSet);   
 
 ~Tri3() override ;
 
@@ -49,22 +49,6 @@ RowVecd3  CalcShapeFunc(double xi, double eta);
 Matd2x3 CalcShapeFuncDeriv(double xi, double eta);
 
 /**
- * @brief Reads the data `nElements`, `nElementSets` and `elemNodeConn` from hdf5 file.
- * 
- * @param H5File_in 
- * @todo Consider moving to base `Elements`. `CalcElemDispDof` will probably have to be pure `virtual` function.
- */
-void ReadElementsData(H5IO &H5File_in);
-
-/**
- * @brief Returns the displacement dofs associated with element `iElem`.
- * 
- * @param iElem 
- * @return vector<int> 
- */
-vector<int> CalcElemDispDof(int iElem);
-
-/**
  * @brief Initializes the data for all elements: `elemNodCoord`, `gaussPtCart`, `BMat`, `BuMat`
  *  and `intPtVol`.
  * 
@@ -72,11 +56,39 @@ vector<int> CalcElemDispDof(int iElem);
  */
 void InitializeElements(Nodes& Nodes);
 
-void CalcElemStiffMatx(T_DMatx DMatx) override;
+/**
+ * @brief Get the cartesian coordinates of gauss points `N_i x_ij`.
+ * 
+ * @param elCoord 
+ * @param sFunc 
+ * @return RowVecd2 
+ */
+RowVecd2 getGaussCart(RowVecd3& sFunc, Matd3x2& elCoord);
 
-// void CalcStres(T_DMatx DMatx, const double* globalBuffer) override;
+/**
+ * @brief Calculates `intPtVol`, `BMat` and `BuMat`.
+ * 
+ * @param elNodCoord 
+ * @param sFuncDeriv 
+ * @param intVol 
+ * @param cartDeriv 
+ * @param strainMat 
+ */
+void CalcCartDeriv(Matd3x2& elNodCoord, Matd2x3& sFuncDeriv, const double& wt, double& intVol, Matd2x3& cartDeriv, Matd3x6& strainMat);
 
-// void WriteOut(H5IO &H5File_out) override;
+/**
+ * @brief Calculates the element stiffness matrix for all elements.
+ * 
+ * @param DMatx 
+ */
+void CalcElemStiffMatx(T_DMatx DMatx) override ;
+
+/**
+ * @brief Calculates the Fint, strains and stresses. Also Calculates the stress nodal values 
+ *        if `nodStresFlag=true`.
+ * 
+ */
+void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) override;
 
 private:
 
@@ -89,9 +101,6 @@ vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss
 
 vector<vector<ColVecd3>> elStran;   /// @brief Int-pt strains.
 vector<vector<ColVecd3>> elStres;   /// @brief Int-pt stresses.
-vector<ColVecd3> nodStran;          /// @brief Nod-pt strains.
-vector<ColVecd3> nodStres;          /// @brief Nod-pt stresses.
-vector<int> nodCount;     /// @brief Counter for integration points surrounding nodes.
 
 vector<vector<Matd2x3>> BMat;       /// @brief Derivatives (scalar) matrix.
 vector<vector<Matd3x6>> BuMat;      /// @brief Strain matrix.

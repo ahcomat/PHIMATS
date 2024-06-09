@@ -200,6 +200,27 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
                 Matd8x8::Map(vals, dummyVals.rows(), dummyVals.cols()) = dummyVals;
                 MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, vals, ADD_VALUES);
             }
+        } else if (std::holds_alternative<vector<Matd6x6>*>(elStiffMatx_ptr)){  // Tri3 elements.
+ 
+            const vector<Matd6x6> elStiffMatx_ref = *std::get<vector<Matd6x6>*>(elStiffMatx_ptr);
+
+            Matd6x6 dummyVals;
+
+            for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
+
+                // Get the disp dofs associated with the element
+                for(int iElDof=0; iElDof<nElDispDofs; iElDof++){
+
+                    i1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
+                    j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
+                }
+
+                // Get the element stiffness matrix
+                dummyVals = elStiffMatx_ref.at(iElem);
+
+                Matd6x6::Map(vals, dummyVals.rows(), dummyVals.cols()) = dummyVals;
+                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, vals, ADD_VALUES);
+            }
         }
 
         // Free memory
