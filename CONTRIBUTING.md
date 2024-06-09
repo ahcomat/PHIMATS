@@ -10,4 +10,5 @@
 
 - Use `camelCase` for variables and `PascalCase` for function names.
 - For `get_` and `set_` for getters and setters for private variables.
+- Use `setAction_` for setting an action on private variable.
 - For `pointers` or `references` use the style `type *` and `type &`.
