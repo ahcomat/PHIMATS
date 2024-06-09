@@ -50,8 +50,8 @@ vector<int> BaseElemMech::CalcElemDispDof(int iElem){
     vector<int> dispDof(nElDispDofs);
     for(int iNod=0; iNod<nElNodes; iNod++){
 
-        dispDof.at(nDim*iNod) = nDim*elemNodeConn.at(iElem).at(iNod);
-        dispDof.at(nDim*iNod+1) = nDim*elemNodeConn.at(iElem).at(iNod)+1;
+        dispDof.at(nElDim*iNod) = nElDim*elemNodeConn.at(iElem).at(iNod);
+        dispDof.at(nElDim*iNod+1) = nElDim*elemNodeConn.at(iElem).at(iNod)+1;
     }
 
     return dispDof;

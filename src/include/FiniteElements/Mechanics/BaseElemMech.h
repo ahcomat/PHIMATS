@@ -22,9 +22,9 @@ class BaseElemMech: public BaseElements{
 
 public:
 
-BaseElemMech(int nElDim, int nElNodes, int dispDofs, int nStres, int nElDispDofs, int nElGauss)
+BaseElemMech(int nElDim, int nElNodes, int dispDofs, int nElStres, int nElDispDofs, int nElGauss2)
     : nElDim(nElDim), nElNodes(nElNodes), dispDofs(dispDofs), nElStres(nElStres),
-      nElDispDofs(nElDispDofs), nElGauss(nElGauss) {};
+      nElDispDofs(nElDispDofs), nElGauss(nElGauss2) {};
 
 /**
  * @brief Get dimensions of the element. 
