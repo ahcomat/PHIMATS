@@ -11,9 +11,6 @@
 #ifndef BASEELEMMECH_H
 #define BASEELEMMECH_H
 
-// #include <petscsys.h>
-// #include <petscvec.h>
-
 #include "FiniteElements/BaseElements.h"
 
 using namespace std;
