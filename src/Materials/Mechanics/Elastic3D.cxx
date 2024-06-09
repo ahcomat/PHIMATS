@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Elastic3D::Elastic3D(H5IO &H5File, string isoType)
+Elastic3D::Elastic3D(H5IO &H5File, int iSet, string isoType)
     : BaseMechanics(isoType, "3D") {
 
     string dsetName; 
@@ -14,9 +14,9 @@ Elastic3D::Elastic3D(H5IO &H5File, string isoType)
         /**
          * Reads Young's modulus and Poisson's ratio
          */
-        dsetName = "SimulationParameters/Emod";
+        dsetName = "Materials/Material_"+ std::to_string(iSet)+"/Emod";
         double Emod = H5File.ReadScalar(dsetName);
-        dsetName = "SimulationParameters/nu";
+        dsetName = "Materials/Material_"+ std::to_string(iSet)+"/nu";
         double nu = H5File.ReadScalar(dsetName);
 
         DMatx.setZero();

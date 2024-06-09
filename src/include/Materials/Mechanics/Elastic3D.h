@@ -29,7 +29,7 @@ public:
  * @param H5File Input file.
  * @param matType Material isotropy.
  */
-Elastic3D(H5IO &H5File, string isoType="Isotropic");
+Elastic3D(H5IO &H5File, int iSet, string isoType="Isotropic");
 
 /**
  * @brief Returns the 3D stiffness matrix in Voigt notation.
