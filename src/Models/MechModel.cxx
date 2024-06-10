@@ -278,7 +278,6 @@ void MechModel::setDirichBC(){
 
     MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
 
-    // TODO: Check for incremental loads "ADD_VALUES"
     VecSetValues(b, nPresDofs, presDofs, presVals, ADD_VALUES); 
     VecAssemblyBegin(b); VecAssemblyEnd(b);
 }
