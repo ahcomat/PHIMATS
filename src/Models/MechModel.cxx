@@ -125,7 +125,7 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
         nElements = elem->get_nElements();
         const vector<vector<int>>& elemDispDof_ptr = elem->get_elemDispDof();
     
-        for (int iElem=0; iElem<elem->get_nElements(); iElem++){ // Loop through all elements per element set
+        for (int iElem=0; iElem<nElements; iElem++){ // Loop through all elements per element set
 
             for (int idof=0; idof<nElDispDofs; idof++){ // Row
 
