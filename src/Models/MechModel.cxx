@@ -341,4 +341,3 @@ void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const
     // set zeros
     setZero_nodStres();
 }
-
