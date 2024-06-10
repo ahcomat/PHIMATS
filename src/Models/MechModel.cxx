@@ -207,6 +207,7 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
 
                     i1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
                     j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
+
                 }
 
                 // Get the element stiffness matrix
