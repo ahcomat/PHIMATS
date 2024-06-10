@@ -154,7 +154,8 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     MatSeqAIJSetPreallocation(A, PETSC_DEFAULT, nnz); 
     PetscFree(nnz); 
 
-    // Throw error if unallocated entry is accessed.
+    // TODO: Something wrong here !!!!
+    // Throw error if unallocated entry is accessed if "PETSC_TRUE".
     MatSetOption(A, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_FALSE); 
 }
 
