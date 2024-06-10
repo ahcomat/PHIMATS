@@ -149,7 +149,7 @@ void H5IO::WriteStres(string dsetName, int nNodes, int nStres, const T_nodStres&
 
         for (int i=0; i<nNodes; i++){
             for (int j=0; j<nStres; j++){
-                BufferField[i][j] = std::get<std::vector<ColVecd3>>(Array).at(i)(j);
+                BufferField[i][j] = std::get<std::vector<ColVecd6>>(Array).at(i)(j);
             }
         }        
     }
