@@ -68,6 +68,7 @@ void MechModel::setZero_nodStres(){
             nodCount.at(iNod) = 0;
 
         }
+
     } else if (nDim == 3){ // Case 3D
 
         for(int iNod=0; iNod<nTotNodes; iNod++){
@@ -270,6 +271,7 @@ void MechModel::setDirichBC(){
 
     // MatZeroRowsColumns(A, nPresDofs, presDofs, 1.0, NULL, NULL);
     MatZeroRows(A, nPresDofs, presDofs, 1.0, NULL, NULL);
+
     MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
 
     // TODO: Check for incremental loads "ADD_VALUES"
