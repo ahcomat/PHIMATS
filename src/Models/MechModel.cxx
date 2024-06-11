@@ -172,9 +172,6 @@ void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMec
 
 void MechModel::Assemble(vector<BaseElemMech*> elements){
 
-    MatZeroEntries(A);  // Set all entries to zero.
-    MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
-
     for (auto* elem : elements){  // Loop through element sets
 
         // Pointer to the element dip DOFs. Will vanish out the "for" element set loop.
@@ -219,7 +216,7 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
                 dummyVals = elStiffMatx_ref.at(iElem);
 
                 Matd8x8::Map(vals, dummyVals.rows(), dummyVals.cols()) = dummyVals;
-                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, vals, ADD_VALUES);
+                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, vals, INSERT_VALUES);
             }
 
         } else if (std::holds_alternative<vector<Matd6x6>*>(elStiffMatx_ptr)){  // Tri3 elements.
@@ -251,6 +248,7 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
         PetscFree(vals);
     }
 
+    // MAT_FINAL_ASSEMBLY for final use, otherwise MAT_FLUSH_ASSEMBLY https://petsc-users.mcs.anl.narkive.com/pppnM7xI/problem-with-preallocating
     MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
 }
 
