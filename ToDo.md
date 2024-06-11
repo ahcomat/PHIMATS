@@ -15,6 +15,7 @@ This is a list for planned features and developments to be added to `PhiMATS`. S
 
 ## FEM
 
+- [ ] Modify the HDF IO format.
 - [ ] DM and DMPlex in PETSc
 - [ ] Parallel
 - [ ] Adaptive meshing
