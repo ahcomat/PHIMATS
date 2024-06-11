@@ -242,6 +242,29 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
                 Matd6x6::Map(vals, dummyVals.rows(), dummyVals.cols()) = dummyVals;
                 MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, vals, ADD_VALUES);
             }
+
+        } else if (std::holds_alternative<vector<Matd24x24>*>(elStiffMatx_ptr)){  // Hex8 elements.
+ 
+            const vector<Matd24x24> elStiffMatx_ref = *std::get<vector<Matd24x24>*>(elStiffMatx_ptr);
+
+            Matd24x24 dummyVals;
+
+            for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
+
+                // Get the disp dofs associated with the element
+                for(int iElDof=0; iElDof<nElDispDofs; iElDof++){
+
+                    i1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
+                    j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
+                }
+
+                // Get the element stiffness matrix
+                // const Matd24x24&
+                dummyVals = elStiffMatx_ref.at(iElem);
+
+                Matd24x24::Map(vals, dummyVals.rows(), dummyVals.cols()) = dummyVals;
+                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, vals, ADD_VALUES);
+            }
         }
 
         // Free memory

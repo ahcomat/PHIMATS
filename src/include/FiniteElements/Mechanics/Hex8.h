@@ -20,7 +20,7 @@ class Hex8: public BaseElemMech{
 
 public:
 
-Hex8(H5IO &H5File_in, Nodes &Nodes);   
+Hex8(H5IO &H5File_in, Nodes &Nodes, int iSet);   
 ~Hex8() override ;
 
 /**
@@ -34,27 +34,76 @@ void InitShapeFunc();
  * 
  * @param xi 
  * @param eta 
- * @return RowVecd4
+ * @return RowVecd8
  */
-RowVecd4  CalcShapeFunc(double xi, double eta);
+RowVecd8  CalcShapeFunc(double xi, double eta, double zeta);
 
 /**
  * @brief Returns the integration pointe values of of shape function derivatives in natural coordinates.
  * 
  * @param xi 
  * @param eta 
- * @return Matd2x4 
+ * @return Matd3x8
  */
-Matd2x4 CalcShapeFuncDeriv(double xi, double eta);
+Matd3x8 CalcShapeFuncDeriv(double xi, double eta, double zeta);
+
+/**
+ * @brief Initializes the data for all elements: `elemNodCoord`, `gaussPtCart`, `BMat`, `BuMat`
+ *  and `intPtVol`.
+ * 
+ * @param Nodes 
+ */
+void InitializeElements(Nodes &Nodes);
+
+/**
+ * @brief Get the cartesian coordinates of gauss points `N_i x_ij`.
+ * 
+ * @param elCoord 
+ * @param sFunc 
+ * @return RowVecd3 
+ */
+RowVecd3 getGaussCart(RowVecd8& sFunc, Matd8x3& elCoord);
+
+/**
+ * @brief Calculates `intPtVol`, `BMat` and `BuMat`.
+ * 
+ * @param elNodCoord 
+ * @param sFuncDeriv 
+ * @param intVol 
+ * @param cartDeriv 
+ * @param strainMat 
+ */
+void CalcCartDeriv(Matd8x3& elNodCoord, Matd3x8& sFuncDeriv, const double& wt, double& intVol, Matd3x8& cartDeriv, Matd6x24& strainMat);
+
+/**
+ * @brief Calculates the element stiffness matrix for all elements.
+ * 
+ * @param DMatx 
+ */
+void CalcElemStiffMatx(T_DMatx DMatx) override ;
+
+/**
+ * @brief Calculates the Fint, strains and stresses. Also Calculates the stress nodal values 
+ *        if `nodStresFlag=true`.
+ * 
+ */
+void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) override;
 
 private:
 
-const vector<double> wts{1.0, 1.0, 1.0, 1.0};  /// @brief Weights of the gauss points.
+const vector<double> wts{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};  /// @brief Weights of the gauss points [nElGauss].
 
-vector<RowVecd4> shapeFunc; /// @brief Values of the shape functions at integration points in natural coordinates.
-vector<Matd2x4> shapeFuncDeriv;  /// @brief Values of the shape function derivatives at integration points in natural coordinates. 
-vector<Matd4x2> elemNodCoord;     /// @brief Node Coordinates. 
-vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements. 
+vector<RowVecd8> shapeFunc;      /// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
+vector<Matd3x8> shapeFuncDeriv;  /// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
+vector<Matd8x3> elemNodCoord;     /// @brief Node Coordinates [nElDim, nElNodes]. 
+vector<vector<RowVecd3>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
 
+vector<vector<ColVecd6>> elStran;   /// @brief Int-pt strains [nElStres].
+vector<vector<ColVecd6>> elStres;   /// @brief Int-pt stresses [nElStres].
+
+vector<vector<Matd3x8>> BMat;       /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
+vector<vector<Matd6x24>> BuMat;     /// @brief Strain matrix [nElStres, nElDispDofs].
+vector<vector<double>> intPtVol;    /// @brief Int-pt volume.
+vector<Matd24x24> elStiffMatx;      /// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].
 };
 #endif
