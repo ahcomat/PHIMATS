@@ -152,11 +152,16 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
 
     // Preallocate the stiffness matrix.
     MatSeqAIJSetPreallocation(A, PETSC_DEFAULT, nnz); 
-    PetscFree(nnz); 
+    PetscFree(nnz);
 
-    // TODO: Something wrong here !!!!
-    // Throw error if unallocated entry is accessed if "PETSC_TRUE".
-    MatSetOption(A, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_FALSE); 
+    // // Check the preallocation indirectly by querying the number of nonzeros
+    // MatInfo info;
+    // MatGetInfo(A, MAT_LOCAL, &info);
+    // if (info.nz_allocated > 0) {
+    //     PetscPrintf(PETSC_COMM_WORLD, "Matrix is preallocated.\n");
+    // } else {
+    //     PetscPrintf(PETSC_COMM_WORLD, "Matrix is not preallocated.\n");
+    // }
 }
 
 void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats){
