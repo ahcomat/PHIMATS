@@ -53,6 +53,8 @@ MechModel::~MechModel(){
     // Deallocate memory.
     PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint);
     VecDestroy(&b); VecDestroy(&x); MatDestroy(&A);
+    // Finalize PETSc
+    PetscFinalize();
     // Exit message
     cout << "MechModel elements exited correctly" << "\n";
 }
