@@ -218,7 +218,7 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
                 dummyVals = elStiffMatx_ref.at(iElem);
 
                 Matd8x8::Map(vals, dummyVals.rows(), dummyVals.cols()) = dummyVals;
-                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, vals, INSERT_VALUES);
+                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, vals, ADD_VALUES);
             }
 
         } else if (std::holds_alternative<vector<Matd6x6>*>(elStiffMatx_ptr)){  // Tri3 elements.
