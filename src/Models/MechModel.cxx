@@ -108,8 +108,8 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     MatSetType(A, MATSEQAIJ);
     // MatSetFromOptions(A);  // for command line options, but we dont do it here.
 
-    // MAT_SYMMETRIC: symmetric in terms of both structure and value
-    MatSetOption(A, MAT_SYMMETRIC, PETSC_TRUE);
+    // // MAT_SYMMETRIC: symmetric in terms of both structure and value
+    // MatSetOption(A, MAT_SYMMETRIC, PETSC_TRUE);
 
     // Preallocate the coefficient matrix.
     vector<vector<int>> gDofs(nTotDofs); // vector to store dofs per row.
