@@ -48,10 +48,24 @@ void BaseElemMech::ReadElementsData(H5IO &H5File_in, int iSet){
 vector<int> BaseElemMech::CalcElemDispDof(int iElem){
 
     vector<int> dispDof(nElDispDofs);
-    for(int iNod=0; iNod<nElNodes; iNod++){
 
-        dispDof.at(nElDim*iNod) = nElDim*elemNodeConn.at(iElem).at(iNod);
-        dispDof.at(nElDim*iNod+1) = nElDim*elemNodeConn.at(iElem).at(iNod)+1;
+    if (nElDim==2){
+
+        for(int iNod=0; iNod<nElNodes; iNod++){
+
+            dispDof.at(nElDim*iNod) = nElDim*elemNodeConn.at(iElem).at(iNod);
+            dispDof.at(nElDim*iNod+1) = nElDim*elemNodeConn.at(iElem).at(iNod)+1;
+        }
+
+    } else if (nElDim==3){
+
+        for(int iNod=0; iNod<nElNodes; iNod++){
+
+            dispDof.at(nElDim*iNod) = nElDim*elemNodeConn.at(iElem).at(iNod);
+            dispDof.at(nElDim*iNod+1) = nElDim*elemNodeConn.at(iElem).at(iNod)+1;
+            dispDof.at(nElDim*iNod+2) = nElDim*elemNodeConn.at(iElem).at(iNod)+2;
+
+        }
     }
 
     return dispDof;

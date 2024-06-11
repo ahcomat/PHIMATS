@@ -319,10 +319,22 @@ void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     }
 
     // Number averaging the nodal values
-    for(int iNod=0; iNod<nTotNodes; iNod++){
-        
-        std::get<std::vector<ColVecd3>>(nodStran).at(iNod) = std::get<std::vector<ColVecd3>>(nodStran).at(iNod)/nodCount.at(iNod);
-        std::get<std::vector<ColVecd3>>(nodStres).at(iNod) = std::get<std::vector<ColVecd3>>(nodStres).at(iNod)/nodCount.at(iNod);
+    if (nDim==2){
+
+        for(int iNod=0; iNod<nTotNodes; iNod++){
+            
+            std::get<std::vector<ColVecd3>>(nodStran).at(iNod) = std::get<std::vector<ColVecd3>>(nodStran).at(iNod)/nodCount.at(iNod);
+            std::get<std::vector<ColVecd3>>(nodStres).at(iNod) = std::get<std::vector<ColVecd3>>(nodStres).at(iNod)/nodCount.at(iNod);
+        }
+
+    } else if (nDim==3){
+
+        for(int iNod=0; iNod<nTotNodes; iNod++){
+            
+            std::get<std::vector<ColVecd6>>(nodStran).at(iNod) = std::get<std::vector<ColVecd6>>(nodStran).at(iNod)/nodCount.at(iNod);
+            std::get<std::vector<ColVecd6>>(nodStres).at(iNod) = std::get<std::vector<ColVecd6>>(nodStres).at(iNod)/nodCount.at(iNod);
+        }
+
     }
 
     // TODO: For debug!
