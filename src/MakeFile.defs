@@ -7,7 +7,7 @@ DEBUG=-g -Wall -DDEBUG -std=c++17 -pedantic
 OPTIM=-O3 -std=c++17
 
 ifeq ($(SETTINGS), DEFAULT)
-	CPPFLAGS = $(DEBUG)
+	CPPFLAGS = $(DEFAULT)
 else ifeq ($(SETTINGS), DEBUG)
 	CPPFLAGS =  $(DEBUG)
 else ifeq ($(SETTINGS), OPTIM)
