@@ -250,6 +250,10 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
 
     // MAT_FINAL_ASSEMBLY for final use, otherwise MAT_FLUSH_ASSEMBLY https://petsc-users.mcs.anl.narkive.com/pppnM7xI/problem-with-preallocating
     MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
+
+    // Throw error if unallocated entry is accessed if "PETSC_TRUE".
+    // Should be added after the matrix is assembled https://lists.mcs.anl.gov/pipermail/petsc-users/2019-October/039608.html
+    MatSetOption(A, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
 }
 
 void MechModel::InitializeDirichBC(H5IO& H5File_in){
