@@ -42,8 +42,6 @@ typedef Eigen::Matrix<double, 3, 2> Matd3x2;
 typedef Eigen::Matrix<double, 3, 6> Matd3x6;     
 typedef Eigen::Matrix<double, 3, 8> Matd3x8;
 
-// typedef Eigen::Matrix<double, 8, 8, Eigen::RowMajor> Matd8x8;  
-// typedef Eigen::Matrix<double, 6, 6, Eigen::RowMajor> Matd6x6;  
 
 // Aliases based on `std::variant`.
 // NOTE: This is type alias, not variable definition.
