@@ -37,7 +37,8 @@ void BaseElemMech::ReadElementsData(H5IO &H5File_in, int iSet){
         H5File_in.ReadFieldInt1D(dsetName, dummy);
 
         elemNodeConn.at(iElem) = dummy;
-        elemDispDof.at(iElem) = CalcElemDispDof(iElem);
+        elemDispDof.at(iElem).resize(nElDispDofs);
+        CalcElemDispDof(iElem, elemDispDof.at(iElem));
     }
 
     // TODO: For debug!
@@ -45,9 +46,9 @@ void BaseElemMech::ReadElementsData(H5IO &H5File_in, int iSet){
     //     cout << s << "\n"; 
 }
 
-vector<int> BaseElemMech::CalcElemDispDof(int iElem){
+void BaseElemMech::CalcElemDispDof(int iElem, vector<int>& dispDof){
 
-    vector<int> dispDof(nElDispDofs);
+    // vector<int> dispDof(nElDispDofs);
 
     if (nElDim==2){
 
@@ -67,6 +68,4 @@ vector<int> BaseElemMech::CalcElemDispDof(int iElem){
 
         }
     }
-
-    return dispDof;
 }

@@ -55,9 +55,9 @@ void ReadElementsData(H5IO &H5File_in, int iSet);
  * @brief Returns the displacement dofs associated with element `iElem`.
  * 
  * @param iElem 
- * @return vector<int> 
+ * @param dispDof 
  */
-vector<int> CalcElemDispDof(int iElem);
+void CalcElemDispDof(int iElem, vector<int>& dispDof);
 
 /**
  * @brief Calculates the `Fint`, strains and stresses. Also evaluates the stress nodal values.
