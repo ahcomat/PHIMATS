@@ -168,7 +168,6 @@ void Tri3::CalcElemStiffMatx(T_DMatx DMatx){
 
     elStiffMatx.resize(nElements); // Initialize the vector containing each element stiffness matrix.
 
-    Matd3x6 dummyBu;    // dummy for strain matrix.
     double dummydVol;   // dummy for int-pt volume.
 
     // Loop through all elements.
@@ -183,7 +182,7 @@ void Tri3::CalcElemStiffMatx(T_DMatx DMatx){
             dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current integration point 
 
             // [B_kl]^T D_kk B_kl
-            elStiffMatx.at(iElem) += dummyBu.transpose()*std::get<Matd3x3>(DMatx)*dummyBu*dummydVol;
+            elStiffMatx.at(iElem) += dummyBu.transpose()*DMat*dummyBu*dummydVol;
         }  
     }
 

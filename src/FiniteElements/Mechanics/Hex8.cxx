@@ -207,7 +207,7 @@ void Hex8::CalcElemStiffMatx(T_DMatx DMatx){
 
     elStiffMatx.resize(nElements); // Initialize the vector containing each element stiffness matrix.
 
-    Matd6x24 dummyBu;    // dummy for strain matrix.
+    // Matd6x24 dummyBu;   // dummy for strain matrix.
     double dummydVol;   // dummy for int-pt volume.
 
     // Loop through all elements.
@@ -218,7 +218,7 @@ void Hex8::CalcElemStiffMatx(T_DMatx DMatx){
         // Integration over all Gauss points.
         for (int iGauss=0; iGauss<nElGauss; iGauss++){
 
-            dummyBu = BuMat.at(iElem).at(iGauss); // Strain matrix for the given gauss point.
+            const Matd6x24& dummyBu = BuMat.at(iElem).at(iGauss); // Strain matrix for the given gauss point.
             dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current integration point 
 
             // [B_kl]^T D_kk B_kl
