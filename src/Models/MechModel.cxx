@@ -188,21 +188,19 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
         PetscMalloc1(nElDispDofs, &i1);
         PetscMalloc1(nElDispDofs, &j1);
 
-        PetscScalar* vals;   // values.
-        PetscMalloc1(nElDispDofs*nElDispDofs, &vals);
+        /* A constatn reference to the std::variant object returned by `elem->getElStiffMatx()`, 
+        in this case `T_ElStiffMatx` variant that holds a pointer to a vector.
+        You cannot modify the object through T_elStiffMatx_ref (because it's a constant reference).
+        */
+        const T_ElStiffMatx& T_elStiffMatx_ref = elem->getElStiffMatx();
 
-        // `T_ElStiffMatx` variant that holds a pointer to the vector.
-        const T_ElStiffMatx& elStiffMatx_ptr = elem->getElStiffMatx();
+        if (std::holds_alternative<vector<Matd8x8>*>(T_elStiffMatx_ref)){  // Quad4 elements.
 
-        if (std::holds_alternative<vector<Matd8x8>*>(elStiffMatx_ptr)){  // Quad4 elements.
-
-            /* The "*" operator dereferences the pointer to get the actual variable that the 
-            pointer is pointing to. const auto& binds the dereferenced vector to a constant reference. 
+            /* The "*" operator dereferences the pointer stored in the std::variant, giving
+            you a reference to the actual vector. 
             This way avoids copying the vector and can safely read from it without modifying it.
             */ 
-            const vector<Matd8x8> elStiffMatx_ref = *std::get<vector<Matd8x8>*>(elStiffMatx_ptr);
-
-            Matd8x8 dummyVals;
+            const vector<Matd8x8>& elStiffMatx_ref = *std::get<vector<Matd8x8>*>(T_elStiffMatx_ref);
 
             for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
 
@@ -214,18 +212,12 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
 
                 }
 
-                // Get the element stiffness matrix
-                dummyVals = elStiffMatx_ref.at(iElem);
-
-                Matd8x8::Map(vals, dummyVals.rows(), dummyVals.cols()) = dummyVals;
-                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, vals, ADD_VALUES);
+                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
             }
 
-        } else if (std::holds_alternative<vector<Matd6x6>*>(elStiffMatx_ptr)){  // Tri3 elements.
+        } else if (std::holds_alternative<vector<Matd6x6>*>(T_elStiffMatx_ref)){  // Tri3 elements.
  
-            const vector<Matd6x6> elStiffMatx_ref = *std::get<vector<Matd6x6>*>(elStiffMatx_ptr);
-
-            Matd6x6 dummyVals;
+            const vector<Matd6x6>& elStiffMatx_ref = *std::get<vector<Matd6x6>*>(T_elStiffMatx_ref);
 
             for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
 
@@ -236,18 +228,12 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
                     j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
                 }
 
-                // Get the element stiffness matrix
-                dummyVals = elStiffMatx_ref.at(iElem);
-
-                Matd6x6::Map(vals, dummyVals.rows(), dummyVals.cols()) = dummyVals;
-                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, vals, ADD_VALUES);
+                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
             }
 
-        } else if (std::holds_alternative<vector<Matd24x24>*>(elStiffMatx_ptr)){  // Hex8 elements.
+        } else if (std::holds_alternative<vector<Matd24x24>*>(T_elStiffMatx_ref)){  // Hex8 elements.
  
-            const vector<Matd24x24> elStiffMatx_ref = *std::get<vector<Matd24x24>*>(elStiffMatx_ptr);
-
-            Matd24x24 dummyVals;
+            const vector<Matd24x24>& elStiffMatx_ref = *std::get<vector<Matd24x24>*>(T_elStiffMatx_ref);
 
             for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
 
@@ -258,19 +244,13 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
                     j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
                 }
 
-                // Get the element stiffness matrix
-                // const Matd24x24&
-                dummyVals = elStiffMatx_ref.at(iElem);
-
-                Matd24x24::Map(vals, dummyVals.rows(), dummyVals.cols()) = dummyVals;
-                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, vals, ADD_VALUES);
+                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
             }
         }
 
         // Free memory
         PetscFree(i1);
         PetscFree(j1);
-        PetscFree(vals);
     }
 
     // MAT_FINAL_ASSEMBLY for final use, otherwise MAT_FLUSH_ASSEMBLY https://petsc-users.mcs.anl.narkive.com/pppnM7xI/problem-with-preallocating
