@@ -182,7 +182,7 @@ void Tri3::CalcElemStiffMatx(T_DMatx DMatx){
             dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current integration point 
 
             // [B_kl]^T D_kk B_kl
-            elStiffMatx.at(iElem) += dummyBu.transpose()*DMat*dummyBu*dummydVol;
+            elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*DMat*dummyBu*dummydVol;
         }  
     }
 
