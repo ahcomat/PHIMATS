@@ -171,6 +171,8 @@ void Quad4::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double
 
 void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
 
+    Matd3x3 DMat = std::get<Matd3x3>(DMatx);
+
     elStiffMatx.resize(nElements); // Initialize the vector containing each element stiffness matrix.
 
     Matd3x8 dummyBu;    // dummy for strain matrix.
@@ -188,14 +190,14 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
             dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current integration point 
 
             // [B_kl]^T D_kk B_kl
-            elStiffMatx.at(iElem) += dummyBu.transpose()*std::get<Matd3x3>(DMatx)*dummyBu*dummydVol;
+            elStiffMatx.at(iElem) += dummyBu.transpose()*DMat*dummyBu*dummydVol;
         }  
     }
 
     // // TODO: For debug!
     // for (auto& iStifMat : elStiffMatx)
     //     cout << iStifMat << "\n\n";
-    cout << elStiffMatx.at(0) << "\n";
+    // cout << elStiffMatx.at(0) << "\n";
 
 
     // Pointer to the vector, not the vector itself.

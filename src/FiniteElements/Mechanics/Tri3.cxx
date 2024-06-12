@@ -164,6 +164,8 @@ void Tri3::CalcCartDeriv(Matd3x2& elNodCoord, Matd2x3& sFuncDeriv, const double&
 
 void Tri3::CalcElemStiffMatx(T_DMatx DMatx){
 
+    Matd3x3 DMat = std::get<Matd3x3>(DMatx);
+
     elStiffMatx.resize(nElements); // Initialize the vector containing each element stiffness matrix.
 
     Matd3x6 dummyBu;    // dummy for strain matrix.
@@ -177,7 +179,7 @@ void Tri3::CalcElemStiffMatx(T_DMatx DMatx){
         // Integration over all Gauss points.
         for (int iGauss=0; iGauss<nElGauss; iGauss++){
 
-            dummyBu = BuMat.at(iElem).at(iGauss); // Strain matrix for the given gauss point.
+            const Matd3x6& dummyBu = BuMat.at(iElem).at(iGauss); // Strain matrix for the given gauss point.
             dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current integration point 
 
             // [B_kl]^T D_kk B_kl

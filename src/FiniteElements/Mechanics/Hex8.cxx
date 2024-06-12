@@ -203,6 +203,8 @@ void Hex8::CalcCartDeriv(Matd8x3& elNodCoord, Matd3x8& sFuncDeriv, const double&
 
 void Hex8::CalcElemStiffMatx(T_DMatx DMatx){
 
+    Matd6x6 DMat = std::get<Matd6x6>(DMatx);
+
     elStiffMatx.resize(nElements); // Initialize the vector containing each element stiffness matrix.
 
     Matd6x24 dummyBu;    // dummy for strain matrix.
@@ -220,7 +222,7 @@ void Hex8::CalcElemStiffMatx(T_DMatx DMatx){
             dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current integration point 
 
             // [B_kl]^T D_kk B_kl
-            elStiffMatx.at(iElem) += dummyBu.transpose()*std::get<Matd6x6>(DMatx)*dummyBu*dummydVol;
+            elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*DMat*dummyBu*dummydVol;
         }  
     }
 
