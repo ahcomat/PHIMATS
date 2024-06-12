@@ -1,5 +1,6 @@
 #include<iostream>
 #include<algorithm>
+#include <omp.h>
 
 #include"FiniteElements/Mechanics/Tri3.h"
 
@@ -169,6 +170,11 @@ void Tri3::CalcElemStiffMatx(T_DMatx DMatx){
     elStiffMatx.resize(nElements); // Initialize the vector containing each element stiffness matrix.
 
     double dummydVol;   // dummy for int-pt volume.
+
+    // Set the number of threads
+    omp_set_num_threads(4); // Set to the desired number of threads
+    // Parallelize the outer loop
+    #pragma omp parallel for
 
     // Loop through all elements.
     for(int iElem=0; iElem<nElements; iElem++){
