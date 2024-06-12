@@ -195,6 +195,8 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
     // // TODO: For debug!
     // for (auto& iStifMat : elStiffMatx)
     //     cout << iStifMat << "\n\n";
+    cout << elStiffMatx.at(0) << "\n";
+
 
     // Pointer to the vector, not the vector itself.
     elStiffMatxVariant = &elStiffMatx;
