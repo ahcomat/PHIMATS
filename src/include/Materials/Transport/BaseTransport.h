@@ -21,14 +21,12 @@ public:
 BaseTransport(string isoType, string dimensions): BaseMaterial(isoType, dimensions) {};
 virtual ~BaseTransport() override {};
 
-/*
-    NOTE: Don't use pure virtual functions or some derived classed will 
-    be abstract classes and will not be called. Consider using the 3D 
-    version and only loop over the `dims`.
-*/ 
-
-virtual Matd2x2 getDMat2(){};
-virtual Matd3x3 getDMat3(){};
+/**
+ * @brief Returns the 3D stiffness matrix in Voigt notation.
+ * 
+ * @return T_DMatx 
+ */
+virtual T_DMatx getKMatx() = 0;
 
 };
 #endif
