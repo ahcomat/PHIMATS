@@ -52,17 +52,19 @@ typedef Eigen::Matrix<double, 6, 24> Matd6x24;
 // Aliases based on `std::variant`.
 // NOTE: This is type alias, not variable definition.
 
+
+// For some reason this doesn't work O.o and makes extremely unexpected behavior 
+// /**
+//  * @brief Variants `KMatx`.
+//  * 
+//  */
+// using T_KMatx = std::variant<Matd2x2, Matd3x3>;
+
 /**
  * @brief Variants `DMatx`.
  * 
  */
-using T_DMatx = std::variant<Matd3x3, Matd6x6>;
-
-/**
- * @brief Variants `KMatx`.
- * 
- */
-using T_KMatx = std::variant<Matd2x2, Matd3x3>;
+using T_DMatx = std::variant<Matd2x2, Matd3x3, Matd6x6>;
 
 /**
  * @brief Variants `elStiffMatx`. It is a pointer because we need this to avoid copy in `Elements::getElStiffMatx`.
