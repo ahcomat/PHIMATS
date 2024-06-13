@@ -13,8 +13,6 @@
 
 #include "FiniteElements/BaseElements.h"
 
-using namespace std;
-
 class BaseElemMech: public BaseElements{
 
 public:

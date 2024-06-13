@@ -10,8 +10,6 @@
  * @todo Consider having only elements rather than element set-container.
  *       But this will require another class as element container. 
  * 
- * Updates (when, what and who)
- * 
  */
 
 #ifndef BASEELEMENTS_H
