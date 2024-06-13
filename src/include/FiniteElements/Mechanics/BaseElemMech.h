@@ -74,12 +74,12 @@ virtual void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, 
 
 protected:
 
-const int nElDim;           /// @brief Spatial dimensions of the element.
+const int nElDim;         /// @brief Spatial dimensions of the element.
 const int nElNodes;       /// @brief Number of nodes per element.
 const int dispDofs;       /// @brief Number of displacement dofs per node. 
-const int nElStres;         /// @brief Stress/strain components.
+const int nElStres;       /// @brief Stress/strain components.
 const int nElDispDofs;    /// @brief Number of element displacement dofs.
-const int nElGauss;         /// @brief Number of gauss points.
+const int nElGauss;       /// @brief Number of gauss points.
 
 vector<vector<int>> elemDispDof;    /// @brief Element displacement dofs.
 
