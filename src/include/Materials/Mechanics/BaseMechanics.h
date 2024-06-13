@@ -21,6 +21,11 @@ public:
 
 BaseMechanics(string isoType, string dimensions): BaseMaterial(isoType,dimensions) {};
 
+/**
+ * @brief Returns a stiffness matrix variant.
+ * 
+ * @return T_DMatx 
+ */
 virtual T_DMatx getDMatx() = 0;
 
 };
