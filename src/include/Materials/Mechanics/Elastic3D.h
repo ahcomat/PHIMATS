@@ -34,7 +34,7 @@ Elastic3D(H5IO &H5File, int iSet, string isoType="Isotropic");
 /**
  * @brief Returns the 3D stiffness matrix in Voigt notation.
  * 
- * @return Matd6x6 
+ * @return T_DMatx 
  */
 T_DMatx getDMatx() override;
 

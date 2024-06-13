@@ -34,6 +34,8 @@ PlaneStress(H5IO &H5File, int iSet, string isoType="Isotropic");
 
 /**
  * @brief Returns the 2D stiffness matrix in Voigt notation.
+ * 
+ * @return T_DMatx 
  */
 T_DMatx getDMatx() override;
 
