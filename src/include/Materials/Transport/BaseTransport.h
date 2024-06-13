@@ -14,8 +14,6 @@
 #include "Matrix.h"
 #include "Materials/BaseMaterial.h"
 
-using namespace std;
-
 class BaseTransport: public BaseMaterial{
 
 public:
