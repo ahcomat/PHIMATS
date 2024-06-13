@@ -8,6 +8,7 @@
 
 ## `C++` style
 
+- For includes, first add standard includes, then custom ones. Add a blank line after them.
 - Element specific data begin with `nEl`.
 - Total model data begin with `nTot`.
 - Element set data begin with `n`.
