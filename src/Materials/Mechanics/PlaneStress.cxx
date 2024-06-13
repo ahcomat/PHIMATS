@@ -2,8 +2,6 @@
 
 #include "Materials/Mechanics/PlaneStress.h"
 
-using namespace std;
-
 PlaneStress::PlaneStress(H5IO &H5File, int iSet, string isoType)
     : BaseMechanics(isoType, "2D"){
     

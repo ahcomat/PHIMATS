@@ -2,8 +2,6 @@
 
 #include "Materials/Mechanics/Elastic3D.h"
 
-using namespace std;
-
 Elastic3D::Elastic3D(H5IO &H5File, int iSet, string isoType)
     : BaseMechanics(isoType, "3D") {
 
