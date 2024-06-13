@@ -56,7 +56,13 @@ typedef Eigen::Matrix<double, 6, 24> Matd6x24;
  * @brief Variants `DMatx`.
  * 
  */
-using T_DMatx = std::variant<Matd2x2, Matd3x3, Matd6x6>;
+using T_DMatx = std::variant<Matd3x3, Matd6x6>;
+
+/**
+ * @brief Variants `KMatx`.
+ * 
+ */
+using T_KMatx = std::variant<Matd2x2, Matd3x3>;
 
 /**
  * @brief Variants `elStiffMatx`. It is a pointer because we need this to avoid copy in `Elements::getElStiffMatx`.
