@@ -4,7 +4,6 @@ This is a list for planned features and developments to be added to `PhiMATS`. S
 
 ## Models
 
-- [ ] Incremental loading for linear elasticity
 - [ ] Transport model
 - [ ] Diffusion and trapping model
 - [ ] Stress gradients and stress-driven diffusion
@@ -12,10 +11,13 @@ This is a list for planned features and developments to be added to `PhiMATS`. S
 - [ ] Neumann BCs for mechanics
 - [ ] Small strain plasticity
 - [ ] Large strain and non linear geometry
+- [x] Incremental loading for linear elasticity
 
 ## FEM
 
-- [ ] Modify the HDF IO format.
+- [ ] Make a logger class **ConsoleLogger** or **DisplayLogger**
+- [ ] Modify the HDF5 IO format
+- [ ] Use C++ API for HDF5
 - [ ] DM and DMPlex in PETSc
 - [ ] Parallel
 - [ ] Adaptive meshing
