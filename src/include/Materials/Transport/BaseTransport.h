@@ -26,7 +26,7 @@ virtual ~BaseTransport() override {};
  * 
  * @return T_DMatx 
  */
-virtual T_DMatx getKMatx() = 0;
+virtual T_DMatx getKMatx() const = 0;
 
 };
 #endif

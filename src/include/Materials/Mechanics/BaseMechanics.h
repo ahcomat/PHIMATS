@@ -24,7 +24,7 @@ BaseMechanics(string isoType, string dimensions): BaseMaterial(isoType,dimension
  * 
  * @return T_DMatx 
  */
-virtual T_DMatx getDMatx() = 0;
+virtual T_DMatx getDMatx() const = 0;
 
 };
 #endif

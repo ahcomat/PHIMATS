@@ -38,7 +38,7 @@ PlaneStrain(H5IO &H5File, int iSet, string isoType="Isotropic");
  * 
  * @return T_DMatx 
  */
-T_DMatx getDMatx() override;
+T_DMatx getDMatx() const override;
 
 private:
 

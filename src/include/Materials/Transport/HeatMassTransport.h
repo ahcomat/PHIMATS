@@ -31,7 +31,7 @@ HeatMassTransport(string dimensions, H5IO &H5File, int iSet, string isoType="Iso
  * 
  * @return T_KMatx 
  */
-T_DMatx getKMatx() override;
+T_DMatx getKMatx() const override;
 
 private:
 

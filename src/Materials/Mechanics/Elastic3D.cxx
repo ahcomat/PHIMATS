@@ -41,7 +41,7 @@ Elastic3D::Elastic3D(H5IO &H5File, int iSet, string isoType)
     }
 }
 
-T_DMatx Elastic3D::getDMatx(){
+T_DMatx Elastic3D::getDMatx() const{
 
     return DMatx;
 }

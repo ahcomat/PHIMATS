@@ -46,7 +46,7 @@ HeatMassTransport::HeatMassTransport(string dimensions, H5IO &H5File, int iSet, 
     }
 }
 
-T_DMatx HeatMassTransport::getKMatx() {
+T_DMatx HeatMassTransport::getKMatx() const {
 
     return KMatx;
 }
