@@ -56,13 +56,6 @@ virtual void CalcElemStiffMatx(T_DMatx DMatx) = 0;
  */
 const T_ElStiffMatx& getElStiffMatx() const { return elStiffMatxVariant; }
 
-// /**
-//  * @brief Write element specific int-pts output averaged over the nodes.
-//  * 
-//  * @param H5File_out 
-//  */
-// virtual void WriteOut(H5IO &H5File_out) = 0;
-
 protected:
 
 int nElements;         /// @brief Total number of elements in element set.
