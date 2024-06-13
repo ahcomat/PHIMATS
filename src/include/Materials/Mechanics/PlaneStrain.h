@@ -42,11 +42,7 @@ T_DMatx getDMatx() override;
 
 private:
 
-/**
- * @brief The 2D elastic stiffness matrix in Voigt notation.
- * 
- */
-Matd3x3 DMatx;
+Matd3x3 DMatx;      /// @brief The 2D elastic stiffness matrix for plane-strain in Voigt notation.
 
 };
 #endif
