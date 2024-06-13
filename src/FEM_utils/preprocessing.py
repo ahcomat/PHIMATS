@@ -14,6 +14,7 @@ class PreProcessing:
         #----------------------------------------------------------------------
         
         self.Simul = inputData["Simul"]
+        self.SimulType = inputData["SimulType"]
         self.mesh = inputData["mesh"]
         self.elementName = inputData["elementName"]
         self.nElementSets = inputData["nElementSets"]
@@ -91,6 +92,17 @@ class PreProcessing:
         # Read material data
         #----------------------------------------------------------------------
         
+        # Allowed simulation types
+        allowedSimulTypes = ["Mechanical", "Transfer"]
+                
+        if not self.SimulType in allowedSimulTypes:
+            ErrString = "ERROR! Unknown simulation type < " + self.SimulType + " >\n"
+            ErrString += "Allowed elements are: \n"
+            for simulType in allowedSimulTypes:
+                ErrString += simulType + "\n"
+            raise ValueError(ErrString)
+        
+        # Read materials dict
         self.Materials = inputData["Materials"]
 
         pass
@@ -132,12 +144,27 @@ class PreProcessing:
             #----------------------------------------------------------------------
             self.grp_Materials = self.fh5.create_group('Materials')
             
-            counter = 0
-            for mat in self.Materials:
-                counter+=1
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/Emod", data=self.Materials[mat]["Emod"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/nu", data=self.Materials[mat]["nu"])
+            if self.SimulType == "Mechanical":
             
+                counter = 0
+                for mat in self.Materials:
+                    counter+=1
+                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Emod", data=self.Materials[mat]["Emod"])
+                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/nu", data=self.Materials[mat]["nu"])
+                    
+            elif self.SimulType == "Transfer":
+                
+                counter = 0
+                for mat in self.Materials:
+                    counter+=1
+                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/xKappa", data=self.Materials[mat]["xKappa"])
+                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/yKappa", data=self.Materials[mat]["yKappa"])
+                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/c", data=self.Materials[mat]["c"])
+                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/rho", data=self.Materials[mat]["rho"])
+
+                    if self.nDim == 3:
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/yKappa", data=self.Materials[mat]["zKappa"])
+                  
             #----------------------------------------------------------------------
             # Write node coordinates 
             #----------------------------------------------------------------------
