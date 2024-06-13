@@ -11,9 +11,6 @@ Elastic3D::Elastic3D(H5IO &H5File, int iSet, string isoType)
 
     if(isotropy=="Isotropic"){
 
-        /**
-         * Reads Young's modulus and Poisson's ratio
-         */
         dsetName = "Materials/Material_"+ std::to_string(iSet)+"/Emod";
         double Emod = H5File.ReadScalar(dsetName);
         dsetName = "Materials/Material_"+ std::to_string(iSet)+"/nu";
