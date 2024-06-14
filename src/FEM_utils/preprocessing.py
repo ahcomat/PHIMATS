@@ -21,6 +21,9 @@ class PreProcessing:
         self.presBCs = inputData["presBCs"]
         self.nPresDofs = len(self.presBCs)
         self.nSteps = inputData["nSteps"]
+        
+        if self.SimulType=="Transport":
+            self.exitNods = inputData["exitNods"]
 
         #----------------------------------------------------------------------
         # Check for allowed elements and assign element data (number of nodes,
@@ -77,9 +80,14 @@ class PreProcessing:
             self.nodeCoord = self.mesh.points[:,0:2]
         elif self.nDim == 3:    
             self.nodeCoord = self.mesh.points
+            
+        # self.nTotDofs = self.nTotNodes*self.nDim
         
         # Total number of Dofs
-        self.nTotDofs = self.nTotNodes*self.nDim
+        if self.SimulType == "Mechanical":
+            self.nTotDofs = self.nTotNodes*self.nDim
+        elif self.SimulType == "Transport":
+            self.nTotDofs = self.nTotNodes
         
         #----------------------------------------------------------------------
         # Read number of elements  
@@ -93,7 +101,7 @@ class PreProcessing:
         #----------------------------------------------------------------------
         
         # Allowed simulation types
-        allowedSimulTypes = ["Mechanical", "Transfer"]
+        allowedSimulTypes = ["Mechanical", "Transport"]
                 
         if not self.SimulType in allowedSimulTypes:
             ErrString = "ERROR! Unknown simulation type < " + self.SimulType + " >\n"
@@ -124,7 +132,7 @@ class PreProcessing:
         try :
             
             # self.fh5.attrs["Simulation"] =  self.Simul
-                      
+                        
             #----------------------------------------------------------------------
             # Nodes/Elements data 
             #----------------------------------------------------------------------
@@ -138,7 +146,7 @@ class PreProcessing:
             self.grp_Sim_Params.create_dataset("nPresDofs", data=self.nPresDofs, dtype = np.int64)
             self.grp_Sim_Params.create_dataset("nElementSets", data=self.nElementSets, dtype = np.int64)
             self.grp_Sim_Params.create_dataset("nSteps", data=self.nSteps, dtype = np.int64)
-
+            
             #----------------------------------------------------------------------
             # Material data
             #----------------------------------------------------------------------
@@ -152,7 +160,7 @@ class PreProcessing:
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Emod", data=self.Materials[mat]["Emod"])
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/nu", data=self.Materials[mat]["nu"])
                     
-            elif self.SimulType == "Transfer":
+            elif self.SimulType == "Transport":
                 
                 counter = 0
                 for mat in self.Materials:
@@ -164,7 +172,7 @@ class PreProcessing:
 
                     if self.nDim == 3:
                         self.grp_Materials.create_dataset("Material_"+str(counter)+"/yKappa", data=self.Materials[mat]["zKappa"])
-                  
+                    
             #----------------------------------------------------------------------
             # Write node coordinates 
             #----------------------------------------------------------------------
@@ -173,7 +181,7 @@ class PreProcessing:
             
             for iNod in range(self.nTotNodes):
                 self.grp_nNodes.create_dataset("Node_"+str(iNod), data=self.nodeCoord[iNod], dtype = np.float64)   
-                       
+                        
             #----------------------------------------------------------------------
             # Write element node connectivity
             #----------------------------------------------------------------------
@@ -214,6 +222,12 @@ class PreProcessing:
             for iPreDof in range(self.nPresDofs):
                 self.grp_prescribedDOFs.create_dataset("Prescribed_"+str(iPreDof), data=self.presBCs[iPreDof]) 
                 
+            if self.SimulType == "Transport":
+                self.grp_prescribedDOFs = self.fh5.create_group('ExitNodes')
+            
+                for iENode in range(len(self.exitNods)):
+                    self.grp_prescribedDOFs.create_dataset("Exit_"+str(iENode), data=iENode)
+
             #----------------------------------------------------------------------
             # Close hdf5 file
             #----------------------------------------------------------------------
@@ -380,6 +394,42 @@ class PreProcessing:
 #-----------------------------------------------------------------------------#
 
     @staticmethod
+    def PermeationX(lx, Con_b, mesh):
+        """
+        Applies boundary conditions for permeation simulation to a regular 
+        quadrilateral in the x direction. The origin point must be (0,0)
+        """
+        
+        #----------------------------------------------------------------------
+        # Prepare data  
+        #----------------------------------------------------------------------
+        
+        # List of prescribed degrees of freedom. Order of list [node id (dof) value]
+        conBCs = []   
+        exitNods = []     # for flux calculation
+        # Number of nodes
+        nNodes = mesh.points.shape[0]  
+        # Node coordinates
+        nodCoord = mesh.points[:,0:2]
+        
+        #----------------------------------------------------------------------
+        # Loop through nodes  
+        #----------------------------------------------------------------------
+    
+        for iNod in range(nNodes):
+            # Left nodes
+            if nodCoord[iNod][0]==0.0:
+                conBCs.append([iNod, Con_b])                    
+            # Right nodes
+            elif nodCoord[iNod][0] == lx:
+                conBCs.append([iNod, 0])
+                exitNods.append([iNod])
+                
+        return conBCs, exitNods
+
+#-----------------------------------------------------------------------------#
+
+    @staticmethod
     def WriteDispBCs(Simul, elementName, mesh, presBCs, dispDofs=2):
         
         #----------------------------------------------------------------------
@@ -454,3 +504,55 @@ class PreProcessing:
     
 #-----------------------------------------------------------------------------#
 
+    @staticmethod
+    def WriteDispBCs(Simul, elementName, mesh, presBCs, dims=2):
+        
+        #----------------------------------------------------------------------
+        # Prepare data  
+        #----------------------------------------------------------------------
+        
+        # Number of prescribed dofs
+        nPresDofs = len(presBCs)
+        # Number of nodes
+        nNodes = mesh.points.shape[0] 
+        # Node coordinates
+        nodeCoord = mesh.points
+        # Node connectivity
+        nodeConnectivity = mesh.cells_dict[elementName] 
+
+        #----------------------------------------------------------------------
+        # Create new mesh object for writing BCs  
+        #----------------------------------------------------------------------
+        
+        cells = [
+            (elementName, nodeConnectivity),
+        ]
+        BCmesh = meshio.Mesh(
+            nodeCoord,
+            cells,
+        )
+        
+        #----------------------------------------------------------------------
+        # Arrange BCs as solution vector  
+        #----------------------------------------------------------------------
+
+        uCon = np.zeros(nNodes)
+        flagsCon = np.zeros(nNodes, dtype=int)
+
+        for i in range(nPresDofs):
+            pDOF = presBCs[i][0]
+            uCon[pDOF] = presBCs[i][1]
+            
+            flagsCon[pDOF] = 1
+        
+        #----------------------------------------------------------------------
+        # Append and write to vtk
+        #----------------------------------------------------------------------
+        
+        BCmesh.point_data.update({"con": uCon})
+        BCmesh.point_data.update({"FlagBC": flagsCon})
+        BCmesh.write(Simul+"_BC.vtk")
+        
+        return BCmesh
+    
+#-----------------------------------------------------------------------------#
