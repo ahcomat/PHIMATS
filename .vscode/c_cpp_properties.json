@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/src/include",
+                "/usr/include/hdf5/serial/",
+                "~/petsc/arch-linux-c-debug/include/",
+                "~/petsc/include/",
+                "~/eigen/",
+                "/usr/lib/gcc/x86_64-linux-gnu/11/include/"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang-14",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-clang-x64"
+        }
+    ],
+    "version": 4
+}
