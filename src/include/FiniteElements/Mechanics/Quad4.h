@@ -14,8 +14,6 @@
 #include"BaseElemMech.h"
 #include"Nodes.h"
 
-using namespace std;
-
 class Quad4: public BaseElemMech{
 
 public:
@@ -94,7 +92,7 @@ private:
 
 const vector<double> wts{1.0, 1.0, 1.0, 1.0};  /// @brief Weights of the gauss points [nElGauss].
 
-vector<RowVecd4> shapeFunc; /// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
+vector<RowVecd4> shapeFunc;      /// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
 vector<Matd2x4> shapeFuncDeriv;  /// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
 vector<Matd4x2> elemNodCoord;     /// @brief Node Coordinates [nElDim, nElNodes]. 
 vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
