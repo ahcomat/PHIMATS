@@ -65,8 +65,6 @@ void CalcElemDispDof(int iElem, vector<int>& dispDof);
  * @param globalBuffer 
  * @param nodStresFlag 
  * 
- * @todo 
- * - Remove `nodStresFlag`.
  */
 virtual void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) = 0;
 
