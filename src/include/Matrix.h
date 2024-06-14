@@ -19,6 +19,7 @@ using namespace std;
 
 // Type aliases for `Eigen` vectors and matrices
 
+typedef Eigen::Vector<double, 2> ColVecd2;    
 typedef Eigen::Vector<double, 3> ColVecd3;    
 typedef Eigen::Vector<double, 6> ColVecd6;                 
 typedef Eigen::Vector<double, 3> ColVecd3;                  
@@ -77,3 +78,9 @@ using T_ElStiffMatx = std::variant<vector<Matd8x8>*, vector<Matd6x6>*, vector<Ma
  * 
  */
 using T_nodStres = std::variant<vector<ColVecd3>, vector<ColVecd6>>;
+
+/**
+ * @brief Variants `nodFlux`.
+ * 
+ */
+using T_nodFlux = std::variant<vector<ColVecd3>, vector<ColVecd2>>;
