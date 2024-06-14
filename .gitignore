@@ -1,0 +1,11 @@
+Classes.md
+FEM.pdf
+dev
+Doxygen/*
+src/FEM_utils/__pycache__
+src/testing
+src/obj
+src/LinearAlgebra
+src/include/LinearAlgebra
+
+
