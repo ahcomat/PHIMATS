@@ -43,11 +43,6 @@ int get_nDof() const { return nDof; };
 int get_nElements() const { return nElements; };
 
 /**
- * @brief Calculates the element stiffness matrix.
- */
-virtual void CalcElemStiffMatx(T_DMatx DMatx) = 0;
-
-/**
  * @brief Return const reference to the vector of element stiffness matrix k_ll.
  * 
  * @return const vector<T_ElStiffMatx>& 

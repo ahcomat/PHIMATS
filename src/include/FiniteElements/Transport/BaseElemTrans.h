@@ -49,6 +49,11 @@ const vector<vector<int>>& get_elemConDof() const { return elemConDof; };
 void ReadElementsData(H5IO &H5File_in, int iSet);
 
 /**
+ * @brief Calculates the element stiffness matrix.
+ */
+virtual void CalcElemStiffMatx(T_DMatx DMatx, double s) = 0;
+
+/**
  * @brief Evaluates the int-pt flux vector. Also evaluates the flux at the nodes.
  * 
  * @param KMatx 

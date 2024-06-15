@@ -58,6 +58,11 @@ void ReadElementsData(H5IO &H5File_in, int iSet);
 void CalcElemDispDof(int iElem, vector<int>& dispDof);
 
 /**
+ * @brief Calculates the element stiffness matrix.
+ */
+virtual void CalcElemStiffMatx(T_DMatx DMatx) = 0;
+
+/**
  * @brief Calculates the `Fint`, strains and stresses. Also evaluates the stress nodal values.
  * 
  * @param DMatx 
