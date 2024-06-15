@@ -158,8 +158,9 @@ void Quad4T::CalcElemStiffMatx(T_DMatx KMatx, double s){
 
     Matd2x2 KMat = std::get<Matd2x2>(KMatx);
 
-    elKdMatx.resize(nElements);  // Initialize the vector containing each element conductivity matrix.
-    elCapMatx.resize(nElements); // Initialize the vector containing each element capacitance matrix.
+    elStiffMatx.resize(nElements);
+    vector<Matd4x4> elKdMatx(nElements);
+    vector<Matd4x4> elCapMatx(nElements);
 
     double dummydVol;   // dummy for int-pt volume.
 
@@ -171,6 +172,7 @@ void Quad4T::CalcElemStiffMatx(T_DMatx KMatx, double s){
     // Loop through all elements.
     for(int iElem=0; iElem<nElements; iElem++){
 
+        elStiffMatx.at(iElem).setZero();
         elKdMatx.at(iElem).setZero();  // Must be populated with zeros.
         elCapMatx.at(iElem).setZero(); // Must be populated with zeros.                  
 
@@ -185,16 +187,18 @@ void Quad4T::CalcElemStiffMatx(T_DMatx KMatx, double s){
             elKdMatx.at(iElem).noalias() += dummyBu.transpose()*KMat*dummyBu*dummydVol;
             // [N_i]^T s N_i
             elCapMatx.at(iElem).noalias() += s*(dummyShFunc.transpose()*dummyShFunc)*dummydVol;
-        }  
+        }
+
+        elStiffMatx.at(iElem) = dt*elKdMatx.at(iElem) + elCapMatx.at(iElem);
     }
 
     // // TODO: For debug!
     // for (auto& iStifMat : elKdMatx)
     //     cout << iStifMat << "\n\n";
-    // cout << elCapMatx.at(0) << "\n";
+    // cout << elStiffMatx.at(0) << "\n";
 
     // Pointer to the vector, not the vector itself.
-    elKdMatxVariant = &elKdMatx;
+    elStiffMatxVariant = &elStiffMatx;
 }
 
 void Quad4T::CalcFlux(T_DMatx KMatx, const double* globalBuffer, T_nodFlux& nodFlux, vector<int>& nodCount){
