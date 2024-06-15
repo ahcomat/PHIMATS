@@ -24,6 +24,7 @@ class PreProcessing:
         
         if self.SimulType=="Transport":
             self.exitNods = inputData["exitNods"]
+            self.dt = inputData["dt"]
 
         #----------------------------------------------------------------------
         # Check for allowed elements and assign element data (number of nodes,
@@ -146,6 +147,9 @@ class PreProcessing:
             self.grp_Sim_Params.create_dataset("nPresDofs", data=self.nPresDofs, dtype = np.int64)
             self.grp_Sim_Params.create_dataset("nElementSets", data=self.nElementSets, dtype = np.int64)
             self.grp_Sim_Params.create_dataset("nSteps", data=self.nSteps, dtype = np.int64)
+            
+            if self.SimulType == "Transport":
+                self.grp_Sim_Params.create_dataset("dt", data=self.dt, dtype = np.int64)
             
             #----------------------------------------------------------------------
             # Material data
