@@ -62,7 +62,6 @@ vector<vector<int>> elemNodeConn;   /// @brief Node connectivity.
 vector<int> elemIDs;                   /// @brief Global element IDs. 
 
 T_ElStiffMatx elStiffMatxVariant;   /// @brief Variant for returning elStiffMatx. 
-T_ElKdMatx elKdMatxVariant;         /// @brief Variant for returning elKdMatx. 
 
 };
 #endif
