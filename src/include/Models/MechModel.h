@@ -123,7 +123,7 @@ void WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const string iSt
 private:
 
 int nElementSets;   /// @brief Number of element sets
-int nTotNodes;      /// @brief Total number of DOFs.
+int nTotNodes;      /// @brief Total number of nodes.
 int nTotDofs;       /// @brief Total number of DOFs.
 int nTotElements;   /// @brief Total number of elements.
 int nDim;           /// @brief Spatial dimensions of the model.
