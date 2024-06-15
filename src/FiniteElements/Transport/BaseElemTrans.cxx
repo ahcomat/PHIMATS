@@ -19,7 +19,9 @@ void BaseElemTrans::ReadElementsData(H5IO &H5File_in, int iSet){
     nElements = H5File_in.ReadScalar(dsetName);
     dsetName = "Elements/ElementSet_"+std::to_string(iSet)+"/nNodes";
     nNodes = H5File_in.ReadScalar(dsetName);
-
+    dsetName = "SimulationParameters/dt";
+    dt = H5File_in.ReadScalar(dsetName);
+    
     // Initialize the size.
     elemNodeConn.resize(nElements);  
     elemConDof.resize(nElements);

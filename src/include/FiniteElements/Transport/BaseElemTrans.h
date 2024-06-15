@@ -70,6 +70,8 @@ const int nElNodes;            /// @brief Number of nodes per element.
 const int nElConDofs;          /// @brief Number of element concentration (temperature) dofs.
 const int nElGauss;            /// @brief Number of gauss points.
 
+double dt;                     /// @brief Time increment.     
+
 vector<vector<int>> elemConDof;    /// @brief Element concentration (temperature) dofs. In this case, it is identical to `elemNodeConn`.
 
 };
