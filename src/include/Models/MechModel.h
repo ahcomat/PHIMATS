@@ -14,8 +14,7 @@
  * 
  * @copyright Copyright (c) 2024
  * 
- * @todo - Use a vector of `BaseElemMech` for multi-material models.
- * - Consider inheritance.
+ * @todo - Consider inheritance.
  *  
  */
 
