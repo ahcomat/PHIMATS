@@ -44,7 +44,6 @@ void setZero_nodStres();
  *        stiffness matrix `A.
  * 
  * @param elements 
- * @param H5File_in 
  */
 void InitializePETSc(vector<BaseElemMech*> elements);
 
