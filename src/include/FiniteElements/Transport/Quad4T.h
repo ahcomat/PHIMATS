@@ -79,7 +79,7 @@ void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double& wt, d
  * 
  * @param DMatx 
  */
-void CalcElemStiffMatx(T_DMatx DMatx) override ;
+void CalcElemStiffMatx(T_DMatx DMatx, double s) override ;
 
 /**
  * @brief Evaluates the int-pt flux vector. Also evaluates the flux at the nodes.

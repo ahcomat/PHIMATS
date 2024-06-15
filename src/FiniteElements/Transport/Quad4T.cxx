@@ -154,7 +154,7 @@ void Quad4T::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const doubl
     cartDeriv = jacMat.inverse()*sFuncDeriv;
 }
 
-void Quad4T::CalcElemStiffMatx(T_DMatx KMatx){
+void Quad4T::CalcElemStiffMatx(T_DMatx KMatx, double s){
 
     Matd2x2 KMat = std::get<Matd2x2>(KMatx);
 
@@ -178,17 +178,20 @@ void Quad4T::CalcElemStiffMatx(T_DMatx KMatx){
         for (int iGauss=0; iGauss<nElGauss; iGauss++){
 
             const Matd2x4& dummyBu = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
+            const RowVecd4& dummyShFunc = shapeFunc.at(iGauss);
             dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current integration point 
 
             // [B_ji]^T k_jj B_ji
             elKdMatx.at(iElem).noalias() += dummyBu.transpose()*KMat*dummyBu*dummydVol;
+            // [N_i]^T s N_i
+            elCapMatx.at(iElem).noalias() += s*(dummyShFunc.transpose()*dummyShFunc)*dummydVol;
         }  
     }
 
     // // TODO: For debug!
     // for (auto& iStifMat : elKdMatx)
     //     cout << iStifMat << "\n\n";
-    cout << elKdMatx.at(0) << "\n";
+    // cout << elCapMatx.at(0) << "\n";
 
     // Pointer to the vector, not the vector itself.
     elKdMatxVariant = &elKdMatx;
