@@ -149,7 +149,7 @@ class PreProcessing:
             self.grp_Sim_Params.create_dataset("nSteps", data=self.nSteps, dtype = np.int64)
             
             if self.SimulType == "Transport":
-                self.grp_Sim_Params.create_dataset("dt", data=self.dt, dtype = np.int64)
+                self.grp_Sim_Params.create_dataset("dt", data=self.dt)
             
             #----------------------------------------------------------------------
             # Material data
