@@ -50,3 +50,8 @@ T_DMatx HeatMassTransport::getKMatx() const {
 
     return KMatx;
 }
+
+double HeatMassTransport::getCapacity() const{
+
+    return c*rho;
+}

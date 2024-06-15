@@ -34,11 +34,11 @@ HeatMassTransport(string dimensions, H5IO &H5File, int iSet, string isoType="Iso
 T_DMatx getKMatx() const override;
 
 /**
- * @brief Returns the diffusive (heat) capacity matrix.
+ * @brief Returns the diffusive (heat) capacity.
  * 
- * @return T_DMatx 
+ * @return double 
  */
-T_DMatx getKMatx() const;
+double getCapacity() const;
 
 private:
 
