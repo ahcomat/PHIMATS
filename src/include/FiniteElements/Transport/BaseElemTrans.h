@@ -54,6 +54,13 @@ void ReadElementsData(H5IO &H5File_in, int iSet);
 virtual void CalcElemStiffMatx(T_DMatx DMatx, double s) = 0;
 
 /**
+ * @brief Return const reference to the vector of element capacitance matrix c_ii.
+ * 
+ * @return const vector<T_ElStiffMatx>& 
+ */
+const T_ElStiffMatx& getElCapMatx() const { return elCapMatxVariant; }
+
+/**
  * @brief Evaluates the int-pt flux vector. Also evaluates the flux at the nodes.
  * 
  * @param KMatx 
@@ -73,6 +80,8 @@ const int nElGauss;            /// @brief Number of gauss points.
 double dt;                     /// @brief Time increment.     
 
 vector<vector<int>> elemConDof;    /// @brief Element concentration (temperature) dofs. In this case, it is identical to `elemNodeConn`.
+
+T_ElStiffMatx elCapMatxVariant;   /// @brief Variant for returning elCapMatx. 
 
 };
 #endif

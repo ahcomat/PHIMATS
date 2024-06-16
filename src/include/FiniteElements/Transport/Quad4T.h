@@ -105,5 +105,7 @@ vector<vector<ColVecd3>> elFlux;   /// @brief Int-pt strains [nElStres].
 vector<vector<Matd2x4>> BMat;       /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
 vector<vector<double>> intPtVol;    /// @brief Int-pt volume.
 vector<Matd4x4> elStiffMatx;        /// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].
+vector<Matd4x4> elCapMatx;          /// @brief Element capacitance matrix [nElDispDofs, nElDispDofs].
+
 };
 #endif

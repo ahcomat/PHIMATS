@@ -159,8 +159,8 @@ void Quad4T::CalcElemStiffMatx(T_DMatx KMatx, double s){
     Matd2x2 KMat = std::get<Matd2x2>(KMatx);
 
     elStiffMatx.resize(nElements);
+    elCapMatx.resize(nElements);
     vector<Matd4x4> elKdMatx(nElements);
-    vector<Matd4x4> elCapMatx(nElements);
 
     double dummydVol;   // dummy for int-pt volume.
 
@@ -199,6 +199,7 @@ void Quad4T::CalcElemStiffMatx(T_DMatx KMatx, double s){
 
     // Pointer to the vector, not the vector itself.
     elStiffMatxVariant = &elStiffMatx;
+    elCapMatxVariant = &elCapMatx;
 }
 
 void Quad4T::CalcFlux(T_DMatx KMatx, const double* globalBuffer, T_nodFlux& nodFlux, vector<int>& nodCount){
