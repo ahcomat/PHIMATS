@@ -28,7 +28,7 @@ LinearElastic(Mat &A);
  * @param x 
  * @param b 
  */
-void Solve(Vec &x, Vec &b) override;
+void Solve(Vec &x, Vec &b);
 
 /**
  * @brief Solve the linear system `Ax=b`.
