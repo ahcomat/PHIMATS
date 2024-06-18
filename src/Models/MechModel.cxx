@@ -281,14 +281,12 @@ void MechModel::InitializeDirichBC(H5IO& H5File_in){
         // // TODO: For debug!
         // cout << presDofs[iPresDof] << " --> " << presVals[iPresDof] << "\n";
     }
+
+    MatZeroRows(A, nPresDofs, presDofs, 1.0, NULL, NULL);
+    MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
 }
 
 void MechModel::setDirichBC(){
-
-    // MatZeroRowsColumns(A, nPresDofs, presDofs, 1.0, NULL, NULL);
-    MatZeroRows(A, nPresDofs, presDofs, 1.0, NULL, NULL);
-
-    MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
 
     VecSetValues(b, nPresDofs, presDofs, presVals, ADD_VALUES); 
     VecAssemblyBegin(b); VecAssemblyEnd(b);
