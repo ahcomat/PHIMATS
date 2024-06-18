@@ -11,22 +11,20 @@
 #ifndef BASESOLVER_H
 #define BASESOLVER_H
 
+#include <petscsys.h>
 #include <petscvec.h>
-
+#include <petscmat.h>
+#include <petscksp.h>
 class BaseSolver{
 
 public:
 
 virtual ~BaseSolver() = default;
 
-/**
- * @brief Solve the linear system `Ax=b`.
- * 
- * @param A 
- * @param x 
- * @param b 
- */
-virtual void Solve(Vec &x, Vec &b) = 0;
+protected:
+
+KSP ksp;        /// @brief `KSP` object.
+PC pc;          /// @brief Pre-conditioner.
 
 };
 #endif

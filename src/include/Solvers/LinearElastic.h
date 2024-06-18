@@ -30,19 +30,14 @@ LinearElastic(Mat &A);
  */
 void Solve(Vec &x, Vec &b) override;
 
-private:
-
 /**
- * @brief `KSP` object.
+ * @brief Solve the linear system `Ax=b`.
  * 
+ * @param A 
+ * @param x 
+ * @param b 
  */
-KSP ksp;  
-
-/**
- * @brief Pre-conditioner.
- * 
- */
-PC pc;
+void SolveTransport(Vec &x, Vec &F);
 
 };
 #endif
