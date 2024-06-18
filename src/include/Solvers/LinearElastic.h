@@ -11,11 +11,6 @@
 #ifndef LINEARELASTIC_H
 #define LINEARELASTIC_H
 
-#include <petscsys.h>
-#include <petscvec.h>
-#include <petscmat.h>
-#include <petscksp.h>
-
 #include "BaseSolver.h"
 
 class LinearElastic: public BaseSolver{
