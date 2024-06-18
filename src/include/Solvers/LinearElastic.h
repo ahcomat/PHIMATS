@@ -30,14 +30,5 @@ LinearElastic(Mat &A);
  */
 void Solve(Vec &x, Vec &b);
 
-/**
- * @brief Solve the linear system `Ax=b`.
- * 
- * @param A 
- * @param x 
- * @param b 
- */
-void SolveTransport(Vec &x, Vec &F);
-
 };
 #endif
