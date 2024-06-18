@@ -509,7 +509,7 @@ class PreProcessing:
 #-----------------------------------------------------------------------------#
 
     @staticmethod
-    def WriteDispBCs(Simul, elementName, mesh, presBCs, dims=2):
+    def WriteConBCs(Simul, elementName, mesh, presBCs, dims=2):
         
         #----------------------------------------------------------------------
         # Prepare data  
