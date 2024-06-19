@@ -179,12 +179,12 @@ void Quad4T::CalcElemStiffMatx(T_DMatx KMatx, double s){
         // Integration over all Gauss points.
         for (int iGauss=0; iGauss<nElGauss; iGauss++){
 
-            const Matd2x4& dummyBu = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
+            const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
             const RowVecd4& dummyShFunc = shapeFunc.at(iGauss);
             dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current integration point 
 
             // [B_ji]^T k_jj B_ji
-            elKdMatx.at(iElem).noalias() += dummyBu.transpose()*KMat*dummyBu*dummydVol;
+            elKdMatx.at(iElem).noalias() += dummyBMat.transpose()*KMat*dummyBMat*dummydVol;
             // [N_i]^T s N_i
             elCapMatx.at(iElem).noalias() += s*(dummyShFunc.transpose()*dummyShFunc)*dummydVol;
         }
