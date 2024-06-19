@@ -1,5 +1,10 @@
 # Contributing to PhiMATS
 
+## General practices
+
+- For `std::vector`, unless extremely necessary, don't use `pushback()` and instead use `resize()`. This avoids changing the size of the vector by mistake.
+
+
 ## `Pointers` and `References`
 
 - Always use `dynamic` arrays only when needed.
