@@ -39,20 +39,13 @@ TransportModel::TransportModel(vector<BaseElemTrans*> elements, H5IO& H5File_in)
     // Initialize to zeros
     setZero_nodFlux();
 
-    // Allocate memory for `Fint`.
-    PetscMalloc1(nTotDofs, &Fint);
-    // Initialize to zeros, otherwise will get garbage memory values.
-    for(int iDof=0; iDof<nTotDofs; iDof++){
-        Fint[iDof] = 0;
-    }
-
     InitializePETSc(elements);
 }
 
 TransportModel::~TransportModel(){
 
     // Deallocate memory.
-    PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint);
+    PetscFree(presDofs); PetscFree(presVals);
     VecDestroy(&F); VecDestroy(&x); MatDestroy(&K);
     // Finalize PETSc
     PetscFinalize();

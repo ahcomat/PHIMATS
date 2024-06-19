@@ -137,7 +137,6 @@ vector<int> nodCount;     /// @brief Counter for integration points surrounding 
 // PETSc ------------------------
 
 const double* globalBuffer;  /// @brief buffer array for PETSc data
-double* Fint = NULL;         /// @brief For calculating the internal force vector.
 
 // Boundary conditions
 PetscInt nPresDofs;            /// @brief number of prescribed dofs.
