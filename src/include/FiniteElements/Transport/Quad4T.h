@@ -100,7 +100,7 @@ vector<Matd2x4> shapeFuncDeriv;  /// @brief Values of the shape function derivat
 vector<Matd4x2> elemNodCoord;     /// @brief Node Coordinates [nElDim, nElNodes]. 
 vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
 
-vector<vector<ColVecd3>> elFlux;   /// @brief Int-pt strains [nElStres].
+vector<vector<ColVecd2>> elFlux;   /// @brief Int-pt strains [nElStres].
 
 vector<vector<Matd2x4>> BMat;       /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
 vector<vector<double>> intPtVol;    /// @brief Int-pt volume.
