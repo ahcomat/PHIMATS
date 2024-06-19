@@ -199,7 +199,14 @@ void H5IO::WriteStres(string dsetName, const int nNodes, const int nStres, const
 
     double BufferField [nNodes][nStres];
 
-    if(nStres==3){
+    if(nStres==2){
+
+        for (int i=0; i<nNodes; i++){
+            for (int j=0; j<nStres; j++){
+                BufferField[i][j] = std::get<std::vector<ColVecd2>>(Array).at(i)(j);
+            }
+        }
+    } else if(nStres==3){
 
         for (int i=0; i<nNodes; i++){
             for (int j=0; j<nStres; j++){
