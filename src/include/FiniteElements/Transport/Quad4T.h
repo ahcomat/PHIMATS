@@ -89,7 +89,7 @@ void CalcElemStiffMatx(T_DMatx DMatx, double s) override ;
  * @param nodFlux 
  * @param nodCount 
  */
-void CalcFlux(T_DMatx KMatx, const double* globalBuffer, T_nodFlux& nodFlux, vector<int>& nodCount) override;
+void CalcFlux(T_DMatx KMatx, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount) override;
 
 private:
 

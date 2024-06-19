@@ -203,43 +203,36 @@ void Quad4T::CalcElemStiffMatx(T_DMatx KMatx, double s){
     elCapMatxVariant = &elCapMatx;
 }
 
-void Quad4T::CalcFlux(T_DMatx KMatx, const double* globalBuffer, T_nodFlux& nodFlux, vector<int>& nodCount){
+void Quad4T::CalcFlux(T_DMatx KMatx, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount){
 
-    // ColVecd8 dummyDisp; // for element nodal displacement.
-    // ColVecd8 dummyForc; // for element nodal internal force.
+    ColVecd4 dummyCon; // for element nodal concentration.
+    int iNode;  // counter for the number of nodes.
 
-    // // Integration point values.
-    // for(int iElem=0; iElem<nElements; iElem++){
+    // Integration point values.
+    for(int iElem=0; iElem<nElements; iElem++){
 
-    //     // Get element nodal displacements from the solution vector. 
-    //     for(int iDof=0; iDof<nElDispDofs; iDof++){
-    //         dummyDisp(iDof) = globalBuffer[elemDispDof.at(iElem).at(iDof)];
-    //     }
+        // Get element nodal concentration from the solution vector. 
+        for(int iDof=0; iDof<nElConDofs; iDof++){
+            dummyCon(iDof) = globalBuffer[elemConDof.at(iElem).at(iDof)];
+        }
 
-    //     // Gauss points
-    //     for(int iGaus=0; iGaus<nElGauss; iGaus++){
+        // Gauss points
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-    //         // Int pt values
-    //         elStran.at(iElem).at(iGaus) = BuMat.at(iElem).at(iGaus)*dummyDisp;
-    //         elStres.at(iElem).at(iGaus) = std::get<Matd3x3>(DMatx)*elStran.at(iElem).at(iGaus);
+            // Int pt flux
+            elFlux.at(iElem).at(iGaus) = -(std::get<Matd2x2>(KMatx)*BMat.at(iElem).at(iGaus))*dummyCon;
 
-    //         dummyForc = BuMat.at(iElem).at(iGaus).transpose()*elStres.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+            // Nodal values
+            iNode = 0;
+            for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
 
-    //         // Sometimes it throws segmentation fault, have no idea why (⊙_⊙)？
-    //         for(int pom=0; pom<nElDispDofs; pom++){
-    //             Fint[elemDispDof.at(iElem).at(pom)] += dummyForc(pom);
-    //         }
+                std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                iNode += 1;
+            }
+        }
+    }
 
-    //         // Nodal values
-    //         for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
-
-    //             std::get<std::vector<ColVecd3>>(nodStran).at(*iNod2) += elStran.at(iElem).at(iGaus);
-    //             std::get<std::vector<ColVecd3>>(nodStres).at(*iNod2) += elStres.at(iElem).at(iGaus);
-    //             nodCount.at(*iNod2) += 1;
-    //         }
-    //     }
-    // }
-
-    // // // TODO: For debug!
-    // // cout << elStran.at(0).at(0) << "\n\n";
+    // // TODO: For debug!
+    // cout << elFlux.at(0).at(0) << "\n\n";
 }
