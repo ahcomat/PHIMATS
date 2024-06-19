@@ -180,21 +180,15 @@ class PreProcessing:
             #----------------------------------------------------------------------
             # Write node coordinates 
             #----------------------------------------------------------------------
-            
-            self.grp_nNodes = self.fh5.create_group('NodeCoordinates')
-            
-            for iNod in range(self.nTotNodes):
-                self.grp_nNodes.create_dataset("Node_"+str(iNod), data=self.nodeCoord[iNod], dtype = np.float64)   
+                
+            self.fh5.create_dataset("NodeCoordinates", data=self.nodeCoord, dtype = np.float64)
                         
             #----------------------------------------------------------------------
             # Write element node connectivity
             #----------------------------------------------------------------------
             
             # All elements
-            self.grp_nodeConnectivity = self.fh5.create_group('NodeConnectivity')
-            
-            for iElem in range(self.nTotElements):
-                self.grp_nodeConnectivity.create_dataset("Element_"+str(iElem), data=self.nodeConnectivity[iElem], dtype = np.int64)      
+            self.fh5.create_dataset("NodeConnectivity", data=self.nodeConnectivity, dtype = np.int64)
 
             # Data per element set
             # element connectivity
