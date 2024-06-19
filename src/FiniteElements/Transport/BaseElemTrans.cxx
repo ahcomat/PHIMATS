@@ -26,20 +26,23 @@ void BaseElemTrans::ReadElementsData(H5IO &H5File_in, int iSet){
     elemNodeConn.resize(nElements);  
     elemConDof.resize(nElements);
     elemIDs.resize(nElements);
-    // Read global element IDs.
+
+    // Read global element IDs
     dsetName = "Elements/ElementSet_"+std::to_string(iSet)+"/ElementSetIDs";
     H5File_in.ReadFieldInt1D(dsetName, elemIDs);
 
-    // Read node connectivity.
-    vector<int> dummy(nElNodes);
+    // Read node connectivity
+    dsetName = "SimulationParameters/nTotElements";
+    int totElements = H5File_in.ReadScalar(dsetName);  // Total number of elements
+    vector<vector<int>> totElNodConnectivity(totElements);  // Node connectivity for all elements
+    dsetName = "NodeConnectivity";
+    H5File_in.ReadFieldInt2D(dsetName, totElements, nElNodes, totElNodConnectivity);
 
+    // Node connectivity for the element set
     for (int iElem=0; iElem<nElements; iElem++){
 
-        dsetName = "NodeConnectivity/Element_"+to_string(elemIDs.at(iElem));
-        H5File_in.ReadFieldInt1D(dsetName, dummy);
-
-        elemNodeConn.at(iElem) = dummy;
-        elemConDof.at(iElem) = dummy;
+        elemNodeConn.at(iElem) = totElNodConnectivity.at(elemIDs.at(iElem));
+        elemConDof.at(iElem) = totElNodConnectivity.at(elemIDs.at(iElem));
     }
 
     // TODO: For debug!
