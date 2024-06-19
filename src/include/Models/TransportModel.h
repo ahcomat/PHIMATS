@@ -129,7 +129,7 @@ int nElements;      /// @brief Number of elements per element set.
 int nSteps;         /// @brief Number of steps to apply the load.
 double dt;          /// @brief Time increment.
 
-T_nodFlux nodFlux;        /// @brief Nodal flux.
+T_nodStres nodFlux;        /// @brief Nodal flux.
 vector<double> nodCount;     /// @brief Counter for integration points surrounding nodes.
 
 // PETSc ------------------------
