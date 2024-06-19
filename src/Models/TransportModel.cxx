@@ -329,18 +329,15 @@ void TransportModel::WriteOut(vector<BaseElemTrans*> elements, H5IO &H5File_out,
     // Displacements
     VecGetArrayRead(x, &globalBuffer);
     H5File_out.WriteArray_1D("Con/Step_"+iStep, nTotDofs, globalBuffer);
-    // VecRestoreArrayRead(x, &globalBuffer);
-    // H5File_out.WriteArray_1D("Force/Step_"+iStep, nTotDofs, Fint);
+    VecRestoreArrayRead(x, &globalBuffer);
 
-    // // Stresses and strains
-    // if (nDim==2){
-    //     H5File_out.WriteStres("Strain/Step_"+iStep, nTotNodes, 2, nodStran);
-    //     // H5File_out.WriteStres("Stress/Step_"+iStep, nTotNodes, 3, nodStres);
-    // } else if (nDim==3) {
-    //     H5File_out.WriteStres("Strain/Step_"+iStep, nTotNodes, 3, nodStran);
-    //     // H5File_out.WriteStres("Stress/Step_"+iStep, nTotNodes, 6, nodStres);
-    // }
+    // Flux
+    if (nDim==2){
+        H5File_out.WriteStres("Flux/Step_"+iStep, nTotNodes, 2, nodFlux);
+    } else if (nDim==3) {
+        H5File_out.WriteStres("Flux/Step_"+iStep, nTotNodes, 3, nodFlux);
+    }
 
-    // // set zeros
-    // setZero_nodStres();
+    // set zeros
+    setZero_nodFlux();
 }
