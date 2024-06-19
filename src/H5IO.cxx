@@ -159,7 +159,6 @@ void H5IO::ReadFieldDoub1D(string dsetName, vector<double>& Field){
     }
 }
 
-
 void H5IO::WriteArray_1D(std::string dsetName, int xSize, const double *Array){
 
     hid_t  file_id, dataset_id, dataspace_id;
