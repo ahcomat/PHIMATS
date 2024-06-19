@@ -20,7 +20,7 @@ using namespace std;
 // Type aliases for `Eigen` vectors and matrices
 
 typedef Eigen::Vector<double, 2> ColVecd2;    
-typedef Eigen::Vector<double, 3> ColVecd3;    
+typedef Eigen::Vector<double, 3> ColVecd3;
 typedef Eigen::Vector<double, 4> ColVecd4;    
 typedef Eigen::Vector<double, 6> ColVecd6;                 
 typedef Eigen::Vector<double, 3> ColVecd3;                  
