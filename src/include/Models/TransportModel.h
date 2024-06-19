@@ -102,14 +102,12 @@ Vec& getX();
  */
 Mat& getK();
 
-// /**
-//  * @brief Calculates the Fint, strains and stresses. Also Calculates the stress nodal values 
-//  *        if `nodStresFlag=true`.
-//  * 
-//  * @param elements 
-//  * @param nodStresFlag 
-//  */
-// void CalcStres(vector<BaseElemTrans*> elements, vector<BaseTransport*> mats);
+/**
+ * @brief Calculates the flux. Also Calculates the maps the flux to nodal values.
+ * 
+ * @param elements 
+ */
+void CalcFlux(vector<BaseElemTrans*> elements, vector<BaseTransport*> mats);
 
 /**
  * @brief Write nodal values.

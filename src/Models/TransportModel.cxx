@@ -292,39 +292,37 @@ Mat& TransportModel::getK(){
     return K;
 }
 
-// void TransportModel::CalcStres(vector<BaseElemTrans*> elements, vector<BaseTransport*> mats){
+void TransportModel::CalcFlux(vector<BaseElemTrans*> elements, vector<BaseTransport*> mats){
 
-//     VecGetArrayRead(x, &globalBuffer);
+    VecGetArrayRead(x, &globalBuffer);
 
-//     for (int iSet=0; iSet<nElementSets; iSet++){
+    for (int iSet=0; iSet<nElementSets; iSet++){
         
-//         elements[iSet]->CalcStres(mats[iSet]->getDMatx(), globalBuffer, Fint, nodStres, nodStran, nodCount);
-//     }
+        elements[iSet]->CalcFlux(mats[iSet]->getKMatx(), globalBuffer, nodFlux, nodCount);
+    }
 
-//     // Number averaging the nodal values
-//     if (nDim==2){
+    // Number averaging the nodal values
+    if (nDim==2){
 
-//         for(int iNod=0; iNod<nTotNodes; iNod++){
+        for(int iNod=0; iNod<nTotNodes; iNod++){
             
-//             std::get<std::vector<ColVecd3>>(nodStran).at(iNod) = std::get<std::vector<ColVecd3>>(nodStran).at(iNod)/nodCount.at(iNod);
-//             std::get<std::vector<ColVecd3>>(nodStres).at(iNod) = std::get<std::vector<ColVecd3>>(nodStres).at(iNod)/nodCount.at(iNod);
-//         }
+            std::get<std::vector<ColVecd2>>(nodFlux).at(iNod) = std::get<std::vector<ColVecd2>>(nodFlux).at(iNod)/nodCount.at(iNod);
+        }
 
-//     } else if (nDim==3){
+    } else if (nDim==3){
 
-//         for(int iNod=0; iNod<nTotNodes; iNod++){
+        for(int iNod=0; iNod<nTotNodes; iNod++){
             
-//             std::get<std::vector<ColVecd6>>(nodStran).at(iNod) = std::get<std::vector<ColVecd6>>(nodStran).at(iNod)/nodCount.at(iNod);
-//             std::get<std::vector<ColVecd6>>(nodStres).at(iNod) = std::get<std::vector<ColVecd6>>(nodStres).at(iNod)/nodCount.at(iNod);
-//         }
+            std::get<std::vector<ColVecd3>>(nodFlux).at(iNod) = std::get<std::vector<ColVecd3>>(nodFlux).at(iNod)/nodCount.at(iNod);
+        }
 
-//     }
+    }
 
-//     // TODO: For debug!
-//     // cout << std::get<std::vector<ColVecd3>>(nodStran).at(0) << "\n";
+    // TODO: For debug!
+    // cout << std::get<std::vector<ColVecd3>>(nodStran).at(0) << "\n";
 
-//     VecRestoreArrayRead(x, &globalBuffer);
-// }
+    VecRestoreArrayRead(x, &globalBuffer);
+}
 
 void TransportModel::WriteOut(vector<BaseElemTrans*> elements, H5IO &H5File_out, const string iStep){
 
