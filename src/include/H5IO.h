@@ -34,13 +34,9 @@ H5IO(std::string H5FileName);
  */
 double ReadScalar(std::string dsetName);
 
-/**
- * @brief Reads a 1D field input from HDF5 file. 
- * 
- * @param dsetName 
- * @return double/int 
- */
-// void ReadFieldInt1D(std::string dsetName, Array1D<int>& Field);
+void ReadFieldFloat2D(string dsetName, const int row, const int col, vector<vector<double>>& Field);
+
+void ReadFieldInt2D(string dsetName, const int row, const int col, vector<vector<int>>& Field);
 
 void ReadFieldInt1D(string dsetName, vector<int>& Field);
 

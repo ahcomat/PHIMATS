@@ -43,6 +43,68 @@ double H5IO::ReadScalar(string dsetName){
     return Var[0];
 }
 
+void H5IO::ReadFieldFloat2D(string dsetName, const int row, const int col, vector<vector<double>>& Field){
+
+    hid_t  file_id, dataset_id;
+    herr_t status;
+
+    double BufferField[row][col];
+
+    const char* fileName = this->H5FileName.c_str();
+    const char* dataSetName = dsetName.c_str();
+
+    // Open existing file
+    file_id = H5Fopen(fileName, H5F_ACC_RDWR, H5P_DEFAULT);
+    // Open existing data set
+    dataset_id = H5Dopen2(file_id, dataSetName, H5P_DEFAULT);
+    // Read dataset buffer
+    status = H5Dread(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, BufferField);
+    // Close dataset
+    status = H5Dclose(dataset_id);
+    // Close file
+    status = H5Fclose(file_id);
+
+    vector<double> dummy1(col);
+
+    for (int i=0; i<row; i++){
+        for (int j=0; j<col; j++){
+            dummy1.at(j) = BufferField[i][j];
+        }
+        Field.at(i) = dummy1;
+    }
+}
+
+void H5IO::ReadFieldInt2D(string dsetName, const int row, const int col, vector<vector<int>>& Field){
+
+    hid_t  file_id, dataset_id;
+    herr_t status;
+
+    int BufferField[row][col];
+
+    const char* fileName = this->H5FileName.c_str();
+    const char* dataSetName = dsetName.c_str();
+
+    // Open existing file
+    file_id = H5Fopen(fileName, H5F_ACC_RDWR, H5P_DEFAULT);
+    // Open existing data set
+    dataset_id = H5Dopen2(file_id, dataSetName, H5P_DEFAULT);
+    // Read dataset buffer
+    status = H5Dread(dataset_id, H5T_NATIVE_INT , H5S_ALL, H5S_ALL, H5P_DEFAULT, BufferField);
+    // Close dataset
+    status = H5Dclose(dataset_id);
+    // Close file
+    status = H5Fclose(file_id);
+
+    vector<int> dummy1(col);
+
+    for (int i=0; i<row; i++){
+        for (int j=0; j<col; j++){
+            dummy1.at(j) = BufferField[i][j];
+        }
+        Field.at(i) = dummy1;
+    }
+}
+
 void H5IO::ReadFieldInt1D(string dsetName,  vector<int> &Field){
 
     hid_t  file_id, dataset_id;
