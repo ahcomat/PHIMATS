@@ -103,11 +103,9 @@ Vec& getX();
 Mat& getA();
 
 /**
- * @brief Calculates the Fint, strains and stresses. Also Calculates the stress nodal values 
- *        if `nodStresFlag=true`.
+ * @brief Calculates the Fint, strains and stresses. Also Calculates the stress nodal values.
  * 
  * @param elements 
- * @param nodStresFlag 
  */
 void CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats);
 
