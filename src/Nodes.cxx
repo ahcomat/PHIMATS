@@ -20,13 +20,10 @@ void Nodes::ReadNodes(H5IO &H5File){
     dsetName = "SimulationParameters/nDim";
     nDim = H5File.ReadScalar(dsetName);
 
-    vector<double> dummy1(nDim);
+    nodeCoordinates.resize(nTotNodes);
 
-    for (int iNod=0; iNod<nTotNodes; iNod++){
-        dsetName = "NodeCoordinates/Node_"+to_string(iNod);
-        H5File.ReadFieldDoub1D(dsetName, dummy1);
-        nodeCoordinates.push_back(dummy1);
-    }
+    dsetName = "NodeCoordinates";
+    H5File.ReadFieldFloat2D(dsetName, nTotNodes, nDim, nodeCoordinates);
 }
 
 vector<double> Nodes::getNodCoord(int nod){
