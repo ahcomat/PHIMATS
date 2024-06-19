@@ -103,6 +103,7 @@ void Quad4T::InitializeElements(Nodes &Nodes){
     // Loop through elements.
     for(int iElem=0; iElem<nElements; iElem++){
 
+        elFlux.at(iElem).resize(nElGauss);
         gaussPtCart.at(iElem).resize(nElGauss);
         BMat.at(iElem).resize(nElGauss);
 
