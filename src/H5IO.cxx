@@ -159,7 +159,7 @@ void H5IO::ReadFieldDoub1D(string dsetName, vector<double>& Field){
     }
 }
 
-void H5IO::WriteArray_1D(std::string dsetName, int xSize, const double *Array){
+void H5IO::WriteArray_1D(std::string dsetName, const int xSize, const double *Array){
 
     hid_t  file_id, dataset_id, dataspace_id;
     herr_t status;
@@ -185,7 +185,7 @@ void H5IO::WriteArray_1D(std::string dsetName, int xSize, const double *Array){
     status = H5Fclose(file_id);
 }
 
-void H5IO::WriteStres(string dsetName, int nNodes, int nStres, const T_nodStres& Array){
+void H5IO::WriteStres(string dsetName, const int nNodes, const int nStres, const T_nodStres& Array){
 
     hid_t  file_id, dataset_id, dataspace_id;
     herr_t status;

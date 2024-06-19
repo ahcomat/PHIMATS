@@ -42,9 +42,9 @@ void ReadFieldInt1D(string dsetName, vector<int>& Field);
 
 void ReadFieldDoub1D(string dsetName, vector<double>& Field);
 
-void WriteArray_1D(string dsetName, int xSize, const double *Array);
+void WriteArray_1D(string dsetName, const int xSize, const double *Array);
 
-void WriteStres(string dsetName, int xSize, int ySize, const T_nodStres& Array);
+void WriteStres(string dsetName, const int xSize, const int ySize, const T_nodStres& Array);
 
 private:
 
