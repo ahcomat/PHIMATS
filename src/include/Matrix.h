@@ -76,13 +76,7 @@ using T_DMatx = std::variant<Matd2x2, Matd3x3, Matd6x6>;
 using T_ElStiffMatx = std::variant<vector<Matd4x4>*, vector<Matd6x6>*, vector<Matd8x8>*, vector<Matd24x24>*>;
 
 /**
- * @brief Variants `nodStres`.
+ * @brief Variants for vector (tensor in Voigt notation) quantities.
  * 
  */
-using T_nodStres = std::variant<vector<ColVecd3>, vector<ColVecd6>>;
-
-/**
- * @brief Variants `nodFlux`.
- * 
- */
-using T_nodFlux = std::variant<vector<ColVecd3>, vector<ColVecd2>>;
+using T_nodStres = std::variant<vector<ColVecd2>, vector<ColVecd3>, vector<ColVecd6>>;
