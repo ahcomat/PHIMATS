@@ -21,12 +21,14 @@
 #ifndef MECHMODEL_H
 #define MECHMODEL_H
 
-#include "petsc.h"
+#include <petscvec.h>
+#include <petscmat.h>
+#include "BaseModel.h"
 #include "H5IO.h"
 #include "FiniteElements/Mechanics/BaseElemMech.h"
 #include "Materials/Mechanics/BaseMechanics.h"
 
-class MechModel{
+class MechModel: public BaseModel{
 
 public:
 
@@ -119,14 +121,7 @@ void WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const string iSt
 
 private:
 
-int nElementSets;   /// @brief Number of element sets
-int nTotNodes;      /// @brief Total number of nodes.
-int nTotDofs;       /// @brief Total number of DOFs.
-int nTotElements;   /// @brief Total number of elements.
-int nDim;           /// @brief Spatial dimensions of the model.
 int nElDispDofs;    /// @brief Number of element displacement dofs.
-int nElements;      /// @brief Number of elements per element set. 
-int nSteps;         /// @brief Number of steps to apply the load.
 
 T_nodStres nodStres;      /// @brief Nodal stress.
 T_nodStres nodStran;      /// @brief Nodal strain.
@@ -134,13 +129,7 @@ vector<int> nodCount;     /// @brief Counter for integration points surrounding 
 
 // PETSc ------------------------
 
-const double* globalBuffer;  /// @brief buffer array for PETSc data
 double* Fint = NULL;         /// @brief For calculating the internal force vector.
-
-// Boundary conditions
-PetscInt nPresDofs;            /// @brief number of prescribed dofs.
-PetscInt* presDofs = NULL;     /// @brief Array to hold the prescribed dofs.
-PetscScalar* presVals = NULL;  /// @brief Array to hold the prescribed values.
 
 Vec b;   /// @brief RHS vector.
 Vec x;   /// @brief solution vector.

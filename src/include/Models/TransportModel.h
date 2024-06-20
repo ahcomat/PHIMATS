@@ -19,14 +19,14 @@
 #ifndef TRANSPORTMODEL_H
 #define TRANSPORTMODEL_H
 
-#include <petscsys.h>
 #include <petscvec.h>
 #include <petscmat.h>
+#include "BaseModel.h"
 #include "H5IO.h"
 #include "FiniteElements/Transport/BaseElemTrans.h"
 #include "Materials/Transport/BaseTransport.h"
 
-class TransportModel{
+class TransportModel: public BaseModel{
 
 public:
 
@@ -119,27 +119,13 @@ void WriteOut(vector<BaseElemTrans*> elements, H5IO &H5File_out, const string iS
 
 private:
 
-int nElementSets;   /// @brief Number of element sets
-int nTotNodes;      /// @brief Total number of nodes.
-int nTotDofs;       /// @brief Total number of DOFs.
-int nTotElements;   /// @brief Total number of elements.
-int nDim;           /// @brief Spatial dimensions of the model.
 int nElConDofs;     /// @brief Number of element concentration (temp) dofs.
-int nElements;      /// @brief Number of elements per element set.
-int nSteps;         /// @brief Number of steps to apply the load.
 double dt;          /// @brief Time increment.
 
 T_nodStres nodFlux;        /// @brief Nodal flux.
 vector<double> nodCount;     /// @brief Counter for integration points surrounding nodes.
 
 // PETSc ------------------------
-
-const double* globalBuffer;  /// @brief buffer array for PETSc data
-
-// Boundary conditions
-PetscInt nPresDofs;            /// @brief number of prescribed dofs.
-PetscInt* presDofs = NULL;     /// @brief Array to hold the prescribed dofs.
-PetscScalar* presVals = NULL;  /// @brief Array to hold the prescribed values.
 
 Vec F;   /// @brief RHS vector.
 Vec x;   /// @brief solution vector.
