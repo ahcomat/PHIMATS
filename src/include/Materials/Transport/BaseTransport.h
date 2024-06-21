@@ -28,5 +28,9 @@ virtual ~BaseTransport() override {};
  */
 virtual T_DMatx getKMatx() const = 0;
 
+protected:
+
+const double R = 8.31446261815324; /// @brief Universal gas constant [J/mol.K]
+
 };
 #endif
