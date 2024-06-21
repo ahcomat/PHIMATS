@@ -42,8 +42,7 @@ double getCapacity() const;
 
 private:
 
-double rho;         /// @brief Mass density 
-double c;           /// @brief Specific heat (diffusive) capacity
+double s;           /// @brief (diffusive) capacity
 T_DMatx KMatx;      /// @brief Variant for storing the diffusivity (conductivity) matrix
 
 };
