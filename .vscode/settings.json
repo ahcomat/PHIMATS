@@ -76,6 +76,7 @@
         "*.expression": "cpp",
         "alignedvector3": "cpp",
         "fft": "cpp",
-        "dense": "cpp"
+        "dense": "cpp",
+        "*.cxx2": "c"
     }
 }
