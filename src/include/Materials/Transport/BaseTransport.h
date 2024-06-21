@@ -22,7 +22,7 @@ BaseTransport(string isoType, string dimensions): BaseMaterial(isoType, dimensio
 virtual ~BaseTransport() override {};
 
 /**
- * @brief Returns the 3D stiffness matrix in Voigt notation.
+ * @brief Returns the diffusivity matrix.
  * 
  * @return T_DMatx 
  */
