@@ -111,7 +111,7 @@ void H5IO::ReadFieldInt1D(string dsetName,  vector<int> &Field){
     herr_t status;
 
     int Mx = Field.size();
-    double BufferField[Mx];
+    int BufferField[Mx];
 
     const char* fileName = this->H5FileName.c_str();
     const char* dataSetName = dsetName.c_str();
@@ -121,7 +121,7 @@ void H5IO::ReadFieldInt1D(string dsetName,  vector<int> &Field){
     // Open existing data set
     dataset_id = H5Dopen2(file_id, dataSetName, H5P_DEFAULT);
     // Read dataset buffer
-    status = H5Dread(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, BufferField);
+    status = H5Dread(dataset_id, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, BufferField);
     // Close dataset
     status = H5Dclose(dataset_id);
     // Close file
