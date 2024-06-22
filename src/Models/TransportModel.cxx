@@ -179,7 +179,7 @@ void TransportModel::Assemble(vector<BaseElemTrans*> elements){
 
             for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
 
-                // Get the disp dofs associated with the element
+                // Get the con dofs associated with the element
                 for(int iElDof=0; iElDof<nElConDofs; iElDof++){
 
                     i1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
@@ -197,7 +197,7 @@ void TransportModel::Assemble(vector<BaseElemTrans*> elements){
 
         //     for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
 
-        //         // Get the disp dofs associated with the element
+        //         // Get the con dofs associated with the element
         //         for(int iElDof=0; iElDof<nElConDofs; iElDof++){
 
         //             i1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
@@ -213,7 +213,7 @@ void TransportModel::Assemble(vector<BaseElemTrans*> elements){
 
         //     for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
 
-        //         // Get the disp dofs associated with the element
+        //         // Get the con dofs associated with the element
         //         for(int iElDof=0; iElDof<nElConDofs; iElDof++){
 
         //             i1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
