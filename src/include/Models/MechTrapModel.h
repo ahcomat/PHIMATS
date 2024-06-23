@@ -53,7 +53,7 @@ void InitializePETSc(vector<BaseElemTrap*> elements);
  * @param elements 
  * @param H5File_out 
  */
-void WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_out);
+void WriteGradSigmaH(vector<BaseElemTrap*> elements, H5IO& H5File_out);
 
 /**
  * @brief Calculates the element stiffness matrix. 

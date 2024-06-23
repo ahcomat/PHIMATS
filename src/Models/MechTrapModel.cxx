@@ -149,50 +149,50 @@ void MechTrapModel::InitializePETSc(vector<BaseElemTrap*> elements){
 
 }
 
-void MechTrapModel::WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_out){
+void MechTrapModel::WriteGradSigmaH(vector<BaseElemTrap*> elements, H5IO& H5File_out){
 
-    // Nodal gradient of phi.
-    T_nodStres nodGradPhi;     
+    // Nodal gradient of sigmaH.
+    T_nodStres nodGradSigmaH;     
     // Counter for integration points surrounding nodes.
-    vector<double> nodPhiCount(nTotNodes);     
+    vector<double> nodSigmaHCount(nTotNodes);     
      
     if (nDim == 2){ // Case 2D model
-        nodGradPhi = vector<ColVecd2>(nTotNodes);
+        nodGradSigmaH = vector<ColVecd2>(nTotNodes);
     } else if (nDim == 3){ // Case 3D
-        nodGradPhi = vector<ColVecd3>(nTotNodes);
+        nodGradSigmaH = vector<ColVecd3>(nTotNodes);
     }
 
     // Set zeros
     if (nDim == 2){ // Case 2D model
         for(int iNod=0; iNod<nTotNodes; iNod++){
-            std::get<std::vector<ColVecd2>>(nodGradPhi).at(iNod).setZero();
-            nodPhiCount.at(iNod) = 0;
+            std::get<std::vector<ColVecd2>>(nodGradSigmaH).at(iNod).setZero();
+            nodSigmaHCount.at(iNod) = 0;
         }
     } else if (nDim == 3){ // Case 3D
         for(int iNod=0; iNod<nTotNodes; iNod++){
-            std::get<std::vector<ColVecd3>>(nodGradPhi).at(iNod).setZero();
-            nodPhiCount.at(iNod) = 0;
+            std::get<std::vector<ColVecd3>>(nodGradSigmaH).at(iNod).setZero();
+            nodSigmaHCount.at(iNod) = 0;
         }
     }
 
-    elements[0]->CalcGrad(nodGradPhi, nodPhiCount);
+    elements[0]->CalcGrad(nodGradSigmaH, nodSigmaHCount);
 
     // Number averaging the nodal values
     if (nDim==2){
         for(int iNod=0; iNod<nTotNodes; iNod++){
-            std::get<std::vector<ColVecd2>>(nodGradPhi).at(iNod) = std::get<std::vector<ColVecd2>>(nodGradPhi).at(iNod)/nodPhiCount.at(iNod);
+            std::get<std::vector<ColVecd2>>(nodGradSigmaH).at(iNod) = std::get<std::vector<ColVecd2>>(nodGradSigmaH).at(iNod)/nodSigmaHCount.at(iNod);
         }
     } else if (nDim==3){
         for(int iNod=0; iNod<nTotNodes; iNod++){
-            std::get<std::vector<ColVecd3>>(nodGradPhi).at(iNod) = std::get<std::vector<ColVecd3>>(nodGradPhi).at(iNod)/nodPhiCount.at(iNod);
+            std::get<std::vector<ColVecd3>>(nodGradSigmaH).at(iNod) = std::get<std::vector<ColVecd3>>(nodGradSigmaH).at(iNod)/nodSigmaHCount.at(iNod);
         }
     }
 
     // Flux
     if (nDim==2){
-        H5File_out.WriteStres("GradPhi", nTotNodes, 2, nodGradPhi);
+        H5File_out.WriteStres("GradSigmaH", nTotNodes, 2, nodGradSigmaH);
     } else if (nDim==3) {
-        H5File_out.WriteStres("GradPhi", nTotNodes, 3, nodGradPhi);
+        H5File_out.WriteStres("GradSigmaH", nTotNodes, 3, nodGradSigmaH);
     }
 }
 

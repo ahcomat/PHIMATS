@@ -87,7 +87,7 @@ Matd2x4 Quad4THS::CalcShapeFuncDeriv(double xi, double eta){
 
 void Quad4THS::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
 
-    // Initialize the storages for int-pt flux and phi
+    // Initialize the storages for int-pt flux and sigmaH
     elFlux.resize(nElements);
     elSigmaH.resize(nElements);
 
@@ -98,7 +98,7 @@ void Quad4THS::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd4x2 dummyElNodCoord; // For node coordinates.
-    ColVecd4 dummyElNodPhi;  // For element nodal values of phi.
+    ColVecd4 dummyElNodSigmaH;  // For element nodal values of sigmaH.
 
     gaussPtCart.resize(nElements);  // Initialize the size of the Cart Gauss points.
     vector<RowVecd2> dummyElemGauss(nElGauss); // For element Gauss points.
@@ -122,7 +122,7 @@ void Quad4THS::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
             dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
 
-            dummyElNodPhi[iNod] = nodSigmaH.at(elemNodeConn.at(iElem).at(iNod));
+            dummyElNodSigmaH[iNod] = nodSigmaH.at(elemNodeConn.at(iElem).at(iNod));
         }
 
         elemNodCoord.at(iElem) = dummyElNodCoord;
@@ -134,8 +134,8 @@ void Quad4THS::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
             // Derivatives and int-pt volume
             CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
-            // Int-pt phi
-            elSigmaH.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNodPhi;
+            // Int-pt sigmaH
+            elSigmaH.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNodSigmaH;
         }
         gaussPtCart.at(iElem) = dummyElemGauss;
         intPtVol.at(iElem) = dummyIntVol;
@@ -170,31 +170,31 @@ void Quad4THS::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const dou
     cartDeriv = jacMat.inverse()*sFuncDeriv;
 }
 
-void Quad4THS::CalcGrad(T_nodStres& nodGradPhi, vector<double>& nodCount){
+void Quad4THS::CalcGrad(T_nodStres& nodGradSigmaH, vector<double>& nodCount){
 
-    // Int-pt gradients of phi.
-    vector<vector<ColVecd2>> elGradPhi(nElements);// For element nodal values of phi.
-    ColVecd4 dummyElNodPhi;  // For element nodal values of phi.
+    // Int-pt gradients of sigmaH.
+    vector<vector<ColVecd2>> elGradSigmaH(nElements);// For element nodal values of sigmaH.
+    ColVecd4 dummyElNodSigmaH;  // For element nodal values of sigmaH.
     int iNode;  // counter for the number of nodes.
 
     for(int iElem=0; iElem<nElements; iElem++){
 
-        elGradPhi.at(iElem).resize(nElGauss);
+        elGradSigmaH.at(iElem).resize(nElGauss);
 
         // Loop through element nodes to get nodal values.
         for(int iNod=0; iNod<nElNodes; iNod++){
-            dummyElNodPhi[iNod] = nodSigmaH.at(elemNodeConn.at(iElem).at(iNod));
+            dummyElNodSigmaH[iNod] = nodSigmaH.at(elemNodeConn.at(iElem).at(iNod));
         }
 
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
             const Matd2x4& dummyBMat = BMat.at(iElem).at(iGaus); // derivative matrix for the given gauss point.
-            elGradPhi.at(iElem).at(iGaus) = dummyBMat*dummyElNodPhi;
+            elGradSigmaH.at(iElem).at(iGaus) = dummyBMat*dummyElNodSigmaH;
 
             iNode = 0;
             for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
 
-                std::get<std::vector<ColVecd2>>(nodGradPhi).at(*iNod2) += elGradPhi.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                std::get<std::vector<ColVecd2>>(nodGradSigmaH).at(*iNod2) += elGradSigmaH.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
                 nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
                 iNode += 1;
             }
@@ -214,8 +214,8 @@ void Quad4THS::CalcElemStiffMatx(BaseTrapping* mat, double T){
     vector<Matd4x4> elKTMatx(nElements); 
 
     double dummydVol;        // dummy for int-pt volume.
-    ColVecd4 dummyElNodPhi;  // For element nodal values of phi.
-    double phi;              // dummy for int-pt phi.
+    ColVecd4 dummyElNodSigmaH;  // For element nodal values of sigmaH.
+    double sigmaH;              // dummy for int-pt sigmaH.
 
     // // Set the number of threads
     // omp_set_num_threads(4); // Set to the desired number of threads
@@ -233,13 +233,13 @@ void Quad4THS::CalcElemStiffMatx(BaseTrapping* mat, double T){
 
         // Loop through element nodes to get nodal values.
         for(int iNod=0; iNod<nElNodes; iNod++){
-            dummyElNodPhi[iNod] = nodSigmaH.at(elemNodeConn.at(iElem).at(iNod));
+            dummyElNodSigmaH[iNod] = nodSigmaH.at(elemNodeConn.at(iElem).at(iNod));
         }              
 
         // Integration over all Gauss points.
         for (int iGauss=0; iGauss<nElGauss; iGauss++){
 
-            phi = elSigmaH.at(iElem).at(iGauss);  // Phi of the current int-pt
+            sigmaH = elSigmaH.at(iElem).at(iGauss);  // sigmaH of the current int-pt
 
             KMat = std::get<Matd2x2>(dynamic_cast<MechTrap*>(mat)->CalcKMatx(T));
             TMat = std::get<Matd2x2>(dynamic_cast<MechTrap*>(mat)->CalcTMatx(T));
@@ -250,8 +250,8 @@ void Quad4THS::CalcElemStiffMatx(BaseTrapping* mat, double T){
             // [B_ji]^T k_jj B_ji
             elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*KMat*dummyBMat*dummydVol;
             // [B_ji]^T k_jj B_ji
-            // elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*dummyElNodPhi*dummyShFunc*dummydVol; 
-            elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*phi*dummydVol; 
+            // elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*dummyElNodSigmaH*dummyShFunc*dummydVol; 
+            elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*sigmaH*dummydVol; 
 
             // [N_i]^T s N_i
             elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
