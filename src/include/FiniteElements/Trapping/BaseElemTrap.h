@@ -1,0 +1,104 @@
+/**
+ * @file BaseElemTrap.h
+ * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
+ * @brief The base class for trapping elements. 
+ * @date 2024-06-21
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
+#ifndef BASEELEMTRAP_H
+#define BASEELEMTRAP_H
+
+#include "FiniteElements/BaseElements.h"
+#include "Materials/Trapping/BaseTrapping.h"
+
+class BaseElemTrap: public BaseElements{
+
+public:
+
+BaseElemTrap(int nElDim, int nElNodes, int nElConDofs, int nElGauss)
+    : nElDim(nElDim), nElNodes(nElNodes), nElConDofs(nElConDofs), nElGauss(nElGauss) {};
+
+/**
+ * @brief Get dimensions of the element. 
+ * 
+ * @return int 
+ */
+int get_nDim() const { return nElDim; };
+
+/**
+ * @brief Get the number of element con DOFs. Same as number of nodes. 
+ * 
+ * @return int 
+ */
+int get_nElConDofs() const { return nElConDofs; };
+
+/**
+ * @brief Return a const reference to the `elemConDof`. 
+ * 
+ * @return const vector<vector<int>>& 
+ */
+const vector<vector<int>>& get_elemConDof() const { return elemConDof; };
+
+/**
+ * @brief Reads the data `nElements`, `nElementSets` and `elemNodeConn` from hdf5 file.
+ * 
+ * @param H5File_in  
+ */
+void ReadElementsData(H5IO &H5File_in, int iSet);
+
+/**
+ * @brief Calculates the element stiffness matrix.
+ */
+virtual void CalcElemStiffMatx(BaseTrapping* mat, double T) = 0;
+
+/**
+ * @brief Evaluates the gradients of scalar field at the int-points and maps them to the nodes. 
+ * 
+ * @param nodGrad
+ * @param nodCount 
+ */
+virtual void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount) = 0;
+
+// /**
+//  * @brief Return const reference to the vector of element capacitance matrix c_ii.
+//  * 
+//  * @return const vector<T_ElStiffMatx>& 
+//  */
+// const T_ElStiffMatx& getElCapMatx() const { return elCapMatxVariant; }
+
+/**
+ * @brief Return const reference to the vector of element trapping matrix c_ii.
+ * 
+ * @return const vector<T_ElStiffMatx>& 
+ */
+const T_ElStiffMatx& getElMKTMatx() const { return elMKTMatxVariant; }
+
+/**
+ * @brief Evaluates the int-pt flux vector. Also evaluates the flux at the nodes.
+ * 
+ * @param KMatx 
+ * @param globalBuffer 
+ * @param nodFlux 
+ * @param nodCount 
+ */
+virtual void CalcFlux(T_DMatx KMatx, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount) = 0;
+
+protected:
+
+const int nElDim;              /// @brief Spatial dimensions of the element.
+const int nElNodes;            /// @brief Number of nodes per element.
+const int nElConDofs;          /// @brief Number of element concentration (temperature) dofs.
+const int nElGauss;            /// @brief Number of gauss points.
+
+double dt;                     /// @brief Time increment.     
+
+vector<vector<int>> elemConDof;    /// @brief Element concentration (temperature) dofs. In this case, it is identical to `elemNodeConn`.
+
+T_ElStiffMatx elMKTMatxVariant;    /// @brief Variant for returning elKTMatx. 
+// T_ElStiffMatx elCapMatxVariant;   /// @brief Variant for returning elCapMatx. 
+
+};
+#endif
