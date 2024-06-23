@@ -23,7 +23,7 @@ class PreProcessing:
         self.nSteps = inputData["nSteps"]
         
         # Allowed simulation types
-        allowedSimulTypes = ["Mechanical", "Transport", "PhaseTrapping"]
+        allowedSimulTypes = ["Mechanical", "Transport", "PhaseTrapping", "MechTrapping"]
                 
         if not self.SimulType in allowedSimulTypes:
             ErrString = "ERROR! Unknown simulation type < " + self.SimulType + " >\n"
@@ -41,7 +41,12 @@ class PreProcessing:
             self.R = inputData["R"]
             self.T = inputData["T"]
             self.mesh2 = inputData["mesh2"]
-
+        elif self.SimulType=="MechTrapping":
+            self.exitNods = inputData["exitNods"]
+            self.dt = inputData["dt"]
+            self.R = inputData["R"]
+            self.T = inputData["T"]
+            self.sigmaH = inputData["sigmaH"]
         #----------------------------------------------------------------------
         # Check for allowed elements and assign element data (number of nodes,
         # dimension and order) 
@@ -107,6 +112,8 @@ class PreProcessing:
             self.nTotDofs = self.nTotNodes
         elif self.SimulType == "PhaseTrapping":
             self.nTotDofs = self.nTotNodes
+        elif self.SimulType == "MechTrapping":
+            self.nTotDofs = self.nTotNodes
         
         #----------------------------------------------------------------------
         # Read number of elements  
@@ -170,7 +177,14 @@ class PreProcessing:
                 if iNode in self.mesh2.point_sets.get('trap'):
                     phi[iNode] = 1
                     
-            self.fh5.create_dataset('Phi', data=phi, dtype = np.float64)  
+            self.fh5.create_dataset('Phi', data=phi, dtype = np.float64) 
+            
+        # Case MechTrapping 
+        if self.SimulType == "MechTrapping":
+            self.grp_Sim_Params.create_dataset("dt", data=self.dt)
+            self.grp_Sim_Params.create_dataset("R", data=self.R)
+            self.grp_Sim_Params.create_dataset("T", data=self.T)
+            self.fh5.create_dataset('sigmaH', data=self.sigmaH, dtype = np.float64)  
         
         #----------------------------------------------------------------------
         # Material data
@@ -196,6 +210,18 @@ class PreProcessing:
 
                 if self.nDim == 3:
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dy", data=self.Materials[mat]["Dz"])
+                    
+        elif self.SimulType == "MechTrapping":
+            for mat in self.Materials:
+                counter = 1
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x1", data=self.Materials[mat]["D0x1"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y1", data=self.Materials[mat]["D0y1"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx1", data=self.Materials[mat]["DQx1"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy1", data=self.Materials[mat]["DQy1"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/Vh", data=self.Materials[mat]["Vh"])
+
+                if self.nDim == 3:
+                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
                     
         elif self.SimulType == "PhaseTrapping":
             for mat in self.Materials:
