@@ -201,7 +201,6 @@ void MechTrapModel::WriteGradSigmaH(vector<BaseElemTrap*> elements, H5IO& H5File
 
     // laplacian
     H5File_out.WriteArray_1D("LapSigmaH", nTotDofs, nodLapSigmaH);
-
     delete [] nodLapSigmaH;
 }
 
