@@ -151,6 +151,10 @@ void MechTrapModel::InitializePETSc(vector<BaseElemTrap*> elements){
 
 void MechTrapModel::WriteGradSigmaH(vector<BaseElemTrap*> elements, H5IO& H5File_out){
 
+    // Nodal laplacian of sigmaH
+    double* nodLapSigmaH = new double[nTotNodes];
+    for (int iNod=0; iNod<nTotDofs; iNod++){
+        nodLapSigmaH[iNod] = 0;}
     // Nodal gradient of sigmaH.
     T_nodStres nodGradSigmaH;     
     // Counter for integration points surrounding nodes.
@@ -175,7 +179,7 @@ void MechTrapModel::WriteGradSigmaH(vector<BaseElemTrap*> elements, H5IO& H5File
         }
     }
 
-    elements[0]->CalcGrad(nodGradSigmaH, nodSigmaHCount);
+    elements[0]->CalcGrad(nodGradSigmaH, nodSigmaHCount, nodLapSigmaH);
 
     // Number averaging the nodal values
     if (nDim==2){
@@ -194,6 +198,11 @@ void MechTrapModel::WriteGradSigmaH(vector<BaseElemTrap*> elements, H5IO& H5File
     } else if (nDim==3) {
         H5File_out.WriteStres("GradSigmaH", nTotNodes, 3, nodGradSigmaH);
     }
+
+    // laplacian
+    H5File_out.WriteArray_1D("LapSigmaH", nTotDofs, nodLapSigmaH);
+
+    delete [] nodLapSigmaH;
 }
 
 void MechTrapModel::CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){

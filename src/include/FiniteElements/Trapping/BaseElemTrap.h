@@ -60,7 +60,7 @@ virtual void CalcElemStiffMatx(BaseTrapping* mat, double T) = 0;
  * @param nodGrad
  * @param nodCount 
  */
-virtual void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount) = 0;
+virtual void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapSigmaH) = 0;
 
 // /**
 //  * @brief Return const reference to the vector of element capacitance matrix c_ii.

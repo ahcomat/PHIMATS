@@ -170,11 +170,12 @@ void Quad4THS::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const dou
     cartDeriv = jacMat.inverse()*sFuncDeriv;
 }
 
-void Quad4THS::CalcGrad(T_nodStres& nodGradSigmaH, vector<double>& nodCount){
+void Quad4THS::CalcGrad(T_nodStres& nodGradSigmaH, vector<double>& nodCount, double* nodLapSigmaH){
 
     // Int-pt gradients of sigmaH.
     vector<vector<ColVecd2>> elGradSigmaH(nElements);// For element nodal values of sigmaH.
-    ColVecd4 dummyElNodSigmaH;  // For element nodal values of sigmaH.
+    ColVecd4 dummyElNodSigmaH;     // For element nodal values of sigmaH.
+    ColVecd4 dummyElNodLapSigmaH;  // For element nodal values of sigmaH laplacian.
     int iNode;  // counter for the number of nodes.
 
     for(int iElem=0; iElem<nElements; iElem++){
@@ -190,12 +191,14 @@ void Quad4THS::CalcGrad(T_nodStres& nodGradSigmaH, vector<double>& nodCount){
 
             const Matd2x4& dummyBMat = BMat.at(iElem).at(iGaus); // derivative matrix for the given gauss point.
             elGradSigmaH.at(iElem).at(iGaus) = dummyBMat*dummyElNodSigmaH;
+            dummyElNodLapSigmaH = dummyBMat.transpose()*dummyBMat*dummyElNodSigmaH;
 
             iNode = 0;
             for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
 
                 std::get<std::vector<ColVecd2>>(nodGradSigmaH).at(*iNod2) += elGradSigmaH.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
                 nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                nodLapSigmaH[*iNod2] += dummyElNodLapSigmaH[iNode]; 
                 iNode += 1;
             }
         }

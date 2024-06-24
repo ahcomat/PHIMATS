@@ -82,7 +82,7 @@ void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double& wt, d
  * 
  * @todo Move to BaseElemTrap.
  */
-void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount) override;
+void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapSigmaH) override;
 
 /**
  * @brief Calculates the element stiffness matrix for all elements.
