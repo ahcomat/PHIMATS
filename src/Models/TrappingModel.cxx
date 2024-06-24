@@ -152,6 +152,10 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
 
 void TrappingModel::WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_out){
 
+    // Nodal laplacian of phi
+    double* nodLapPhi = new double[nTotNodes];
+    for (int iNod=0; iNod<nTotDofs; iNod++){
+        nodLapPhi[iNod] = 0;}
     // Nodal gradient of phi.
     T_nodStres nodGradPhi;     
     // Counter for integration points surrounding nodes.
@@ -176,7 +180,7 @@ void TrappingModel::WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_ou
         }
     }
 
-    elements[0]->CalcGrad(nodGradPhi, nodPhiCount);
+    elements[0]->CalcGrad(nodGradPhi, nodPhiCount, nodLapPhi);
 
     // Number averaging the nodal values
     if (nDim==2){
@@ -195,6 +199,10 @@ void TrappingModel::WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_ou
     } else if (nDim==3) {
         H5File_out.WriteStres("GradPhi", nTotNodes, 3, nodGradPhi);
     }
+
+    // laplacian
+    H5File_out.WriteArray_1D("LapPhi", nTotDofs, nodLapPhi);
+    delete [] nodLapPhi;
 }
 
 void TrappingModel::CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){

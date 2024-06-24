@@ -170,11 +170,12 @@ void Quad4TH::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const doub
     cartDeriv = jacMat.inverse()*sFuncDeriv;
 }
 
-void Quad4TH::CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount){
+void Quad4TH::CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi){
 
     // Int-pt gradients of phi.
     vector<vector<ColVecd2>> elGradPhi(nElements);// For element nodal values of phi.
-    ColVecd4 dummyElNodPhi;  // For element nodal values of phi.
+    ColVecd4 dummyElNodPhi;        // For element nodal values of phi.
+    ColVecd4 dummyElNodLapPhi;  // For element nodal values of phi laplacian.
     int iNode;  // counter for the number of nodes.
 
     for(int iElem=0; iElem<nElements; iElem++){
@@ -190,12 +191,14 @@ void Quad4TH::CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount){
 
             const Matd2x4& dummyBMat = BMat.at(iElem).at(iGaus); // derivative matrix for the given gauss point.
             elGradPhi.at(iElem).at(iGaus) = dummyBMat*dummyElNodPhi;
+            dummyElNodLapPhi = dummyBMat.transpose()*dummyBMat*dummyElNodPhi;
 
             iNode = 0;
             for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
 
                 std::get<std::vector<ColVecd2>>(nodGrad).at(*iNod2) += elGradPhi.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
                 nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                nodLapPhi[*iNod2]   += dummyElNodLapPhi[iNode]; 
                 iNode += 1;
             }
         }
