@@ -490,6 +490,46 @@ class PreProcessing:
 #-----------------------------------------------------------------------------#
 
     @staticmethod
+    def Uptake(lx, ly, Con_b, mesh):
+        """
+        Applies boundary conditions for uptake simulation to a regular 
+        quadrilateral in the x direction. The origin point must be (0,0)
+        """
+        
+        #----------------------------------------------------------------------
+        # Prepare data  
+        #----------------------------------------------------------------------
+        
+        # List of prescribed degrees of freedom. Order of list [node id (dof) value]
+        conBCs = []   
+        # Number of nodes
+        nNodes = mesh.points.shape[0]  
+        # Node coordinates
+        nodCoord = mesh.points[:,0:2]
+        
+        #----------------------------------------------------------------------
+        # Loop through nodes  
+        #----------------------------------------------------------------------
+    
+        for iNod in range(nNodes):
+            # Left nodes
+            if nodCoord[iNod][0]==0.0:
+                conBCs.append([iNod, Con_b])                    
+            # Right nodes
+            elif nodCoord[iNod][0] == lx:
+                conBCs.append([iNod, Con_b])
+            # Bottom nodes
+            elif nodCoord[iNod][1] == 0:
+                conBCs.append([iNod, Con_b])
+            # Top nodes
+            elif nodCoord[iNod][1] == ly:
+                conBCs.append([iNod, Con_b])
+                
+        return conBCs
+    
+#-----------------------------------------------------------------------------#
+
+    @staticmethod
     def WriteDispBCs(Simul, elementName, mesh, presBCs, dispDofs=2):
         
         #----------------------------------------------------------------------
