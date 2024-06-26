@@ -89,7 +89,9 @@ void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapSigma
  * 
  * @param DMatx 
  */
-void CalcElemStiffMatx(BaseTrapping* mat, double T) override ;
+void CalcElemStiffMatx(BaseTrapping* mat, const double T, const double* globalBuffer) override ;
+
+void getFT(BaseTrapping* mat, const double T, const double* globalBuffer, double* FTBuffer);
 
 /**
  * @brief Evaluates the int-pt flux vector. Also evaluates the flux at the nodes.

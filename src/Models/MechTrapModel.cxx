@@ -99,7 +99,7 @@ void MechTrapModel::InitializePETSc(vector<BaseElemTrap*> elements){
     // Initialize the coefficient matrices.
     MatCreate(PETSC_COMM_WORLD, &K_D);
     MatSetSizes(K_D, PETSC_DECIDE, PETSC_DECIDE, nTotDofs, nTotDofs);
-    
+
     MatSetType(K_D, MATSEQAIJ); 
 
     MatDuplicate(K_D, MAT_DO_NOT_COPY_VALUES, &MKT);
@@ -206,10 +206,16 @@ void MechTrapModel::WriteGradSigmaH(vector<BaseElemTrap*> elements, H5IO& H5File
 
 void MechTrapModel::CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
 
+    VecGetArrayRead(x, &globalBuffer);
+
     for (int iSet=0; iSet<nElementSets; iSet++){
-        elements[iSet]->CalcElemStiffMatx(mats[iSet], T);
+        elements[iSet]->CalcElemStiffMatx(mats[iSet], T, globalBuffer);
     }
+
+    VecRestoreArrayRead(x, &globalBuffer);
+
 }
+
 
 void MechTrapModel::Assemble(vector<BaseElemTrap*> elements){
 

@@ -205,10 +205,14 @@ void Quad4THS::CalcGrad(T_nodStres& nodGradSigmaH, vector<double>& nodCount, dou
     }
 }
 
-void Quad4THS::CalcElemStiffMatx(BaseTrapping* mat, double T){
+void Quad4THS::CalcElemStiffMatx(BaseTrapping* mat, const double T, const double* globalBuffer){
 
     Matd2x2 KMat; 
     Matd2x2 TMat; 
+
+    ColVecd4 dummyElNodCon;  // For element nodal values of concentration.
+    double dummyInPtCon;      // Int-pt concentration
+    // double dummyInPtsigmaH;   // dummy for int-pt sigmaH.
 
     elStiffMatx.resize(nElements);
     elCapMatx.resize(nElements);
@@ -218,7 +222,6 @@ void Quad4THS::CalcElemStiffMatx(BaseTrapping* mat, double T){
 
     double dummydVol;        // dummy for int-pt volume.
     ColVecd4 dummyElNodSigmaH;  // For element nodal values of sigmaH.
-    double sigmaH;              // dummy for int-pt sigmaH.
 
     // // Set the number of threads
     // omp_set_num_threads(4); // Set to the desired number of threads
@@ -237,12 +240,14 @@ void Quad4THS::CalcElemStiffMatx(BaseTrapping* mat, double T){
         // Loop through element nodes to get nodal values.
         for(int iNod=0; iNod<nElNodes; iNod++){
             dummyElNodSigmaH[iNod] = nodSigmaH.at(elemNodeConn.at(iElem).at(iNod));
+            dummyElNodCon[iNod] = globalBuffer[elemNodeConn.at(iElem).at(iNod)];
         }              
 
         // Integration over all Gauss points.
         for (int iGauss=0; iGauss<nElGauss; iGauss++){
 
-            sigmaH = elSigmaH.at(iElem).at(iGauss);  // sigmaH of the current int-pt
+            // dummyInPtsigmaH = elSigmaH.at(iElem).at(iGauss);  // sigmaH of the current int-pt
+            dummyInPtCon = shapeFunc.at(iGauss)*dummyElNodCon;  // sigmaH of the current int-pt
 
             KMat = std::get<Matd2x2>(dynamic_cast<MechTrap*>(mat)->CalcKMatx(T));
             TMat = std::get<Matd2x2>(dynamic_cast<MechTrap*>(mat)->CalcTMatx(T));
@@ -252,18 +257,18 @@ void Quad4THS::CalcElemStiffMatx(BaseTrapping* mat, double T){
             dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
             // [B_ji]^T k_jj B_ji
             elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*KMat*dummyBMat*dummydVol;
-            // [B_ji]^T k_jj B_ji
-            // elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*dummyElNodSigmaH*dummyShFunc*dummydVol; 
-            elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*sigmaH*dummydVol; 
-
+            // [B_ji]^T k_jj*Vh/RT B_ji
+            // elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*dummyElNodSigmaH*dummyShFunc*dummydVol;
+            // elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyInPtCon*dummyBMat*dummyElNodSigmaH*dummydVol; 
             // [N_i]^T s N_i
             elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
         }
 
         // cout << elKTMatx.at(iElem) << "\n\n";
-        elStiffMatx.at(iElem) = dt*(elKDMatx.at(iElem) - elKTMatx.at(iElem)) + elCapMatx.at(iElem);
+        elStiffMatx.at(iElem) = dt*(elKDMatx.at(iElem)) + elCapMatx.at(iElem);
         elMKTMatx.at(iElem) = elCapMatx.at(iElem);
         // elMKTMatx.at(iElem) = elCapMatx.at(iElem);
+        elMKTMatx.at(iElem) = elCapMatx.at(iElem); //+ dt*elKTMatx.at(iElem);
     }
 
     // // TODO: For debug!
