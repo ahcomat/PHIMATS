@@ -24,5 +24,4 @@ LinearElastic::~LinearElastic(){
 void LinearElastic::Solve(Vec &x, Vec &b){
 
     KSPSolve(ksp, b, x);
-    VecCopy(x, b);
 }
