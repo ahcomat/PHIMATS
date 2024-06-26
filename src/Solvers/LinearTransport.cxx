@@ -21,6 +21,17 @@ LinearTransport::~LinearTransport(){
     std::cout << "LinearTransport solver exited correctly" << "\n";
 }
 
+void LinearTransport::UpdateKSP(Mat &A){
+
+    KSPSetOperators(ksp, A, A);
+    KSPSetFromOptions(ksp);
+
+    // Set preconditioner
+    KSPGetPC(ksp, &pc);
+    PCSetType(pc, PCLU); // LU preconditioner for direct solver
+    PCSetFromOptions(pc);
+}
+
 void LinearTransport::SolveTransport(Vec &x, Vec &F){
 
     KSPSolve(ksp, F, x);

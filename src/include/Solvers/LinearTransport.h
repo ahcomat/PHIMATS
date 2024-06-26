@@ -21,6 +21,8 @@ LinearTransport(Mat &A);
 
 ~LinearTransport() override;
 
+void UpdateKSP(Mat &A);
+
 /**
  * @brief Solve the linear system `Ax=b`.
  * 
