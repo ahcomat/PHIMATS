@@ -212,6 +212,7 @@ void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T
 
     ColVecd8 dummyDisp; // for element nodal displacement.
     ColVecd8 dummyForc; // for element nodal internal force.
+    int iNode;  // counter for the number of nodes.
 
     // Integration point values.
     for(int iElem=0; iElem<nElements; iElem++){
@@ -236,10 +237,11 @@ void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T
             }
 
             // Nodal values
+            iNode = 0;
             for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
 
-                std::get<std::vector<ColVecd3>>(nodStran).at(*iNod2) += elStran.at(iElem).at(iGaus);
-                std::get<std::vector<ColVecd3>>(nodStres).at(*iNod2) += elStres.at(iElem).at(iGaus);
+                std::get<std::vector<ColVecd3>>(nodStran).at(*iNod2) += elStran.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                std::get<std::vector<ColVecd3>>(nodStres).at(*iNod2) += elStres.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
                 nodCount.at(*iNod2) += 1;
             }
         }
