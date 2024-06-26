@@ -211,10 +211,10 @@ void Hex8::CalcElemStiffMatx(T_DMatx DMatx){
     // Matd6x24 dummyBu;   // dummy for strain matrix.
     double dummydVol;   // dummy for int-pt volume.
 
-    // Set the number of threads
-    omp_set_num_threads(4); // Set to the desired number of threads
-    // Parallelize the outer loop
-    #pragma omp parallel for
+    // // Set the number of threads
+    // omp_set_num_threads(4); // Set to the desired number of threads
+    // // Parallelize the outer loop
+    // #pragma omp parallel for
 
     // Loop through all elements.
     for(int iElem=0; iElem<nElements; iElem++){
