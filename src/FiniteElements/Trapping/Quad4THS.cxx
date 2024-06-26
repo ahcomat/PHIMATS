@@ -283,6 +283,51 @@ void Quad4THS::CalcElemStiffMatx(BaseTrapping* mat, const double T, const double
 
 }
 
+void Quad4THS::getFT(BaseTrapping* mat, const double T, const double* globalBuffer, double* FTBuffer){
+ 
+    Matd2x2 TMat; 
+
+    ColVecd4 dummyElNodCon;   // For element nodal values of concentration.
+    double dummyInPtCon;      // Int-pt concentration 
+
+    double dummydVol;           // dummy for int-pt volume.
+    ColVecd4 dummyElNodSigmaH;  // For element nodal values of sigmaH.
+
+    ColVecd4 dummyFT;
+
+    // // Set the number of threads
+    // omp_set_num_threads(4); // Set to the desired number of threads
+    // // Parallelize the outer loop
+    // #pragma omp parallel for
+
+    // Loop through all elements.
+    for(int iElem=0; iElem<nElements; iElem++){ 
+
+        // Loop through element nodes to get nodal values.
+        for(int iNod=0; iNod<nElNodes; iNod++){
+            dummyElNodSigmaH[iNod] = nodSigmaH.at(elemNodeConn.at(iElem).at(iNod));
+            dummyElNodCon[iNod] = globalBuffer[elemNodeConn.at(iElem).at(iNod)];
+        }              
+
+        // Integration over all Gauss points.
+        for (int iGauss=0; iGauss<nElGauss; iGauss++){
+
+            dummyInPtCon = shapeFunc.at(iGauss)*dummyElNodCon;   // Con of the current int-pt
+
+            TMat = std::get<Matd2x2>(dynamic_cast<MechTrap*>(mat)->CalcTMatx(T));
+
+            const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
+            dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
+            // [B_ji]^T k_jj*Vh/RT B_ji
+            dummyFT += dummyBMat.transpose()*TMat*dummyInPtCon*dummyBMat*dummyElNodSigmaH*dummydVol; 
+        }
+
+        for(int iNod=0; iNod<nElNodes; iNod++){
+            FTBuffer[elemNodeConn.at(iElem).at(iNod)] = dt*dummyFT[iNod];
+        }
+    }
+}
+
 void Quad4THS::CalcFlux(T_DMatx KMatx, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount){
 
     // ColVecd4 dummyCon; // for element nodal concentration.

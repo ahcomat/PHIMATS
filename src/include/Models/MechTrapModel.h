@@ -76,6 +76,8 @@ void Assemble(vector<BaseElemTrap*> elements);
  */
 void InitializeDirichBC(H5IO& H5File_in);
 
+void UpdateFT(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
+
 /**
  * @brief Set Dirichlet boundary conditions in the RHS `b` and global stiffness matrix `A`.
  * 
@@ -130,6 +132,8 @@ private:
 int nElConDofs;     /// @brief Number of element concentration (temp) dofs.
 double dt;          /// @brief Time increment.
 double T;           /// @brief Temperature.
+
+double* FTBuffer;  /// @brief buffer array for PETSc data
 
 T_nodStres nodFlux;          /// @brief Nodal flux.
 vector<double> nodCount;     /// @brief Counter for integration points surrounding nodes.

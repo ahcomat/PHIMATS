@@ -2,6 +2,7 @@
 #include<variant>
 
 #include"Models/MechTrapModel.h"
+#include "FiniteElements/Trapping/Quad4THS.h"
 
 using namespace std;
 
@@ -46,7 +47,7 @@ MechTrapModel::MechTrapModel(vector<BaseElemTrap*> elements, H5IO& H5File_in){
 MechTrapModel::~MechTrapModel(){
 
     // Deallocate memory.
-    PetscFree(presDofs); PetscFree(presVals);
+    PetscFree(presDofs); PetscFree(presVals); PetscFree(FTBuffer);
     VecDestroy(&F); VecDestroy(&x); MatDestroy(&K_D);
     // Finalize PETSc
     PetscFinalize();
@@ -109,6 +110,7 @@ void MechTrapModel::InitializePETSc(vector<BaseElemTrap*> elements){
     int itotv, jtotv; // for global row and colum dof.
     PetscInt *nnz; // Array for the number of zeros per row
     PetscMalloc1(nTotDofs, &nnz); // Allocates the size of nnz
+    PetscMalloc1(nTotDofs, &FTBuffer); // Allocates the size of FTBuffer
     
     // Find the number of non zeros (columns) per row for preallocation.
     for (auto* elem : elements){  // Loop through element sets
@@ -323,9 +325,34 @@ void MechTrapModel::InitializeDirichBC(H5IO& H5File_in){
     MatAssemblyBegin(K_D, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(K_D, MAT_FINAL_ASSEMBLY);
 }
 
+void MechTrapModel::UpdateFT(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
+
+    MatMult(MKT, x, F);
+
+    VecGetArrayRead(x, &globalBuffer);
+
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        dynamic_cast<Quad4THS*>(elements[iSet])->getFT(mats[iSet], T, globalBuffer, FTBuffer);
+    }
+
+    VecRestoreArrayRead(x, &globalBuffer);
+
+    // Set the values from the array to the PETSc Vec
+    PetscInt *indices = new PetscInt[nTotDofs];
+    for (PetscInt i = 0; i < nTotDofs; ++i) {
+        indices[i] = i;
+    }
+
+    VecSetValues(F, nTotDofs, indices, FTBuffer, ADD_VALUES); 
+    VecAssemblyBegin(F); VecAssemblyEnd(F);
+
+    delete [] indices;
+
+}
+
 void MechTrapModel::setDirichBC(){
     
-    MatMult(MKT, x, F);
+    // MatMult(MKT, x, F);
 
     VecSetValues(F, nPresDofs, presDofs, presVals, INSERT_VALUES); 
     VecAssemblyBegin(F); VecAssemblyEnd(F);
