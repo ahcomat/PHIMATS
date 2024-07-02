@@ -352,7 +352,7 @@ void MechTrapModel::UpdateFT(vector<BaseElemTrap*> elements, vector<BaseTrapping
 
 void MechTrapModel::setDirichBC(){
     
-    // MatMult(MKT, x, F);
+    MatMult(MKT, x, F);
 
     VecSetValues(F, nPresDofs, presDofs, presVals, INSERT_VALUES); 
     VecAssemblyBegin(F); VecAssemblyEnd(F);
