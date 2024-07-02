@@ -196,7 +196,8 @@ void Quad4THS::CalcGrad(T_nodStres& nodGradSigmaH, vector<double>& nodCount, dou
             iNode = 0;
             for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
 
-                std::get<std::vector<ColVecd2>>(nodGradSigmaH).at(*iNod2) += elGradSigmaH.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                // std::get<std::vector<ColVecd2>>(nodGradSigmaH).at(*iNod2) += elGradSigmaH.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                std::get<std::vector<ColVecd2>>(nodGradSigmaH).at(*iNod2) += elGradSigmaH.at(iElem).at(iGaus);
                 nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
                 nodLapSigmaH[*iNod2] += dummyElNodLapSigmaH[iNode]; 
                 iNode += 1;
