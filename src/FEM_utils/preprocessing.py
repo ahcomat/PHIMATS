@@ -76,7 +76,7 @@ class PreProcessing:
         if self.elementName in elements3D:
             self.nDim = 3
         
-        # First of second order
+        # First or second order
         if self.elementName in elementsOrder1:
             self.nOrder = 1
         if self.elementName in elementsOrder2:
