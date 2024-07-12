@@ -1,5 +1,5 @@
 /**
- * @file BaseElemTrans.h
+ * @file BaseElemTransport.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
  * @brief The base class for transport elements, i.e. with only concentration/temperature DOFs. 
  * @date 2024-06-13
@@ -8,16 +8,16 @@
  * 
  */
 
-#ifndef BASEELEMTRANS_H
-#define BASEELEMTRANS_H
+#ifndef BaseElemTransport_H
+#define BaseElemTransport_H
 
 #include "FiniteElements/BaseElements.h"
 
-class BaseElemTrans: public BaseElements{
+class BaseElemTransport: public BaseElements{
 
 public:
 
-BaseElemTrans(int nElDim, int nElNodes, int nElConDofs, int nElGauss)
+BaseElemTransport(int nElDim, int nElNodes, int nElConDofs, int nElGauss)
     : nElDim(nElDim), nElNodes(nElNodes), nElConDofs(nElConDofs), nElGauss(nElGauss) {};
 
 /**

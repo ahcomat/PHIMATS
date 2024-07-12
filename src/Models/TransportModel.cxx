@@ -6,7 +6,7 @@
 
 using namespace std;
 
-TransportModel::TransportModel(vector<BaseElemTrans*> elements, H5IO& H5File_in){
+TransportModel::TransportModel(vector<BaseElemTransport*> elements, H5IO& H5File_in){
 
     string dsetName;
     dsetName = "SimulationParameters/nSteps";
@@ -75,7 +75,7 @@ void TransportModel::setZero_nodFlux(){
     }
 }
 
-void TransportModel::InitializePETSc(vector<BaseElemTrans*> elements){
+void TransportModel::InitializePETSc(vector<BaseElemTransport*> elements){
 
     // TODO: For debug!
     // for(auto* elem : elements)
@@ -148,7 +148,7 @@ void TransportModel::InitializePETSc(vector<BaseElemTrans*> elements){
 
 }
 
-void TransportModel::CalcElemStiffMatx(vector<BaseElemTrans*> elements, vector<BaseTransport*> mats){
+void TransportModel::CalcElemStiffMatx(vector<BaseElemTransport*> elements, vector<BaseTransport*> mats){
 
     for (int iSet=0; iSet<nElementSets; iSet++){
         // Downcasting to derived class `HeatMassTransport`
@@ -156,7 +156,7 @@ void TransportModel::CalcElemStiffMatx(vector<BaseElemTrans*> elements, vector<B
     }
 }
 
-void TransportModel::Assemble(vector<BaseElemTrans*> elements){
+void TransportModel::Assemble(vector<BaseElemTransport*> elements){
 
     for (auto* elem : elements){  // Loop through element sets
 
@@ -292,7 +292,7 @@ Mat& TransportModel::getK(){
     return K;
 }
 
-void TransportModel::CalcFlux(vector<BaseElemTrans*> elements, vector<BaseTransport*> mats){
+void TransportModel::CalcFlux(vector<BaseElemTransport*> elements, vector<BaseTransport*> mats){
 
     VecGetArrayRead(x, &globalBuffer);
 
@@ -324,7 +324,7 @@ void TransportModel::CalcFlux(vector<BaseElemTrans*> elements, vector<BaseTransp
     VecRestoreArrayRead(x, &globalBuffer);
 }
 
-void TransportModel::WriteOut(vector<BaseElemTrans*> elements, H5IO &H5File_out, const string iStep){
+void TransportModel::WriteOut(vector<BaseElemTransport*> elements, H5IO &H5File_out, const string iStep){
 
     // Displacements
     VecGetArrayRead(x, &globalBuffer);

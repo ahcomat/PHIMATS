@@ -17,7 +17,7 @@
 */
 
 Quad4T::Quad4T(H5IO &H5File_in, Nodes &Nodes, int iSet)
-    : BaseElemTrans(2, 4, 4, 4){ // nElDim, nElNodes, nElConDofs, nElGauss 
+    : BaseElemTransport(2, 4, 4, 4){ // nElDim, nElNodes, nElConDofs, nElGauss 
 
     InitShapeFunc();
     ReadElementsData(H5File_in, iSet);

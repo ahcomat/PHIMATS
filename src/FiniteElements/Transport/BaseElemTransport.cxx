@@ -1,4 +1,4 @@
-#include "FiniteElements/Transport/BaseElemTrans.h"
+#include "FiniteElements/Transport/BaseElemTransport.h"
 
 #ifndef DEBUG
 #define at(x) operator[](x)
@@ -12,7 +12,7 @@
  l -> total displacement dofs.
 */
 
-void BaseElemTrans::ReadElementsData(H5IO &H5File_in, int iSet){
+void BaseElemTransport::ReadElementsData(H5IO &H5File_in, int iSet){
 
     string dsetName;
     dsetName = "Elements/ElementSet_"+std::to_string(iSet)+"/nElements";

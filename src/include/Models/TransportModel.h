@@ -4,7 +4,7 @@
  * capacitance matrix `C`, conductivity matrix `K`, solution vector `x` and RHS `F`.
  * 
  * @details Main functions:
- * - Calls `BaseElemTrans::CalcElemStiffMatx` to build the local diffusivity and capacitance matrix.
+ * - Calls `BaseElemTransport::CalcElemStiffMatx` to build the local diffusivity and capacitance matrix.
  * - Assembles the global capacitance and conductivity matrix.
  * - Initializes and applies boundary conditions.
  * - Manages the output by writing to H5file_out.
@@ -23,14 +23,14 @@
 #include <petscmat.h>
 #include "BaseModel.h"
 #include "H5IO.h"
-#include "FiniteElements/Transport/BaseElemTrans.h"
+#include "FiniteElements/Transport/BaseElemTransport.h"
 #include "Materials/Transport/BaseTransport.h"
 
 class TransportModel: public BaseModel{
 
 public:
 
-TransportModel(vector<BaseElemTrans*> elements, H5IO& H5File_in);
+TransportModel(vector<BaseElemTransport*> elements, H5IO& H5File_in);
 ~TransportModel();
 
 /**
@@ -45,7 +45,7 @@ void setZero_nodFlux();
  * 
  * @param elements 
  */
-void InitializePETSc(vector<BaseElemTrans*> elements);
+void InitializePETSc(vector<BaseElemTransport*> elements);
 
 /**
  * @brief Calculates the element stiffness matrix. 
@@ -53,13 +53,13 @@ void InitializePETSc(vector<BaseElemTrans*> elements);
  * @param elements 
  * @param mats 
  */
-void CalcElemStiffMatx(vector<BaseElemTrans*> elements, vector<BaseTransport*> mats);
+void CalcElemStiffMatx(vector<BaseElemTransport*> elements, vector<BaseTransport*> mats);
 
 /**
  * @brief Assemble the global stiffness matrix.
  * 
  */
-void Assemble(vector<BaseElemTrans*> elements);
+void Assemble(vector<BaseElemTransport*> elements);
 
 /**
  * @brief Reads and initializes Dirichlet BCs.
@@ -107,7 +107,7 @@ Mat& getK();
  * 
  * @param elements 
  */
-void CalcFlux(vector<BaseElemTrans*> elements, vector<BaseTransport*> mats);
+void CalcFlux(vector<BaseElemTransport*> elements, vector<BaseTransport*> mats);
 
 /**
  * @brief Write nodal values.
@@ -115,7 +115,7 @@ void CalcFlux(vector<BaseElemTrans*> elements, vector<BaseTransport*> mats);
  * @param elements 
  * @param H5File_out 
  */
-void WriteOut(vector<BaseElemTrans*> elements, H5IO &H5File_out, const string iStep);
+void WriteOut(vector<BaseElemTransport*> elements, H5IO &H5File_out, const string iStep);
 
 private:
 

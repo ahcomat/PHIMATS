@@ -11,10 +11,10 @@
 #ifndef QUAD4T_H
 #define QUAD4T_H
 
-#include"BaseElemTrans.h"
+#include"BaseElemTransport.h"
 #include"Nodes.h"
 
-class Quad4T: public BaseElemTrans{
+class Quad4T: public BaseElemTransport{
 
 public:
 
