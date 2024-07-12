@@ -1,6 +1,5 @@
 #include<iostream>
 #include<algorithm>
-#include <omp.h>
 
 #include "FiniteElements/Trapping/Quad4TH.h"
 #include "Materials/Trapping/PhaseTrap.h"
@@ -219,11 +218,6 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const double*
     double dummydVol;        // dummy for int-pt volume.
     ColVecd4 dummyElNodPhi;  // For element nodal values of phi.
     double phi;              // dummy for int-pt phi.
-
-    // // Set the number of threads
-    // omp_set_num_threads(4); // Set to the desired number of threads
-    // // Parallelize the outer loop
-    // #pragma omp parallel for
 
     // Loop through all elements.
     for(int iElem=0; iElem<nElements; iElem++){

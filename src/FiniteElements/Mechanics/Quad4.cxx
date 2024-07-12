@@ -1,6 +1,5 @@
 #include<iostream>
 #include<algorithm>
-#include <omp.h>
 
 #include"FiniteElements/Mechanics/Quad4.h"
 
