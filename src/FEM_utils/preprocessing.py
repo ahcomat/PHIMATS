@@ -96,9 +96,7 @@ class PreProcessing:
             self.nodeCoord = self.mesh.points[:,0:2]
         elif self.nDim == 3:    
             self.nodeCoord = self.mesh.points
-            
-        # self.nTotDofs = self.nTotNodes*self.nDim
-        
+                    
         # Total number of Dofs
         if self.SimulType == "Mechanical":
             self.nTotDofs = self.nTotNodes*self.nDim
