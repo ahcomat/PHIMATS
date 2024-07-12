@@ -73,7 +73,7 @@ using T_DMatx = std::variant<Matd2x2, Matd3x3, Matd6x6>;
  * @brief Variants `elStiffMatx`. It is a pointer because we need this to avoid copy in `Elements::getElStiffMatx`.
  * 
  */
-using T_ElStiffMatx = std::variant<vector<Matd4x4>*, vector<Matd6x6>*, vector<Matd8x8>*, vector<Matd24x24>*>;
+using T_ElStiffMatx = std::variant<vector<Matd3x3>*, vector<Matd4x4>*, vector<Matd6x6>*, vector<Matd8x8>*, vector<Matd24x24>*>;
 
 /**
  * @brief Variants for vector (tensor in Voigt notation) quantities.
