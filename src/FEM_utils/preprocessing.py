@@ -70,12 +70,6 @@ class PreProcessing:
                 ErrString += elem + "\n"
             raise ValueError(ErrString)
         
-        # # Number of element nodes
-        # if self.elementName == "quad":
-        #     self.elementNodes = 4
-        # elif self.elementName == "tri3":
-        #     self.elementNodes = 3
-        
         # 2D or 3D
         if self.elementName in elements2D:
             self.nDim = 2
