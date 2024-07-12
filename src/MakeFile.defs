@@ -2,9 +2,9 @@ CXX=g++
 
 SETTINGS = DEBUG
 
-DEFAULT= -std=c++17 -fopenmp
-DEBUG= -g -Wall -DDEBUG -std=c++17 -pedantic -fopenmp
-OPTIM=-O3 -std=c++17 -fopenmp
+DEFAULT= -std=c++17 
+DEBUG= -g -Wall -DDEBUG -std=c++17 -pedantic  
+OPTIM=-O3 -std=c++17 
 
 
 ifeq ($(SETTINGS), DEFAULT)
