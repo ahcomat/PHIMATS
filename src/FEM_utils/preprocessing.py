@@ -132,14 +132,14 @@ class PreProcessing:
         
         # Open hdf5 file 
         self.OpenFileHDF5()
-               
+        
+        # try :
+        
         #----------------------------------------------------------------------
         # Write simulation parameters to hdf5  
         #----------------------------------------------------------------------
-        
-        # try :
             
-        # self.fh5.attrs["Simulation"] =  self.Simul
+        self.fh5.attrs["Simulation"] =  self.Simul
                     
         #----------------------------------------------------------------------
         # Nodes/Elements data 
