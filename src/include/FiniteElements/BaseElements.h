@@ -57,11 +57,11 @@ int nDof;              /// @brief Total number of DOFs for element set.
 // int nPresDofs;      /// @brief Number of prescribed displacement dofs.
 
 
-vector<vector<double>> gaussPts;    /// @brief Gauss points in natural coordinates. 
-vector<vector<int>> elemNodeConn;   /// @brief Node connectivity.
+vector<vector<double>> gaussPts;       /// @brief Gauss points in natural coordinates. 
+vector<vector<int>> elemNodeConn;      /// @brief Node connectivity.
 vector<int> elemIDs;                   /// @brief Global element IDs. 
 
-T_ElStiffMatx elStiffMatxVariant;   /// @brief Variant for returning elStiffMatx. 
+T_ElStiffMatx elStiffMatxVariant;      /// @brief Variant for returning elStiffMatx. 
 
 };
 #endif
