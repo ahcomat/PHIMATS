@@ -191,37 +191,37 @@ void TransportModel::Assemble(vector<BaseElemTransport*> elements){
                 MatSetValues(M, nElConDofs, i1, nElConDofs, j1, elCapMatx_ref.at(iElem).data(), ADD_VALUES);
             }
 
-        // } else if (std::holds_alternative<vector<Matd6x6>*>(T_elStiffMatx_ref)){  // Tri3 elements.
+        } else if (std::holds_alternative<vector<Matd3x3>*>(T_elStiffMatx_ref)){  // Tri3 elements.
  
-        //     const vector<Matd6x6>& elStiffMatx_ref = *std::get<vector<Matd6x6>*>(T_elStiffMatx_ref);
+            const vector<Matd3x3>& elStiffMatx_ref = *std::get<vector<Matd3x3>*>(T_elStiffMatx_ref);
 
-        //     for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
+            for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
 
-        //         // Get the con dofs associated with the element
-        //         for(int iElDof=0; iElDof<nElConDofs; iElDof++){
+                // Get the con dofs associated with the element
+                for(int iElDof=0; iElDof<nElConDofs; iElDof++){
 
-        //             i1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
-        //             j1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
-        //         }
+                    i1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
+                    j1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
+                }
 
-        //         MatSetValues(K, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
-        //     }
+                MatSetValues(K, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+            }
 
-        // } else if (std::holds_alternative<vector<Matd24x24>*>(T_elStiffMatx_ref)){  // Hex8 elements.
+        } else if (std::holds_alternative<vector<Matd6x6>*>(T_elStiffMatx_ref)){  // Tri6 elements.
  
-        //     const vector<Matd24x24>& elStiffMatx_ref = *std::get<vector<Matd24x24>*>(T_elStiffMatx_ref);
+            const vector<Matd6x6>& elStiffMatx_ref = *std::get<vector<Matd6x6>*>(T_elStiffMatx_ref);
 
-        //     for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
+            for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
 
-        //         // Get the con dofs associated with the element
-        //         for(int iElDof=0; iElDof<nElConDofs; iElDof++){
+                // Get the con dofs associated with the element
+                for(int iElDof=0; iElDof<nElConDofs; iElDof++){
 
-        //             i1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
-        //             j1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
-        //         }
+                    i1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
+                    j1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
+                }
 
-        //         MatSetValues(K, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
-        //     }
+                MatSetValues(K, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+            }
         }
 
         // Free memory
