@@ -53,15 +53,15 @@ class PreProcessing:
         #----------------------------------------------------------------------
 
         # Allowed elements (naming should match with meshio)
-        allowedElements = ["quad", "quad8", "triangle", "hexahedron"]
+        allowedElements = ["quad", "quad8", "triangle", "triangle6", "hexahedron"]
         # 2D elements
-        elements2D = ["quad", "quad8", "triangle"]
+        elements2D = ["quad", "quad8", "triangle", "triangle6"]
         # 3D elements
         elements3D = ["hexahedron"]
         # First order
         elementsOrder1 = ["quad", "triangle", "hexahedron"]
         # Second order
-        elementsOrder2 = ["quad8"]
+        elementsOrder2 = ["quad8", "triangle6"]
         
         if not self.elementName in allowedElements:
             ErrString = "ERROR! Unknown element name < " + self.elementName + " >\n"
