@@ -34,7 +34,7 @@ TrapGB::TrapGB(string dimensions, H5IO &H5File, int iSet, string isoType)
     DQy2 = H5File.ReadScalar(dsetName);
 
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/EMM";
-    zeta = H5File.ReadScalar(dsetName);
+    kappa_GB = H5File.ReadScalar(dsetName);
 
     if (dims=="3D"){
 
@@ -79,7 +79,7 @@ T_DMatx TrapGB::CalcTMatx(const double phiL, const double phiT, const double T){
     double DTx = D0x2*exp(-DQx2/(T*R));
     double DTy = D0y2*exp(-DQy2/(T*R));
 
-    // Variant for storing the trapping matrix D*zeta/(RT)
+    // Variant for storing the trapping matrix D*kappa_GB/(RT)
     T_DMatx TMatx;
 
     if (dims=="2D"){
@@ -87,8 +87,8 @@ T_DMatx TrapGB::CalcTMatx(const double phiL, const double phiT, const double T){
     Matd2x2 mat2 = Matd2x2::Zero();
     
     mat2.setZero();
-    mat2(0, 0) = (DLx*phiL + DTx*phiT)*zeta/(R*T);
-    mat2(1, 1) = (DLy*phiL + DTy*phiT)*zeta/(R*T);
+    mat2(0, 0) = (DLx*phiL + DTx*phiT)*kappa_GB/(R*T);
+    mat2(1, 1) = (DLy*phiL + DTy*phiT)*kappa_GB/(R*T);
 
     TMatx = mat2;
 
