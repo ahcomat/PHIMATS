@@ -23,7 +23,7 @@ class PreProcessing:
         self.nSteps = inputData["nSteps"]
         
         # Allowed simulation types
-        allowedSimulTypes = ["Mechanical", "Transport", "PhaseTrapping", "MechTrapping"]
+        allowedSimulTypes = ["Mechanical", "Transport", "GBTrapping", "MechTrapping"]
                 
         if not self.SimulType in allowedSimulTypes:
             ErrString = "ERROR! Unknown simulation type < " + self.SimulType + " >\n"
@@ -35,12 +35,11 @@ class PreProcessing:
         if self.SimulType=="Transport":
             self.exitNods = inputData["exitNods"]
             self.dt = inputData["dt"]
-        elif self.SimulType=="PhaseTrapping":
+        elif self.SimulType=="GBTrapping":
             self.exitNods = inputData["exitNods"]
             self.dt = inputData["dt"]
-            self.R = inputData["R"]
             self.T = inputData["T"]
-            self.mesh2 = inputData["mesh2"]
+            self.gPhi = inputData["gPhi"]
         elif self.SimulType=="MechTrapping":
             self.exitNods = inputData["exitNods"]
             self.dt = inputData["dt"]
@@ -102,7 +101,7 @@ class PreProcessing:
             self.nTotDofs = self.nTotNodes*self.nDim
         elif self.SimulType == "Transport":
             self.nTotDofs = self.nTotNodes
-        elif self.SimulType == "PhaseTrapping":
+        elif self.SimulType == "GBTrapping":
             self.nTotDofs = self.nTotNodes
         elif self.SimulType == "MechTrapping":
             self.nTotDofs = self.nTotNodes
@@ -159,17 +158,10 @@ class PreProcessing:
             self.grp_Sim_Params.create_dataset("dt", data=self.dt)
         
         # Case Trapping 
-        if self.SimulType == "PhaseTrapping":
+        if self.SimulType == "GBTrapping":
             self.grp_Sim_Params.create_dataset("dt", data=self.dt)
-            self.grp_Sim_Params.create_dataset("R", data=self.R)
             self.grp_Sim_Params.create_dataset("T", data=self.T)
-            
-            phi = np.zeros(len(self.mesh2.points))
-            for iNode in range(len(self.mesh2.points)):
-                if iNode in self.mesh2.point_sets.get('trap'):
-                    phi[iNode] = 1
-                    
-            self.fh5.create_dataset('Phi', data=phi, dtype = np.float64) 
+            self.fh5.create_dataset('gPhi', data=self.gPhi, dtype = np.float64) 
             
         # Case MechTrapping 
         if self.SimulType == "MechTrapping":
@@ -215,7 +207,7 @@ class PreProcessing:
                 if self.nDim == 3:
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
                     
-        elif self.SimulType == "PhaseTrapping":
+        elif self.SimulType == "GBTrapping":
             for mat in self.Materials:
                 counter = 1
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x1", data=self.Materials[mat]["D0x1"])
@@ -226,7 +218,7 @@ class PreProcessing:
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y2", data=self.Materials[mat]["D0y2"])
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx2", data=self.Materials[mat]["DQx2"])
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy2", data=self.Materials[mat]["DQy2"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/EMM", data=self.Materials[mat]["EMM"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/kappa_GB", data=self.Materials[mat]["kappa_GB"])
 
                 if self.nDim == 3:
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
