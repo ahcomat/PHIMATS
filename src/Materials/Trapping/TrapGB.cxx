@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include "Materials/Trapping/PhaseTrap.h"
+#include "Materials/Trapping/TrapGB.h"
 
 using namespace std;
 
-PhaseTrap::PhaseTrap(string dimensions, H5IO &H5File, int iSet, string isoType)
+TrapGB::TrapGB(string dimensions, H5IO &H5File, int iSet, string isoType)
     : BaseTrapping(isoType, dimensions) {
 
     string dsetName;
@@ -41,7 +41,7 @@ PhaseTrap::PhaseTrap(string dimensions, H5IO &H5File, int iSet, string isoType)
     }
 }
 
-T_DMatx PhaseTrap::CalcKMatx(const double phiL, const double phiT, const double T){
+T_DMatx TrapGB::CalcKMatx(const double phiL, const double phiT, const double T){
 
     // Lattice phase
     double DLx = D0x1*exp(-DQx1/(T*R));
@@ -70,7 +70,7 @@ T_DMatx PhaseTrap::CalcKMatx(const double phiL, const double phiT, const double 
     return KMatx;
 }
 
-T_DMatx PhaseTrap::CalcTMatx(const double phiL, const double phiT, const double T){
+T_DMatx TrapGB::CalcTMatx(const double phiL, const double phiT, const double T){
 
     // Lattice phase
     double DLx = D0x1*exp(-DQx1/(T*R));

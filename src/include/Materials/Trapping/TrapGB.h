@@ -1,30 +1,30 @@
 /**
- * @file PhaseTrap.h
+ * @file TrapGB.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief A model for phase trapping. 
+ * @brief A model for grain boundary trapping. 
  * @date 2024-06-21
  * 
  * @copyright Copyright (c) 2024
- * 
+ * s
  */
 
-#ifndef PHASETRAP_H
-#define PHASETRAP_H
+#ifndef TRAPGB_H
+#define TRAPGB_H
 
 #include "BaseTrapping.h"
 #include "H5IO.h"
 
-class PhaseTrap: public BaseTrapping{
+class TrapGB: public BaseTrapping{
 
 public:
 
 /**
- * @brief Constructor, reads heat/mass transport parameters from hdf5 file.
+ * @brief Constructor, reads GB diffusion and trapping parameters from hdf5 file.
  * 
  * @param H5File Input file.
  * @param matType Material isotropy.
  */
-PhaseTrap(string dimensions, H5IO &H5File, int iSet, string isoType="Isotropic");
+TrapGB(string dimensions, H5IO &H5File, int iSet, string isoType="Isotropic");
 
 /**
  * @brief Calculates the phase-field dependent diffusivity matrix.
