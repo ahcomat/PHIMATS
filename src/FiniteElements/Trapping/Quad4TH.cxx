@@ -152,7 +152,7 @@ void Quad4TH::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const doub
     Matd2x2 jacMat = sFuncDeriv*elNodCoord;
 
     // Jacobian determinant.
-    intVol = jacMat.determinant();
+    intVol = jacMat.determinant()*wt;
         
 #ifdef DEBUG
 

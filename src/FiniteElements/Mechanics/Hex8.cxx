@@ -167,7 +167,7 @@ void Hex8::CalcCartDeriv(Matd8x3& elNodCoord, Matd3x8& sFuncDeriv, const double&
     Matd3x3 jacMat = sFuncDeriv*elNodCoord;
 
     // Jacobian determinant.
-    intVol = jacMat.determinant();
+    intVol = jacMat.determinant()*wt;
         
 #ifdef DEBUG
 
