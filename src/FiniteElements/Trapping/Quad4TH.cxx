@@ -2,7 +2,7 @@
 #include<algorithm>
 
 #include "FiniteElements/Trapping/Quad4TH.h"
-#include "Materials/Trapping/PhaseTrap.h"
+#include "Materials/Trapping/TrapGB.h"
 
 #ifndef DEBUG
 #define at(x) operator[](x)
@@ -206,69 +206,69 @@ void Quad4TH::CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* no
 
 void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const double* globalBuffer){
 
-    Matd2x2 KMat; 
-    Matd2x2 TMat; 
+    // Matd2x2 KMat; 
+    // Matd2x2 TMat; 
 
-    elStiffMatx.resize(nElements);
-    elCapMatx.resize(nElements);
-    elMKTMatx.resize(nElements);
-    vector<Matd4x4> elKDMatx(nElements); 
-    vector<Matd4x4> elKTMatx(nElements); 
+    // elStiffMatx.resize(nElements);
+    // elCapMatx.resize(nElements);
+    // elMKTMatx.resize(nElements);
+    // vector<Matd4x4> elKDMatx(nElements); 
+    // vector<Matd4x4> elKTMatx(nElements); 
 
-    double dummydVol;        // dummy for int-pt volume.
-    ColVecd4 dummyElNodPhi;  // For element nodal values of phi.
-    double phi;              // dummy for int-pt phi.
+    // double dummydVol;        // dummy for int-pt volume.
+    // ColVecd4 dummyElNodPhi;  // For element nodal values of phi.
+    // double phi;              // dummy for int-pt phi.
 
-    // Loop through all elements.
-    for(int iElem=0; iElem<nElements; iElem++){
+    // // Loop through all elements.
+    // for(int iElem=0; iElem<nElements; iElem++){
 
-        // MUST BE POPULATED WITH ZEROS    
-        elStiffMatx.at(iElem).setZero();
-        elKDMatx.at(iElem).setZero();  
-        elKTMatx.at(iElem).setZero();  
-        elCapMatx.at(iElem).setZero(); 
+    //     // MUST BE POPULATED WITH ZEROS    
+    //     elStiffMatx.at(iElem).setZero();
+    //     elKDMatx.at(iElem).setZero();  
+    //     elKTMatx.at(iElem).setZero();  
+    //     elCapMatx.at(iElem).setZero(); 
 
-        // Loop through element nodes to get nodal values.
-        for(int iNod=0; iNod<nElNodes; iNod++){
-            dummyElNodPhi[iNod] = nodPhi.at(elemNodeConn.at(iElem).at(iNod));
-        }              
+    //     // Loop through element nodes to get nodal values.
+    //     for(int iNod=0; iNod<nElNodes; iNod++){
+    //         dummyElNodPhi[iNod] = nodPhi.at(elemNodeConn.at(iElem).at(iNod));
+    //     }              
 
-        // Integration over all Gauss points.
-        for (int iGauss=0; iGauss<nElGauss; iGauss++){
+    //     // Integration over all Gauss points.
+    //     for (int iGauss=0; iGauss<nElGauss; iGauss++){
 
-            phi = elPhi.at(iElem).at(iGauss);  // Phi of the current int-pt
+    //         phi = elPhi.at(iElem).at(iGauss);  // Phi of the current int-pt
 
-            KMat = std::get<Matd2x2>(dynamic_cast<PhaseTrap*>(mat)->CalcKMatx((1-phi),  phi, T));
-            TMat = std::get<Matd2x2>(dynamic_cast<PhaseTrap*>(mat)->CalcTMatx((1-phi),  phi, T));
+    //         KMat = std::get<Matd2x2>(dynamic_cast<PhaseTrap*>(mat)->CalcKMatx((1-phi),  phi, T));
+    //         TMat = std::get<Matd2x2>(dynamic_cast<PhaseTrap*>(mat)->CalcTMatx((1-phi),  phi, T));
 
-            const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
-            const RowVecd4& dummyShFunc = shapeFunc.at(iGauss);
-            dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
-            // [B_ji]^T k_jj B_ji
-            elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*KMat*dummyBMat*dummydVol;
-            // [B_ji]^T k_jj B_ji
-            // elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*dummyElNodPhi*dummyShFunc*dummydVol; 
-            elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*phi*dummydVol; 
+    //         const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
+    //         const RowVecd4& dummyShFunc = shapeFunc.at(iGauss);
+    //         dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
+    //         // [B_ji]^T k_jj B_ji
+    //         elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*KMat*dummyBMat*dummydVol;
+    //         // [B_ji]^T k_jj B_ji
+    //         // elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*dummyElNodPhi*dummyShFunc*dummydVol; 
+    //         elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*phi*dummydVol; 
 
-            // [N_i]^T s N_i
-            elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
-        }
+    //         // [N_i]^T s N_i
+    //         elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
+    //     }
 
-        // cout << elKTMatx.at(iElem) << "\n\n";
-        elStiffMatx.at(iElem) = dt*(elKDMatx.at(iElem) - elKTMatx.at(iElem)) + elCapMatx.at(iElem);
-        elMKTMatx.at(iElem) = elCapMatx.at(iElem);
-        // elMKTMatx.at(iElem) = elCapMatx.at(iElem);
-    }
+    //     // cout << elKTMatx.at(iElem) << "\n\n";
+    //     elStiffMatx.at(iElem) = dt*(elKDMatx.at(iElem) - elKTMatx.at(iElem)) + elCapMatx.at(iElem);
+    //     elMKTMatx.at(iElem) = elCapMatx.at(iElem);
+    //     // elMKTMatx.at(iElem) = elCapMatx.at(iElem);
+    // }
 
-    // // TODO: For debug!
-    // for (auto& iStifMat : elKDMatx)
-    //     cout << iStifMat << "\n\n";
-    // cout << elKDMatx.at(0) << "\n";
+    // // // TODO: For debug!
+    // // for (auto& iStifMat : elKDMatx)
+    // //     cout << iStifMat << "\n\n";
+    // // cout << elKDMatx.at(0) << "\n";
 
-    // Pointer to the vector, not the vector itself.
-    elStiffMatxVariant = &elStiffMatx;
-    // elCapMatxVariant = &elCapMatx;
-    elMKTMatxVariant = &elMKTMatx;
+    // // Pointer to the vector, not the vector itself.
+    // elStiffMatxVariant = &elStiffMatx;
+    // // elCapMatxVariant = &elCapMatx;
+    // elMKTMatxVariant = &elMKTMatx;
 
 }
 
