@@ -274,7 +274,7 @@ void Quad4THS::CalcElemStiffMatx(BaseTrapping* mat, const double T, const double
     // Pointer to the vector, not the vector itself.
     elStiffMatxVariant = &elStiffMatx;
     // elCapMatxVariant = &elCapMatx;
-    elMKTMatxVariant = &elMKTMatx;
+    // elMKTMatxVariant = &elMKTMatx;
 
 }
 
