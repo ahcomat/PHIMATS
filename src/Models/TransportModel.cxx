@@ -196,7 +196,6 @@ void TransportModel::Assemble(vector<BaseElemTransport*> elements){
             const vector<Matd3x3>& elStiffMatx_ref = *std::get<vector<Matd3x3>*>(T_elStiffMatx_ref);
             const vector<Matd3x3>& elCapMatx_ref = *std::get<vector<Matd3x3>*>(T_elCapMatx_ref);
 
-
             for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
 
                 // Get the con dofs associated with the element
