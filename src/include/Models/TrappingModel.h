@@ -138,8 +138,8 @@ vector<double> nodCount;     /// @brief Counter for integration points surroundi
 
 Vec F;      /// @brief RHS vector.
 Vec x;      /// @brief solution vector.
-Mat K_D;    /// @brief The global diffusivity matrix.
-Mat MKT;    /// @brief The global [M-KT] matrix.
+Mat K;    /// @brief The global diffusivity matrix.
+Mat M;    /// @brief The global [M-KT] matrix.
 
 };
 #endif

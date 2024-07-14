@@ -48,7 +48,7 @@ TrappingModel::~TrappingModel(){
 
     // Deallocate memory.
     PetscFree(presDofs); PetscFree(presVals);
-    VecDestroy(&F); VecDestroy(&x); MatDestroy(&K_D);
+    VecDestroy(&F); VecDestroy(&x); MatDestroy(&K); MatDestroy(&M);
     // Finalize PETSc
     PetscFinalize();
     // Exit message
@@ -98,12 +98,12 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
     VecAssemblyBegin(x); VecAssemblyEnd(x);
 
     // Initialize the coefficient matrices.
-    MatCreate(PETSC_COMM_WORLD, &K_D);
-    MatSetSizes(K_D, PETSC_DECIDE, PETSC_DECIDE, nTotDofs, nTotDofs);
+    MatCreate(PETSC_COMM_WORLD, &K);
+    MatSetSizes(K, PETSC_DECIDE, PETSC_DECIDE, nTotDofs, nTotDofs);
     
-    MatSetType(K_D, MATSEQAIJ); 
+    MatSetType(K, MATSEQAIJ); 
 
-    MatDuplicate(K_D, MAT_DO_NOT_COPY_VALUES, &MKT);
+    MatDuplicate(K, MAT_DO_NOT_COPY_VALUES, &M);
 
     // Preallocate the coefficient matrix.
     vector<vector<int>> gDofs(nTotDofs); // vector to store dofs per row.
@@ -144,8 +144,8 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
     }
 
     // Preallocate the stiffness matrix.
-    MatSeqAIJSetPreallocation(K_D, PETSC_DEFAULT, nnz); 
-    MatSeqAIJSetPreallocation(MKT, PETSC_DEFAULT, nnz); 
+    MatSeqAIJSetPreallocation(K, PETSC_DEFAULT, nnz); 
+    MatSeqAIJSetPreallocation(M, PETSC_DEFAULT, nnz); 
     PetscFree(nnz);
 
 }
@@ -226,7 +226,7 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements){
         PetscMalloc1(nElConDofs, &j1);
 
         const T_ElStiffMatx& T_elStiffMatx_ref = elem->getElStiffMatx();
-        const T_ElStiffMatx& T_elMKTMatx_ref = elem->getElMKTMatx();
+        const T_ElStiffMatx& T_elMKTMatx_ref = elem->getElCapMatx();
 
         if (std::holds_alternative<vector<Matd4x4>*>(T_elStiffMatx_ref)){  // Quad4 elements.
  
@@ -243,8 +243,8 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements){
 
                 }
 
-                MatSetValues(K_D, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
-                MatSetValues(MKT, nElConDofs, i1, nElConDofs, j1, elMKTMatx_ref.at(iElem).data(), ADD_VALUES);
+                MatSetValues(K, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+                MatSetValues(M, nElConDofs, i1, nElConDofs, j1, elMKTMatx_ref.at(iElem).data(), ADD_VALUES);
             }
 
         // } else if (std::holds_alternative<vector<Matd6x6>*>(T_elStiffMatx_ref)){  // Tri3 elements.
@@ -260,7 +260,7 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements){
         //             j1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
         //         }
 
-        //         MatSetValues(K_D, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+        //         MatSetValues(K, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
         //     }
 
         // } else if (std::holds_alternative<vector<Matd24x24>*>(T_elStiffMatx_ref)){  // Hex8 elements.
@@ -276,7 +276,7 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements){
         //             j1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
         //         }
 
-        //         MatSetValues(K_D, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+        //         MatSetValues(K, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
         //     }
         }
 
@@ -285,11 +285,11 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements){
         PetscFree(j1);
     }
 
-    MatAssemblyBegin(K_D, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(K_D, MAT_FINAL_ASSEMBLY);
-    MatSetOption(K_D, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
+    MatAssemblyBegin(K, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(K, MAT_FINAL_ASSEMBLY);
+    MatSetOption(K, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
 
-    MatAssemblyBegin(MKT, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(MKT, MAT_FINAL_ASSEMBLY);
-    MatSetOption(MKT, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
+    MatAssemblyBegin(M, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(M, MAT_FINAL_ASSEMBLY);
+    MatSetOption(M, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
 }
 
 void TrappingModel::InitializeDirichBC(H5IO& H5File_in){
@@ -314,13 +314,13 @@ void TrappingModel::InitializeDirichBC(H5IO& H5File_in){
     }
 
     // For the coefficient matrix
-    MatZeroRows(K_D, nPresDofs, presDofs, 1.0, NULL, NULL);
-    MatAssemblyBegin(K_D, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(K_D, MAT_FINAL_ASSEMBLY);
+    MatZeroRows(K, nPresDofs, presDofs, 1.0, NULL, NULL);
+    MatAssemblyBegin(K, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(K, MAT_FINAL_ASSEMBLY);
 }
 
 void TrappingModel::setDirichBC(){
     
-    MatMult(MKT, x, F);
+    MatMult(M, x, F);
 
     VecSetValues(F, nPresDofs, presDofs, presVals, INSERT_VALUES); 
     VecAssemblyBegin(F); VecAssemblyEnd(F);
@@ -345,7 +345,7 @@ Vec& TrappingModel::getX(){
 
 Mat& TrappingModel::getK(){
 
-    return K_D;
+    return K;
 }
 
 // void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<void CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
