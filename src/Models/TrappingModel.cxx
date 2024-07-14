@@ -226,12 +226,12 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements){
         PetscMalloc1(nElConDofs, &j1);
 
         const T_ElStiffMatx& T_elStiffMatx_ref = elem->getElStiffMatx();
-        const T_ElStiffMatx& T_elMKTMatx_ref = elem->getElCapMatx();
+        const T_ElStiffMatx& T_elCapMatx_ref = elem->getElCapMatx();
 
         if (std::holds_alternative<vector<Matd4x4>*>(T_elStiffMatx_ref)){  // Quad4 elements.
  
             const vector<Matd4x4>& elStiffMatx_ref = *std::get<vector<Matd4x4>*>(T_elStiffMatx_ref);
-            const vector<Matd4x4>& elMKTMatx_ref = *std::get<vector<Matd4x4>*>(T_elMKTMatx_ref);
+            const vector<Matd4x4>& elCapMatx_ref = *std::get<vector<Matd4x4>*>(T_elCapMatx_ref);
 
             for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
 
@@ -244,7 +244,7 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements){
                 }
 
                 MatSetValues(K, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
-                MatSetValues(M, nElConDofs, i1, nElConDofs, j1, elMKTMatx_ref.at(iElem).data(), ADD_VALUES);
+                MatSetValues(M, nElConDofs, i1, nElConDofs, j1, elCapMatx_ref.at(iElem).data(), ADD_VALUES);
             }
 
         // } else if (std::holds_alternative<vector<Matd6x6>*>(T_elStiffMatx_ref)){  // Tri3 elements.
