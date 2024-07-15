@@ -2,7 +2,6 @@
 #include<variant>
 
 #include "Models/TrappingModel.h"
-#include "FiniteElements/Trapping/Quad4TH.h" 
 
 using namespace std;
 
