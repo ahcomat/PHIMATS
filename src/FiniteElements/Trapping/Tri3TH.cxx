@@ -261,26 +261,35 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
     Matd2x2 DMat; 
     Matd2x2 TMat; 
     double gPhi;
+    double IntPtCon;   // Integration point concnetration
     ColVecd3 dummyCon; // for element nodal concentration.
+    ColVecd3 dummyElNod_gPhi; // for element nodal concentration.
 
     // Integration point values.
     for(int iElem=0; iElem<nElements; iElem++){
 
-        // Get element nodal concentration from the solution vector. 
+        // Get element nodal concentration and gPhi from the solution vector. 
         for(int iDof=0; iDof<nElConDofs; iDof++){
-            dummyCon(iDof) = globalBuffer[elemConDof.at(iElem).at(iDof)];
+            dummyCon[iDof] = globalBuffer[elemConDof.at(iElem).at(iDof)];
+            dummyElNod_gPhi[iDof] = nod_gPhi.at(elemConDof.at(iElem).at(iDof));
         }
 
         // Gauss points
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
             gPhi = el_gPhi.at(iElem).at(iGaus);
+            IntPtCon = shapeFunc.at(iGaus)*dummyCon;
 
             DMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcDMatx(gPhi, T));
             TMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcTMatx(gPhi, T));
 
             // Int pt flux
-            elFlux.at(iElem).at(iGaus) = -(DMat*BMat.at(iElem).at(iGaus))*dummyCon;
+            elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon 
+                                         + TMat*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi;
+
+            // elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon;
+
+            // elFlux.at(iElem).at(iGaus) = TMat*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi;
 
             // Nodal values
             for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
