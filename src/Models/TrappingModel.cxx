@@ -353,38 +353,46 @@ Mat& TrappingModel::getK(){
     return K;
 }
 
-// void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<void CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
-// *> mats){
+void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, H5IO &H5File_out, const string iStep){
 
-//     VecGetArrayRead(x, &globalBuffer);
+    VecGetArrayRead(x, &globalBuffer);
 
-//     for (int iSet=0; iSet<nElementSets; iSet++){
-        
-//         elements[iSet]->CalcFlux(mats[iSet]->getKMatx(), globalBuffer, nodFlux, nodCount);
-//     }
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        elements[iSet]->CalcFlux(mats[iSet], globalBuffer, nodFlux, nodCount, T);
+    }
 
-//     // Number averaging the nodal values
-//     if (nDim==2){
+    // Number averaging the nodal values
+    if (nDim==2){
 
-//         for(int iNod=0; iNod<nTotNodes; iNod++){
+        for(int iNod=0; iNod<nTotNodes; iNod++){
             
-//             std::get<std::vector<ColVecd2>>(nodFlux).at(iNod) = std::get<std::vector<ColVecd2>>(nodFlux).at(iNod)/nodCount.at(iNod);
-//         }
+            std::get<std::vector<ColVecd2>>(nodFlux).at(iNod) = std::get<std::vector<ColVecd2>>(nodFlux).at(iNod)/nodCount.at(iNod);
+        }
 
-//     } else if (nDim==3){
+    } else if (nDim==3){
 
-//         for(int iNod=0; iNod<nTotNodes; iNod++){
+        for(int iNod=0; iNod<nTotNodes; iNod++){
             
-//             std::get<std::vector<ColVecd3>>(nodFlux).at(iNod) = std::get<std::vector<ColVecd3>>(nodFlux).at(iNod)/nodCount.at(iNod);
-//         }
+            std::get<std::vector<ColVecd3>>(nodFlux).at(iNod) = std::get<std::vector<ColVecd3>>(nodFlux).at(iNod)/nodCount.at(iNod);
+        }
 
-//     }
+    }
 
-//     // TODO: For debug!
-//     // cout << std::get<std::vector<ColVecd3>>(nodStran).at(0) << "\n";
+    // TODO: For debug!
+    // cout << std::get<std::vector<ColVecd3>>(nodStran).at(0) << "\n";
 
-//     VecRestoreArrayRead(x, &globalBuffer);
-// }
+    VecRestoreArrayRead(x, &globalBuffer);
+
+    // Write to H5 file
+    if (nDim==2){
+        H5File_out.WriteStres("Flux/Step_"+iStep, nTotNodes, 2, nodFlux);
+    } else if (nDim==3) {
+        H5File_out.WriteStres("Flux/Step_"+iStep, nTotNodes, 3, nodFlux);
+    }
+
+    // set zeros
+    setZero_nodFlux();
+}
 
 void TrappingModel::WriteOut(vector<BaseElemTrap*> elements, H5IO &H5File_out, const string iStep){
 
@@ -393,13 +401,4 @@ void TrappingModel::WriteOut(vector<BaseElemTrap*> elements, H5IO &H5File_out, c
     H5File_out.WriteArray_1D("Con/Step_"+iStep, nTotDofs, globalBuffer);
     VecRestoreArrayRead(x, &globalBuffer);
 
-    // // Flux
-    // if (nDim==2){
-    //     H5File_out.WriteStres("Flux/Step_"+iStep, nTotNodes, 2, nodFlux);
-    // } else if (nDim==3) {
-    //     H5File_out.WriteStres("Flux/Step_"+iStep, nTotNodes, 3, nodFlux);
-    // }
-
-    // // set zeros
-    // setZero_nodFlux();
 }

@@ -115,7 +115,11 @@ Mat& getK();
  * 
  * @param elements 
  */
+<<<<<<< HEAD
 void CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, const double T);
+=======
+void CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, H5IO &H5File_out, const string iStep);
+>>>>>>> 1c82745 (Calculate flux)
 
 /**
  * @brief Write nodal values.
