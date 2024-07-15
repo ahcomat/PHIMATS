@@ -256,7 +256,7 @@ void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const double* 
     elCapMatxVariant = &elCapMatx;
 }
 
-void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount){
+void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount, const double T){
 
     // Matd2x2 DMat; 
     // Matd2x2 TMat; 
