@@ -101,7 +101,7 @@ void getFT(BaseTrapping* mat, const double T, const double* globalBuffer, double
  * @param nodFlux 
  * @param nodCount 
  */
-void CalcFlux(T_DMatx KMatx, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount) override;
+void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount) override;
 
 private:
 
