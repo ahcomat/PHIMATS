@@ -62,19 +62,12 @@ virtual void CalcElemStiffMatx(BaseTrapping* mat, const double T, const double* 
  */
 virtual void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapSigmaH) = 0;
 
-// /**
-//  * @brief Return const reference to the vector of element capacitance matrix c_ii.
-//  * 
-//  * @return const vector<T_ElStiffMatx>& 
-//  */
-// const T_ElStiffMatx& getElCapMatx() const { return elCapMatxVariant; }
-
 /**
- * @brief Return const reference to the vector of element trapping matrix c_ii.
+ * @brief Return const reference to the vector of element capacitance matrix c_ii.
  * 
  * @return const vector<T_ElStiffMatx>& 
  */
-const T_ElStiffMatx& getElCapMatx() const { return elMKTMatxVariant; }
+const T_ElStiffMatx& getElCapMatx() const { return elCapMatxVariant; }
 
 /**
  * @brief Evaluates the int-pt flux vector. Also evaluates the flux at the nodes.
@@ -97,7 +90,6 @@ double dt;                     /// @brief Time increment.
 
 vector<vector<int>> elemConDof;    /// @brief Element concentration (temperature) dofs. In this case, it is identical to `elemNodeConn`.
 
-// T_ElStiffMatx elMKTMatxVariant;    /// @brief Variant for returning elKTMatx. 
 T_ElStiffMatx elCapMatxVariant;   /// @brief Variant for returning elCapMatx. 
 
 };
