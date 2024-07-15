@@ -74,7 +74,7 @@ virtual void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nod
  * 
  * @return const vector<T_ElStiffMatx>& 
  */
-const T_ElStiffMatx& getElMKTMatx() const { return elMKTMatxVariant; }
+const T_ElStiffMatx& getElCapMatx() const { return elMKTMatxVariant; }
 
 /**
  * @brief Evaluates the int-pt flux vector. Also evaluates the flux at the nodes.
@@ -97,8 +97,8 @@ double dt;                     /// @brief Time increment.
 
 vector<vector<int>> elemConDof;    /// @brief Element concentration (temperature) dofs. In this case, it is identical to `elemNodeConn`.
 
-T_ElStiffMatx elMKTMatxVariant;    /// @brief Variant for returning elKTMatx. 
-// T_ElStiffMatx elCapMatxVariant;   /// @brief Variant for returning elCapMatx. 
+// T_ElStiffMatx elMKTMatxVariant;    /// @brief Variant for returning elKTMatx. 
+T_ElStiffMatx elCapMatxVariant;   /// @brief Variant for returning elCapMatx. 
 
 };
 #endif
