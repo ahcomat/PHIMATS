@@ -115,7 +115,7 @@ Mat& getK();
  * 
  * @param elements 
  */
-void CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
+void CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, const double T);
 
 /**
  * @brief Write nodal values.
