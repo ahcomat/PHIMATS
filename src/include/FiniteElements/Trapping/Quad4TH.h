@@ -99,7 +99,7 @@ void CalcElemStiffMatx(BaseTrapping* mat, const double T, const double* globalBu
  * @param nodFlux 
  * @param nodCount 
  */
-void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount) override;
+void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount, const double T) override;
 
 private:
 

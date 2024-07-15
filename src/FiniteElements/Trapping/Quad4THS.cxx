@@ -323,7 +323,7 @@ void Quad4THS::getFT(BaseTrapping* mat, const double T, const double* globalBuff
     }
 }
 
-void Quad4THS::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount){
+void Quad4THS::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount, const double T){
 
     // ColVecd4 dummyCon; // for element nodal concentration.
     // int iNode;  // counter for the number of nodes.

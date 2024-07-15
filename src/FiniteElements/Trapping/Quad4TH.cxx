@@ -272,7 +272,7 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const double*
 
 }
 
-void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount){
+void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount, const double T){
 
     // ColVecd4 dummyCon; // for element nodal concentration.
     // int iNode;  // counter for the number of nodes.
