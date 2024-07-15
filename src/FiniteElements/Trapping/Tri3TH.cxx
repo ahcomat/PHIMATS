@@ -77,7 +77,7 @@ Matd2x3 Tri3TH::CalcShapeFuncDeriv(double xi, double eta){
 
 void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
 
-    // Initialize the storages for int-pt flux and phi
+    // Initialize the storages for int-pt flux and gPhi
     elFlux.resize(nElements);
     el_gPhi.resize(nElements);
 
