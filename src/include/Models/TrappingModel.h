@@ -70,6 +70,14 @@ void CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mat
 void Assemble(vector<BaseElemTrap*> elements);
 
 /**
+ * @brief Reads initial conditions from H5File.
+ * 
+ * @param H5File 
+ * @param iStep 
+ */
+void ReadInitialCon(H5IO& H5File, const int iStep);
+
+/**
  * @brief Reads and initializes Dirichlet BCs.
  * 
  * @param H5File_in 

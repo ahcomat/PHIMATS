@@ -296,6 +296,18 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements){
     MatSetOption(M, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
 }
 
+void TrappingModel::ReadInitialCon(H5IO& H5File, const int iStep){
+
+    vector<double> con_0(nTotDofs);
+    H5File.ReadFieldDoub1D("Con/Step_"+to_string(iStep), con_0);
+
+    for(int iDof=0; iDof<nTotDofs; iDof++){
+        VecSetValue(x, iDof, con_0.at(iDof), INSERT_VALUES);
+    }
+    VecAssemblyBegin(x);  VecAssemblyEnd(x);
+}
+
+
 void TrappingModel::InitializeDirichBC(H5IO& H5File_in){
 
     // Read Dirichlet BCs
