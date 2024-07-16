@@ -34,6 +34,8 @@ H5IO(std::string H5FileName);
  */
 double ReadScalar(std::string dsetName);
 
+void WriteScalar(string dsetName, double val);
+
 void ReadFieldFloat2D(string dsetName, const int row, const int col, vector<vector<double>>& Field);
 
 void ReadFieldInt2D(string dsetName, const int row, const int col, vector<vector<int>>& Field);

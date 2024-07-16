@@ -43,6 +43,34 @@ double H5IO::ReadScalar(string dsetName){
     return Var[0];
 }
 
+void H5IO::WriteScalar(string dsetName, double val){
+
+    hid_t  file_id, dataset_id, dataspace_id;
+    herr_t status;
+    hsize_t dims[1];
+
+    const char* fileName = this->H5FileName.c_str();
+    const char* dataSetName = dsetName.c_str();
+
+    dims[0] = 1;
+    double Var[1];
+    Var[0] = val;
+
+    file_id = H5Fopen(fileName, H5F_ACC_RDWR, H5P_DEFAULT);
+
+    dataspace_id = H5Screate_simple(1, dims, NULL);
+
+    dataset_id = H5Dcreate2(file_id, dataSetName, H5T_NATIVE_DOUBLE, dataspace_id, 
+                 H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+
+    status = H5Dwrite(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL,
+             H5P_DEFAULT, Var);
+
+    status = H5Dclose(dataset_id);
+    status = H5Sclose(dataspace_id);
+    status = H5Fclose(file_id);
+}
+
 void H5IO::ReadFieldFloat2D(string dsetName, const int row, const int col, vector<vector<double>>& Field){
 
     hid_t  file_id, dataset_id;
