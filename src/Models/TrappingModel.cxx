@@ -323,14 +323,19 @@ void TrappingModel::InitializeDirichBC(H5IO& H5File_in){
 }
 
 void TrappingModel::setDirichBC(){
-    
-    MatMult(M, x, F);
 
+    Update_F();
+    
     VecSetValues(F, nPresDofs, presDofs, presVals, INSERT_VALUES); 
     VecAssemblyBegin(F); VecAssemblyEnd(F);
 
     // // TODO: For debug!
     // VecView(F, PETSC_VIEWER_STDOUT_WORLD);
+}
+
+void TrappingModel::Update_F(){
+
+    MatMult(M, x, F);
 }
 
 int TrappingModel::get_nSteps() const{

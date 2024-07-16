@@ -83,6 +83,12 @@ void InitializeDirichBC(H5IO& H5File_in);
 void setDirichBC();
 
 /**
+ * @brief Function for updating `F`.
+ * 
+ */
+void Update_F();
+
+/**
  * @brief Get the number of steps to apply load.
  * 
  * @return int 
