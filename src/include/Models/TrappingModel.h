@@ -125,6 +125,14 @@ void CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, H5IO &
  */
 void WriteOut(vector<BaseElemTrap*> elements, H5IO &H5File_out, const string iStep);
 
+/**
+ * @brief Write the total concentration of the time step
+ * 
+ * @param H5File_out 
+ * @param tStep 
+ */
+void WriteTotCon(H5IO &H5File_out, const int tStep);
+
 private:
 
 int nElConDofs;     /// @brief Number of element concentration (temp) dofs.

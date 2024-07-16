@@ -402,3 +402,13 @@ void TrappingModel::WriteOut(vector<BaseElemTrap*> elements, H5IO &H5File_out, c
     VecRestoreArrayRead(x, &globalBuffer);
 
 }
+
+void TrappingModel::WriteTotCon(H5IO &H5File_out, const int iStep){
+
+    PetscScalar sum;
+    VecSum(x, &sum);
+
+    H5File_out.WriteScalar("Time/Step_"+to_string(iStep), dt*(double)iStep);
+    H5File_out.WriteScalar("TotCon/Step_"+to_string(iStep), sum);
+
+}
