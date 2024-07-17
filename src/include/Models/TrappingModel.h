@@ -58,10 +58,10 @@ void WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_out);
 /**
  * @brief Updates the temperature according the the heating rate HR.
  * 
- * @param tStep Time step
+ * @param iStep Time step
  * @param HR Heating rate
  */
-void UpdateTemp(const int tStep, double HR);
+void UpdateTemp(const int iStep, double HR);
 
 /**
  * @brief Write the current temperature.
