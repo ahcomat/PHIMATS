@@ -24,6 +24,7 @@ TrappingModel::TrappingModel(vector<BaseElemTrap*> elements, H5IO& H5File_in){
     dt = H5File_in.ReadScalar(dsetName);
     dsetName = "SimulationParameters/T";
     T = H5File_in.ReadScalar(dsetName);
+    T0 = H5File_in.ReadScalar(dsetName);
 
     // Set the type and size
     nodCount.resize(nTotNodes);
@@ -204,6 +205,12 @@ void TrappingModel::WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_ou
     delete [] nodLapPhi;
 }
 
+void TrappingModel::UpdateTemp(int tStep, double HR){
+
+    T = dt*(double)tStep*HR + T0;
+}
+
+
 void TrappingModel::CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
 
     for (int iSet=0; iSet<nElementSets; iSet++){
@@ -271,7 +278,7 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements){
     }
 
     MatAssemblyBegin(K, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(K, MAT_FINAL_ASSEMBLY);
-    MatSetOption(K, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
+    MatSetOption(K, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_FALSE);
 
     // TODO: For debug!
     // // Extract a specific row

@@ -55,6 +55,8 @@ void InitializePETSc(vector<BaseElemTrap*> elements);
  */
 void WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_out);
 
+void UpdateTemp(int tStep, double HR);
+
 /**
  * @brief Calculates the element stiffness matrix. 
  * 
@@ -152,7 +154,7 @@ private:
 int nElConDofs;     /// @brief Number of element concentration (temp) dofs.
 double dt;          /// @brief Time increment.
 double T0;          /// @brief Initial temperature.
-double T;           /// @brief Temperature.
+double T;           /// @brief Current temperature.
 
 T_nodStres nodFlux;          /// @brief Nodal flux.
 vector<double> nodCount;     /// @brief Counter for integration points surrounding nodes.
