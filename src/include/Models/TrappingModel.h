@@ -55,6 +55,12 @@ void InitializePETSc(vector<BaseElemTrap*> elements);
  */
 void WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_out);
 
+/**
+ * @brief Updates the temperature according the the heating rate HR.
+ * 
+ * @param tStep 
+ * @param HR 
+ */
 void UpdateTemp(int tStep, double HR);
 
 /**
