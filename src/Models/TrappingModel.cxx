@@ -218,7 +218,7 @@ void TrappingModel::WriteTemp(H5IO &H5File_out, const int iStep){
 void TrappingModel::CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
 
     for (int iSet=0; iSet<nElementSets; iSet++){
-        elements[iSet]->CalcElemStiffMatx(mats[iSet], T, globalBuffer);
+        elements[iSet]->CalcElemStiffMatx(mats[iSet], T);
     }
 }
 

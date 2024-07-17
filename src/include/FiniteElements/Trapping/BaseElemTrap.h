@@ -52,7 +52,7 @@ void ReadElementsData(H5IO &H5File_in, int iSet);
 /**
  * @brief Calculates the element stiffness matrix.
  */
-virtual void CalcElemStiffMatx(BaseTrapping* mat, const double T, const double* globalBuffer) = 0;
+virtual void CalcElemStiffMatx(BaseTrapping* mat, const double T) = 0;
 
 /**
  * @brief Evaluates the gradients of scalar field at the int-points and maps them to the nodes. 

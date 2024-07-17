@@ -195,7 +195,7 @@ void Tri3TH::CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nod
     }
 }
 
-void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const double* globalBuffer){
+void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
     Matd2x2 DMat; 
     Matd2x2 TMat; 
