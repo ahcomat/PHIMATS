@@ -151,6 +151,7 @@ private:
 
 int nElConDofs;     /// @brief Number of element concentration (temp) dofs.
 double dt;          /// @brief Time increment.
+double T0;          /// @brief Initial temperature.
 double T;           /// @brief Temperature.
 
 T_nodStres nodFlux;          /// @brief Nodal flux.
