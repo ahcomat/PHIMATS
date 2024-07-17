@@ -155,7 +155,13 @@ class PreProcessing:
         #----------------------------------------------------------------------
         
         self.grp_Sim_Params = self.fh5.create_group('SimulationParameters')
-
+        
+        if self.SimulType == "GBTrapping":
+            self.grp_Sim_Params.create_dataset("Trapping", data=int(1), dtype = np.int64)
+        elif self.SimulType == "PhaseTrapping":
+            self.grp_Sim_Params.create_dataset("Trapping", data=int(2), dtype = np.int64)
+        
+        
         self.grp_Sim_Params.create_dataset("nDim", data=self.nDim, dtype = np.int64)
         self.grp_Sim_Params.create_dataset("nTotNodes", data=self.nTotNodes, dtype = np.int64)
         self.grp_Sim_Params.create_dataset("nTotDofs", data=self.nTotDofs, dtype = np.int64)

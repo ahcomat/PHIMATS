@@ -87,6 +87,7 @@ const int nElConDofs;          /// @brief Number of element concentration (tempe
 const int nElGauss;            /// @brief Number of gauss points.
 
 double dt;                     /// @brief Time increment.     
+int Trapping;                  /// @brief Flag for trapping type.
 
 vector<vector<int>> elemConDof;    /// @brief Element concentration (temperature) dofs. In this case, it is identical to `elemNodeConn`.
 

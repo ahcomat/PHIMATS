@@ -21,6 +21,8 @@ void BaseElemTrap::ReadElementsData(H5IO &H5File_in, int iSet){
     nNodes = H5File_in.ReadScalar(dsetName);
     dsetName = "SimulationParameters/dt";
     dt = H5File_in.ReadScalar(dsetName);
+    dsetName = "SimulationParameters/Trapping";
+    Trapping = H5File_in.ReadScalar(dsetName);
     
     // Initialize the size.
     elemNodeConn.resize(nElements);  
