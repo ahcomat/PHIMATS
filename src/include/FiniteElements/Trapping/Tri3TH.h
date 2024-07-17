@@ -87,7 +87,8 @@ void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi) 
 /**
  * @brief Calculates the element stiffness matrix for all elements.
  * 
- * @param DMatx 
+ * @param mat Material
+ * @param T Current temperature
  */
 void CalcElemStiffMatx(BaseTrapping* mat, const double T) override ;
 
