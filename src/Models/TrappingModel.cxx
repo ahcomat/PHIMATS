@@ -210,7 +210,6 @@ void TrappingModel::UpdateTemp(int tStep, double HR){
     T = dt*(double)tStep*HR + T0;
 }
 
-
 void TrappingModel::CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
 
     for (int iSet=0; iSet<nElementSets; iSet++){
