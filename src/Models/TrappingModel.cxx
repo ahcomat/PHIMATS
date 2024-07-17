@@ -413,7 +413,7 @@ void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping
 
 void TrappingModel::WriteOut(vector<BaseElemTrap*> elements, H5IO &H5File_out, const string iStep){
 
-    // Displacements
+    // Concentration
     VecGetArrayRead(x, &globalBuffer);
     H5File_out.WriteArray_1D("Con/Step_"+iStep, nTotDofs, globalBuffer);
     VecRestoreArrayRead(x, &globalBuffer);
