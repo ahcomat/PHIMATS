@@ -61,7 +61,7 @@ void WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_out);
  * @param tStep 
  * @param HR 
  */
-void UpdateTemp(int tStep, double HR);
+void UpdateTemp(const int tStep, double HR);
 
 /**
  * @brief Calculates the element stiffness matrix. 

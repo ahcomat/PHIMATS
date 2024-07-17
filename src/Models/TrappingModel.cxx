@@ -205,7 +205,7 @@ void TrappingModel::WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_ou
     delete [] nodLapPhi;
 }
 
-void TrappingModel::UpdateTemp(int tStep, double HR){
+void TrappingModel::UpdateTemp(const int tStep, double HR){
 
     T = dt*(double)tStep*HR + T0;
 }
