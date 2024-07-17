@@ -210,6 +210,11 @@ void TrappingModel::UpdateTemp(const int tStep, double HR){
     T = dt*(double)tStep*HR + T0;
 }
 
+void TrappingModel::WriteTemp(H5IO &H5File_out, const int iStep){
+
+    H5File_out.WriteScalar("Temp/Step_"+to_string(iStep), T);
+}
+
 void TrappingModel::CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
 
     for (int iSet=0; iSet<nElementSets; iSet++){

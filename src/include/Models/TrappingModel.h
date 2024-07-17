@@ -64,6 +64,14 @@ void WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_out);
 void UpdateTemp(const int tStep, double HR);
 
 /**
+ * @brief Write the current temperature.
+ * 
+ * @param H5File_out Output hdf5 file
+ * @param tStep Time step
+ */
+void WriteTemp(H5IO &H5File_out, const int iStep);
+
+/**
  * @brief Calculates the element stiffness matrix. 
  * 
  * @param elements 
