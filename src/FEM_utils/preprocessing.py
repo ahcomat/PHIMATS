@@ -23,7 +23,7 @@ class PreProcessing:
         self.nSteps = inputData["nSteps"]
         
         # Allowed simulation types
-        allowedSimulTypes = ["Mechanical", "Transport", "GBTrapping", "MechTrapping"]
+        allowedSimulTypes = ["Mechanical", "Transport", "PhaseTrapping", "GBTrapping", "MechTrapping"]
                 
         if not self.SimulType in allowedSimulTypes:
             ErrString = "ERROR! Unknown simulation type < " + self.SimulType + " >\n"
@@ -40,6 +40,14 @@ class PreProcessing:
             self.dt = inputData["dt"]
             self.T = inputData["T"]
             self.gPhi = inputData["gPhi"]
+        elif self.SimulType=="PhaseTrapping":
+            self.exitNods = inputData["exitNods"]
+            self.dt = inputData["dt"]
+            self.T = inputData["T"]
+            self.martensite = inputData["martensite"]
+            self.gPhi_MM = inputData["gPhi_MM"]
+            self.gPhi_ff = inputData["gPhi_ff"]
+            self.gPhi_fM = inputData["gPhi_fM"]
         elif self.SimulType=="MechTrapping":
             self.exitNods = inputData["exitNods"]
             self.dt = inputData["dt"]
@@ -103,6 +111,8 @@ class PreProcessing:
             self.nTotDofs = self.nTotNodes
         elif self.SimulType == "GBTrapping":
             self.nTotDofs = self.nTotNodes
+        elif self.SimulType == "PhaseTrapping":
+            self.nTotDofs = self.nTotNodes
         elif self.SimulType == "MechTrapping":
             self.nTotDofs = self.nTotNodes
         
@@ -161,7 +171,16 @@ class PreProcessing:
         if self.SimulType == "GBTrapping":
             self.grp_Sim_Params.create_dataset("dt", data=self.dt)
             self.grp_Sim_Params.create_dataset("T", data=self.T)
-            self.fh5.create_dataset('gPhi', data=self.gPhi, dtype = np.float64) 
+            self.fh5.create_dataset('gPhi', data=self.gPhi, dtype = np.float64)
+            
+        # Case Trapping 
+        if self.SimulType == "PhaseTrapping":
+            self.grp_Sim_Params.create_dataset("dt", data=self.dt)
+            self.grp_Sim_Params.create_dataset("T", data=self.T)
+            self.fh5.create_dataset('gPhi_MM', data=self.gPhi_MM, dtype = np.float64) 
+            self.fh5.create_dataset('gPhi_fM', data=self.gPhi_fM, dtype = np.float64) 
+            self.fh5.create_dataset('gPhi_ff', data=self.gPhi_ff, dtype = np.float64) 
+            self.fh5.create_dataset('martensite', data=self.martensite, dtype = np.float64) 
             
         # Case MechTrapping 
         if self.SimulType == "MechTrapping":
@@ -219,6 +238,25 @@ class PreProcessing:
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx2", data=self.Materials[mat]["DQx2"])
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy2", data=self.Materials[mat]["DQy2"])
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/kappa_GB", data=self.Materials[mat]["kappa_GB"])
+
+                if self.nDim == 3:
+                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
+                    
+        elif self.SimulType == "PhaseTrapping":
+            for mat in self.Materials:
+                counter = 1
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x1", data=self.Materials[mat]["D0x1"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y1", data=self.Materials[mat]["D0y1"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx1", data=self.Materials[mat]["DQx1"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy1", data=self.Materials[mat]["DQy1"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x2", data=self.Materials[mat]["D0x2"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y2", data=self.Materials[mat]["D0y2"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx2", data=self.Materials[mat]["DQx2"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy2", data=self.Materials[mat]["DQy2"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_MM", data=self.Materials[mat]["zeta_MM"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_M", data=self.Materials[mat]["zeta_M"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_fM", data=self.Materials[mat]["zeta_fM"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_ff", data=self.Materials[mat]["zeta_ff"])
 
                 if self.nDim == 3:
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
