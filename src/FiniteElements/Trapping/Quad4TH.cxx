@@ -204,7 +204,7 @@ void Quad4TH::CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* no
     }
 }
 
-void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const double* globalBuffer){
+void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
     // Matd2x2 KMat; 
     // Matd2x2 TMat; 
