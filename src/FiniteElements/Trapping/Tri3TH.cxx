@@ -77,8 +77,10 @@ Matd2x3 Tri3TH::CalcShapeFuncDeriv(double xi, double eta){
 
 void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
 
-    // Initialize the storages for int-pt flux
+    // Initialize the storages
     elFlux.resize(nElements);
+    elStiffMatx.resize(nElements);
+    elCapMatx.resize(nElements);
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd3x2 dummyElNodCoord;   // For node coordinates.
