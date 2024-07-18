@@ -77,18 +77,11 @@ Matd2x3 Tri3TH::CalcShapeFuncDeriv(double xi, double eta){
 
 void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
 
-    // Initialize the storages for int-pt flux and gPhi
+    // Initialize the storages for int-pt flux
     elFlux.resize(nElements);
-    el_gPhi.resize(nElements);
-
-    // Read nodal values of phi
-    nod_gPhi.resize(nNodes);
-    string dsetName = "gPhi";
-    H5File_in.ReadFieldDoub1D(dsetName, nod_gPhi);      
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd3x2 dummyElNodCoord;   // For node coordinates.
-    ColVecd3 dummyElNod_gPhi;  // For element nodal values of phi.
 
     gaussPtCart.resize(nElements);  // Initialize the size of the Cart Gauss points.
     vector<RowVecd2> dummyElemGauss(nElGauss); // For element Gauss points.
@@ -98,37 +91,128 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
     intPtVol.resize(nElements);   
     vector<double> dummyIntVol(nElGauss);  // For integration point volume.
 
-    // Loop through elements.
-    for(int iElem=0; iElem<nElements; iElem++){
+    if (Trapping==1){       // GB
 
-        elFlux.at(iElem).resize(nElGauss);
-        el_gPhi.at(iElem).resize(nElGauss);
-        gaussPtCart.at(iElem).resize(nElGauss);
-        BMat.at(iElem).resize(nElGauss);
+        ColVecd3 dummyElNod_gPhi;  // For element nodal values of phi.
 
-        // Loop through nodes to get coordinates.
-        for(int iNod=0; iNod<nElNodes; iNod++){
+        // Initialize the storages for int-pt gPhi
+        el_gPhi.resize(nElements);
+        // Read nodal values of gPhi
+        nod_gPhi.resize(nNodes);
+        string dsetName = "gPhi";
+        H5File_in.ReadFieldDoub1D(dsetName, nod_gPhi);
 
-            dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
-            dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
+        // Loop through elements.
+        for(int iElem=0; iElem<nElements; iElem++){
 
-            dummyElNod_gPhi[iNod] = nod_gPhi.at(elemNodeConn.at(iElem).at(iNod));
-        }
+            elFlux.at(iElem).resize(nElGauss);
+            el_gPhi.at(iElem).resize(nElGauss);
 
-        elemNodCoord.at(iElem) = dummyElNodCoord;
 
-        // Loop through integration points.
-        for(int iGauss=0; iGauss<nElGauss; iGauss++){
-        
-            // Cart coord of iGauss point.
-            dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
-            // Derivatives and int-pt volume
-            CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
-            // Int-pt phi
-            el_gPhi.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi;
-        }
-        gaussPtCart.at(iElem) = dummyElemGauss;
-        intPtVol.at(iElem) = dummyIntVol;
+            gaussPtCart.at(iElem).resize(nElGauss);
+            BMat.at(iElem).resize(nElGauss);
+
+            // Loop through nodes to get coordinates.
+            for(int iNod=0; iNod<nElNodes; iNod++){
+
+                dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
+                dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
+
+                dummyElNod_gPhi[iNod] = nod_gPhi.at(elemNodeConn.at(iElem).at(iNod));
+            }
+
+            elemNodCoord.at(iElem) = dummyElNodCoord;
+
+            // Loop through integration points.
+            for(int iGauss=0; iGauss<nElGauss; iGauss++){
+            
+                // Cart coord of iGauss point.
+                dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                // Derivatives and int-pt volume
+                CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                // Int-pt phi
+                el_gPhi.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi;
+            }
+            gaussPtCart.at(iElem) = dummyElemGauss;
+            intPtVol.at(iElem) = dummyIntVol;
+        }   
+
+    } else if (Trapping==2) {       // Phase 
+
+        ColVecd3 dummyElNod_martensite; ColVecd3 dummyElNod_gPhiMM;
+        ColVecd3 dummyElNod_gPhiff; ColVecd3 dummyElNod_gPhifM;
+
+        // Initialize the storages for int-pt traps
+        el_martensite.resize(nElements); el_gPhiff.resize(nElements);
+        el_gPhiMM.resize(nElements); el_gPhifM.resize(nElements);
+
+        // Read nodal values of traps
+        nod_martensite.resize(nNodes);
+        string dsetName = "martensite";
+        H5File_in.ReadFieldDoub1D(dsetName, nod_martensite);
+
+        nod_gPhiff.resize(nNodes);
+        dsetName = "gPhi_ff";
+        H5File_in.ReadFieldDoub1D(dsetName, nod_gPhiff);
+
+        nod_gPhifM.resize(nNodes);
+        dsetName = "gPhi_fM";
+        H5File_in.ReadFieldDoub1D(dsetName, nod_gPhifM);
+
+        nod_gPhiMM.resize(nNodes);
+        dsetName = "gPhi_MM";
+        H5File_in.ReadFieldDoub1D(dsetName, nod_gPhiMM);
+
+        // Loop through elements.
+        for(int iElem=0; iElem<nElements; iElem++){
+
+            elFlux.at(iElem).resize(nElGauss);
+
+            el_martensite.at(iElem).resize(nElGauss);
+            el_gPhiff.at(iElem).resize(nElGauss);
+            el_gPhifM.at(iElem).resize(nElGauss);
+            el_gPhiMM.at(iElem).resize(nElGauss);
+
+            gaussPtCart.at(iElem).resize(nElGauss);
+            BMat.at(iElem).resize(nElGauss);
+
+            // Loop through nodes to get coordinates.
+            for(int iNod=0; iNod<nElNodes; iNod++){
+
+                dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
+                dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
+
+                dummyElNod_martensite[iNod] = nod_martensite.at(elemNodeConn.at(iElem).at(iNod));
+                dummyElNod_gPhiff[iNod] = nod_gPhiff.at(elemNodeConn.at(iElem).at(iNod));
+                dummyElNod_gPhifM[iNod] = nod_gPhifM.at(elemNodeConn.at(iElem).at(iNod));
+                dummyElNod_gPhiMM[iNod] = nod_gPhiMM.at(elemNodeConn.at(iElem).at(iNod));
+            }
+
+            elemNodCoord.at(iElem) = dummyElNodCoord;
+
+            // Loop through integration points.
+            for(int iGauss=0; iGauss<nElGauss; iGauss++){
+            
+                // Cart coord of iGauss point.
+                dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                // Derivatives and int-pt volume
+                CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                // Int-pt phi
+                el_martensite.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_martensite;
+                el_gPhiff.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhiff;
+                el_gPhifM.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhifM;
+                el_gPhiMM.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhiMM;
+
+            }
+            gaussPtCart.at(iElem) = dummyElemGauss;
+            intPtVol.at(iElem) = dummyIntVol;
+        }   
+
+    }  else {
+
+        cerr << "Error trapping flag: " << Trapping << "\n";
+        cerr << "Terminating!\n\n";
+        exit(10);
     }
 }
 
