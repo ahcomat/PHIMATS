@@ -104,6 +104,8 @@ void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux
 
 private:
 
+const double R = 8.31446261815324; /// @brief Universal gas constant [J/mol.K]
+
 const vector<double> wts{1.0/6.0, 1.0/6.0, 1.0/6};  /// @brief Weights of the gauss points [nElGauss].
 
 vector<RowVecd3> shapeFunc; /// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
