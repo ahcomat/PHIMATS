@@ -3,6 +3,8 @@
 
 #include "FiniteElements/Trapping/Tri3TH.h"
 #include "Materials/Trapping/TrapGB.h"
+#include "Materials/Trapping/TrapPhase.h"
+
 
 #ifndef DEBUG
 #define at(x) operator[](x)
@@ -284,52 +286,114 @@ void Tri3TH::CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nod
 void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
     Matd2x2 DMat; 
-    Matd2x2 TMat; 
 
-    elStiffMatx.resize(nElements);
-    elCapMatx.resize(nElements);
     vector<Matd3x3> elKDMatx(nElements); 
     vector<Matd3x3> elKTMatx(nElements); 
 
-    double dummydVol;          // dummy for int-pt volume.
-    ColVecd3 dummyElNod_gPhi;  // For element nodal values of phi.
-    double gPhi;               // dummy for int-pt phi.
+    double dummydVol;       // dummy for int-pt volume.
 
-    // Loop through all elements.
-    for(int iElem=0; iElem<nElements; iElem++){
+    if (Trapping==1){       // GB
 
-        // MUST BE POPULATED WITH ZEROS    
-        elStiffMatx.at(iElem).setZero();
-        elKDMatx.at(iElem).setZero();  
-        elKTMatx.at(iElem).setZero();  
-        elCapMatx.at(iElem).setZero(); 
+        Matd2x2 TMat; 
 
-        // Loop through element nodes to get nodal values.
-        for(int iNod=0; iNod<nElNodes; iNod++){
-            dummyElNod_gPhi[iNod] = nod_gPhi.at(elemNodeConn.at(iElem).at(iNod));
-        }              
+        ColVecd3 dummyElNod_gPhi;  // For element nodal values of phi.
+        double gPhi;               // dummy for int-pt phi.
 
-        // Integration over all Gauss points.
-        for (int iGauss=0; iGauss<nElGauss; iGauss++){
+        // Loop through all elements.
+        for(int iElem=0; iElem<nElements; iElem++){
 
-            gPhi = el_gPhi.at(iElem).at(iGauss);  // gPhi of the current int-pt
+            // MUST BE POPULATED WITH ZEROS    
+            elStiffMatx.at(iElem).setZero();
+            elKDMatx.at(iElem).setZero();  
+            elKTMatx.at(iElem).setZero();  
+            elCapMatx.at(iElem).setZero(); 
 
-            DMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcDMatx(gPhi, T));
-            TMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcTMatx(gPhi, T));
+            // Loop through element nodes to get nodal values.
+            for(int iNod=0; iNod<nElNodes; iNod++){
+                dummyElNod_gPhi[iNod] = nod_gPhi.at(elemNodeConn.at(iElem).at(iNod));
+            }              
 
-            const Matd2x3& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
-            const RowVecd3& dummyShFunc = shapeFunc.at(iGauss);
-            dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
+            // Integration over all Gauss points.
+            for (int iGauss=0; iGauss<nElGauss; iGauss++){
 
-            // [B_ji]^T k_jj B_ji
-            elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
-            // [B_ji]^T k_jj B_ji
-            elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*dummyElNod_gPhi*dummyShFunc*dummydVol; 
-            // [N_i]^T N_i
-            elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
+                gPhi = el_gPhi.at(iElem).at(iGauss);  // gPhi of the current int-pt
+
+                DMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcDMatx(gPhi, T));
+                TMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcTMatx(gPhi, T));
+
+                const Matd2x3& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
+                const RowVecd3& dummyShFunc = shapeFunc.at(iGauss);
+                dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
+
+                // [B_ji]^T k_jj B_ji
+                elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
+                // [B_ji]^T k_jj B_ji
+                elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*dummyElNod_gPhi*dummyShFunc*dummydVol; 
+                // [N_i]^T N_i
+                elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
+            }
+
+            elStiffMatx.at(iElem) = dt*elKDMatx.at(iElem) - dt*elKTMatx.at(iElem) + elCapMatx.at(iElem);
+        } 
+    } else if (Trapping==2){        // Phase
+
+        ColVecd3 dummyElNod_martensite, dummyElNod_gPhifM, dummyElNod_gPhiff,
+        dummyElNod_gPhiMM;
+        double martensite, gPhiff, gPhifM, gPhiMM;              
+
+        vector<int> NodeConn;
+
+        double zeta_M = dynamic_cast<TrapPhase*>(mat)->get_zeta_M();
+        double zeta_fM = dynamic_cast<TrapPhase*>(mat)->get_zeta_fM();
+        double zeta_MM = dynamic_cast<TrapPhase*>(mat)->get_zeta_MM();
+        double zeta_ff = dynamic_cast<TrapPhase*>(mat)->get_zeta_ff();
+
+        // Loop through all elements.
+        for(int iElem=0; iElem<nElements; iElem++){
+
+            NodeConn = elemNodeConn.at(iElem);
+
+            // MUST BE POPULATED WITH ZEROS    
+            elStiffMatx.at(iElem).setZero();
+            elKDMatx.at(iElem).setZero();  
+            elKTMatx.at(iElem).setZero();  
+            elCapMatx.at(iElem).setZero(); 
+
+            // Loop through element nodes to get nodal values.
+            for(int iNod=0; iNod<nElNodes; iNod++){
+                dummyElNod_martensite[iNod] = nod_martensite.at(NodeConn.at(iNod));
+                dummyElNod_gPhiff[iNod] = nod_gPhiff.at(NodeConn.at(iNod));
+                dummyElNod_gPhifM[iNod] = nod_gPhifM.at(NodeConn.at(iNod));
+                dummyElNod_gPhiMM[iNod] = nod_gPhiMM.at(NodeConn.at(iNod));
+            }              
+
+            // Integration over all Gauss points.
+            for (int iGauss=0; iGauss<nElGauss; iGauss++){
+
+                martensite = el_martensite.at(iElem).at(iGauss);  // values of the current int-pt
+                gPhiff = el_gPhiff.at(iElem).at(iGauss);
+                gPhifM = el_gPhifM.at(iElem).at(iGauss);
+                gPhiMM = el_gPhiMM.at(iElem).at(iGauss);
+
+                DMat = std::get<Matd2x2>(dynamic_cast<TrapPhase*>(mat)->CalcDMatx(martensite, T));
+
+                const Matd2x3& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
+                const RowVecd3& dummyShFunc = shapeFunc.at(iGauss);
+                dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
+
+                // [B_ji]^T k_jj B_ji
+                elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
+                // [B_ji]^T k_jj B_ji
+                elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*zeta_M/(R*T)*dummyBMat*dummyElNod_martensite*dummyShFunc*dummydVol + 
+                dummyBMat.transpose()*DMat*zeta_ff/(R*T)*dummyBMat*dummyElNod_gPhiff*dummyShFunc*dummydVol + 
+                dummyBMat.transpose()*DMat*zeta_fM/(R*T)*dummyBMat*dummyElNod_gPhifM*dummyShFunc*dummydVol +
+                dummyBMat.transpose()*DMat*zeta_MM/(R*T)*dummyBMat*dummyElNod_gPhiMM*dummyShFunc*dummydVol; 
+                // [N_i]^T N_i
+                elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
+            }
+
+            elStiffMatx.at(iElem) = dt*elKDMatx.at(iElem) - dt*elKTMatx.at(iElem) + elCapMatx.at(iElem);
         }
-
-        elStiffMatx.at(iElem) = dt*elKDMatx.at(iElem) - dt*elKTMatx.at(iElem) + elCapMatx.at(iElem);
     }
 
     // // TODO: For debug!
