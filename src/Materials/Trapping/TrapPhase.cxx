@@ -68,8 +68,8 @@ T_DMatx TrapPhase::CalcDMatx(const double phi, const double T){
     Matd2x2 mat2 = Matd2x2::Zero();
     
     mat2.setZero();
-    mat2(0, 0) = DLx*phi + (1-phi)*DTx;
-    mat2(1, 1) = DLy*phi + (1-phi)*DTy;
+    mat2(0, 0) = DLx*(1-phi) + phi*DTx;
+    mat2(1, 1) = DLy*(1-phi) + phi*DTy;
 
     DMatx = mat2;
 
