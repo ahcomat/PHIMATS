@@ -436,7 +436,9 @@ void TrappingModel::WriteTotCon(H5IO &H5File_out, const int iStep){
     PetscScalar sum;
     VecSum(x, &sum);
 
+    sum = sum/nTotNodes;  // Number averaging
+
     H5File_out.WriteScalar("Time/Step_"+to_string(iStep), dt*(double)iStep);
-    H5File_out.WriteScalar("TotCon/Step_"+to_string(iStep), sum);
+    H5File_out.WriteScalar("AvCon/Step_"+to_string(iStep), sum);
 
 }
