@@ -90,7 +90,15 @@ void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi) 
  * @param mat Material
  * @param T Current temperature
  */
-void CalcElemStiffMatx(BaseTrapping* mat, const double T) override ;
+void CalcElemStiffMatx(BaseTrapping* mat, const double T) override;
+
+/**
+ * @brief Updates the element stiffness matrix for new temperature.
+ * 
+ * @param mat 
+ * @param T 
+ */
+virtual void UpdateElemStiffMatx(BaseTrapping* mat, const double T) override;
 
 /**
  * @brief Evaluates the int-pt flux vector. Also evaluates the flux at the nodes.

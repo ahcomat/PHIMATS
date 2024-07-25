@@ -58,6 +58,14 @@ void ReadElementsData(H5IO &H5File_in, int iSet);
 virtual void CalcElemStiffMatx(BaseTrapping* mat, const double T) = 0;
 
 /**
+ * @brief Updates the element stiffness matrix for new temperature.
+ * 
+ * @param mat 
+ * @param T 
+ */
+virtual void UpdateElemStiffMatx(BaseTrapping* mat, const double T) = 0;
+
+/**
  * @brief Evaluates the gradients of scalar field at the int-points and maps them to the nodes. 
  * 
  * @param nodGrad
