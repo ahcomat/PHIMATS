@@ -50,9 +50,10 @@ const vector<vector<int>>& get_elemConDof() const { return elemConDof; };
 void ReadElementsData(H5IO &H5File_in, int iSet);
 
 /**
- * @brief Calculates the element stiffness matrix.
+ * @brief Calculates the element stiffness and capacitances matrix.
  */
 virtual void CalcElemStiffMatx(BaseTrapping* mat, const double T) = 0;
+
 
 /**
  * @brief Evaluates the gradients of scalar field at the int-points and maps them to the nodes. 
