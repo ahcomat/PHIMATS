@@ -51,8 +51,13 @@ void ReadElementsData(H5IO &H5File_in, int iSet);
 
 /**
  * @brief Calculates the element stiffness and capacitances matrix.
+ * @brief Calculates the element stiffness and capacitances matrix.
+ * 
+ * @param mat 
+ * @param T 
  */
 virtual void CalcElemStiffMatx(BaseTrapping* mat, const double T) = 0;
+
 
 
 /**

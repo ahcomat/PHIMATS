@@ -85,7 +85,7 @@ void CalcCartDeriv(Matd3x2& elNodCoord, Matd2x3& sFuncDeriv, const double& wt, d
 void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi) override;
 
 /**
- * @brief Calculates the element stiffness matrix for all elements.
+ * @brief Calculates the element stiffness and capacitance matrix for all elements.
  * 
  * @param mat Material
  * @param T Current temperature
