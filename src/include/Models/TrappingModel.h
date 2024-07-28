@@ -171,6 +171,14 @@ void WriteOut(vector<BaseElemTrap*> elements, H5IO &H5File_out, const string iSt
  */
 void WriteAvCon(H5IO &H5File_out, const int tStep);
 
+/**
+ * @brief Writes the average exit flux in the x direction.
+ * 
+ * @param H5File_out 
+ * @param tStep 
+ */
+void WriteAvFlux(H5IO &H5File_out, const int tStep);
+
 private:
 
 int nElConDofs;     /// @brief Number of element concentration (temp) dofs.

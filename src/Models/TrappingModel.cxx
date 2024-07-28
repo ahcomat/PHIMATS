@@ -450,3 +450,16 @@ void TrappingModel::WriteAvCon(H5IO &H5File_out, const int iStep){
     H5File_out.WriteScalar("Time/Step_"+to_string(iStep), dt*(double)iStep);
     H5File_out.WriteScalar("AvCon/Step_"+to_string(iStep), sum);
 }
+
+void TrappingModel::WriteAvFlux(H5IO &H5File_out, const int iStep){
+
+    double sum = 0;
+
+    for (int iExNod : ExitNodeIDs){ 
+        sum += std::get<std::vector<ColVecd2>>(nodFlux).at(iExNod)[0];  // x-component
+    }
+
+    sum = sum/nExitNodes;  // Number averaging
+
+    H5File_out.WriteScalar("AvFlux/Step_"+to_string(iStep), sum);
+}
