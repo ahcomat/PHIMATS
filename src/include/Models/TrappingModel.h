@@ -148,7 +148,7 @@ Mat& getK();
 void CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, H5IO &H5File_out, const string iStep);
 
 /**
- * @brief Write nodal values.
+ * @brief Write nodal concentration values.
  * 
  * @param elements 
  * @param H5File_out 
