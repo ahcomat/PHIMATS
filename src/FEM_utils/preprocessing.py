@@ -24,6 +24,8 @@ class PreProcessing:
         
         # Allowed simulation types
         allowedSimulTypes = ["Mechanical", "Transport", "PhaseTrapping", "GBTrapping", "MechTrapping"]
+        
+        self.TransportSimulTypes = ["Transport", "PhaseTrapping", "GBTrapping", "MechTrapping"]
                 
         if not self.SimulType in allowedSimulTypes:
             ErrString = "ERROR! Unknown simulation type < " + self.SimulType + " >\n"
@@ -310,7 +312,7 @@ class PreProcessing:
         for iPreDof in range(self.nPresDofs):
             self.grp_prescribedDOFs.create_dataset("Prescribed_"+str(iPreDof), data=self.presBCs[iPreDof]) 
             
-        if self.SimulType == "Transport":
+        if self.SimulType in self.TransportSimulTypes:
             self.grp_prescribedDOFs = self.fh5.create_group('ExitNodes')
         
             for iENode in range(len(self.exitNods)):
