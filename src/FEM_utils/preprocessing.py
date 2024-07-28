@@ -174,6 +174,9 @@ class PreProcessing:
         
         if self.SimulType == "Transport":
             self.grp_Sim_Params.create_dataset("dt", data=self.dt)
+            
+        if self.SimulType in self.TransportSimulTypes:
+            self.grp_Sim_Params.create_dataset("nExitNodes", data=len(self.exitNods))
         
         # Case Trapping 
         if self.SimulType == "GBTrapping":
