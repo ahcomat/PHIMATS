@@ -442,7 +442,7 @@ void TrappingModel::WriteOut(vector<BaseElemTrap*> elements, H5IO &H5File_out, c
 
 void TrappingModel::WriteAvCon(H5IO &H5File_out, const int iStep){
 
-    PetscScalar sum;
+    PetscScalar sum = 0;
     VecSum(x, &sum);
 
     sum = sum/nTotNodes;  // Number averaging
