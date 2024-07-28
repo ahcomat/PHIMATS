@@ -23,6 +23,13 @@ TransportModel::TransportModel(vector<BaseElemTransport*> elements, H5IO& H5File
     nTotNodes = H5File_in.ReadScalar(dsetName);
     dsetName = "SimulationParameters/dt";
     dt = H5File_in.ReadScalar(dsetName);
+    dsetName = "SimulationParameters/nExitNodes";
+    nExitNodes = H5File_in.ReadScalar(dsetName);
+
+    // Read exit nodes IDs
+    ExitNodeIDs.resize(nExitNodes);
+    dsetName = "ExitNodes";
+    H5File_in.ReadFieldInt1D(dsetName, ExitNodeIDs);
 
     // Set the type and size
     nodCount.resize(nTotNodes);
@@ -298,6 +305,9 @@ Mat& TransportModel::getK(){
 
 void TransportModel::CalcFlux(vector<BaseElemTransport*> elements, vector<BaseTransport*> mats){
 
+    // set zeros
+    setZero_nodFlux();
+    
     VecGetArrayRead(x, &globalBuffer);
 
     for (int iSet=0; iSet<nElementSets; iSet++){
@@ -341,7 +351,28 @@ void TransportModel::WriteOut(vector<BaseElemTransport*> elements, H5IO &H5File_
     } else if (nDim==3) {
         H5File_out.WriteStres("Flux/Step_"+iStep, nTotNodes, 3, nodFlux);
     }
+}
 
-    // set zeros
-    setZero_nodFlux();
+void TransportModel::WriteAvCon(H5IO &H5File_out, const int iStep){
+
+    PetscScalar sum = 0;
+    VecSum(x, &sum);
+
+    sum = sum/nTotNodes;  // Number averaging
+
+    H5File_out.WriteScalar("Time/Step_"+to_string(iStep), dt*(double)iStep);
+    H5File_out.WriteScalar("AvCon/Step_"+to_string(iStep), sum);
+}
+
+void TransportModel::WriteAvFlux(H5IO &H5File_out, const int iStep){
+
+    double sum = 0;
+
+    for (int iExNod : ExitNodeIDs){ 
+        sum += std::get<std::vector<ColVecd2>>(nodFlux).at(iExNod)[0];  // x-component
+    }
+
+    sum = sum/nExitNodes;  // Number averaging
+
+    H5File_out.WriteScalar("AvFlux/Step_"+to_string(iStep), sum);
 }

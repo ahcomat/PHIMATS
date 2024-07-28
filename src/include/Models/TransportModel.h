@@ -110,7 +110,23 @@ Mat& getK();
 void CalcFlux(vector<BaseElemTransport*> elements, vector<BaseTransport*> mats);
 
 /**
- * @brief Write nodal values.
+ * @brief Write the total concentration of the time step
+ * 
+ * @param H5File_out 
+ * @param tStep 
+ */
+void WriteAvCon(H5IO &H5File_out, const int tStep);
+
+/**
+ * @brief Writes the average exit flux in the x direction.
+ * 
+ * @param H5File_out 
+ * @param tStep 
+ */
+void WriteAvFlux(H5IO &H5File_out, const int tStep);
+
+/**
+ * @brief Write nodal values of concentration.
  * 
  * @param elements 
  * @param H5File_out 
@@ -121,9 +137,12 @@ private:
 
 int nElConDofs;     /// @brief Number of element concentration (temp) dofs.
 double dt;          /// @brief Time increment.
+int nExitNodes;     /// @brief Number of exit nodes.
 
-T_nodStres nodFlux;        /// @brief Nodal flux.
+T_nodStres nodFlux;          /// @brief Nodal flux.
 vector<double> nodCount;     /// @brief Counter for integration points surrounding nodes.
+
+vector<int> ExitNodeIDs;     /// @brief Exit nodes IDs.
 
 // PETSc ------------------------
 
