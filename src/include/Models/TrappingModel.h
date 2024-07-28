@@ -174,12 +174,15 @@ void WriteTotCon(H5IO &H5File_out, const int tStep);
 private:
 
 int nElConDofs;     /// @brief Number of element concentration (temp) dofs.
+int nExitNodes;     /// @brief Number of exit nodes.
 double dt;          /// @brief Time increment.
 double T0;          /// @brief Initial temperature.
 double T;           /// @brief Current temperature.
 
 T_nodStres nodFlux;          /// @brief Nodal flux.
 vector<double> nodCount;     /// @brief Counter for integration points surrounding nodes.
+
+vector<int> ExitNodeIDs;     /// @brief Exit nodes IDs.
 
 // PETSc ------------------------
 

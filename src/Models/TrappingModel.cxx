@@ -25,6 +25,13 @@ TrappingModel::TrappingModel(vector<BaseElemTrap*> elements, H5IO& H5File_in){
     dsetName = "SimulationParameters/T";
     T = H5File_in.ReadScalar(dsetName);
     T0 = H5File_in.ReadScalar(dsetName);
+    dsetName = "SimulationParameters/nExitNodes";
+    nExitNodes = H5File_in.ReadScalar(dsetName);
+
+    // Read exit nodes IDs
+    ExitNodeIDs.resize(nExitNodes);
+    dsetName = "ExitNodes";
+    H5File_in.ReadFieldInt1D(dsetName, ExitNodeIDs);
 
     // Set the type and size
     nodCount.resize(nTotNodes);
