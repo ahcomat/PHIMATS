@@ -381,7 +381,10 @@ Mat& TrappingModel::getK(){
     return K;
 }
 
-void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, H5IO &H5File_out, const string iStep){
+void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
+
+    // set zeros
+    setZero_nodFlux();
 
     VecGetArrayRead(x, &globalBuffer);
 
@@ -410,6 +413,9 @@ void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping
     // cout << std::get<std::vector<ColVecd3>>(nodStran).at(0) << "\n";
 
     VecRestoreArrayRead(x, &globalBuffer);
+}
+
+void TrappingModel::WriteFlux(H5IO &H5File_out, const string iStep){
 
     // Write to H5 file
     if (nDim==2){
@@ -417,9 +423,6 @@ void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping
     } else if (nDim==3) {
         H5File_out.WriteStres("Flux/Step_"+iStep, nTotNodes, 3, nodFlux);
     }
-
-    // set zeros
-    setZero_nodFlux();
 }
 
 void TrappingModel::WriteOut(vector<BaseElemTrap*> elements, H5IO &H5File_out, const string iStep){
