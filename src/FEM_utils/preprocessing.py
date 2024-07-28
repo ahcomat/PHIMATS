@@ -316,10 +316,7 @@ class PreProcessing:
             self.grp_prescribedDOFs.create_dataset("Prescribed_"+str(iPreDof), data=self.presBCs[iPreDof]) 
             
         if self.SimulType in self.TransportSimulTypes:
-            self.grp_prescribedDOFs = self.fh5.create_group('ExitNodes')
-        
-            for iENode in range(len(self.exitNods)):
-                self.grp_prescribedDOFs.create_dataset("Exit_"+str(iENode), data=iENode)
+            self.fh5.create_dataset("ExitNodes", data=self.exitNods, dtype = np.int64)
 
         #----------------------------------------------------------------------
         # Close hdf5 file
