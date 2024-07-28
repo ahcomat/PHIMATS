@@ -440,7 +440,7 @@ void TrappingModel::WriteOut(vector<BaseElemTrap*> elements, H5IO &H5File_out, c
     VecRestoreArrayRead(x, &globalBuffer);
 }
 
-void TrappingModel::WriteTotCon(H5IO &H5File_out, const int iStep){
+void TrappingModel::WriteAvCon(H5IO &H5File_out, const int iStep){
 
     PetscScalar sum;
     VecSum(x, &sum);

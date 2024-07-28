@@ -169,7 +169,7 @@ void WriteOut(vector<BaseElemTrap*> elements, H5IO &H5File_out, const string iSt
  * @param H5File_out 
  * @param tStep 
  */
-void WriteTotCon(H5IO &H5File_out, const int tStep);
+void WriteAvCon(H5IO &H5File_out, const int tStep);
 
 private:
 
