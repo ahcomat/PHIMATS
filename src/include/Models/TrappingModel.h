@@ -169,7 +169,7 @@ void WriteOut(H5IO &H5File_out, const string iStep);
  * @param H5File_out Ouput hdf5 file handle
  * @param tStep Time step
  */
-void WriteAvCon(vector<BaseElemTrap*> elements, H5IO &H5File_out, const int tStep);
+void WriteAvCon(vector<BaseElemTrap*> elements, H5IO &H5File_out, const int iStep);
 
 /**
  * @brief Writes the average exit flux in the x direction.
