@@ -131,7 +131,7 @@ void WriteAvFlux(H5IO &H5File_out, const int tStep);
  * @param elements 
  * @param H5File_out 
  */
-void WriteOut(vector<BaseElemTransport*> elements, H5IO &H5File_out, const string iStep);
+void WriteOut(H5IO &H5File_out, const string iStep);
 
 private:
 

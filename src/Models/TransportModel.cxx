@@ -338,7 +338,7 @@ void TransportModel::CalcFlux(vector<BaseElemTransport*> elements, vector<BaseTr
     VecRestoreArrayRead(x, &globalBuffer);
 }
 
-void TransportModel::WriteOut(vector<BaseElemTransport*> elements, H5IO &H5File_out, const string iStep){
+void TransportModel::WriteOut(H5IO &H5File_out, const string iStep){
 
     // Displacements
     VecGetArrayRead(x, &globalBuffer);
