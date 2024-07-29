@@ -517,6 +517,30 @@ void Tri3TH::UpdateElemStiffMatx(BaseTrapping* mat, const double T){
     elStiffMatxVariant = &elStiffMatx;
 }
 
+double Tri3TH::CalcAvCon(const double* globalBuffer){
+
+    double IntPtCon, AvCon = 0, TotVol = 0;
+    ColVecd3 dummyCon; 
+
+    // Integration point values.
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        // Get element nodal concentration from the solution vector. 
+        for(int iDof=0; iDof<nElConDofs; iDof++){
+            dummyCon[iDof] = globalBuffer[elemConDof.at(iElem).at(iDof)];
+        }
+
+        // Gauss points
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+            IntPtCon = shapeFunc.at(iGaus)*dummyCon;
+            TotVol += intPtVol.at(iElem).at(iGaus);
+            AvCon += IntPtCon*intPtVol.at(iElem).at(iGaus);
+        }
+    }
+
+    return AvCon/TotVol;
+}
+
 void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount, const double T){
 
     Matd2x2 DMat; 

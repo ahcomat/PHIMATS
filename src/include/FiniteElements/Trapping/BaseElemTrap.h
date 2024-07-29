@@ -66,6 +66,14 @@ virtual void CalcElemStiffMatx(BaseTrapping* mat, const double T) = 0;
 virtual void UpdateElemStiffMatx(BaseTrapping* mat, const double T) = 0;
 
 /**
+ * @brief Calculates the volume averaged concentration
+ * 
+ * @param globalBuffer Solution vector
+ * @return double Volume averaged concentration
+ */
+virtual double CalcAvCon(const double* globalBuffer) = 0;
+
+/**
  * @brief Evaluates the gradients of scalar field at the int-points and maps them to the nodes. 
  * 
  * @param nodGrad

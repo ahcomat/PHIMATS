@@ -164,12 +164,12 @@ void WriteFlux(H5IO &H5File_out, const string iStep);
 void WriteOut(H5IO &H5File_out, const string iStep);
 
 /**
- * @brief Write the total concentration of the time step
+ * @brief Write the volume averaged concentration of the time step.
  * 
- * @param H5File_out 
- * @param tStep 
+ * @param H5File_out Ouput hdf5 file handle
+ * @param tStep Time step
  */
-void WriteAvCon(H5IO &H5File_out, const int tStep);
+void WriteAvCon(vector<BaseElemTrap*> elements, H5IO &H5File_out, const int tStep);
 
 /**
  * @brief Writes the average exit flux in the x direction.
