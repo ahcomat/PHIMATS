@@ -220,3 +220,27 @@ void Tri3T::CalcFlux(T_DMatx KMatx, const double* globalBuffer, T_nodStres& nodF
     // // TODO: For debug!
     // cout << elFlux.at(0).at(0) << "\n\n";
 }
+
+double Tri3T::CalcAvCon(const double* globalBuffer){
+
+    double IntPtCon, AvCon = 0, TotVol = 0;
+    ColVecd3 dummyCon; 
+
+    // Integration point values.
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        // Get element nodal concentration from the solution vector. 
+        for(int iDof=0; iDof<nElConDofs; iDof++){
+            dummyCon[iDof] = globalBuffer[elemConDof.at(iElem).at(iDof)];
+        }
+
+        // Gauss points
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+            IntPtCon = shapeFunc.at(iGaus)*dummyCon;
+            TotVol += intPtVol.at(iElem).at(iGaus);
+            AvCon += IntPtCon*intPtVol.at(iElem).at(iGaus);
+        }
+    }
+
+    return AvCon/TotVol;
+}

@@ -353,15 +353,18 @@ void TransportModel::WriteOut(H5IO &H5File_out, const string iStep){
     }
 }
 
-void TransportModel::WriteAvCon(H5IO &H5File_out, const int iStep){
+void TransportModel::WriteAvCon(vector<BaseElemTransport*> elements, H5IO &H5File_out, const int iStep){
 
-    PetscScalar sum = 0;
-    VecSum(x, &sum);
+    double AvCon = 0;
 
-    sum = sum/nTotNodes;  // Number averaging
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        VecGetArrayRead(x, &globalBuffer);
+        AvCon += elements[iSet]->CalcAvCon(globalBuffer);
+        VecRestoreArrayRead(x, &globalBuffer);
+    }
 
     H5File_out.WriteScalar("Time/Step_"+to_string(iStep), dt*(double)iStep);
-    H5File_out.WriteScalar("AvCon/Step_"+to_string(iStep), sum);
+    H5File_out.WriteScalar("AvCon/Step_"+to_string(iStep), AvCon);
 }
 
 void TransportModel::WriteAvFlux(H5IO &H5File_out, const int iStep){

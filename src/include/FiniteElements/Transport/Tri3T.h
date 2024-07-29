@@ -91,6 +91,14 @@ void CalcElemStiffMatx(T_DMatx DMatx, double s) override ;
  */
 void CalcFlux(T_DMatx KMatx, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount) override;
 
+/**
+ * @brief Calculates the volume averaged concentration
+ * 
+ * @param globalBuffer Solution vector
+ * @return double Volume averaged concentration
+ */
+double CalcAvCon(const double* globalBuffer) override;
+
 private:
 
 const vector<double> wts{1.0/6.0, 1.0/6.0, 1.0/6};  /// @brief Weights of the gauss points [nElGauss].

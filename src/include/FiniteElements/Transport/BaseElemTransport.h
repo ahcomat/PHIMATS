@@ -70,6 +70,14 @@ const T_ElStiffMatx& getElCapMatx() const { return elCapMatxVariant; }
  */
 virtual void CalcFlux(T_DMatx KMatx, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount) = 0;
 
+/**
+ * @brief Calculates the volume averaged concentration
+ * 
+ * @param globalBuffer Solution vector
+ * @return double Volume averaged concentration
+ */
+virtual double CalcAvCon(const double* globalBuffer) = 0;
+
 protected:
 
 const int nElDim;              /// @brief Spatial dimensions of the element.

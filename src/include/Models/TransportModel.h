@@ -115,7 +115,7 @@ void CalcFlux(vector<BaseElemTransport*> elements, vector<BaseTransport*> mats);
  * @param H5File_out 
  * @param tStep 
  */
-void WriteAvCon(H5IO &H5File_out, const int tStep);
+void WriteAvCon(vector<BaseElemTransport*> elements, H5IO &H5File_out, const int iStep);
 
 /**
  * @brief Writes the average exit flux in the x direction.
