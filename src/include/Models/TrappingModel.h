@@ -177,7 +177,7 @@ void WriteAvCon(vector<BaseElemTrap*> elements, H5IO &H5File_out, const int tSte
  * @param H5File_out 
  * @param tStep 
  */
-void WriteAvFlux(H5IO &H5File_out, const int tStep);
+void WriteExitFlux(H5IO &H5File_out, const int tStep);
 
 private:
 

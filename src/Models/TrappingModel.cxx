@@ -453,7 +453,7 @@ void TrappingModel::WriteAvCon(vector<BaseElemTrap*> elements, H5IO &H5File_out,
     H5File_out.WriteScalar("AvCon/Step_"+to_string(iStep), AvCon);
 }
 
-void TrappingModel::WriteAvFlux(H5IO &H5File_out, const int iStep){
+void TrappingModel::WriteExitFlux(H5IO &H5File_out, const int iStep){
 
     double sum = 0;
 
