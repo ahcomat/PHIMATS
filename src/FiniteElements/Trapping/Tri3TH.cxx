@@ -549,6 +549,7 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
     double IntPtCon;   // Integration point concnetration
     ColVecd3 dummyCon; // for element nodal concentration.
     ColVecd3 dummyElNod_gPhi; // for element nodal concentration.
+    int iNode=0;
 
     // Integration point values.
     for(int iElem=0; iElem<nElements; iElem++){
@@ -573,14 +574,23 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
                                          + TMat*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi;
 
             // elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon;
-
             // elFlux.at(iElem).at(iGaus) = TMat*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi;
 
+            // // Nodal values
+            // for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
+            //     std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus);
+            //     nodCount.at(*iNod2) += 1;
+            // }
+
             // Nodal values
+            iNode = 0;
             for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
-                std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus);
-                nodCount.at(*iNod2) += 1;
+
+                std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                iNode += 1;
             }
+
         }
     }
 
