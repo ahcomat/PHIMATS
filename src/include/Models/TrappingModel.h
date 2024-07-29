@@ -161,7 +161,7 @@ void WriteFlux(H5IO &H5File_out, const string iStep);
  * @param elements 
  * @param H5File_out 
  */
-void WriteOut(vector<BaseElemTrap*> elements, H5IO &H5File_out, const string iStep);
+void WriteOut(H5IO &H5File_out, const string iStep);
 
 /**
  * @brief Write the total concentration of the time step

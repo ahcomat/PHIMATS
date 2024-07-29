@@ -413,7 +413,6 @@ void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping
             
             std::get<std::vector<ColVecd3>>(nodFlux).at(iNod) = std::get<std::vector<ColVecd3>>(nodFlux).at(iNod)/nodCount.at(iNod);
         }
-
     }
 
     // TODO: For debug!
@@ -432,7 +431,7 @@ void TrappingModel::WriteFlux(H5IO &H5File_out, const string iStep){
     }
 }
 
-void TrappingModel::WriteOut(vector<BaseElemTrap*> elements, H5IO &H5File_out, const string iStep){
+void TrappingModel::WriteOut(H5IO &H5File_out, const string iStep){
 
     // Concentration
     VecGetArrayRead(x, &globalBuffer);
