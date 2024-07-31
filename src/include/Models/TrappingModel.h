@@ -143,6 +143,8 @@ Vec& getX();
  */
 Mat& getK();
 
+// void WriteInPtCoords(vector<BaseElemTrap*> elements, H5IO &H5File_out);
+
 /**
  * @brief Calculates the flux. Also Calculates the maps the flux to nodal values.
  * 

@@ -376,7 +376,6 @@ void TrappingModel::ReadInitialCon(H5IO& H5File, const int iStep){
     VecAssemblyBegin(x);  VecAssemblyEnd(x);
 }
 
-
 void TrappingModel::InitializeDirichBC(H5IO& H5File_in){
 
     // Read Dirichlet BCs
