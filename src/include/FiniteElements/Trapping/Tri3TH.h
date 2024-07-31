@@ -131,7 +131,7 @@ vector<Matd3x2> elemNodCoord;   /// @brief Node Coordinates [nElDim, nElNodes].
 
 vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
 
-vector<vector<ColVecd2>> elFlux;   /// @brief Int-pt flux [nElStres]
+vector<vector<ColVecd2>> elFlux;         /// @brief Int-pt flux [nElStres]
 
 vector<vector<double>> el_gPhi;          /// @brief Int-pt phi [nElStres]. 
 
@@ -140,17 +140,14 @@ vector<vector<double>> el_gPhiMM;        /// @brief Int-pt gPhiMM [nElStres].
 vector<vector<double>> el_gPhifM;        /// @brief Int-pt gPhifM [nElStres]. 
 vector<vector<double>> el_gPhiff;        /// @brief Int-pt gPhiff [nElStres]. 
 
-vector<double> nod_gPhi;  /// @brief nodal values of phi [nTotNodes]
+vector<double> nod_gPhi;        /// @brief nodal values of phi [nTotNodes]
 
 vector<double> nod_martensite;  /// @brief nodal values of martensite [nTotNodes]
 vector<double> nod_gPhiMM;      /// @brief nodal values of gPhiMM [nTotNodes]
 vector<double> nod_gPhifM;      /// @brief nodal values of gPhifM [nTotNodes]
 vector<double> nod_gPhiff;      /// @brief nodal values of gPhiff [nTotNodes]
 
-
 vector<vector<Matd2x3>> BMat;   /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
-
-vector<vector<double>> intPtVol;    /// @brief Int-pt volume.       
 
 vector<Matd3x3> elStiffMatx;    /// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].    
 vector<Matd3x3> elCapMatx;      /// @brief Element capacitance matrix [nElDispDofs, nElDispDofs].   
