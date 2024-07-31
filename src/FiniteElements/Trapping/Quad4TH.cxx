@@ -169,6 +169,10 @@ void Quad4TH::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const doub
     cartDeriv = jacMat.inverse()*sFuncDeriv;
 }
 
+void Quad4TH::getInPtCoords(T_nodStres& glIntPtCoords){
+    
+}
+
 void Quad4TH::CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi){
 
     // Int-pt gradients of phi.
@@ -272,7 +276,7 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
 }
 
-void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount, const double T){
+void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T){
 
     // ColVecd4 dummyCon; // for element nodal concentration.
     // int iNode;  // counter for the number of nodes.

@@ -85,6 +85,13 @@ void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double& wt, d
 void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi) override;
 
 /**
+ * @brief Get the int-pt coordinates
+ * 
+ * @param glIntPtCoords 
+ */
+virtual void getInPtCoords(T_nodStres& glIntPtCoords) override;
+
+/**
  * @brief Calculates the element stiffness matrix for all elements.
  * 
  * @param DMatx 
@@ -99,7 +106,7 @@ void CalcElemStiffMatx(BaseTrapping* mat, const double T) override ;
  * @param nodFlux 
  * @param nodCount 
  */
-void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount, const double T) override;
+void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T) override;
 
 private:
 
