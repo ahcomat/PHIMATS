@@ -29,6 +29,13 @@ BaseElemTrap(int nElDim, int nElNodes, int nElConDofs, int nElGauss)
 int get_nDim() const { return nElDim; };
 
 /**
+ * @brief Get the number of element Gauss points. 
+ * 
+ * @return int 
+ */
+int get_nGauss() const { return nElGauss; };
+
+/**
  * @brief Get the number of element con DOFs. Same as number of nodes. 
  * 
  * @return int 
