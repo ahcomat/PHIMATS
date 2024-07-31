@@ -251,18 +251,13 @@ void Tri3TH::getInPtCoords(T_nodStres& glIntPtCoords){
 
     for(int iElem=0; iElem<nElements; iElem++){
 
-        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss)[0] =  gaussPtCart.at(iElem).at(0)[0];
-        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss)[1] =  gaussPtCart.at(iElem).at(0)[1];
-        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss)[2] =  0;
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+1)[0] =  gaussPtCart.at(iElem).at(1)[0];
-        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+1)[1] =  gaussPtCart.at(iElem).at(1)[1];
-        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+1)[2] =  0;
+            std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+iGaus)[0] =  gaussPtCart.at(iElem).at(iGaus)[0];
+            std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+iGaus)[1] =  gaussPtCart.at(iElem).at(iGaus)[1];
+            std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+iGaus)[2] =  0;
 
-        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+2)[0] =  gaussPtCart.at(iElem).at(2)[0];
-        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+2)[1] =  gaussPtCart.at(iElem).at(2)[1];
-        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+2)[2] =  0;
-
+        }
     }
 }
 
