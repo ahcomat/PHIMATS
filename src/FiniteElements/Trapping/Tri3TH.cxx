@@ -260,7 +260,7 @@ void Tri3TH::getInPtCoords(T_nodStres& glIntPtCoords){
         std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+1)[2] =  0;
 
         std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+2)[0] =  gaussPtCart.at(iElem).at(2)[0];
-        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+2)[1] =  gaussPtCart.at(iElem).at(1)[1];
+        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+2)[1] =  gaussPtCart.at(iElem).at(2)[1];
         std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+2)[2] =  0;
 
     }
