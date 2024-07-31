@@ -110,7 +110,7 @@ const T_ElStiffMatx& getElCapMatx() const { return elCapMatxVariant; }
  * @param nodFlux 
  * @param nodCount 
  */
-virtual void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount, const double T) = 0;
+virtual void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T) = 0;
 
 protected:
 
