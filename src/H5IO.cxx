@@ -225,27 +225,28 @@ void H5IO::WriteStres(string dsetName, const int nNodes, const int nStres, const
     const char* fileName = this->H5FileName.c_str();
     const char* dataSetName = dsetName.c_str();
 
-    double BufferField [nNodes][nStres];
+    std::vector<double> BufferField(nNodes * nStres);
 
     if(nStres==2){
 
         for (int i=0; i<nNodes; i++){
             for (int j=0; j<nStres; j++){
-                BufferField[i][j] = std::get<std::vector<ColVecd2>>(Array).at(i)(j);
+                BufferField[i*nStres + j] = std::get<std::vector<ColVecd2>>(Array).at(i)(j);
             }
         }
     } else if(nStres==3){
 
         for (int i=0; i<nNodes; i++){
             for (int j=0; j<nStres; j++){
-                BufferField[i][j] = std::get<std::vector<ColVecd3>>(Array).at(i)(j);
+                BufferField[i*nStres + j] = std::get<std::vector<ColVecd3>>(Array).at(i)(j);
             }
         }
+
     } else if(nStres==6) {
 
         for (int i=0; i<nNodes; i++){
             for (int j=0; j<nStres; j++){
-                BufferField[i][j] = std::get<std::vector<ColVecd6>>(Array).at(i)(j);
+                BufferField[i*nStres + j] = std::get<std::vector<ColVecd6>>(Array).at(i)(j);
             }
         }        
     }
@@ -258,9 +259,10 @@ void H5IO::WriteStres(string dsetName, const int nNodes, const int nStres, const
                     H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 
     status = H5Dwrite(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL,
-             H5P_DEFAULT, BufferField);
+             H5P_DEFAULT, BufferField.data());
 
     status = H5Dclose(dataset_id);
     status = H5Sclose(dataspace_id);
     status = H5Fclose(file_id);
+
 }
