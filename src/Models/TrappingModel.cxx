@@ -28,6 +28,10 @@ TrappingModel::TrappingModel(vector<BaseElemTrap*> elements, H5IO& H5File_in){
     dsetName = "SimulationParameters/nExitNodes";
     nExitNodes = H5File_in.ReadScalar(dsetName);
 
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        nTotGuasPts += elements[iSet]->get_nGauss()*elements[iSet]->get_nElements();
+    }
+
     // Read exit nodes IDs
     ExitNodeIDs.resize(nExitNodes);
     dsetName = "ExitNodes";
@@ -440,19 +444,13 @@ Mat& TrappingModel::getK(){
 
 void TrappingModel::WriteInPtCoords(vector<BaseElemTrap*> elements, H5IO &H5File_out){
 
-    int  nTotGuasPts = 0;
-
-    for (int iSet=0; iSet<nElementSets; iSet++){
-        nTotGuasPts += elements[iSet]->get_nGauss()*elements[iSet]->get_nElements();
-    }
-
     T_nodStres glIntPtCoords; // global integration points
     glIntPtCoords = vector<ColVecd3>(nTotGuasPts);
 
     for (int iSet=0; iSet<nElementSets; iSet++){
         elements[iSet]->getInPtCoords(glIntPtCoords);
     }
-    
+
     H5File_out.WriteStres("IntPtCoords", nTotGuasPts, 3, glIntPtCoords);
 }
 
