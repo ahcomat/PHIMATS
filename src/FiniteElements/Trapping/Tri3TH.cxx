@@ -247,6 +247,25 @@ void Tri3TH::CalcCartDeriv(Matd3x2& elNodCoord, Matd2x3& sFuncDeriv, const doubl
     cartDeriv = jacMat.inverse()*sFuncDeriv;
 }
 
+void Tri3TH::getInPtCoords(T_nodStres& glIntPtCoords){
+
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss)[0] =  gaussPtCart.at(iElem).at(0)[0];
+        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss)[1] =  gaussPtCart.at(iElem).at(0)[1];
+        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss)[2] =  0;
+
+        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+1)[0] =  gaussPtCart.at(iElem).at(1)[0];
+        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+1)[1] =  gaussPtCart.at(iElem).at(1)[1];
+        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+1)[2] =  0;
+
+        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+2)[0] =  gaussPtCart.at(iElem).at(2)[0];
+        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+2)[1] =  gaussPtCart.at(iElem).at(1)[1];
+        std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+2)[2] =  0;
+
+    }
+}
+
 void Tri3TH::CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi){
 
     // Int-pt gradients of phi.

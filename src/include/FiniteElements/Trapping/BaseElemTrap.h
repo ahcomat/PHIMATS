@@ -56,6 +56,8 @@ const vector<vector<int>>& get_elemConDof() const { return elemConDof; };
  */
 void ReadElementsData(H5IO &H5File_in, int iSet);
 
+virtual void getInPtCoords(T_nodStres& glIntPtCoords) = 0;
+
 /**
  * @brief Calculates the element stiffness and capacitances matrix.
  * 

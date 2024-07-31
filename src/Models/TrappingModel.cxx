@@ -438,6 +438,24 @@ Mat& TrappingModel::getK(){
     return K;
 }
 
+void TrappingModel::WriteInPtCoords(vector<BaseElemTrap*> elements, H5IO &H5File_out){
+
+    int  nTotGuasPts = 0;
+
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        nTotGuasPts += elements[iSet]->get_nGauss()*elements[iSet]->get_nElements();
+    }
+
+    T_nodStres glIntPtCoords; // global integration points
+    glIntPtCoords = vector<ColVecd3>(nTotGuasPts);
+
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        elements[iSet]->getInPtCoords(glIntPtCoords);
+    }
+    
+    H5File_out.WriteStres("IntPtCoords", nTotGuasPts, 3, glIntPtCoords);
+}
+
 void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
 
     // set zeros
