@@ -56,6 +56,11 @@ const vector<vector<int>>& get_elemConDof() const { return elemConDof; };
  */
 void ReadElementsData(H5IO &H5File_in, int iSet);
 
+/**
+ * @brief Get the int-pt coordinates
+ * 
+ * @param glIntPtCoords 
+ */
 virtual void getInPtCoords(T_nodStres& glIntPtCoords) = 0;
 
 /**
