@@ -112,7 +112,6 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             elFlux.at(iElem).resize(nElGauss);
             el_gPhi.at(iElem).resize(nElGauss);
 
-
             gaussPtCart.at(iElem).resize(nElGauss);
             BMat.at(iElem).resize(nElGauss);
 
