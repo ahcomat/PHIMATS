@@ -123,7 +123,7 @@ double CalcAvCon(const double* globalBuffer) override;
  * @param nodFlux 
  * @param nodCount 
  */
-void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount, const double T) override;
+void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T) override;
 
 private:
 

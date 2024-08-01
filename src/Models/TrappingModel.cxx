@@ -32,6 +32,8 @@ TrappingModel::TrappingModel(vector<BaseElemTrap*> elements, H5IO& H5File_in){
         nTotGuasPts += elements[iSet]->get_nGauss()*elements[iSet]->get_nElements();
     }
 
+    intPtFlux = vector<ColVecd3>(nTotGuasPts);
+
     // Read exit nodes IDs
     ExitNodeIDs.resize(nExitNodes);
     dsetName = "ExitNodes";
@@ -462,9 +464,9 @@ void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping
     VecGetArrayRead(x, &globalBuffer);
 
     for (int iSet=0; iSet<nElementSets; iSet++){
-        elements[iSet]->CalcFlux(mats[iSet], globalBuffer, nodFlux, nodCount, T);
+        elements[iSet]->CalcFlux(mats[iSet], globalBuffer, nodFlux, intPtFlux, nodCount, T);
     }
-
+    
     // Number averaging the nodal values
     if (nDim==2){
 

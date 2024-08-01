@@ -554,7 +554,7 @@ double Tri3TH::CalcAvCon(const double* globalBuffer){
     return AvCon/TotVol;
 }
 
-void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, vector<double>& nodCount, const double T){
+void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T){
 
     Matd2x2 DMat; 
     Matd2x2 TMat; 
@@ -589,6 +589,10 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
             // elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon;
             // elFlux.at(iElem).at(iGaus) = TMat*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi;
 
+            std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[0] =  elFlux.at(iElem).at(iGaus)[0];
+            std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[1] =  elFlux.at(iElem).at(iGaus)[1];
+            std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[2] =  0;
+
             // // Nodal values
             // for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
             //     std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus);
@@ -603,7 +607,6 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
                 nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
                 iNode += 1;
             }
-
         }
     }
 

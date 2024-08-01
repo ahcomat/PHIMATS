@@ -194,6 +194,7 @@ double T;           /// @brief Current temperature.
 
 int  nTotGuasPts = 0;   /// @brief Total number of integration points.
 
+T_nodStres intPtFlux;        /// @brief int-pt flux.
 T_nodStres nodFlux;          /// @brief Nodal flux.
 vector<double> nodCount;     /// @brief Counter for integration points surrounding nodes.
 
