@@ -6,13 +6,28 @@ LinearTransport::LinearTransport(Mat &A){
     // Initialize the solver. Default GMRES. We could use direct solver.
     KSPCreate(PETSC_COMM_WORLD, &ksp);
     KSPSetOperators(ksp, A, A);
+
+    // Direct solver
     KSPSetType(ksp, KSPPREONLY); // Direct solver for linear systems
     KSPSetFromOptions(ksp);
-
     // Set preconditioner
     KSPGetPC(ksp, &pc);
     PCSetType(pc, PCLU); // LU preconditioner for direct solver
     PCSetFromOptions(pc);
+
+    // // Iterative solver
+    // KSPSetType(ksp, KSPGMRES); // Using GMRES iterative solver
+    // KSPSetFromOptions(ksp);
+    // // Set preconditioner
+    // KSPGetPC(ksp, &pc);
+    // PCSetType(pc, PCGAMG); // Algebraic Multigrid
+    // PCSetFromOptions(pc);
+
+    // KSPSetTolerances(ksp, 1e-5, PETSC_DEFAULT, PETSC_DEFAULT, PETSC_DEFAULT);
+    // KSPSetInitialGuessNonzero(ksp, PETSC_TRUE);
+
+    // KSPView(ksp, PETSC_VIEWER_STDOUT_WORLD);
+
 }
 
 LinearTransport::~LinearTransport(){
