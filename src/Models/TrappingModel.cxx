@@ -499,6 +499,11 @@ void TrappingModel::WriteFlux(H5IO &H5File_out, const string iStep){
     }
 }
 
+void TrappingModel::WriteIntPtFlux(H5IO &H5File_out, const string iStep){
+
+    H5File_out.WriteStres("IntPtFlux/Step_"+iStep, nTotGuasPts, 3, intPtFlux);
+}
+
 void TrappingModel::WriteOut(H5IO &H5File_out, const string iStep){
 
     // Concentration

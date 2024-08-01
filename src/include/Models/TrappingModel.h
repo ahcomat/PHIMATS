@@ -160,6 +160,8 @@ void CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
  */
 void WriteFlux(H5IO &H5File_out, const string iStep);
 
+void WriteIntPtFlux(H5IO &H5File_out, const string iStep);
+
 /**
  * @brief Write nodal concentration values.
  * 
