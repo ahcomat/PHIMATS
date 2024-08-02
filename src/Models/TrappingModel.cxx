@@ -111,10 +111,11 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
     VecAssemblyBegin(x); VecAssemblyEnd(x);
 
     // Initialize the coefficient matrices.
-    MatCreate(PETSC_COMM_WORLD, &K);
-    MatSetSizes(K, PETSC_DECIDE, PETSC_DECIDE, nTotDofs, nTotDofs);
-    
-    MatSetType(K, MATSEQAIJ); 
+    MatCreateSeqAIJ(PETSC_COMM_WORLD, nTotDofs, nTotDofs, PETSC_DEFAULT, NULL, &K); // Works better for HPC
+
+    // MatCreate(PETSC_COMM_WORLD, &K);
+    // MatSetSizes(K, PETSC_DECIDE, PETSC_DECIDE, nTotDofs, nTotDofs);
+    // MatSetType(K, MATSEQAIJ); 
 
     MatDuplicate(K, MAT_DO_NOT_COPY_VALUES, &M);
 
@@ -157,7 +158,7 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
     }
 
     // Preallocate the stiffness matrix.
-    MatSeqAIJSetPreallocation(K, PETSC_DEFAULT, nnz); 
+    MatSeqAIJSetPreallocation(K, PETSC_DEFAULT, nnz);
     MatSeqAIJSetPreallocation(M, PETSC_DEFAULT, nnz); 
     PetscFree(nnz);
 
