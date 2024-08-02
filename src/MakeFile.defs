@@ -22,6 +22,7 @@ ifeq "${HOME}" "/home/abdu"
     H5ID = /usr/include/hdf5/serial/
     EIGEN = /home/abdu/eigen/
 else ifeq "${HOME}" "/user/gent/456/vsc45632"
-    H5LD = /usr/lib64/
-    H5ID = /kyukon/home/apps/RHEL8/zen2-ib/software/HDF5/1.12.2-gompi-2022a/include
+    H5LD = ${EBROOTHDF5}/lib
+    H5ID = ${EBROOTHDF5}/include
+    EIGEN = /apps/gent/RHEL8/zen2-ib/software/Eigen/3.4.0-GCCcore-13.2.0/include
 endif
