@@ -64,6 +64,14 @@ void WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_out);
 void UpdateTemp(const int iStep, double HR);
 
 /**
+ * @brief Updates time increment `dt`.
+ * 
+ * @param elements Element sets vector
+ * @param dtNew New time increment
+ */
+void Update_dt(vector<BaseElemTrap*> elements, double dtNew);
+
+/**
  * @brief Write the current temperature.
  * 
  * @param H5File_out Output hdf5 file
@@ -193,6 +201,7 @@ int nExitNodes;     /// @brief Number of exit nodes.
 double dt;          /// @brief Time increment.
 double T0;          /// @brief Initial temperature.
 double T;           /// @brief Current temperature.
+double TotTime = 0;     /// @brief Total time.
 
 int  nTotGuasPts = 0;   /// @brief Total number of integration points.
 

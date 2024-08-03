@@ -226,6 +226,15 @@ void TrappingModel::UpdateTemp(const int iStep, double HR){
     T += dt*HR;
 }
 
+void TrappingModel::Update_dt(vector<BaseElemTrap*> elements, double dtNew){
+
+    dt = dtNew;
+
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        elements[iSet]->set_dt(dt);
+    }
+}
+
 void TrappingModel::WriteTemp(H5IO &H5File_out, const int iStep){
 
     H5File_out.WriteScalar("Temp/Step_"+to_string(iStep), T);
@@ -523,7 +532,9 @@ void TrappingModel::WriteAvCon(vector<BaseElemTrap*> elements, H5IO &H5File_out,
         VecRestoreArrayRead(x, &globalBuffer);
     }
 
-    H5File_out.WriteScalar("Time/Step_"+to_string(iStep), dt*(double)iStep);
+    TotTime += dt;
+
+    H5File_out.WriteScalar("Time/Step_"+to_string(iStep), TotTime);
     H5File_out.WriteScalar("AvCon/Step_"+to_string(iStep), AvCon);
 }
 

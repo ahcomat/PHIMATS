@@ -43,6 +43,13 @@ int get_nGauss() const { return nElGauss; };
 int get_nElConDofs() const { return nElConDofs; };
 
 /**
+ * @brief Set new time increment `dt`.
+ * 
+ * @param dtNew 
+ */
+void set_dt(double dtNew) { dt = dtNew; };
+
+/**
  * @brief Return a const reference to the `elemConDof`. 
  * 
  * @return const vector<vector<int>>& 
