@@ -39,7 +39,7 @@ LinearTransport::~LinearTransport(){
 void LinearTransport::UpdateKSP(Mat &A){
 
     KSPSetOperators(ksp, A, A);
-    KSPSetFromOptions(ksp);
+    // KSPSetFromOptions(ksp);
 
     // // Set preconditioner
     // KSPGetPC(ksp, &pc);
