@@ -484,7 +484,7 @@ class PreProcessing:
 #-----------------------------------------------------------------------------#
 
     @staticmethod
-    def PermeationX(lx, Con_b, mesh):
+    def PermeationX(lx, Con_b, mesh, Discharge=False):
         """
         Applies boundary conditions for permeation simulation to a regular 
         quadrilateral in the x direction. The origin point must be (0,0)
@@ -512,7 +512,10 @@ class PreProcessing:
                 conBCs.append([iNod, Con_b])                    
             # Right nodes
             elif nodCoord[iNod][0] == lx:
-                conBCs.append([iNod, 0])
+                if Discharge:
+                    conBCs.append([iNod, Con_b])
+                else:
+                    conBCs.append([iNod, 0])
                 exitNods.append([iNod])
                 
         return conBCs, exitNods
