@@ -484,7 +484,7 @@ class PreProcessing:
 #-----------------------------------------------------------------------------#
 
     @staticmethod
-    def PermeationX(lx, Con_b, mesh, Discharge=False):
+    def PermeationX(lx, Con_b, mesh, Charging=False):
         """
         Applies boundary conditions for permeation simulation to a regular 
         quadrilateral in the x direction. The origin point must be (0,0)
