@@ -512,7 +512,7 @@ class PreProcessing:
                 conBCs.append([iNod, Con_b])                    
             # Right nodes
             elif nodCoord[iNod][0] == lx:
-                if Discharge:
+                if Charging:
                     conBCs.append([iNod, Con_b])
                 else:
                     conBCs.append([iNod, 0])
