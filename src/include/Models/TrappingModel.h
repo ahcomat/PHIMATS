@@ -86,7 +86,7 @@ void WriteTemp(H5IO &H5File_out, const int iStep);
  * @param mats 
  * @param updateTemp 
  */
-void CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, bool updateTemp=false);
+void CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
 
 /**
  * @brief Assemble the global stiffness matrix.

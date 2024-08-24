@@ -79,14 +79,6 @@ virtual void getInPtCoords(T_nodStres& glIntPtCoords) = 0;
 virtual void CalcElemStiffMatx(BaseTrapping* mat, const double T) = 0;
 
 /**
- * @brief Updates the element stiffness matrix for new temperature.
- * 
- * @param mat 
- * @param T 
- */
-virtual void UpdateElemStiffMatx(BaseTrapping* mat, const double T) = 0;
-
-/**
  * @brief Calculates the volume averaged concentration
  * 
  * @param globalBuffer Solution vector

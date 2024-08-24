@@ -100,14 +100,6 @@ void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi) 
 void CalcElemStiffMatx(BaseTrapping* mat, const double T) override;
 
 /**
- * @brief Updates the element stiffness matrix for new temperature.
- * 
- * @param mat 
- * @param T 
- */
-void UpdateElemStiffMatx(BaseTrapping* mat, const double T) override;
-
-/**
  * @brief Calculates the volume averaged concentration
  * 
  * @param globalBuffer Solution vector

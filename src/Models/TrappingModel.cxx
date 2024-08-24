@@ -240,19 +240,11 @@ void TrappingModel::WriteTemp(H5IO &H5File_out, const int iStep){
     H5File_out.WriteScalar("Temp/Step_"+to_string(iStep), T);
 }
 
-void TrappingModel::CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, bool updateTemp){
-
-    if (!updateTemp) {
+void TrappingModel::CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
 
         for (int iSet=0; iSet<nElementSets; iSet++){
             elements[iSet]->CalcElemStiffMatx(mats[iSet], T);
         }
-    } else {
-
-        for (int iSet=0; iSet<nElementSets; iSet++){
-            elements[iSet]->UpdateElemStiffMatx(mats[iSet], T);
-        }
-    }
 }
 
 void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool updateTemp){
