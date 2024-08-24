@@ -446,55 +446,116 @@ double Tri3TH::CalcAvCon(const double* globalBuffer){
 void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T){
 
     Matd2x2 DMat; 
-    Matd2x2 TMat; 
-    double gPhi;
     double IntPtCon;   // Integration point concnetration
     ColVecd3 dummyCon; // for element nodal concentration.
-    ColVecd3 dummyElNod_gPhi; // for element nodal concentration.
     int iNode=0;
 
-    // Integration point values.
-    for(int iElem=0; iElem<nElements; iElem++){
+    if (Trapping==1){       // GB
+        
+        Matd2x2 TMat; 
+        double gPhi;
+        ColVecd3 dummyElNod_gPhi; // for element nodal concentration.
 
-        // Get element nodal concentration and gPhi from the solution vector. 
-        for(int iDof=0; iDof<nElConDofs; iDof++){
-            dummyCon[iDof] = globalBuffer[elemConDof.at(iElem).at(iDof)];
-            dummyElNod_gPhi[iDof] = nod_gPhi.at(elemConDof.at(iElem).at(iDof));
+        // Integration point values.
+        for(int iElem=0; iElem<nElements; iElem++){
+
+            // Get element nodal concentration and gPhi from the solution vector. 
+            for(int iDof=0; iDof<nElConDofs; iDof++){
+                dummyCon[iDof] = globalBuffer[elemConDof.at(iElem).at(iDof)];
+                dummyElNod_gPhi[iDof] = nod_gPhi.at(elemConDof.at(iElem).at(iDof));
+            }
+
+            // Gauss points
+            for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+                gPhi = el_gPhi.at(iElem).at(iGaus);
+                IntPtCon = shapeFunc.at(iGaus)*dummyCon;
+
+                DMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcDMatx(gPhi, T));
+                TMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcTMatx(gPhi, T));
+
+                // Int pt flux
+                elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon 
+                                            + TMat*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi;
+
+                // elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon;
+                // elFlux.at(iElem).at(iGaus) = TMat*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi;
+
+                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[0] =  elFlux.at(iElem).at(iGaus)[0];
+                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[1] =  elFlux.at(iElem).at(iGaus)[1];
+                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[2] =  0;
+
+                // // Nodal values
+                // for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
+                //     std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus);
+                //     nodCount.at(*iNod2) += 1;
+                // }
+
+                // Nodal values
+                iNode = 0;
+                for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
+
+                    std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                    nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                    iNode += 1;
+                }
+            }
         }
 
-        // Gauss points
-        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+    } else if (Trapping==2){        // Phase
 
-            gPhi = el_gPhi.at(iElem).at(iGaus);
-            IntPtCon = shapeFunc.at(iGaus)*dummyCon;
+        ColVecd3 dummyElNod_martensite, dummyElNod_gPhifM, dummyElNod_gPhiff,
+        dummyElNod_gPhiMM;
+        double martensite, gPhiff, gPhifM, gPhiMM;              
 
-            DMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcDMatx(gPhi, T));
-            TMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcTMatx(gPhi, T));
+        double zeta_M = dynamic_cast<TrapPhase*>(mat)->get_zeta_M();
+        double zeta_fM = dynamic_cast<TrapPhase*>(mat)->get_zeta_fM();
+        double zeta_MM = dynamic_cast<TrapPhase*>(mat)->get_zeta_MM();
+        double zeta_ff = dynamic_cast<TrapPhase*>(mat)->get_zeta_ff();
 
-            // Int pt flux
-            elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon 
-                                         + TMat*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi;
+        // Integration point values.
+        for(int iElem=0; iElem<nElements; iElem++){
 
-            // elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon;
-            // elFlux.at(iElem).at(iGaus) = TMat*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi;
+            // Loop through element nodes to get nodal values.
+            for(int iDof=0; iDof<nElConDofs; iDof++){
+                dummyCon[iDof] = globalBuffer[elemConDof.at(iElem).at(iDof)];
+                dummyElNod_martensite[iDof] = nod_martensite.at(elemConDof.at(iElem).at(iDof));
+                dummyElNod_gPhiff[iDof] = nod_gPhiff.at(elemConDof.at(iElem).at(iDof));
+                dummyElNod_gPhifM[iDof] = nod_gPhifM.at(elemConDof.at(iElem).at(iDof));
+                dummyElNod_gPhiMM[iDof] = nod_gPhiMM.at(elemConDof.at(iElem).at(iDof));
+            }
 
-            std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[0] =  elFlux.at(iElem).at(iGaus)[0];
-            std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[1] =  elFlux.at(iElem).at(iGaus)[1];
-            std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[2] =  0;
+            // Gauss points
+            for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-            // // Nodal values
-            // for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
-            //     std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus);
-            //     nodCount.at(*iNod2) += 1;
-            // }
+                IntPtCon = shapeFunc.at(iGaus)*dummyCon;
 
-            // Nodal values
-            iNode = 0;
-            for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
+                martensite = el_martensite.at(iElem).at(iGaus);  // values of the current int-pt
+                gPhiff = el_gPhiff.at(iElem).at(iGaus);
+                gPhifM = el_gPhifM.at(iElem).at(iGaus);
+                gPhiMM = el_gPhiMM.at(iElem).at(iGaus);
 
-                std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
-                nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
-                iNode += 1;
+                DMat = std::get<Matd2x2>(dynamic_cast<TrapPhase*>(mat)->CalcDMatx(martensite, T));
+
+                // Int pt flux
+                elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon 
+                                             + DMat*zeta_M/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_martensite
+                                             + DMat*zeta_ff/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhiff
+                                             + DMat*zeta_fM/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhifM
+                                             + DMat*zeta_MM/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhiMM;
+
+                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[0] =  elFlux.at(iElem).at(iGaus)[0];
+                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[1] =  elFlux.at(iElem).at(iGaus)[1];
+                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[2] =  0;
+
+                // Nodal values
+                iNode = 0;
+                for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
+
+                    std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                    nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                    iNode += 1;
+                }
             }
         }
     }
