@@ -5,7 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/src/include",
                 "/usr/include/hdf5/serial/",
-                "~/petsc/arch-linux-c-debug/include/",
+                "~/petsc/arch-debug/include/",
                 "~/petsc/include/",
                 "~/eigen/",
                 "/usr/lib/gcc/x86_64-linux-gnu/11/include/"
