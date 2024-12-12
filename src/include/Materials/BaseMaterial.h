@@ -34,7 +34,7 @@ protected:
  */
 const string isotropy; 
 
-const string dims;      /// @brief Dimensions of the material tensor.
+const string dims;      /// @brief Dimensions of the material model.
 
 };
 #endif
