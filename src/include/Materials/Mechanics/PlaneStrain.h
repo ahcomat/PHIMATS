@@ -21,7 +21,7 @@ class PlaneStrain: public BaseMechanics{
 public:
 
 /**
- * @brief Constructor, reads elastic plane-strain parameters from hdf5 file.
+ * @brief Constructor, reads elasticity plane-strain parameters from hdf5 file.
  * 
  * @param H5File Input file.
  * @param matType Material isotropy.

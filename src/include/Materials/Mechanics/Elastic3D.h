@@ -24,7 +24,7 @@ class Elastic3D: public BaseMechanics{
 public:
 
 /**
- * @brief Constructor, reads elastic parameters from hdf5 file.
+ * @brief Constructor, reads elasticity parameters from hdf5 file.
  * 
  * @param H5File Input file.
  * @param matType Material isotropy.
