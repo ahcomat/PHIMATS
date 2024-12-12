@@ -17,7 +17,7 @@ class BaseMechanics: public BaseMaterial{
 
 public:
 
-BaseMechanics(string isoType, string dimensions): BaseMaterial(isoType,dimensions) {};
+BaseMechanics(string isoType, string dimensions): BaseMaterial(isoType, dimensions) {};
 
 /**
  * @brief Returns a stiffness matrix variant.
