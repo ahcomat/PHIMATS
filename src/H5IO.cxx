@@ -9,6 +9,15 @@
 H5IO::H5IO(string H5FName)
     : H5FileName(H5FName) {
 
+    // Attempt to open the file
+    hid_t file_id = H5Fopen(H5FileName.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
+
+    if (file_id < 0) {
+        throw std::runtime_error("Error: Unable to open file " + H5FileName);
+    } 
+    // Close the file after the check
+    H5Fclose(file_id);
+
 }
 
 H5IO::~H5IO(){
@@ -19,56 +28,113 @@ H5IO::~H5IO(){
 
 double H5IO::ReadScalar(const string& dsetName){
 
-    hid_t  file_id, dataset_id;
+    hid_t  file_id = -1, dataset_id = -1;
     herr_t status;
 
-    // Buffer for getting data.
-    double Var[1];
+    // Buffer for data.
+    double value = 0.0;
 
-    const char* fileName = this->H5FileName.c_str();
-    const char* dataSetName = dsetName.c_str();
-    
-    // Open existing file
-    file_id = H5Fopen(fileName, H5F_ACC_RDWR, H5P_DEFAULT);
-    // Open existing data set
-    dataset_id = H5Dopen2(file_id, dataSetName, H5P_DEFAULT);
+    try {
+        // Open the file
+        file_id = H5Fopen(H5FileName.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
+        if (file_id < 0) throw std::runtime_error("Failed to open file "+ H5FileName);
 
-    // Read dataset buffer
-    status = H5Dread(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, Var);
-    // Close dataset
-    status = H5Dclose(dataset_id);
-    // Close file
-    status = H5Fclose(file_id);
+        // Open the dataset
+        dataset_id = H5Dopen2(file_id, dsetName.c_str(), H5P_DEFAULT);
+        if (dataset_id < 0) throw std::runtime_error("Failed to open dataset " + dsetName);
 
-    return Var[0];
+        // Read the data
+        if (H5Dread(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, &value) < 0)
+            throw std::runtime_error("Failed to read dataset " + dsetName);
+
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+
+    // Ensure resources are released
+    if (dataset_id >= 0) H5Dclose(dataset_id);
+    if (file_id >= 0) H5Fclose(file_id);
+
+    return value;
 }
 
-void H5IO::WriteScalar(string dsetName, double val){
+void H5IO::WriteScalar(const std::string& dsetName, double val) {
+    hid_t file_id = -1, dataset_id = -1, dataspace_id = -1;
 
-    hid_t  file_id, dataset_id, dataspace_id;
+    try {
+        // Open the HDF5 file
+        file_id = H5Fopen(H5FileName.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
+        if (file_id < 0) throw std::runtime_error("Failed to open file " + H5FileName);
+
+        // Create a simple dataspace
+        hsize_t dims[1] = {1};
+        dataspace_id = H5Screate_simple(1, dims, NULL);
+        if (dataspace_id < 0) throw std::runtime_error("Failed to create dataspace");
+
+        // Create the dataset
+        dataset_id = H5Dcreate2(file_id, dsetName.c_str(), H5T_NATIVE_DOUBLE, dataspace_id, 
+                                H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+        if (dataset_id < 0) throw std::runtime_error("Failed to create dataset " + dsetName);
+
+        // Write data 
+        if (H5Dwrite(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, &val) < 0)
+            throw std::runtime_error("Failed to write data " + dsetName);
+
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+
+    if (dataset_id >= 0) H5Dclose(dataset_id);
+    if (dataspace_id >= 0) H5Sclose(dataspace_id);
+    if (file_id >= 0) H5Fclose(file_id);
+}
+
+string H5IO::ReadString(const string& dsetName) {
+    hid_t file_id = -1, dataset_id = -1, datatype = -1, dataspace = -1;
     herr_t status;
-    hsize_t dims[1];
 
-    const char* fileName = this->H5FileName.c_str();
-    const char* dataSetName = dsetName.c_str();
+    char* buffer = nullptr;
+    string result;
 
-    dims[0] = 1;
-    double Var[1];
-    Var[0] = val;
+    try {
+        file_id = H5Fopen(H5FileName.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
+        if (file_id < 0) throw std::runtime_error("Failed to open HDF5 file " + H5FileName);
 
-    file_id = H5Fopen(fileName, H5F_ACC_RDWR, H5P_DEFAULT);
+        dataset_id = H5Dopen2(file_id, dsetName.c_str(), H5P_DEFAULT);
+        if (dataset_id < 0) throw std::runtime_error("Failed to open dataset " + dsetName);
 
-    dataspace_id = H5Screate_simple(1, dims, NULL);
+        // Get datatype and dataspace
+        datatype = H5Dget_type(dataset_id);
+        dataspace = H5Dget_space(dataset_id);
 
-    dataset_id = H5Dcreate2(file_id, dataSetName, H5T_NATIVE_DOUBLE, dataspace_id, 
-                 H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+        // Ensure the datatype is a string
+        if (H5Tget_class(datatype) != H5T_STRING) {
+            throw std::runtime_error("Dataset is not a string type!");
+        }
 
-    status = H5Dwrite(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL,
-             H5P_DEFAULT, Var);
+        // Get string size and allocate memory
+        size_t str_size = H5Tget_size(datatype);
+        buffer = new char[str_size + 1];
 
-    status = H5Dclose(dataset_id);
-    status = H5Sclose(dataspace_id);
-    status = H5Fclose(file_id);
+        // Read the dataset
+        status = H5Dread(dataset_id, datatype, H5S_ALL, H5S_ALL, H5P_DEFAULT, buffer);
+        if (status < 0) throw std::runtime_error("Failed to read dataset " + dsetName);
+
+        buffer[str_size] = '\0';  // Null-terminate the string
+        result = string(buffer);
+
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+
+    // Cleanup resources
+    if (buffer) delete[] buffer;
+    if (datatype >= 0) H5Tclose(datatype);
+    if (dataspace >= 0) H5Sclose(dataspace);
+    if (dataset_id >= 0) H5Dclose(dataset_id);
+    if (file_id >= 0) H5Fclose(file_id);
+
+    return result;
 }
 
 void H5IO::ReadFieldFloat2D(const string& dsetName, const int row, const int col, vector<vector<double>>& Field){
