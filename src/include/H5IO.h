@@ -24,7 +24,12 @@ class H5IO{
 
 public:
 
-H5IO(std::string H5FileName);
+/**
+ * @brief Constructor. Checks if the file exists. 
+ * 
+ * @param H5FileName 
+ */
+H5IO(string H5FileName);
 ~H5IO();
 
 /**
@@ -32,21 +37,35 @@ H5IO(std::string H5FileName);
  * 
  * @param dsetName  
  */
-double ReadScalar(std::string dsetName);
+double ReadScalar(const string& dsetName);
 
-void WriteScalar(string dsetName, double val);
+/**
+ * @brief Write scalar `val`.
+ * 
+ * @param dsetName 
+ * @param val 
+ */
+void WriteScalar(const string& dsetName, double val);
 
-void ReadFieldFloat2D(string dsetName, const int row, const int col, vector<vector<double>>& Field);
+/**
+ * @brief Reads a string variable. 
+ * 
+ * @param dsetName 
+ * @return string 
+ */
+string ReadString(const string& dsetName);
 
-void ReadFieldInt2D(string dsetName, const int row, const int col, vector<vector<int>>& Field);
+void ReadFieldFloat2D(const string &dsetName, const int row, const int col, vector<vector<double>>& Field);
 
-void ReadFieldInt1D(string dsetName, vector<int>& Field);
+void ReadFieldInt2D(const string& dsetName, const int row, const int col, vector<vector<int>>& Field);
 
-void ReadFieldDoub1D(string dsetName, vector<double>& Field);
+void ReadFieldInt1D(const string& dsetName, vector<int>& Field);
 
-void WriteArray_1D(string dsetName, const int xSize, const double *Array);
+void ReadFieldDoub1D(const string& dsetName, vector<double>& Field);
 
-void WriteStres(string dsetName, const int xSize, const int ySize, const T_nodStres& Array);
+void WriteArray_1D(const string& dsetName, const int xSize, const double *Array);
+
+void WriteStres(const string& dsetName, const int xSize, const int ySize, const T_nodStres& Array);
 
 private:
 

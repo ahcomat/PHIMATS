@@ -6,7 +6,7 @@
 #define at(x) operator[](x)
 #endif
 
-H5IO::H5IO(std::string H5FName)
+H5IO::H5IO(string H5FName)
     : H5FileName(H5FName) {
 
 }
@@ -17,7 +17,7 @@ H5IO::~H5IO(){
     cout << "H5IO exited correctly" << "\n";
 }
 
-double H5IO::ReadScalar(string dsetName){
+double H5IO::ReadScalar(const string& dsetName){
 
     hid_t  file_id, dataset_id;
     herr_t status;
@@ -71,7 +71,7 @@ void H5IO::WriteScalar(string dsetName, double val){
     status = H5Fclose(file_id);
 }
 
-void H5IO::ReadFieldFloat2D(string dsetName, const int row, const int col, vector<vector<double>>& Field){
+void H5IO::ReadFieldFloat2D(const string& dsetName, const int row, const int col, vector<vector<double>>& Field){
 
     hid_t  file_id, dataset_id;
     herr_t status;
@@ -102,7 +102,7 @@ void H5IO::ReadFieldFloat2D(string dsetName, const int row, const int col, vecto
     }
 }
 
-void H5IO::ReadFieldInt2D(string dsetName, const int row, const int col, vector<vector<int>>& Field){
+void H5IO::ReadFieldInt2D(const string& dsetName, const int row, const int col, vector<vector<int>>& Field){
 
     hid_t  file_id, dataset_id;
     herr_t status;
@@ -133,7 +133,7 @@ void H5IO::ReadFieldInt2D(string dsetName, const int row, const int col, vector<
     }
 }
 
-void H5IO::ReadFieldInt1D(string dsetName,  vector<int> &Field){
+void H5IO::ReadFieldInt1D(const string& dsetName,  vector<int> &Field){
 
     hid_t  file_id, dataset_id;
     herr_t status;
@@ -160,7 +160,7 @@ void H5IO::ReadFieldInt1D(string dsetName,  vector<int> &Field){
     }
 }
 
-void H5IO::ReadFieldDoub1D(string dsetName, vector<double>& Field){
+void H5IO::ReadFieldDoub1D(const string& dsetName, vector<double>& Field){
 
     hid_t  file_id, dataset_id;
     herr_t status;
@@ -187,7 +187,7 @@ void H5IO::ReadFieldDoub1D(string dsetName, vector<double>& Field){
     }
 }
 
-void H5IO::WriteArray_1D(std::string dsetName, const int xSize, const double *Array){
+void H5IO::WriteArray_1D(const string& dsetName, const int xSize, const double *Array){
 
     hid_t  file_id, dataset_id, dataspace_id;
     herr_t status;
@@ -213,7 +213,7 @@ void H5IO::WriteArray_1D(std::string dsetName, const int xSize, const double *Ar
     status = H5Fclose(file_id);
 }
 
-void H5IO::WriteStres(string dsetName, const int nNodes, const int nStres, const T_nodStres& Array){
+void H5IO::WriteStres(const string& dsetName, const int nNodes, const int nStres, const T_nodStres& Array){
 
     hid_t  file_id, dataset_id, dataspace_id;
     herr_t status;
