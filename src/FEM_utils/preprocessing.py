@@ -56,6 +56,7 @@ class PreProcessing:
             self.R = inputData["R"]
             self.T = inputData["T"]
             self.sigmaH = inputData["sigmaH"]
+        
         #----------------------------------------------------------------------
         # Check for allowed elements and assign element data (number of nodes,
         # dimension and order) 
@@ -131,6 +132,18 @@ class PreProcessing:
         
         # Read materials dict
         self.Materials = inputData["Materials"]
+        
+        # Check plasticity type
+        HardeningLaws = ["Linear", "PowerLaw"]
+                
+        for mat in self.Materials:
+            if "Plasticity" in self.Materials[mat]:
+                if not self.Materials[mat]["HardeningLaw"] in HardeningLaws:
+                    ErrString = "ERROR! undefined hardening law < " + self.Materials[mat]["HardeningLaw"] + " >\n"
+                    ErrString += "Allowed hardening laws are: \n"
+                    for i in HardeningLaws:
+                        ErrString += i + "\n"
+                    raise ValueError(ErrString)
 
         pass
     
@@ -212,7 +225,20 @@ class PreProcessing:
                 counter+=1
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/Emod", data=self.Materials[mat]["Emod"])
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/nu", data=self.Materials[mat]["nu"])
-                
+
+                # Check plasticity
+                if "Plasticity" in self.Materials[mat]:
+                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plasticity", data=np.bytes_(self.Materials[mat]["Plasticity"]))
+                    if self.Materials[mat]["HardeningLaw"] == "Linear":
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/HardeningLaw", data=np.bytes_(self.Materials[mat]["HardeningLaw"]))
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/sig_y0", data=self.Materials[mat]["sig_y0"])
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/K_hard", data=self.Materials[mat]["K_hard"])
+                    elif self.Materials[mat]["HardeningLaw"] == "PowerLaw":
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/HardeningLaw", data=np.bytes_(self.Materials[mat]["HardeningLaw"]))
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/sig_y0", data=self.Materials[mat]["sig_y0"])
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/K_hard", data=self.Materials[mat]["K_hard"])
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/n_pow", data=self.Materials[mat]["n_pow"])                   
+
         elif self.SimulType == "Transport":
             
             counter = 0
