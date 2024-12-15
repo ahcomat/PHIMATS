@@ -36,8 +36,25 @@ public:
  */
 Elastic(string dimensions, H5IO& H5File, int iSet);
 
+/**
+ * @brief Initialize the isotropic elastic stiffness matrix in Voigt notation
+ * 
+ * @param elasticity 
+ * @param Emod 
+ * @param nu 
+ * @param ho 
+ * @param uo 
+ */
 void InitializeIsoElasticityMatrix(const string& elasticity, double Emod, double nu, double ho, double uo);
 
+/**
+ * @brief Initialize the cubic elastic stiffness matrix in Voigt notation
+ * 
+ * @param elasticity 
+ * @param C11 
+ * @param C12 
+ * @param C44 
+ */
 void InitializeCubicElasticityMatrix(const string& elasticity, double C11, double C12, double C44);
 
 /**
