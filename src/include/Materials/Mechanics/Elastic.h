@@ -66,7 +66,7 @@ T_DMatx getDMatx() const override;
 
 private:
 
-T_DMatx DMatx;      /// @brief The 3D elastic stiffness matrix in Voigt notation.
+T_DMatx DMatx;      /// @brief The elastic stiffness matrix in Voigt notation.
 
 };
 #endif
