@@ -133,13 +133,24 @@ class PreProcessing:
         # Read materials dict
         self.Materials = inputData["Materials"]
         
+        # Check isotropy
+        Isotropy = ["Isotropic", "Cubic"]
+        
         # Check plasticity type
         HardeningLaws = ["Linear", "PowerLaw"]
                 
         for mat in self.Materials:
+            if "Elastic" in self.Materials[mat]:
+                if not self.Materials[mat]["Elastic"]["Isotropy"] in Isotropy:
+                    ErrString = "ERROR! undefined hardening law < " + self.Materials[mat]["Elastic"]["Isotropy"] + " >\n"
+                    ErrString += "Allowed hardening laws are: \n"
+                    for i in HardeningLaws:
+                        ErrString += i + "\n"
+                    raise ValueError(ErrString)
+                
             if "Plastic" in self.Materials[mat]:
                 if not self.Materials[mat]["Plastic"]["HardeningLaw"] in HardeningLaws:
-                    ErrString = "ERROR! undefined hardening law < " + self.Materials[mat]["HardeningLaw"] + " >\n"
+                    ErrString = "ERROR! undefined hardening law < " + self.Materials[mat]["Plastic"]["HardeningLaw"] + " >\n"
                     ErrString += "Allowed hardening laws are: \n"
                     for i in HardeningLaws:
                         ErrString += i + "\n"
@@ -223,11 +234,16 @@ class PreProcessing:
             counter = 0
             for mat in self.Materials:
                 counter+=1
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/Elasticity", data=np.bytes_(self.Materials[mat]['Elastic']["Elasticity"]))
                 if self.Materials[mat]['Elastic']['Isotropy'] == "Isotropic":
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/Elasticity", data=np.bytes_(self.Materials[mat]['Elastic']["Elasticity"]))
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/Isotropy", data=np.bytes_(self.Materials[mat]['Elastic']["Isotropy"]))
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/Emod", data=self.Materials[mat]['Elastic']["Emod"])
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/nu", data=self.Materials[mat]['Elastic']["nu"])
+                elif self.Materials[mat]['Elastic']['Isotropy'] == "Cubic":
+                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/Isotropy", data=np.bytes_(self.Materials[mat]['Elastic']["Isotropy"]))
+                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/C11", data=self.Materials[mat]['Elastic']["C11"])
+                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/C12", data=self.Materials[mat]['Elastic']["C12"])
+                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/C44", data=self.Materials[mat]['Elastic']["C44"])
 
                 # Check plasticity
                 if "Plastic" in self.Materials[mat]:
