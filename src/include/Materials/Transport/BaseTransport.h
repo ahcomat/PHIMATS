@@ -18,7 +18,7 @@ class BaseTransport: public BaseMaterial{
 
 public:
 
-BaseTransport(string isoType, string dimensions): BaseMaterial(isoType, dimensions) {};
+BaseTransport(string dimensions): BaseMaterial(dimensions) {};
 virtual ~BaseTransport() override {};
 
 /**

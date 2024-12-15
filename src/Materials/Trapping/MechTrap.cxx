@@ -4,8 +4,8 @@
 
 using namespace std;
 
-MechTrap::MechTrap(string dimensions, H5IO &H5File, int iSet, string isoType)
-    : BaseTrapping(isoType, dimensions) {
+MechTrap::MechTrap(string dimensions, H5IO& H5File, int iSet)
+    : BaseTrapping(dimensions) {
 
     string dsetName;
 

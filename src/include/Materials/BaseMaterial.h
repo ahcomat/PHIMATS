@@ -19,20 +19,12 @@ class BaseMaterial{
 
 public:
 
-BaseMaterial(string isoType, string dimensions): isotropy(isoType), dims(dimensions) {};
+BaseMaterial(string dimensions): dims(dimensions) {};
 virtual ~BaseMaterial() = default;
 
-string getIsotropy(){ return isotropy; }
 string getDims(){ return dims; }
 
 protected:
-/**
- * @brief Isotropy type of the material. 
- * 
- * Available types are: `Isotropic` and `Cubic`.
- * 
- */
-const string isotropy; 
 
 const string dims;      /// @brief Dimensions of the material model.
 

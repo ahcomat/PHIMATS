@@ -18,7 +18,7 @@ class BaseTrapping: public BaseMaterial{
 
 public:
 
-BaseTrapping(string isoType, string dimensions): BaseMaterial(isoType, dimensions) {};
+BaseTrapping(string dimensions): BaseMaterial(dimensions) {};
 virtual ~BaseTrapping() override {};
 
 protected:

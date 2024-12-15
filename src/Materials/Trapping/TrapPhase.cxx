@@ -5,8 +5,8 @@
 
 using namespace std;
 
-TrapPhase::TrapPhase(string dimensions, H5IO &H5File, int iSet, string isoType)
-    : BaseTrapping(isoType, dimensions) {
+TrapPhase::TrapPhase(string dimensions, H5IO &H5File, int iSet)
+    : BaseTrapping(dimensions) {
 
     string dsetName;
 
