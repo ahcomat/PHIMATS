@@ -58,7 +58,7 @@ void InitializeIsoElasticityMatrix(const string& elasticity, double Emod, double
 void InitializeCubicElasticityMatrix(const string& elasticity, double C11, double C12, double C44);
 
 /**
- * @brief Returns the 3D stiffness matrix in Voigt notation.
+ * @brief Returns the stiffness matrix in Voigt notation.
  * 
  * @return T_DMatx 
  */
