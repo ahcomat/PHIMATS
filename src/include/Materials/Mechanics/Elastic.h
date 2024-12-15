@@ -1,11 +1,16 @@
 /**
- * @file Elastic3D.h
+ * @file Elastic.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief 3D Elastic tensor in Voigt notation.
+ * @brief Elastic tensor in Voigt notation.
  * 
  * The class supports the following isotropies:
  * `Isotropic` 
  * `Cubic`
+ * 
+ * And Elasticities:
+ * `3D`
+ * `PlaneStrain`
+ * 'PlaneStress'
  * 
  * @date 2024-05-20
  * 
@@ -13,13 +18,13 @@
  * 
  */
 
-#ifndef ELASTIC3D_H
-#define ELASTIC3D_H
+#ifndef ELASTIC_H
+#define ELASTIC_H
 
 #include "BaseMechanics.h"
 #include "H5IO.h"
 
-class Elastic3D: public BaseMechanics{
+class Elastic: public BaseMechanics{
 
 public:
 
@@ -29,7 +34,11 @@ public:
  * @param H5File Input file.
  * @param matType Material isotropy.
  */
-Elastic3D(H5IO &H5File, int iSet, string isoType="Isotropic");
+Elastic(string dimensions, H5IO& H5File, int iSet);
+
+void InitializeIsoElasticityMatrix(const string& elasticity, double Emod, double nu, double ho, double uo);
+
+void InitializeCubicElasticityMatrix(const string& elasticity, double C11, double C12, double C44);
 
 /**
  * @brief Returns the 3D stiffness matrix in Voigt notation.
@@ -40,7 +49,7 @@ T_DMatx getDMatx() const override;
 
 private:
 
-Matd6x6 DMatx;      /// @brief The 3D elastic stiffness matrix in Voigt notation.
+T_DMatx DMatx;      /// @brief The 3D elastic stiffness matrix in Voigt notation.
 
 };
 #endif
