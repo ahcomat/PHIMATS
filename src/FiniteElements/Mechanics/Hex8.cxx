@@ -14,9 +14,10 @@
  l -> total displacement dofs.
 */
 
-Hex8::Hex8(H5IO &H5File_in, Nodes &Nodes, int iSet)
+Hex8::Hex8(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel)
     : BaseElemMech(3, 8, 3, 6, 24, 8){ // nElDim, nElNodes, dispDofs, nElStres, nElDispDofs, nElGauss
 
+materialModel = matModel;
     InitShapeFunc();
     ReadElementsData(H5File_in, iSet);
     InitializeElements(Nodes);
@@ -114,6 +115,11 @@ void Hex8::InitializeElements(Nodes &Nodes){
     // Initialize the storages for int-pt stresses/strains
     elStres.resize(nElements); elStran.resize(nElements);      
 
+    if (materialModel=="ElastoPlastic"){
+        elStran_e.resize(nElements); elStran_p.resize(nElements); // Elastic and plastic strain tensors
+        elStres_eq.resize(nElements); elStran_eq.resize(nElements); // Equivalent platic strain/stress
+    }
+
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd8x3 dummyElNodCoord; // For node coordinates.
 
@@ -131,6 +137,14 @@ void Hex8::InitializeElements(Nodes &Nodes){
 
         elStres.at(iElem).resize(nElGauss);
         elStran.at(iElem).resize(nElGauss);
+
+        if (materialModel=="ElastoPlastic"){
+            elStran_e.at(iElem).resize(nElGauss);
+            elStran_p.at(iElem).resize(nElGauss); 
+            elStres_eq.at(iElem).resize(nElGauss);
+            elStran_eq.at(iElem).resize(nElGauss);
+        }
+
         BMat.at(iElem).resize(nElGauss);
         BuMat.at(iElem).resize(nElGauss);
 

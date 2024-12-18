@@ -75,7 +75,7 @@ RowVecd3 getGaussCart(RowVecd8& sFunc, Matd8x3& elCoord);
  */
 void CalcCartDeriv(Matd8x3& elNodCoord, Matd3x8& sFuncDeriv, const double& wt, double& intVol, Matd3x8& cartDeriv, Matd6x24& strainMat);
 
-void CalcElemStiffMatx(T_DMatx DMatx) override ;
+void CalcElemStiffMatx(T_DMatx DMatx) override;
 
 void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) override;
 
@@ -90,6 +90,11 @@ vector<vector<RowVecd3>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss
 
 vector<vector<ColVecd6>> elStran;   /// @brief Int-pt total strains [nElStres].
 vector<vector<ColVecd6>> elStres;   /// @brief Int-pt stresses [nElStres].
+
+vector<vector<ColVecd6>> elStran_e;   /// @brief Int-pt elastic strain [nElStres].
+vector<vector<ColVecd6>> elStran_p;   /// @brief Int-pt plastic strain [nElStres].
+vector<vector<double>> elStran_eq;    /// @brief Int-pt equivalent plastic strain [nElStres].
+vector<vector<double>> elStres_eq;    /// @brief Int-pt equivalent stress (vin Mises) [nElStres].
 
 vector<vector<Matd3x8>> BMat;       /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
 vector<vector<Matd6x24>> BuMat;     /// @brief Strain matrix [nElStres, nElDispDofs].
