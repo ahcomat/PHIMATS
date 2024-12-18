@@ -289,3 +289,24 @@ void Hex8::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_
     // // TODO: For debug!
     // cout << elStran.at(0).at(0) << "\n\n";
 }
+
+void Hex8::CalcElStran(const double* globalBuffer){
+
+    ColVecd24 dummyDisp; // for element nodal displacement.
+
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        // Get element nodal displacements from the solution vector. 
+        for(int iDof=0; iDof<nElDispDofs; iDof++){
+            dummyDisp(iDof) = globalBuffer[elemDispDof.at(iElem).at(iDof)];
+        }
+
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+            elStran.at(iElem).at(iGaus) = BuMat.at(iElem).at(iGaus)*dummyDisp;
+        }
+    }
+}
+
+void Hex8::CalcRetrunMapping(BaseMechanics* mats){
+
+}
