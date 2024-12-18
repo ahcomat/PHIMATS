@@ -1,6 +1,6 @@
 CXX=g++
 
-SETTINGS = OPTIM
+SETTINGS = DEBUG
 
 DEFAULT= -std=c++17 
 DEBUG= -g -Wall -DDEBUG -std=c++17 -pedantic  
