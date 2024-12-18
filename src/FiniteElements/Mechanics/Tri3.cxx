@@ -233,3 +233,8 @@ void Tri3::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_
     // // TODO: For debug!
     // cout << elStran.at(0).at(0) << "\n\n";
 }
+
+void Tri3::CalcElStran(const double* globalBuffer){
+    
+}
+

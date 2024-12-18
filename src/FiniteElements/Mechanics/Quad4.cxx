@@ -248,3 +248,7 @@ void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T
     // // TODO: For debug!
     // cout << elStran.at(0).at(0) << "\n\n";
 }
+
+void Quad4::CalcElStran(const double* globalBuffer){
+    
+}
