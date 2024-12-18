@@ -82,11 +82,6 @@ void CalcCartDeriv(Matd8x3& elNodCoord, Matd3x8& sFuncDeriv, const double& wt, d
  */
 void CalcElemStiffMatx(T_DMatx DMatx) override ;
 
-/**
- * @brief Calculates the Fint, strains and stresses. Also Calculates the stress nodal values 
- *        if `nodStresFlag=true`.
- * 
- */
 void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) override;
 
 private:
@@ -95,10 +90,10 @@ const vector<double> wts{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};  /// @brief We
 
 vector<RowVecd8> shapeFunc;      /// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
 vector<Matd3x8> shapeFuncDeriv;  /// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
-vector<Matd8x3> elemNodCoord;     /// @brief Node Coordinates [nElDim, nElNodes]. 
+vector<Matd8x3> elemNodCoord;          /// @brief Node Coordinates [nElDim, nElNodes]. 
 vector<vector<RowVecd3>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
 
-vector<vector<ColVecd6>> elStran;   /// @brief Int-pt strains [nElStres].
+vector<vector<ColVecd6>> elStran;   /// @brief Int-pt total strains [nElStres].
 vector<vector<ColVecd6>> elStres;   /// @brief Int-pt stresses [nElStres].
 
 vector<vector<Matd3x8>> BMat;       /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
