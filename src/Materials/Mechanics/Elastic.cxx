@@ -119,7 +119,6 @@ void Elastic::InitializeCubicElasticityMatrix(const string& elasticity, double C
     }
 }
 
-
 T_DMatx Elastic::getDMatx() const{
 
     return DMatx_e;
