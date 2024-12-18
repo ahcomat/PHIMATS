@@ -82,6 +82,8 @@ const int nElStres;       /// @brief Stress/strain components.
 const int nElDispDofs;    /// @brief Number of element displacement dofs.
 const int nElGauss;       /// @brief Number of gauss points.
 
+string materialModel;     /// @brief Flag for material model [`Elastic`, `ElasoPlastic`]
+
 vector<vector<int>> elemDispDof;    /// @brief Element displacement dofs.
 
 };
