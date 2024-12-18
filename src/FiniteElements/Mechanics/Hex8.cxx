@@ -17,7 +17,7 @@
 Hex8::Hex8(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel)
     : BaseElemMech(3, 8, 3, 6, 24, 8){ // nElDim, nElNodes, dispDofs, nElStres, nElDispDofs, nElGauss
 
-materialModel = matModel;
+    materialModel = matModel;
     InitShapeFunc();
     ReadElementsData(H5File_in, iSet);
     InitializeElements(Nodes);
