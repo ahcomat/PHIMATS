@@ -252,3 +252,8 @@ void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T
 void Quad4::CalcElStran(const double* globalBuffer){
     
 }
+
+void Quad4::CalcRetrunMapping(vector<BaseMechanics*> mats){
+
+}
+

@@ -238,3 +238,7 @@ void Tri3::CalcElStran(const double* globalBuffer){
     
 }
 
+void Tri3::CalcRetrunMapping(vector<BaseMechanics*> mats){
+
+}
+
