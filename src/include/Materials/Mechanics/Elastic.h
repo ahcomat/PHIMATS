@@ -66,7 +66,18 @@ T_DMatx getDMatx() const override;
 
 private:
 
-T_DMatx DMatx;      /// @brief The stiffness matrix in Voigt notation.
+T_DMatx DMatx_e;      /// @brief The elastic stiffness matrix in Voigt notation.
+
+protected:
+
+/// @brief Isotropic elasticity parameters.
+double uo = 0.0;
+double ho = 0.0;
+
+/// @brief Cubic elasticity parameters.
+double C11 = 0.0;
+double C12 = 0.0;
+double C44 = 0.0;
 
 };
 #endif

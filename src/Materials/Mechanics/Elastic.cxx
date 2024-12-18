@@ -9,28 +9,28 @@ Elastic::Elastic(string dimensions, H5IO& H5File, int iSet)
 
     try {
         string elasticity = H5File.ReadString("Materials/Material_" + to_string(iSet)+"/Elastic/Elasticity");
-        string isotropy2 = H5File.ReadString("Materials/Material_" + to_string(iSet) + "/Elastic/Isotropy");
+        string isotropy = H5File.ReadString("Materials/Material_" + to_string(iSet) + "/Elastic/Isotropy");
 
-        if (isotropy2=="Isotropic"){
+        if (isotropy=="Isotropic"){
 
             double Emod = H5File.ReadScalar("Materials/Material_" + to_string(iSet)+"/Elastic/Emod");
             double nu = H5File.ReadScalar("Materials/Material_" + to_string(iSet)+"/Elastic/nu");
 
-            double ho = Emod*nu/((1+nu)*(1-2*nu));
-            double uo = Emod/(2*(1+nu));
+            ho = Emod*nu/((1+nu)*(1-2*nu));
+            uo = Emod/(2*(1+nu));
 
             InitializeIsoElasticityMatrix(elasticity, Emod, nu, ho, uo);
 
-        } else if (isotropy2=="Cubic"){
+        } else if (isotropy=="Cubic"){
 
-            double C11 = H5File.ReadScalar("Materials/Material_" + to_string(iSet)+"/Elastic/C11");
-            double C12 = H5File.ReadScalar("Materials/Material_" + to_string(iSet)+"/Elastic/C12");
-            double C44 = H5File.ReadScalar("Materials/Material_" + to_string(iSet)+"/Elastic/C44");
+            C11 = H5File.ReadScalar("Materials/Material_" + to_string(iSet)+"/Elastic/C11");
+            C12 = H5File.ReadScalar("Materials/Material_" + to_string(iSet)+"/Elastic/C12");
+            C44 = H5File.ReadScalar("Materials/Material_" + to_string(iSet)+"/Elastic/C44");
 
             InitializeCubicElasticityMatrix(elasticity, C11, C12, C44);
 
         } else {
-            throw std::invalid_argument("Undefined material isotropy: < " + isotropy2 + " >");
+            throw std::invalid_argument("Undefined material isotropy: < " + isotropy + " >");
         }
 
     } catch (const std::exception& e) {
@@ -47,8 +47,8 @@ void Elastic::InitializeIsoElasticityMatrix(const string& elasticity, double Emo
 
     try {
         if (elasticity == "3D") {
-            DMatx = Matd6x6(Matd6x6::Zero());
-            auto& mat = std::get<Matd6x6>(DMatx);
+            DMatx_e = Matd6x6(Matd6x6::Zero());
+            auto& mat = std::get<Matd6x6>(DMatx_e);
 
             mat << ho + 2 * uo, ho, ho, 0, 0, 0,
                    ho, ho + 2 * uo, ho, 0, 0, 0,
@@ -62,8 +62,8 @@ void Elastic::InitializeIsoElasticityMatrix(const string& elasticity, double Emo
             if (dims != "2D")
                 throw std::invalid_argument("Invalid dimension: < " + dims + " > for < " + elasticity + " > elasticity.");
 
-            DMatx = Matd3x3(Matd3x3::Zero());
-            auto& mat = std::get<Matd3x3>(DMatx);
+            DMatx_e = Matd3x3(Matd3x3::Zero());
+            auto& mat = std::get<Matd3x3>(DMatx_e);
 
             double param = Emod * (1 - nu) / ((1 + nu) * (1 - 2 * nu));
 
@@ -91,8 +91,8 @@ void Elastic::InitializeIsoElasticityMatrix(const string& elasticity, double Emo
 void Elastic::InitializeCubicElasticityMatrix(const string& elasticity, double C11, double C12, double C44) {
     try {
         if (elasticity == "3D") {
-            DMatx = Matd6x6(Matd6x6::Zero());
-            auto& mat = std::get<Matd6x6>(DMatx);
+            DMatx_e = Matd6x6(Matd6x6::Zero());
+            auto& mat = std::get<Matd6x6>(DMatx_e);
 
             mat << C11, C12, C12, 0, 0, 0,
                    C12, C11, C12, 0, 0, 0,
@@ -102,8 +102,8 @@ void Elastic::InitializeCubicElasticityMatrix(const string& elasticity, double C
                    0, 0, 0, 0, 0, C44;
 
         } else if (elasticity == "PlaneStrain" || elasticity == "PlaneStress") {
-            DMatx = Matd3x3(Matd3x3::Zero());
-            auto& mat = std::get<Matd3x3>(DMatx);
+            DMatx_e = Matd3x3(Matd3x3::Zero());
+            auto& mat = std::get<Matd3x3>(DMatx_e);
 
             double param = C11 - C12;
             mat << C11, C12, 0,
@@ -122,5 +122,5 @@ void Elastic::InitializeCubicElasticityMatrix(const string& elasticity, double C
 
 T_DMatx Elastic::getDMatx() const{
 
-    return DMatx;
+    return DMatx_e;
 }
