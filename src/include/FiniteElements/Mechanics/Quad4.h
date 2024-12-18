@@ -81,11 +81,6 @@ void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double& wt, d
  */
 void CalcElemStiffMatx(T_DMatx DMatx) override ;
 
-/**
- * @brief Calculates the Fint, strains and stresses. Also Calculates the stress nodal values 
- *        if `nodStresFlag=true`.
- * 
- */
 void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) override;
 
 void CalcElStran(const double* globalBuffer) override;

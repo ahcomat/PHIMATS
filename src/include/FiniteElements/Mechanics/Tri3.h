@@ -76,18 +76,8 @@ RowVecd2 getGaussCart(RowVecd3& sFunc, Matd3x2& elCoord);
  */
 void CalcCartDeriv(Matd3x2& elNodCoord, Matd2x3& sFuncDeriv, const double& wt, double& intVol, Matd2x3& cartDeriv, Matd3x6& strainMat);
 
-/**
- * @brief Calculates the element stiffness matrix for all elements.
- * 
- * @param DMatx 
- */
 void CalcElemStiffMatx(T_DMatx DMatx) override ;
 
-/**
- * @brief Calculates the Fint, strains and stresses. Also Calculates the stress nodal values 
- *        if `nodStresFlag=true`.
- * 
- */
 void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) override;
 
 void CalcElStran(const double* globalBuffer) override;

@@ -20,7 +20,7 @@ class Hex8: public BaseElemMech{
 
 public:
 
-Hex8(H5IO &H5File_in, Nodes &Nodes, int iSet);   
+Hex8(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel = "Elastic");   
 ~Hex8() override ;
 
 /**
@@ -75,11 +75,6 @@ RowVecd3 getGaussCart(RowVecd8& sFunc, Matd8x3& elCoord);
  */
 void CalcCartDeriv(Matd8x3& elNodCoord, Matd3x8& sFuncDeriv, const double& wt, double& intVol, Matd3x8& cartDeriv, Matd6x24& strainMat);
 
-/**
- * @brief Calculates the element stiffness matrix for all elements.
- * 
- * @param DMatx 
- */
 void CalcElemStiffMatx(T_DMatx DMatx) override ;
 
 void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) override;
