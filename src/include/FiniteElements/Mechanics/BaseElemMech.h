@@ -12,6 +12,7 @@
 #define BASEELEMMECH_H
 
 #include "FiniteElements/BaseElements.h"
+#include "Materials/Mechanics/BaseMechanics.h"
 
 class BaseElemMech: public BaseElements{
 
@@ -79,6 +80,13 @@ virtual void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, 
  * @param globalBuffer 
  */
 virtual void CalcElStran(const double* globalBuffer) = 0;
+
+/**
+ * @brief Calls return mapping for plasticity.
+ * 
+ * @param mats 
+ */
+virtual void CalcRetrunMapping(BaseMechanics* mats) = 0;
 
 protected:
 
