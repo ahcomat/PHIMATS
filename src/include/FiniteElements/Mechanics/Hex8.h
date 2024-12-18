@@ -79,6 +79,10 @@ void CalcElemStiffMatx(T_DMatx DMatx) override;
 
 void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) override;
 
+void CalcElStran(const double* globalBuffer) override;
+
+void CalcRetrunMapping(BaseMechanics* mats) override;
+
 private:
 
 const vector<double> wts{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};  /// @brief Weights of the gauss points [nElGauss].
