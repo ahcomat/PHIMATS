@@ -1,7 +1,9 @@
 #include<iostream>
 #include<variant>
 
-#include"Models/MechModel.h"
+#include "Models/MechModel.h"
+#include "Materials/Mechanics/Elastic.h"
+#include "Materials/Mechanics/IsoHard.h"
 
 using namespace std;
 
