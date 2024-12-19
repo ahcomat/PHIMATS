@@ -21,7 +21,7 @@ class Hex8: public BaseElemMech{
 public:
 
 Hex8(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel = "Elastic");   
-~Hex8() override ;
+~Hex8() override;
 
 /**
  * @brief Initializes the data for the shape functions.
