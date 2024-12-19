@@ -8,7 +8,7 @@ Elastic::Elastic(string dimensions, H5IO& H5File, int iSet)
     : BaseMechanics(dimensions) {
 
     try {
-        string elasticity = H5File.ReadString("Materials/Material_" + to_string(iSet)+"/Elastic/Elasticity");
+        analysisType = H5File.ReadString("Materials/Material_" + to_string(iSet)+"/Elastic/AnalysisType");
         string isotropy = H5File.ReadString("Materials/Material_" + to_string(iSet) + "/Elastic/Isotropy");
 
         if (isotropy=="Isotropic"){
@@ -19,7 +19,7 @@ Elastic::Elastic(string dimensions, H5IO& H5File, int iSet)
             ho = Emod*nu/((1+nu)*(1-2*nu));
             uo = Emod/(2*(1+nu));
 
-            InitializeIsoElasticityMatrix(elasticity, Emod, nu, ho, uo);
+            InitializeIsoElasticityMatrix(analysisType, Emod, nu, ho, uo);
 
         } else if (isotropy=="Cubic"){
 
@@ -27,7 +27,7 @@ Elastic::Elastic(string dimensions, H5IO& H5File, int iSet)
             C12 = H5File.ReadScalar("Materials/Material_" + to_string(iSet)+"/Elastic/C12");
             C44 = H5File.ReadScalar("Materials/Material_" + to_string(iSet)+"/Elastic/C44");
 
-            InitializeCubicElasticityMatrix(elasticity, C11, C12, C44);
+            InitializeCubicElasticityMatrix(analysisType, C11, C12, C44);
 
         } else {
             throw std::invalid_argument("Undefined material isotropy: < " + isotropy + " >");
@@ -40,13 +40,13 @@ Elastic::Elastic(string dimensions, H5IO& H5File, int iSet)
     }
 }
 
-void Elastic::InitializeIsoElasticityMatrix(const string& elasticity, double Emod, double nu, double ho, double uo) {
+void Elastic::InitializeIsoElasticityMatrix(const string& analysisType, double Emod, double nu, double ho, double uo) {
 
     if (dims != "3D")
-        throw std::invalid_argument("Invalid dimension: < " + dims + " > for < " + elasticity + " > elasticity.");
+        throw std::invalid_argument("Invalid dimension: < " + dims + " > for < " + analysisType + " > analysis.");
 
     try {
-        if (elasticity == "3D") {
+        if (analysisType == "3D") {
             DMatx_e = Matd6x6(Matd6x6::Zero());
             auto& mat = std::get<Matd6x6>(DMatx_e);
 
@@ -57,29 +57,29 @@ void Elastic::InitializeIsoElasticityMatrix(const string& elasticity, double Emo
                    0, 0, 0, 0, 2 * uo, 0,
                    0, 0, 0, 0, 0, 2 * uo;
 
-        } else if (elasticity == "PlaneStrain" || elasticity == "PlaneStress") {
+        } else if (analysisType == "PlaneStrain" || analysisType == "PlaneStress") {
 
             if (dims != "2D")
-                throw std::invalid_argument("Invalid dimension: < " + dims + " > for < " + elasticity + " > elasticity.");
+                throw std::invalid_argument("Invalid dimension: < " + dims + " > for < " + analysisType + " > analysis.");
 
             DMatx_e = Matd3x3(Matd3x3::Zero());
             auto& mat = std::get<Matd3x3>(DMatx_e);
 
             double param = Emod * (1 - nu) / ((1 + nu) * (1 - 2 * nu));
 
-            if (elasticity == "PlaneStrain") {
+            if (analysisType == "PlaneStrain") {
                 mat << param, param * nu / (1.0 - nu), 0,
                        param * nu / (1.0 - nu), param, 0,
                        0, 0, param * (1.0 - 2.0 * nu) / (2.0 * (1.0 - nu));
 
-            } else if (elasticity == "PlaneStress") {
+            } else if (analysisType == "PlaneStress") {
                 param = Emod / (1.0 - nu * nu);
                 mat << param, param * nu, 0,
                        param * nu, param, 0,
                        0, 0, param * (1.0 - nu) / 2.0;
             }
         } else {
-            throw std::invalid_argument("Undefined material elasticity: < " + elasticity + " >");
+            throw std::invalid_argument("Undefined material analysis type: < " + analysisType + " >");
         }
     } catch (const std::exception& e) {
         cerr << "ERROR: " << e.what() << endl;
@@ -88,9 +88,9 @@ void Elastic::InitializeIsoElasticityMatrix(const string& elasticity, double Emo
     }
 }
 
-void Elastic::InitializeCubicElasticityMatrix(const string& elasticity, double C11, double C12, double C44) {
+void Elastic::InitializeCubicElasticityMatrix(const string& analysisType, double C11, double C12, double C44) {
     try {
-        if (elasticity == "3D") {
+        if (analysisType == "3D") {
             DMatx_e = Matd6x6(Matd6x6::Zero());
             auto& mat = std::get<Matd6x6>(DMatx_e);
 
@@ -101,7 +101,7 @@ void Elastic::InitializeCubicElasticityMatrix(const string& elasticity, double C
                    0, 0, 0, 0, C44, 0,
                    0, 0, 0, 0, 0, C44;
 
-        } else if (elasticity == "PlaneStrain" || elasticity == "PlaneStress") {
+        } else if (analysisType == "PlaneStrain" || analysisType == "PlaneStress") {
             DMatx_e = Matd3x3(Matd3x3::Zero());
             auto& mat = std::get<Matd3x3>(DMatx_e);
 
@@ -110,7 +110,7 @@ void Elastic::InitializeCubicElasticityMatrix(const string& elasticity, double C
                    C12, C11, 0,
                    0, 0, param / 2;
         } else {
-            throw std::invalid_argument("Undefined material elasticity: < " + elasticity + " >");
+            throw std::invalid_argument("Undefined material analysis type: < " + analysisType + " >");
         }
     } catch (const std::exception& e) {
         cerr << "ERROR: " << e.what() << endl;

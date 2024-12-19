@@ -234,7 +234,7 @@ class PreProcessing:
             counter = 0
             for mat in self.Materials:
                 counter+=1
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/Elasticity", data=np.bytes_(self.Materials[mat]['Elastic']["Elasticity"]))
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/AnalysisType", data=np.bytes_(self.Materials[mat]['Elastic']["AnalysisType"]))
                 if self.Materials[mat]['Elastic']['Isotropy'] == "Isotropic":
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/Isotropy", data=np.bytes_(self.Materials[mat]['Elastic']["Isotropy"]))
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/Emod", data=self.Materials[mat]['Elastic']["Emod"])
