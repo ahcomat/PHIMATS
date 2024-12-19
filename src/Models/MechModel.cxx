@@ -170,8 +170,37 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
 
 void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats){
 
-    for (int iSet=0; iSet<nElementSets; iSet++)
-      elements[iSet]->CalcElemStiffMatx(mats[iSet]->getDMatx());
+    try{
+
+        for (int iSet=0; iSet<nElementSets; iSet++){
+            
+            if (typeid(*mats[iSet]) == typeid(Elastic)){ // Becuase some material models inherit from `Elastic`
+
+                Elastic* elasticMat = dynamic_cast<Elastic*>(mats[iSet]);
+                elements[iSet]->CalcElemStiffMatx(elasticMat->getDMatx());
+    
+            } else if (IsoHard* plasticMat = dynamic_cast<IsoHard*>(mats[iSet])){
+
+                // // TODO: For debug!
+                // cout << std::string(typeid(*mats[iSet]).name()) << "\n"; 
+                
+                VecGetArrayRead(x, &globalBuffer);
+                elements[iSet]->CalcElStran(globalBuffer);
+                VecRestoreArrayRead(x, &globalBuffer);
+
+                elements[iSet]->CalcRetrunMapping(mats[iSet]);
+
+            } else {
+
+                throw std::runtime_error("Undefined material model < " + std::string(typeid(*mats[iSet]).name()) + " >");
+            }
+        }
+
+    } catch (const exception& e) {
+        cerr << "ERROR: " << e.what() << endl;
+        cerr << "Terminating!" << endl;
+        exit(EXIT_FAILURE);
+    }
 }
 
 void MechModel::Assemble(vector<BaseElemMech*> elements){
