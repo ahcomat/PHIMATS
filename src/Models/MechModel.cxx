@@ -179,7 +179,7 @@ void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMec
                 Elastic* elasticMat = dynamic_cast<Elastic*>(mats[iSet]);
                 elements[iSet]->CalcElemStiffMatx(elasticMat->getDMatx());
     
-            } else if (IsoHard* plasticMat = dynamic_cast<IsoHard*>(mats[iSet])){
+            } else if (typeid(*mats[iSet]) == typeid(IsoHard)){
 
                 // // TODO: For debug!
                 // cout << std::string(typeid(*mats[iSet]).name()) << "\n"; 
