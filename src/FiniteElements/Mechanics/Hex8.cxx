@@ -1,6 +1,7 @@
 #include<iostream>
 
 #include"FiniteElements/Mechanics/Hex8.h"
+#include"Materials/Mechanics/IsoHard.h"
 
 #ifndef DEBUG
 #define at(x) operator[](x)
