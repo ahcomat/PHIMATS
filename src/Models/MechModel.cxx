@@ -323,6 +323,8 @@ void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*>
         elements[iSet]->CalcStres(mats[iSet]->getDMatx(), globalBuffer, Fint, nodStres, nodStran, nodCount);
     }
 
+    VecRestoreArrayRead(x, &globalBuffer);
+
     // Number averaging the nodal values
     if (nDim==2){
 
@@ -345,7 +347,6 @@ void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     // TODO: For debug!
     // cout << std::get<std::vector<ColVecd3>>(nodStran).at(0) << "\n";
 
-    VecRestoreArrayRead(x, &globalBuffer);
 }
 
 void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const string iStep){
