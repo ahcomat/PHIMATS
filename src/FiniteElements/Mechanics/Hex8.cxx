@@ -144,6 +144,14 @@ void Hex8::InitializeElements(Nodes &Nodes){
             elStran_p.at(iElem).resize(nElGauss); 
             elStres_eq.at(iElem).resize(nElGauss);
             elStran_eq.at(iElem).resize(nElGauss);
+
+            // Initilize to zeros.
+            for (int iGaus=0; iGaus<nElGauss; iGaus++){
+                elStran_e.at(iElem).at(iGaus).setZero();
+                elStran_p.at(iElem).at(iGaus).setZero();
+                elStran_eq.at(iElem).at(iGaus) = 0;
+                elStres_eq.at(iElem).at(iGaus) = 0;
+            }
         }
 
         BMat.at(iElem).resize(nElGauss);
