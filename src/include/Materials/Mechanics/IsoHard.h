@@ -77,6 +77,8 @@ const int max_iter = 10;    /// @brief Maximum number of iterations.
 
 string Platicity;           /// @brief Plasticity type.
 
+double sig_y0;              /// @brief Initial yield stress. 
+
 string HardLaw;             /// @brief Hardening law. 
 double K_hard = 0.0;        /// @brief Strength coefficient.
 double n_pow = 0.0;         /// @brief Strain hardening exponent.

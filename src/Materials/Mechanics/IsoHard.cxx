@@ -10,6 +10,7 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
         // Read plasticity and hardening law
         Platicity = H5File.ReadString("Materials/Material_" + to_string(iSet) + "/Plastic/Plasticity");
         HardLaw = H5File.ReadString("Materials/Material_" + to_string(iSet) + "/Plastic/HardeningLaw");
+        sig_y0 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/sig_y0");
 
         // Handle supported hardening laws
         if (HardLaw == "Linear") {
