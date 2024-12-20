@@ -80,5 +80,8 @@ double C11 = 0.0;
 double C12 = 0.0;
 double C44 = 0.0;
 
+/// @brief Elastic stiffness matrix in Voigt notation.
+T_DMatx DMatx_e;
+
 };
 #endif
