@@ -81,8 +81,7 @@ string HardLaw;             /// @brief Hardening law.
 double K_hard = 0.0;        /// @brief Strength coefficient.
 double n_pow = 0.0;         /// @brief Strain hardening exponent.
 
-T_DMatx DMatx_e;           /// @brief Elastic stiffness matrix in Voigt notation.
-T_DMatx DMatx_ep;           /// @brief The elastioplastic stiffness matrix in Voigt notation.
+T_DMatx DMatx_ep;          /// @brief Elastioplastic stiffness matrix in Voigt notation.
 
 };
 #endif
