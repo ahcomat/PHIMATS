@@ -33,18 +33,18 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
     }
 }
 
-double IsoHard::R_pow(double eps_eq){
+double IsoHard::R_pow(const double& eps_eq){
     return K_hard*pow(eps_eq, n_pow);
 }
 
-double IsoHard::dR_pow(double eps_eq){
+double IsoHard::dR_pow(const double& eps_eq){
 
-    if (eps_eq == 0){eps_eq = 1.0e-12;}
+    double eps = std::max(eps_eq, 1.0e-12);
 
-    return K_hard*n_pow*pow(eps_eq, n_pow-1);
+    return K_hard*n_pow*pow(eps, n_pow-1);
 }
 
-double IsoHard::Mises3D(ColVecd6& sig3D){
+double IsoHard::Mises3D(const ColVecd6& sig3D){
 
     double term = 0.5 * (pow(sig3D(0) - sig3D(1), 2) + 
                          pow(sig3D(1) - sig3D(2), 2) + 

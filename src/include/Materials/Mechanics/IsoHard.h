@@ -35,7 +35,7 @@ IsoHard(string dimensions, H5IO& H5File, int iSet);
  * @param eps_eq 
  * @return double 
  */
-double R_pow(double eps_eq);
+double R_pow(const double& eps_eq);
 
 /**
  * @brief Derivative of power-law hardening
@@ -43,7 +43,7 @@ double R_pow(double eps_eq);
  * @param eps_eq 
  * @return double 
  */
-double dR_pow(double eps_eq);
+double dR_pow(const double& eps_eq);
 
 /**
  * @brief Von Mises stress for 3D models. 
@@ -51,7 +51,7 @@ double dR_pow(double eps_eq);
  * @param sig3D 
  * @return double 
  */
-double Mises3D(ColVecd6& sig3D);
+double Mises3D(const ColVecd6& sig3D);
 
 // /**
 //  * @brief Equivalent plastic strain for 3D models. 
