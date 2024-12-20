@@ -32,6 +32,20 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
         cerr << "Terminating!" << endl;
         exit(EXIT_FAILURE);
     }
+
+    if (dims == "3D"){
+
+        DMatx_ep = Matd6x6(Matd6x6::Zero());
+
+    } else if (dims == "2D") {
+
+         DMatx_ep =  Matd3x3(Matd3x3::Zero());
+
+    } else {
+
+        throw std::invalid_argument("Invalid dimension: < " + dims + " > for < " + analysisType + " > analysis.");
+        
+    }
 }
 
 double IsoHard::R_pow(const double& eps_eq){
