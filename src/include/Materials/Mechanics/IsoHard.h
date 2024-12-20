@@ -72,18 +72,29 @@ T_DMatx getDMatx() const override;
 
 private:
 
-const double tol = 1e-6;    /// @brief Tolerance for return mapping algorithm.
-const int max_iter = 10;    /// @brief Maximum number of iterations. 
+/// @brief Tolerance for return mapping algorithm.
+const double tol = 1e-6;    
 
-string Platicity;           /// @brief Plasticity type.
+/// @brief Maximum number of iterations.
+const int max_iter = 10;     
 
-double sig_y0;              /// @brief Initial yield stress. 
+/// @brief Plasticity type.
+string Platicity;         
 
-string HardLaw;             /// @brief Hardening law. 
-double K_hard = 0.0;        /// @brief Strength coefficient.
-double n_pow = 0.0;         /// @brief Strain hardening exponent.
+/// @brief Initial yield stress. 
+double sig_y0;              
 
-T_DMatx DMatx_ep;          /// @brief Elastioplastic stiffness matrix in Voigt notation.
+ /// @brief Hardening law. 
+string HardLaw;     
+
+/// @brief Strength coefficient.       
+double K_hard = 0.0;      
+
+/// @brief Strain hardening exponent.
+double n_pow = 0.0;         
+
+/// @brief Elastioplastic stiffness matrix in Voigt notation.
+T_DMatx DMatx_ep;          
 
 };
 #endif
