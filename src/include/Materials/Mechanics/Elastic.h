@@ -66,9 +66,6 @@ T_DMatx getDMatx() const override;
 
 private:
 
-/// @brief Elastic stiffness matrix in Voigt notation.
-T_DMatx DMatx_e;      
-
 protected:
 
 /// @brief Analysis type: `3D`, `PlaneStrain` or `PlaneStress`
