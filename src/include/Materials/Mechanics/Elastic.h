@@ -64,7 +64,7 @@ void InitializeCubicElasticityMatrix(const string& elasticity, double C11, doubl
  */
 T_DMatx getDMatx() const override;
 
-private:
+private:      
 
 protected:
 
