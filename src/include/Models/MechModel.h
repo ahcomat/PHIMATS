@@ -36,10 +36,10 @@ MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in);
 ~MechModel();
 
 /**
- * @brief Set nodal quantities `nodStres`, `nodStran` and `nodCount` to zeros.
+ * @brief Set nodal quantities `nodStres`, `nodStran`, `nodCount` and `Fint` to zeros.
  * 
  */
-void setZero_nodStres();
+void setZeroNodVals();
 
 /**
  * @brief Initializes and preallocates the RHS `b`, solution `x` and 

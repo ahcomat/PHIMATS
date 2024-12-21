@@ -37,15 +37,11 @@ MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in){
 
     }
 
-    // Initialize to zeros
-    setZero_nodStres();
-
     // Allocate memory for `Fint`.
     PetscMalloc1(nTotDofs, &Fint);
+
     // Initialize to zeros, otherwise will get garbage memory values.
-    for(int iDof=0; iDof<nTotDofs; iDof++){
-        Fint[iDof] = 0;
-    }
+    setZeroNodVals();
 
     InitializePETSc(elements);
 }
@@ -61,7 +57,11 @@ MechModel::~MechModel(){
     cout << "MechModel elements exited correctly" << "\n";
 }
 
-void MechModel::setZero_nodStres(){
+void MechModel::setZeroNodVals(){
+
+    for (int iDof=0; iDof<nTotDofs; iDof++){
+        Fint[iDof] = 0;
+    }
 
     if (nDim == 2){ // Case 2D model
 
@@ -70,7 +70,7 @@ void MechModel::setZero_nodStres(){
             std::get<std::vector<ColVecd3>>(nodStran).at(iNod).setZero();
             std::get<std::vector<ColVecd3>>(nodStres).at(iNod).setZero();
             nodCount.at(iNod) = 0;
-
+            
         }
 
     } else if (nDim == 3){ // Case 3D
@@ -80,7 +80,7 @@ void MechModel::setZero_nodStres(){
             std::get<std::vector<ColVecd6>>(nodStran).at(iNod).setZero();
             std::get<std::vector<ColVecd6>>(nodStres).at(iNod).setZero();
             nodCount.at(iNod) = 0;
-            
+
         }
     }
 }
@@ -395,6 +395,6 @@ void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const
         H5File_out.WriteStres("Stress/Step_"+iStep, nTotNodes, 6, nodStres);
     }
 
-    // set zeros
-    setZero_nodStres();
+    // Set nodal vlaues to zero
+    setZeroNodVals();
 }
