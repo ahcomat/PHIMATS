@@ -135,9 +135,17 @@ vector<int> nodCount;     /// @brief Counter for integration points surrounding 
 
 double* Fint = NULL;         /// @brief For calculating the internal force vector.
 
-Vec b;   /// @brief RHS vector.
-Vec x;   /// @brief solution vector.
-Mat A;   /// @brief The global coefficient (stiffness) matrix.
+/// @brief RHS vector.
+Vec b; 
+
+/// @brief solution vector.         
+Vec vecDisp;
+
+/// @brief solution vector.         
+Vec vecFint;
+
+/// @brief The global coefficient (stiffness) matrix.
+Mat matA;       
 
 };
 #endif

@@ -50,7 +50,7 @@ MechModel::~MechModel(){
 
     // Deallocate memory.
     PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint);
-    VecDestroy(&b); VecDestroy(&x); MatDestroy(&A);
+    VecDestroy(&b); VecDestroy(&vecDisp); MatDestroy(&matA);
     // Finalize PETSc
     PetscFinalize();
     // Exit message
@@ -99,21 +99,21 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     // Since we are interested in sequential implementation for now.
     VecSetType(b, VECSEQ);
     // VecSetFromOptions(b); =// for the general case.
-    VecDuplicate(b, &x);      // Initialize the solution vector
+    VecDuplicate(b, &vecDisp);      // Initialize the solution vector
 
     VecSet(b, 0.0); // Set all values to zero.
     VecAssemblyBegin(b); VecAssemblyEnd(b);
 
     // Initialize the coefficient matrix.
-    MatCreate(PETSC_COMM_WORLD, &A);
-    MatSetSizes(A, PETSC_DECIDE, PETSC_DECIDE, nTotDofs, nTotDofs);
+    MatCreate(PETSC_COMM_WORLD, &matA);
+    MatSetSizes(matA, PETSC_DECIDE, PETSC_DECIDE, nTotDofs, nTotDofs);
     
     // Since we are interested in only sequential in this implementation. 
-    MatSetType(A, MATSEQAIJ);
-    // MatSetFromOptions(A);  // for command line options, but we dont do it here.
+    MatSetType(matA, MATSEQAIJ);
+    // MatSetFromOptions(matA);  // for command line options, but we dont do it here.
 
     // // MAT_SYMMETRIC: symmetric in terms of both structure and value
-    // MatSetOption(A, MAT_SYMMETRIC, PETSC_TRUE);
+    // MatSetOption(matA, MAT_SYMMETRIC, PETSC_TRUE);
 
     // Preallocate the coefficient matrix.
     vector<vector<int>> gDofs(nTotDofs); // vector to store dofs per row.
@@ -155,12 +155,12 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     }
 
     // Preallocate the stiffness matrix.
-    MatSeqAIJSetPreallocation(A, PETSC_DEFAULT, nnz); 
+    MatSeqAIJSetPreallocation(matA, PETSC_DEFAULT, nnz); 
     PetscFree(nnz);
 
     // // Check the preallocation indirectly by querying the number of nonzeros
     // MatInfo info;
-    // MatGetInfo(A, MAT_LOCAL, &info);
+    // MatGetInfo(matA, MAT_LOCAL, &info);
     // if (info.nz_allocated > 0) {
     //     PetscPrintf(PETSC_COMM_WORLD, "Matrix is preallocated.\n");
     // } else {
@@ -219,7 +219,7 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
         PetscMalloc1(nElDispDofs, &i1);
         PetscMalloc1(nElDispDofs, &j1);
 
-        /* A constatn reference to the std::variant object returned by `elem->getElStiffMatx()`, 
+        /* matA constatn reference to the std::variant object returned by `elem->getElStiffMatx()`, 
         in this case `T_ElStiffMatx` variant that holds a pointer to a vector.
         You cannot modify the object through T_elStiffMatx_ref (because it's a constant reference).
         */
@@ -243,7 +243,7 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
 
                 }
 
-                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+                MatSetValues(matA, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
             }
 
         } else if (std::holds_alternative<vector<Matd6x6>*>(T_elStiffMatx_ref)){  // Tri3 elements.
@@ -259,7 +259,7 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
                     j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
                 }
 
-                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+                MatSetValues(matA, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
             }
 
         } else if (std::holds_alternative<vector<Matd24x24>*>(T_elStiffMatx_ref)){  // Hex8 elements.
@@ -275,7 +275,7 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
                     j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
                 }
 
-                MatSetValues(A, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+                MatSetValues(matA, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
             }
         }
 
@@ -285,11 +285,11 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
     }
 
     // MAT_FINAL_ASSEMBLY for final use, otherwise MAT_FLUSH_ASSEMBLY https://petsc-users.mcs.anl.narkive.com/pppnM7xI/problem-with-preallocating
-    MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
+    MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
 
     // Throw error if unallocated entry is accessed if "PETSC_TRUE".
     // Should be added after the matrix is assembled https://lists.mcs.anl.gov/pipermail/petsc-users/2019-October/039608.html
-    MatSetOption(A, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
+    MatSetOption(matA, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
 }
 
 void MechModel::InitializeDirichBC(H5IO& H5File_in){
@@ -313,8 +313,8 @@ void MechModel::InitializeDirichBC(H5IO& H5File_in){
         // cout << presDofs[iPresDof] << " --> " << presVals[iPresDof] << "\n";
     }
 
-    MatZeroRows(A, nPresDofs, presDofs, 1.0, NULL, NULL);
-    MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
+    MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
+    MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
 }
 
 void MechModel::setDirichBC(){
@@ -335,24 +335,24 @@ Vec& MechModel::getB(){
 
 Vec& MechModel::getX(){
 
-    return x;
+    return vecDisp;
 }
 
 Mat& MechModel::getA(){
 
-    return A;
+    return matA;
 }
 
 void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats){
 
-    VecGetArrayRead(x, &globalBuffer);
+    VecGetArrayRead(vecDisp, &globalBuffer);
 
     for (int iSet=0; iSet<nElementSets; iSet++){
         
         elements[iSet]->CalcStres(mats[iSet]->getDMatx(), globalBuffer, Fint, nodStres, nodStran, nodCount);
     }
 
-    VecRestoreArrayRead(x, &globalBuffer);
+    VecRestoreArrayRead(vecDisp, &globalBuffer);
 
     // Number averaging the nodal values
     if (nDim==2){
@@ -381,9 +381,9 @@ void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*>
 void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const string iStep){
 
     // Displacements
-    VecGetArrayRead(x, &globalBuffer);
+    VecGetArrayRead(vecDisp, &globalBuffer);
     H5File_out.WriteArray_1D("Disp/Step_"+iStep, nTotDofs, globalBuffer);
-    VecRestoreArrayRead(x, &globalBuffer);
+    VecRestoreArrayRead(vecDisp, &globalBuffer);
     H5File_out.WriteArray_1D("Force/Step_"+iStep, nTotDofs, Fint);
 
     // Stresses and strains
