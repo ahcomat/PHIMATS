@@ -113,6 +113,9 @@ Matd3x8 Hex8::CalcShapeFuncDeriv(double xi, double eta, double zeta){
 
 void Hex8::InitializeElements(Nodes &Nodes){
 
+    // Initialize the vector containing each element stiffness matrix.
+    elStiffMatx.resize(nElements); 
+
     // Initialize the storages for int-pt stresses/strains
     elStres.resize(nElements); elStran.resize(nElements);      
 
