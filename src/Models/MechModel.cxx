@@ -37,8 +37,9 @@ MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in){
 
     }
 
-    // Allocate memory for `Fint`.
+    // Allocate memory for `Fint` and `indices`.
     PetscMalloc1(nTotDofs, &Fint);
+    PetscMalloc1(nTotDofs, &indices);
 
     // Initialize to zeros, otherwise will get garbage memory values.
     setZeroNodVals();
@@ -49,8 +50,8 @@ MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in){
 MechModel::~MechModel(){
 
     // Deallocate memory.
-    PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint);
-    VecDestroy(&b); VecDestroy(&vecDisp); MatDestroy(&matA);
+    PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint); PetscFree(indices);
+    VecDestroy(&b); VecDestroy(&vecDisp); VecDestroy(&vecFint); MatDestroy(&matA);
     // Finalize PETSc
     PetscFinalize();
     // Exit message
@@ -92,6 +93,11 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     //     for (int dispDof : elem->get_elemDispDof(0))
     //         cout << dispDof << "\n";
 
+    // Set indices
+    for (int iDof=0; iDof<nTotDofs; iDof++){
+        indices[iDof] = iDof;
+    }
+
     // Initialize the vectors
     VecCreate(PETSC_COMM_WORLD, &b);
     VecSetSizes(b, PETSC_DECIDE, nTotDofs);
@@ -100,8 +106,12 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     VecSetType(b, VECSEQ);
     // VecSetFromOptions(b); =// for the general case.
     VecDuplicate(b, &vecDisp);      // Initialize the solution vector
+    VecDuplicate(b, &vecFint);      // Initialize the Fint vector
 
     VecSet(b, 0.0); // Set all values to zero.
+    VecAssemblyBegin(b); VecAssemblyEnd(b);
+
+    VecSet(vecFint, 0.0); // Set all values to zero.
     VecAssemblyBegin(b); VecAssemblyEnd(b);
 
     // Initialize the coefficient matrix.
