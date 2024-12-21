@@ -42,7 +42,7 @@ MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in);
 void setZeroNodVals();
 
 /**
- * @brief Initializes and preallocates the RHS `b`, solution `x` and 
+ * @brief Initializes and preallocates the RHS `vecFext`, solution `x` and 
  *        stiffness matrix `A.
  * 
  * @param elements 
@@ -71,7 +71,7 @@ void Assemble(vector<BaseElemMech*> elements);
 void InitializeDirichBC(H5IO& H5File_in);
 
 /**
- * @brief Set Dirichlet boundary conditions in the RHS `b` and global stiffness matrix `A`.
+ * @brief Set Dirichlet boundary conditions in the RHS `vecFext` and global stiffness matrix `A`.
  * 
  */
 void setDirichBC();
@@ -137,7 +137,7 @@ double* Fint = NULL;         /// @brief For calculating the internal force vecto
 int* indices = NULL;         /// @brief Indices for `VecSetValues`.
 
 /// @brief RHS vector.
-Vec b; 
+Vec vecFext; 
 
 /// @brief solution vector.         
 Vec vecDisp;

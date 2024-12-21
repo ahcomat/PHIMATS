@@ -51,7 +51,7 @@ MechModel::~MechModel(){
 
     // Deallocate memory.
     PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint); PetscFree(indices);
-    VecDestroy(&b); VecDestroy(&vecDisp); VecDestroy(&vecFint); MatDestroy(&matA);
+    VecDestroy(&vecFext); VecDestroy(&vecDisp); VecDestroy(&vecFint); MatDestroy(&matA);
     // Finalize PETSc
     PetscFinalize();
     // Exit message
@@ -99,20 +99,20 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     }
 
     // Initialize the vectors
-    VecCreate(PETSC_COMM_WORLD, &b);
-    VecSetSizes(b, PETSC_DECIDE, nTotDofs);
+    VecCreate(PETSC_COMM_WORLD, &vecFext);
+    VecSetSizes(vecFext, PETSC_DECIDE, nTotDofs);
 
     // Since we are interested in sequential implementation for now.
-    VecSetType(b, VECSEQ);
-    // VecSetFromOptions(b); =// for the general case.
-    VecDuplicate(b, &vecDisp);      // Initialize the solution vector
-    VecDuplicate(b, &vecFint);      // Initialize the Fint vector
+    VecSetType(vecFext, VECSEQ);
+    // VecSetFromOptions(vecFext); =// for the general case.
+    VecDuplicate(vecFext, &vecDisp);      // Initialize the solution vector
+    VecDuplicate(vecFext, &vecFint);      // Initialize the Fint vector
 
-    VecSet(b, 0.0); // Set all values to zero.
-    VecAssemblyBegin(b); VecAssemblyEnd(b);
+    VecSet(vecFext, 0.0); // Set all values to zero.
+    VecAssemblyBegin(vecFext); VecAssemblyEnd(vecFext);
 
     VecSet(vecFint, 0.0); // Set all values to zero.
-    VecAssemblyBegin(b); VecAssemblyEnd(b);
+    VecAssemblyBegin(vecFint); VecAssemblyEnd(vecFint);
 
     // Initialize the coefficient matrix.
     MatCreate(PETSC_COMM_WORLD, &matA);
@@ -329,8 +329,8 @@ void MechModel::InitializeDirichBC(H5IO& H5File_in){
 
 void MechModel::setDirichBC(){
 
-    VecSetValues(b, nPresDofs, presDofs, presVals, ADD_VALUES); 
-    VecAssemblyBegin(b); VecAssemblyEnd(b);
+    VecSetValues(vecFext, nPresDofs, presDofs, presVals, ADD_VALUES); 
+    VecAssemblyBegin(vecFext); VecAssemblyEnd(vecFext);
 }
 
 int MechModel::get_nSteps() const{
@@ -340,7 +340,7 @@ int MechModel::get_nSteps() const{
 
 Vec& MechModel::getB(){
 
-    return b;
+    return vecFext;
 }
 
 Vec& MechModel::getX(){
