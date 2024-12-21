@@ -134,6 +134,7 @@ vector<int> nodCount;     /// @brief Counter for integration points surrounding 
 // PETSc ------------------------
 
 double* Fint = NULL;         /// @brief For calculating the internal force vector.
+int* indices = NULL;         /// @brief Indices for `VecSetValues`.
 
 /// @brief RHS vector.
 Vec b; 
