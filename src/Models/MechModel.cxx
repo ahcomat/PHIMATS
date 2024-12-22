@@ -53,6 +53,7 @@ MechModel::~MechModel(){
     PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint); PetscFree(indices);
     VecDestroy(&vecFext); VecDestroy(&vecDisp); VecDestroy(&vecFint); 
     VecDestroy(&vecR); MatDestroy(&matA);
+    SNESDestroy(&snes);
     // Finalize PETSc
     PetscFinalize();
     // Exit message
@@ -262,8 +263,6 @@ void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMec
         exit(EXIT_FAILURE);
     }
 }
-
-
 
 void MechModel::Assemble(vector<BaseElemMech*> elements){
 
