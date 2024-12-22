@@ -23,6 +23,7 @@
 
 #include <petscvec.h>
 #include <petscmat.h>
+#include <petscsnes.h>
 #include "BaseModel.h"
 #include "H5IO.h"
 #include "FiniteElements/Mechanics/BaseElemMech.h"
@@ -139,9 +140,14 @@ vector<int> nodCount;     /// @brief Counter for integration points surrounding 
 
 // PETSc ------------------------
 
-double* Fint = NULL;         /// @brief For calculating the internal force vector.
-int* indices = NULL;         /// @brief Indices for `VecSetValues`.
-double* presZeros = NULL;    /// @brief Prescribed 
+/// @brief For calculating the internal force vector.
+PetscReal* Fint = NULL;     
+/// @brief Indices for `VecSetValues`.
+PetscInt* indices = NULL;       
+/// @brief Prescribed   
+PetscReal* presZeros = NULL;    
+/// @brief L2-Norm 
+PetscReal l2norm;
 
 /// @brief External force vector.
 Vec vecFext; 
@@ -156,7 +162,10 @@ Vec vecDisp;
 Vec vecFint;
 
 /// @brief The global coefficient (stiffness) matrix.
-Mat matA;       
+Mat matA;     
+
+/// @brief `SNES` object.         
+SNES snes;  
 
 };
 #endif
