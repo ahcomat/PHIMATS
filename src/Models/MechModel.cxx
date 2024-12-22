@@ -310,6 +310,10 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
     // Throw error if unallocated entry is accessed if "PETSC_TRUE".
     // Should be added after the matrix is assembled https://lists.mcs.anl.gov/pipermail/petsc-users/2019-October/039608.html
     MatSetOption(matA, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
+
+    // For Dirichlet boundary conditions
+    MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
+    MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
 }
 
 void MechModel::InitializeDirichBC(H5IO& H5File_in){
@@ -332,9 +336,6 @@ void MechModel::InitializeDirichBC(H5IO& H5File_in){
         // // TODO: For debug!
         // cout << presDofs[iPresDof] << " --> " << presVals[iPresDof] << "\n";
     }
-
-    MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
-    MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
 }
 
 void MechModel::setDirichBC(){
