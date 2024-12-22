@@ -141,6 +141,7 @@ vector<int> nodCount;     /// @brief Counter for integration points surrounding 
 
 double* Fint = NULL;         /// @brief For calculating the internal force vector.
 int* indices = NULL;         /// @brief Indices for `VecSetValues`.
+double* presZeros = NULL;    /// @brief Prescribed 
 
 /// @brief External force vector.
 Vec vecFext; 

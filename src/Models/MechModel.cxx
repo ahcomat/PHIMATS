@@ -324,6 +324,7 @@ void MechModel::InitializeDirichBC(H5IO& H5File_in){
     nPresDofs = H5File_in.ReadScalar(dsetName);
     PetscMalloc1(nPresDofs, &presDofs);
     PetscMalloc1(nPresDofs, &presVals); 
+    PetscMalloc1(nPresDofs, &presZeros);
 
     vector<double> dummy(3);
     for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
@@ -335,6 +336,7 @@ void MechModel::InitializeDirichBC(H5IO& H5File_in){
         presVals[iPresDof] = dummy.at(2)/nSteps;
         // // TODO: For debug!
         // cout << presDofs[iPresDof] << " --> " << presVals[iPresDof] << "\n";
+        presZeros[iPresDof] = 0;
     }
 }
 
