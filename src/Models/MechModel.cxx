@@ -51,7 +51,8 @@ MechModel::~MechModel(){
 
     // Deallocate memory.
     PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint); PetscFree(indices);
-    VecDestroy(&vecFext); VecDestroy(&vecDisp); VecDestroy(&vecFint); MatDestroy(&matA);
+    VecDestroy(&vecFext); VecDestroy(&vecDisp); VecDestroy(&vecFint); 
+    VecDestroy(&vecR); MatDestroy(&matA);
     // Finalize PETSc
     PetscFinalize();
     // Exit message
@@ -105,14 +106,23 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     // Since we are interested in sequential implementation for now.
     VecSetType(vecFext, VECSEQ);
     // VecSetFromOptions(vecFext); =// for the general case.
-    VecDuplicate(vecFext, &vecDisp);      // Initialize the solution vector
-    VecDuplicate(vecFext, &vecFint);      // Initialize the Fint vector
-
     VecSet(vecFext, 0.0); // Set all values to zero.
     VecAssemblyBegin(vecFext); VecAssemblyEnd(vecFext);
-
-    VecSet(vecFint, 0.0); // Set all values to zero.
+    
+    // Initialize the solution vector
+    VecDuplicate(vecFext, &vecDisp);      
+    VecSet(vecDisp, 0.0); 
+    VecAssemblyBegin(vecDisp); VecAssemblyEnd(vecDisp);
+    
+    // Initialize the Fint vector
+    VecDuplicate(vecFext, &vecFint);      
+    VecSet(vecFint, 0.0); 
     VecAssemblyBegin(vecFint); VecAssemblyEnd(vecFint);
+    
+    // Initialize the residual vector
+    VecDuplicate(vecFext, &vecR);         
+    VecSet(vecR, 0.0); 
+    VecAssemblyBegin(vecR); VecAssemblyEnd(vecR);
 
     // Initialize the coefficient matrix.
     MatCreate(PETSC_COMM_WORLD, &matA);
