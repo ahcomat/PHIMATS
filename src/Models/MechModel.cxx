@@ -186,6 +186,46 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     // } else {
     //     PetscPrintf(PETSC_COMM_WORLD, "Matrix is not preallocated.\n");
     // }
+
+    // Initialize the `SNES` solver.
+    SNESCreate(PETSC_COMM_WORLD, &snes);
+    SNESSetFromOptions(snes);
+}
+
+void MechModel::InitializeDirichBC(H5IO& H5File_in){
+
+    // Read Dirichlet BCs
+    string dsetName;
+    dsetName = "SimulationParameters/nPresDofs";
+    nPresDofs = H5File_in.ReadScalar(dsetName);
+    PetscMalloc1(nPresDofs, &presDofs);
+    PetscMalloc1(nPresDofs, &presVals); 
+    PetscMalloc1(nPresDofs, &presZeros);
+
+    vector<double> dummy(3);
+    for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
+        // Read values
+        dsetName = "PrescribedDOFs/Prescribed_"+to_string(iPresDof);
+        H5File_in.ReadFieldDoub1D(dsetName, dummy);
+        // Assign values
+        presDofs[iPresDof] = nDim*dummy.at(0)+dummy.at(1); // nDim*iNode+dof
+        presVals[iPresDof] = dummy.at(2)/nSteps;
+        // // TODO: For debug!
+        // cout << presDofs[iPresDof] << " --> " << presVals[iPresDof] << "\n";
+        presZeros[iPresDof] = 0;
+    }
+}
+
+void MechModel::setDirichBC(){
+
+    VecSetValues(vecFext, nPresDofs, presDofs, presVals, ADD_VALUES); 
+    VecAssemblyBegin(vecFext); VecAssemblyEnd(vecFext);
+}
+
+void MechModel::UpdateDisp(){
+
+    VecSetValues(vecDisp, nPresDofs, presDofs, presVals, ADD_VALUES); 
+    VecAssemblyBegin(vecDisp); VecAssemblyEnd(vecDisp);
 }
 
 void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats){
@@ -314,47 +354,6 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
     // For Dirichlet boundary conditions
     MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
     MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
-}
-
-void MechModel::InitializeDirichBC(H5IO& H5File_in){
-
-    // Read Dirichlet BCs
-    string dsetName;
-    dsetName = "SimulationParameters/nPresDofs";
-    nPresDofs = H5File_in.ReadScalar(dsetName);
-    PetscMalloc1(nPresDofs, &presDofs);
-    PetscMalloc1(nPresDofs, &presVals); 
-    PetscMalloc1(nPresDofs, &presZeros);
-
-    vector<double> dummy(3);
-    for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
-        // Read values
-        dsetName = "PrescribedDOFs/Prescribed_"+to_string(iPresDof);
-        H5File_in.ReadFieldDoub1D(dsetName, dummy);
-        // Assign values
-        presDofs[iPresDof] = nDim*dummy.at(0)+dummy.at(1); // nDim*iNode+dof
-        presVals[iPresDof] = dummy.at(2)/nSteps;
-        // // TODO: For debug!
-        // cout << presDofs[iPresDof] << " --> " << presVals[iPresDof] << "\n";
-        presZeros[iPresDof] = 0;
-    }
-}
-
-void MechModel::setDirichBC(){
-
-    VecSetValues(vecFext, nPresDofs, presDofs, presVals, ADD_VALUES); 
-    VecAssemblyBegin(vecFext); VecAssemblyEnd(vecFext);
-}
-
-void MechModel::UpdateDisp(){
-
-    VecSetValues(vecDisp, nPresDofs, presDofs, presVals, ADD_VALUES); 
-    VecAssemblyBegin(vecDisp); VecAssemblyEnd(vecDisp);
-}
-
-int MechModel::get_nSteps() const{
-    
-    return nSteps;
 }
 
 Vec& MechModel::getB(){

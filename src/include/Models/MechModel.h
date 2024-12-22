@@ -50,6 +50,25 @@ void setZeroNodVals();
 void InitializePETSc(vector<BaseElemMech*> elements);
 
 /**
+ * @brief Set Dirichlet boundary conditions in the RHS `vecFext` and global stiffness matrix `A`.
+ * 
+ */
+void setDirichBC();
+
+/**
+ * @brief Updates displacement increment.
+ * 
+ */
+void UpdateDisp();
+
+/**
+ * @brief Get the number of steps to apply load.
+ * 
+ * @return int 
+ */
+int get_nSteps() const;
+
+/**
  * @brief Calculates the element stiffness matrix. 
  * 
  * @param elements 
@@ -69,25 +88,6 @@ void Assemble(vector<BaseElemMech*> elements);
  * @param H5File_in 
  */
 void InitializeDirichBC(H5IO& H5File_in);
-
-/**
- * @brief Set Dirichlet boundary conditions in the RHS `vecFext` and global stiffness matrix `A`.
- * 
- */
-void setDirichBC();
-
-/**
- * @brief Updates displacement increment.
- * 
- */
-void UpdateDisp();
-
-/**
- * @brief Get the number of steps to apply load.
- * 
- * @return int 
- */
-int get_nSteps() const;
 
 /**
  * @brief Pass reference of RHS (to solver).
