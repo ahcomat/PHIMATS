@@ -333,6 +333,12 @@ void MechModel::setDirichBC(){
     VecAssemblyBegin(vecFext); VecAssemblyEnd(vecFext);
 }
 
+void MechModel::UpdateDisp(){
+
+    VecSetValues(vecDisp, nPresDofs, presDofs, presVals, ADD_VALUES); 
+    VecAssemblyBegin(vecDisp); VecAssemblyEnd(vecDisp);
+}
+
 int MechModel::get_nSteps() const{
     
     return nSteps;

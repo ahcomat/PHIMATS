@@ -77,6 +77,12 @@ void InitializeDirichBC(H5IO& H5File_in);
 void setDirichBC();
 
 /**
+ * @brief Updates displacement increment.
+ * 
+ */
+void UpdateDisp();
+
+/**
  * @brief Get the number of steps to apply load.
  * 
  * @return int 
