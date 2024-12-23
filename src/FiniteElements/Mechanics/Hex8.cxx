@@ -315,7 +315,7 @@ void Hex8::CalcElStran(const double* globalBuffer){
     }
 }
 
-void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat){
+void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep){
 
     IsoHard* plasticMat = dynamic_cast<IsoHard*>(mat);
 
@@ -337,7 +337,7 @@ void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat){
                                             elStran_e.at(iElem).at(iGaus),
                                             elStran_p.at(iElem).at(iGaus),
                                             elStran_eq.at(iElem).at(iGaus), 
-                                            elStres_eq.at(iElem).at(iGaus));
+                                            elStres_eq.at(iElem).at(iGaus), iStep);
 
             }
         }
@@ -357,7 +357,7 @@ void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat){
                                             elStran_e.at(iElem).at(iGaus),
                                             elStran_p.at(iElem).at(iGaus),
                                             elStran_eq.at(iElem).at(iGaus), 
-                                            elStres_eq.at(iElem).at(iGaus));
+                                            elStres_eq.at(iElem).at(iGaus), iStep);
 
                 const Matd6x24& dummyBu = BuMat.at(iElem).at(iGaus); // Strain matrix for the given gauss point.
                 dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current integration point 
