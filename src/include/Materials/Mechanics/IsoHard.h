@@ -76,7 +76,11 @@ private:
 const double tol = 1e-6;    
 
 /// @brief Maximum number of iterations.
-const int max_iter = 10;     
+const int max_iter = 10;
+
+/// @brief Identity tensor in Voigt notation.
+const ColVecd6 I6 = (ColVecd6() << 1.0, 1.0, 1.0, 0.0, 0.0, 0.0).finished();
+
 
 /// @brief Plasticity type.
 string Platicity;         
