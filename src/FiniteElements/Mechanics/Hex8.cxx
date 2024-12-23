@@ -116,6 +116,9 @@ void Hex8::InitializeElements(Nodes &Nodes){
     // Initialize the vector containing each element stiffness matrix.
     elStiffMatx.resize(nElements); 
 
+    // Pointer to the vector, not the vector itself.
+    elStiffMatxVariant = &elStiffMatx;
+
     // Initialize the storages for int-pt stresses/strains
     elStres.resize(nElements); elStran.resize(nElements);      
 
@@ -252,9 +255,6 @@ void Hex8::CalcElemStiffMatx(T_DMatx DMatx){
     // for (auto& iStifMat : elStiffMatx)
     //     cout << iStifMat << "\n\n";
     // cout << elStiffMatx.at(0) << "\n";
-
-    // Pointer to the vector, not the vector itself.
-    elStiffMatxVariant = &elStiffMatx;
 }
 
 void Hex8::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount){
@@ -367,7 +367,6 @@ void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int
             }
         }
     }
-
 }
 
 void Hex8::CalcFint(double* Fint){
