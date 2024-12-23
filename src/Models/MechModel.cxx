@@ -51,7 +51,7 @@ MechModel::~MechModel(){
 
     // Deallocate memory.
     PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint); PetscFree(indices);
-    VecDestroy(&vecFext); VecDestroy(&vecDisp); VecDestroy(&vecFint); 
+    VecDestroy(&vecFext); VecDestroy(&vecDisp); VecDestroy(&vecDeltaDisp); VecDestroy(&vecFint); 
     VecDestroy(&vecR); MatDestroy(&matA);
     SNESDestroy(&snes);
     // Finalize PETSc
@@ -112,6 +112,11 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     
     // Initialize the solution vector
     VecDuplicate(vecFext, &vecDisp);      
+    VecSet(vecDisp, 0.0); 
+    VecAssemblyBegin(vecDisp); VecAssemblyEnd(vecDisp);
+
+    // Initialize the displacement increment vector
+    VecDuplicate(vecFext, &vecDeltaDisp);      
     VecSet(vecDisp, 0.0); 
     VecAssemblyBegin(vecDisp); VecAssemblyEnd(vecDisp);
     

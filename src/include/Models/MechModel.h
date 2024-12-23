@@ -158,6 +158,9 @@ Vec vecR;
 /// @brief solution vector.         
 Vec vecDisp;
 
+/// @brief Displacement increment vector.         
+Vec vecDeltaDisp;
+
 /// @brief solution vector.         
 Vec vecFint;
 
