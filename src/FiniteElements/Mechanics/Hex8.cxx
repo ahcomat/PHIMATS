@@ -315,6 +315,73 @@ void Hex8::CalcElStran(const double* globalBuffer){
     }
 }
 
-void Hex8::CalcRetrunMapping(BaseMechanics* mats){
+void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat){
 
+    IsoHard* plasticMat = dynamic_cast<IsoHard*>(mat);
+
+    try {
+        if (elStran_e.data() == nullptr){
+            throw runtime_error("Plasicity strain container vectors were not allocated.\n\n       Please add the keyword argument < Elastoplastic > in the element constructor.\n");
+        }
+    } catch (const exception& e) {
+        cerr << "ERROR: " << e.what() << endl;
+    }
+
+    if (updateStiffMat){
+
+        for(int iElem=0; iElem<nElements; iElem++){
+            for(int iGaus=0; iGaus<nElGauss; iGaus++){
+                
+                plasticMat->ReturnMapping3D(elStres.at(iElem).at(iGaus),
+                                            elStran.at(iElem).at(iGaus),
+                                            elStran_e.at(iElem).at(iGaus),
+                                            elStran_p.at(iElem).at(iGaus),
+                                            elStran_eq.at(iElem).at(iGaus), 
+                                            elStres_eq.at(iElem).at(iGaus));
+
+            }
+        }
+
+    } else {  // Update the element stiffness matrix
+
+        double dummydVol;   // dummy for int-pt volume.
+
+        for(int iElem=0; iElem<nElements; iElem++){
+
+            elStiffMatx.at(iElem).setZero(); // Must be populated with zeros.         
+
+            for(int iGaus=0; iGaus<nElGauss; iGaus++){
+                
+                plasticMat->ReturnMapping3D(elStres.at(iElem).at(iGaus),
+                                            elStran.at(iElem).at(iGaus),
+                                            elStran_e.at(iElem).at(iGaus),
+                                            elStran_p.at(iElem).at(iGaus),
+                                            elStran_eq.at(iElem).at(iGaus), 
+                                            elStres_eq.at(iElem).at(iGaus));
+
+                const Matd6x24& dummyBu = BuMat.at(iElem).at(iGaus); // Strain matrix for the given gauss point.
+                dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current integration point 
+
+                // [B_kl]^T D_kk B_kl
+                elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*std::get<Matd6x6>(plasticMat->getDMatx())*dummyBu*dummydVol;
+            }
+        }
+    }
+
+}
+
+void Hex8::CalcFint(double* Fint){
+
+    ColVecd24 dummyForc; // for element nodal internal force.
+
+    for(int iElem=0; iElem<nElements; iElem++){
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            dummyForc = BuMat.at(iElem).at(iGaus).transpose()*elStres.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+
+            for(int pom=0; pom<nElDispDofs; pom++){
+                Fint[elemDispDof.at(iElem).at(pom)] += dummyForc(pom);
+            }
+        }
+    }
 }

@@ -86,7 +86,9 @@ virtual void CalcElStran(const double* globalBuffer) = 0;
  * 
  * @param mats 
  */
-virtual void CalcRetrunMapping(BaseMechanics* mat) = 0;
+virtual void CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat) = 0;
+
+virtual void CalcFint(double* Fint) = 0;
 
 protected:
 
