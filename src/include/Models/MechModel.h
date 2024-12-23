@@ -128,15 +128,29 @@ void WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const string iSt
 
 private:
 
-const double tol = 1e-6;    /// @brief Tolerance for Newton-Raphson iterations.
-const int max_iter = 10;    /// @brief Maximum number of iterations.
-const int NR_freq = 3;      /// @brief Frequency of updating the stiffness matrix.
+/// @brief Tolerance for Newton-Raphson iterations.
+const double tol = 1e-6; 
 
-int nElDispDofs;    /// @brief Number of element displacement dofs.
+/// @brief Maximum number of iterations.
+const int max_iter = 10;  
 
-T_nodStres nodStres;      /// @brief Nodal stress.
-T_nodStres nodStran;      /// @brief Nodal strain.
-vector<int> nodCount;     /// @brief Counter for integration points surrounding nodes.
+/// @brief Frequency of updating the stiffness matrix. 
+const int NR_freq = 3;      
+
+/// @brief Counter for NR iterations.
+int iterCounter = 0;      
+
+/// @brief Number of element displacement dofs.
+int nElDispDofs;    
+
+/// @brief Nodal stress.
+T_nodStres nodStres;
+
+/// @brief Nodal strain.
+T_nodStres nodStran;  
+
+/// @brief Counter for integration points surrounding nodes.
+vector<int> nodCount;     
 
 // PETSc ------------------------
 
