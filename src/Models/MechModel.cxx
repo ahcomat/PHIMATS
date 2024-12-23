@@ -247,15 +247,6 @@ void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMec
     
             } else if (typeid(*mats[iSet]) == typeid(IsoHard)){
 
-                // // TODO: For debug!
-                // cout << std::string(typeid(*mats[iSet]).name()) << "\n"; 
-                
-                VecGetArrayRead(x, &globalBuffer);
-                elements[iSet]->CalcElStran(globalBuffer);
-                VecRestoreArrayRead(x, &globalBuffer);
-
-                elements[iSet]->CalcRetrunMapping(mats[iSet]);
-
             } else {
 
                 throw std::runtime_error("Undefined material model < " + std::string(typeid(*mats[iSet]).name()) + " >");
