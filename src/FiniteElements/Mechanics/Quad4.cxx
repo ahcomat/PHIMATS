@@ -253,7 +253,7 @@ void Quad4::CalcElStran(const double* globalBuffer){
     
 }
 
-void Quad4::CalcRetrunMapping(BaseMechanics* mats){
+void Quad4::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep){
 
 }
 

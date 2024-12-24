@@ -95,7 +95,7 @@ void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStr
 
 void CalcElStran(const double* globalBuffer) override;
 
-void CalcRetrunMapping(BaseMechanics* mats, const bool& updateStiffMat) override;
+void CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep) override;
 
 private:
 
