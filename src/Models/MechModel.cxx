@@ -376,6 +376,112 @@ PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
 
     // Final assembly
     MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
+
+    return 0;
+}
+
+void MechModel::SolveSNES(){
+
+    // Set counter to zero.
+    iterCounter = 0;
+    
+    // Solve
+    SNESSolve(snes, NULL, vecDeltaDisp);
+
+}
+
+void MechModel::SetupSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep){
+
+    // Create a context for PETSc
+    AppCtx *user = new AppCtx{elements, mats, iStep, this};
+
+    // Set the residual function and context
+    SNESSetFunction(snes, vecR, ResidualCallback, user); 
+
+    // Set the Jacobian
+    SNESSetJacobian(snes, matA, matA, JacobianCallback, user); 
+}
+
+PetscErrorCode MechModel::ResidualCallback(SNES snes, Vec u, Vec R, void *ctx){
+    
+    // Cast the context to AppCtx
+    AppCtx *user = static_cast<AppCtx*>(ctx);
+
+    // Compute the internal forces using your existing CalcResidual method
+    PetscErrorCode ierr = user->mechModel->CalcResidual(user->elements, user->mats, user->iStep);
+    CHKERRQ(ierr);
+
+    return 0;
+}
+
+PetscErrorCode MechModel::JacobianCallback(SNES snes, Vec u, Mat J, Mat P, void *ctx){
+    
+    // Cast the context to AppCtx
+    AppCtx *user = static_cast<AppCtx*>(ctx);
+
+    // Assemble the Jacobian (stiffness) matrix.
+    PetscErrorCode ierr = user->mechModel->Assemble(user->elements);
+    CHKERRQ(ierr);
+
+    return 0;
+}
+
+PetscErrorCode MechModel::CalcResidual(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep){
+
+        try{
+        for (int iSet=0; iSet<nElementSets; iSet++){
+            
+            if (typeid(*mats[iSet]) == typeid(Elastic)){ // Becuase some material models inherit from `Elastic`
+
+    
+            } else if (typeid(*mats[iSet]) == typeid(IsoHard)){
+
+                // // TODO: For debug!
+                // cout << std::string(typeid(*mats[iSet]).name()) << "\n"; 
+
+                // Update iteration counter.
+                iterCounter += 1;
+
+                updateStiffMat = iterCounter % NR_freq == 0;
+                
+                // Calculate total strain
+                VecGetArrayRead(vecDisp, &globalBuffer);
+                elements[iSet]->CalcElStran(globalBuffer);
+                VecRestoreArrayRead(vecDisp, &globalBuffer);
+                // Retrun mapping
+                elements[iSet]->CalcRetrunMapping(mats[iSet], updateStiffMat, iStep);
+                // Calculate internal force
+                elements[iSet]->CalcFint(Fint);
+                VecSetValues(vecFint, nTotDofs, indices, Fint, INSERT_VALUES); 
+                VecAssemblyBegin(vecFint); VecAssemblyEnd(vecFint);
+                // R = Fext - Fint
+                VecWAXPY(vecR, -1.0, vecFint, vecFext);
+                VecSetValues(vecR, nPresDofs, presDofs, presZeros, INSERT_VALUES); 
+                // R = Fext - Fint
+                VecWAXPY(vecR, -1.0, vecFint, vecFext);
+                VecSetValues(vecR, nPresDofs, presDofs, presZeros, INSERT_VALUES); 
+                // Aseemble once 
+                VecAssemblyBegin(vecR); VecAssemblyEnd(vecR);
+
+                // // TODO: For debugging !
+                // VecView(vecR, PETSC_VIEWER_STDOUT_WORLD);
+
+            } else {
+
+                throw std::runtime_error("Undefined material model < " + std::string(typeid(*mats[iSet]).name()) + " >");
+            }
+        }
+
+    } catch (const exception& e) {
+        cerr << "ERROR: " << e.what() << endl;
+        cerr << "Terminating!" << endl;
+        exit(EXIT_FAILURE);
+    }
+
+    Assemble(elements);
+
+    return 0;
+
 }
 
 Vec& MechModel::getB(){

@@ -103,6 +103,16 @@ PetscErrorCode Assemble(vector<BaseElemMech*> elements);
  */
 void InitializeDirichBC(H5IO& H5File_in);
 
+void SolveSNES();
+
+void SetupSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
+
+static PetscErrorCode ResidualCallback(SNES snes, Vec u, Vec R, void *ctx);
+
+static PetscErrorCode JacobianCallback(SNES snes, Vec u, Mat J, Mat P, void *ctx);
+
+PetscErrorCode CalcResidual(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
+
 /**
  * @brief Pass reference of RHS (to solver).
  * 
@@ -151,7 +161,10 @@ const int max_iter = 10;
 const int NR_freq = 3;      
 
 /// @brief Counter for NR iterations.
-int iterCounter = 0;      
+int iterCounter = 0;  
+
+///@brief Flag for updating stiffness matrix
+bool updateStiffMat = true;
 
 /// @brief Number of element displacement dofs.
 int nElDispDofs;    
@@ -195,7 +208,15 @@ Vec vecFint;
 Mat matA;     
 
 /// @brief `SNES` object.         
-SNES snes;  
+SNES snes; 
+
+/// @brief Definint application context structure for SNES. 
+struct AppCtx {
+    vector<BaseElemMech*> elements;  // Elements vector
+    vector<BaseMechanics*> mats;     // Material vector
+    int iStep;                       // Current step
+    MechModel *mechModel;            // Pointer to <this>
+};
 
 };
 #endif
