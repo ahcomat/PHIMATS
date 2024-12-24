@@ -276,6 +276,9 @@ void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMec
 
 PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
 
+    // Has to be zeroed for iterative solver. 
+    MatZeroEntries(matA);
+
     for (auto* elem : elements){  // Loop through element sets
 
         // Pointer to the element dip DOFs. Will vanish out the "for" element set loop.
