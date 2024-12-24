@@ -181,11 +181,18 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
         nnz[iDof] = gDofs.at(iDof).size();
     }
 
-    // Preallocate the stiffness matrix.
+    for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
+        PetscInt row = presDofs[iPresDof];
+
+        // Ensure the row has at least one nonzero (for boundary conditions)
+        nnz[row] = max(nnz[row], static_cast<PetscInt>(1));
+    }
+
+    // Preallocate the stiffness matrix. Does not account for Dirichlet BCs.
     MatSeqAIJSetPreallocation(matA, PETSC_DEFAULT, nnz); 
     PetscFree(nnz);
 
-    // // Check the preallocation indirectly by querying the number of nonzeros
+    // // TODO: For debugging. Check the preallocation indirectly by querying the number of nonzeros
     // MatInfo info;
     // MatGetInfo(matA, MAT_LOCAL, &info);
     // if (info.nz_allocated > 0) {
@@ -193,6 +200,11 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     // } else {
     //     PetscPrintf(PETSC_COMM_WORLD, "Matrix is not preallocated.\n");
     // }
+
+    // Throw error if unallocated entry is accessed if "PETSC_TRUE".
+    // Should be added after the matrix is assembled https://lists.mcs.anl.gov/pipermail/petsc-users/2019-October/039608.html
+    // MatSetOption(matA, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
+    MatSetOption(matA, MAT_NEW_NONZERO_LOCATIONS, PETSC_TRUE);
 
     // Initialize the `SNES` solver.
     SNESCreate(PETSC_COMM_WORLD, &snes);
