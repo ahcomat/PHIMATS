@@ -408,7 +408,6 @@ void MechModel::SetupSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     // Set the Jacobian
     SNESSetJacobian(snes, matA, matA, JacobianCallback, user); 
 
-
 }
 
 PetscErrorCode MechModel::ResidualCallback(SNES snes, Vec u, Vec R, void *ctx){
@@ -419,6 +418,9 @@ PetscErrorCode MechModel::ResidualCallback(SNES snes, Vec u, Vec R, void *ctx){
     // Compute the internal forces using your existing CalcResidual method
     PetscErrorCode ierr = user->mechModel->CalcResidual(u, user->elements, user->mats, user->iStep);
     CHKERRQ(ierr);
+
+    // TODO: For debugging !
+    VecView(R, PETSC_VIEWER_STDOUT_WORLD);
 
     return 0;
 }
@@ -431,6 +433,9 @@ PetscErrorCode MechModel::JacobianCallback(SNES snes, Vec u, Mat J, Mat P, void 
     // Assemble the Jacobian (stiffness) matrix.
     PetscErrorCode ierr = user->mechModel->Assemble(user->elements);
     CHKERRQ(ierr);
+
+    // // TODO: For debugging. 
+    // MatView(J, PETSC_VIEWER_STDOUT_WORLD);
 
     return 0;
 }
