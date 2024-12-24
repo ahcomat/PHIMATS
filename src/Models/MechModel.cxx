@@ -361,25 +361,11 @@ PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
         PetscFree(j1);
     }
 
-    // Intermidiate assembly
-    MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
-
-    // For Dirichlet boundary conditions
-    MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
-
-    // // Dirichlet Boundary conditions
-    // PetscScalar zero = 0.0;
-    // PetscScalar one = 1.0;
-
-    // for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
-    //     // Zero rows
-    //     MatSetValues(matA, 1, &presDofs[iPresDof], nTotDofs, indices, &zero, INSERT_VALUES);
-    //     // One diagonal
-    //     MatSetValues(matA, 1, &presDofs[iPresDof], 0, &presDofs[iPresDof], &one, INSERT_VALUES);
-    // }
-
     // Final assembly
     MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
+
+    // For Dirichlet boundary conditions (Requires `MAT_FINAL_ASSEMBLY`)
+    MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
 
     // // Sets the final sparsity structure  
     // MatSetOption(matA, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
