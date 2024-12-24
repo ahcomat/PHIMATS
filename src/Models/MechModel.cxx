@@ -181,6 +181,7 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
         nnz[iDof] = gDofs.at(iDof).size();
     }
 
+    // To account for Dirichlet BCs in preallocation. Doesn't work very great though. 
     for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
         PetscInt row = presDofs[iPresDof];
 
@@ -188,7 +189,7 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
         nnz[row] = max(nnz[row], static_cast<PetscInt>(1));
     }
 
-    // Preallocate the stiffness matrix. Does not account for Dirichlet BCs.
+    // Preallocate the stiffness matrix.
     MatSeqAIJSetPreallocation(matA, PETSC_DEFAULT, nnz); 
     PetscFree(nnz);
 
@@ -376,6 +377,9 @@ PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
 
     // Final assembly
     MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
+
+    // Sets the final sparsity structure  
+    MatSetOption(matA, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
 
     return 0;
 }
