@@ -107,11 +107,11 @@ void SolveSNES();
 
 void SetupSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
 
-static PetscErrorCode ResidualCallback(SNES snes, Vec u, Vec R, void *ctx);
+static PetscErrorCode ResidualCallback(SNES snes, Vec deltaU, Vec R, void *ctx);
 
-static PetscErrorCode JacobianCallback(SNES snes, Vec u, Mat J, Mat P, void *ctx);
+static PetscErrorCode JacobianCallback(SNES snes, Vec deltaU, Mat J, Mat P, void *ctx);
 
-PetscErrorCode CalcResidual(Vec u, vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
+PetscErrorCode CalcResidual(Vec deltaU, vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
 
 /**
  * @brief Pass reference of RHS (to solver).
