@@ -94,7 +94,7 @@ void CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMechanics*> ma
  * @brief Assemble the global stiffness matrix.
  * 
  */
-void Assemble(vector<BaseElemMech*> elements);
+PetscErrorCode Assemble(vector<BaseElemMech*> elements);
 
 /**
  * @brief Reads and initializes Dirichlet BCs.

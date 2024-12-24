@@ -273,7 +273,7 @@ void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMec
     }
 }
 
-void MechModel::Assemble(vector<BaseElemMech*> elements){
+PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
 
     for (auto* elem : elements){  // Loop through element sets
 
