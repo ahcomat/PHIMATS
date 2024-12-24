@@ -46,7 +46,7 @@ class MechModel: public BaseModel{
 
 public:
 
-MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in);
+MechModel(H5IO& H5File_in);
 ~MechModel();
 
 /**

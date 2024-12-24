@@ -7,7 +7,7 @@
 
 using namespace std;
 
-MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in){
+MechModel::MechModel(H5IO& H5File_in){
 
     string dsetName;
     dsetName = "SimulationParameters/nSteps";
@@ -44,7 +44,11 @@ MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in){
     // Initialize to zeros, otherwise will get garbage memory values.
     setZeroNodVals();
 
-    InitializePETSc(elements);
+    // Set indices
+    for (int iDof=0; iDof<nTotDofs; iDof++){
+        indices[iDof] = iDof;
+    }
+
 }
 
 MechModel::~MechModel(){
@@ -94,11 +98,6 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     // for(auto* elem : elements)
     //     for (int dispDof : elem->get_elemDispDof(0))
     //         cout << dispDof << "\n";
-
-    // Set indices
-    for (int iDof=0; iDof<nTotDofs; iDof++){
-        indices[iDof] = iDof;
-    }
 
     // Initialize the vectors
     VecCreate(PETSC_COMM_WORLD, &vecFext);
