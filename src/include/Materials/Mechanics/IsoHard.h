@@ -74,7 +74,7 @@ double Mises3D(const ColVecd6& sig3D);
 //  */
 // double PEEQ3D(ColVecd6& eps3D);
 
-void ReturnMapping2D();
+void ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, ColVecd6& eps_p, double& eqp, double& sig_eq, int iStep);
 
 /**
  * @brief Returns the stiffness matrix in Voigt notation.
