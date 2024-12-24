@@ -85,7 +85,7 @@ void IsoHard::ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, Col
     double sig_trial_eq = Mises3D(sig_trial);
 
     // Yield function 
-    double f_yield = sig_eq - R_pow(eps_eq) - sig_y0;
+    double f_yield = sig_trial_eq - R_pow(eps_eq) - sig_y0;
 
     // Check yielding 
     if (f_yield <= 0){  // --> Elastic step
