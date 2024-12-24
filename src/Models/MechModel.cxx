@@ -412,7 +412,7 @@ PetscErrorCode MechModel::ResidualCallback(SNES snes, Vec u, Vec R, void *ctx){
     AppCtx *user = static_cast<AppCtx*>(ctx);
 
     // Compute the internal forces using your existing CalcResidual method
-    PetscErrorCode ierr = user->mechModel->CalcResidual(user->elements, user->mats, user->iStep);
+    PetscErrorCode ierr = user->mechModel->CalcResidual(u, user->elements, user->mats, user->iStep);
     CHKERRQ(ierr);
 
     return 0;
@@ -430,7 +430,7 @@ PetscErrorCode MechModel::JacobianCallback(SNES snes, Vec u, Mat J, Mat P, void 
     return 0;
 }
 
-PetscErrorCode MechModel::CalcResidual(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep){
+PetscErrorCode MechModel::CalcResidual(Vec u, vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep){
 
         try{
         for (int iSet=0; iSet<nElementSets; iSet++){
@@ -447,7 +447,10 @@ PetscErrorCode MechModel::CalcResidual(vector<BaseElemMech*> elements, vector<Ba
                 iterCounter += 1;
 
                 updateStiffMat = iterCounter % NR_freq == 0;
-                
+
+                VecAXPY(vecDisp, +1.0, u);
+                VecAssemblyBegin(vecDisp); VecAssemblyEnd(vecDisp);
+
                 // Calculate total strain
                 VecGetArrayRead(vecDisp, &globalBuffer);
                 elements[iSet]->CalcElStran(globalBuffer);
@@ -461,10 +464,6 @@ PetscErrorCode MechModel::CalcResidual(vector<BaseElemMech*> elements, vector<Ba
                 // R = Fext - Fint
                 VecWAXPY(vecR, -1.0, vecFint, vecFext);
                 VecSetValues(vecR, nPresDofs, presDofs, presZeros, INSERT_VALUES); 
-                // R = Fext - Fint
-                VecWAXPY(vecR, -1.0, vecFint, vecFext);
-                VecSetValues(vecR, nPresDofs, presDofs, presZeros, INSERT_VALUES); 
-                // Aseemble once 
                 VecAssemblyBegin(vecR); VecAssemblyEnd(vecR);
 
                 // // TODO: For debugging !

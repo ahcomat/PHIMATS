@@ -111,7 +111,7 @@ static PetscErrorCode ResidualCallback(SNES snes, Vec u, Vec R, void *ctx);
 
 static PetscErrorCode JacobianCallback(SNES snes, Vec u, Mat J, Mat P, void *ctx);
 
-PetscErrorCode CalcResidual(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
+PetscErrorCode CalcResidual(Vec u, vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
 
 /**
  * @brief Pass reference of RHS (to solver).
