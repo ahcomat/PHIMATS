@@ -295,6 +295,9 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
         */
         const T_ElStiffMatx& T_elStiffMatx_ref = elem->getElStiffMatx();
 
+        // // TODO: For debugging.
+        // std::cout << "Active index: " << T_elStiffMatx_ref.index() << std::endl;
+
         if (std::holds_alternative<vector<Matd8x8>*>(T_elStiffMatx_ref)){  // Quad4 elements.
 
             /* The "*" operator dereferences the pointer stored in the std::variant, giving
