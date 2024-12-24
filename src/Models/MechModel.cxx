@@ -357,12 +357,8 @@ void MechModel::Assemble(vector<BaseElemMech*> elements){
         PetscFree(j1);
     }
 
-    // MAT_FINAL_ASSEMBLY for final use, otherwise MAT_FLUSH_ASSEMBLY https://petsc-users.mcs.anl.narkive.com/pppnM7xI/problem-with-preallocating
-    MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
-
-    // Throw error if unallocated entry is accessed if "PETSC_TRUE".
-    // Should be added after the matrix is assembled https://lists.mcs.anl.gov/pipermail/petsc-users/2019-October/039608.html
-    MatSetOption(matA, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
+    // Intermidiate assembly
+    MatAssemblyBegin(matA, MAT_FLUSH_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FLUSH_ASSEMBLY);
 
     // For Dirichlet boundary conditions
     MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
