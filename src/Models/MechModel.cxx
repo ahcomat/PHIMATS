@@ -434,8 +434,8 @@ PetscErrorCode MechModel::JacobianCallback(SNES snes, Vec deltaU, Mat J, Mat P, 
     PetscErrorCode ierr = user->mechModel->Assemble(user->elements);
     CHKERRQ(ierr);
 
-    // TODO: For debugging. 
-    MatView(J, PETSC_VIEWER_STDOUT_WORLD);
+    // // TODO: For debugging. 
+    // MatView(J, PETSC_VIEWER_STDOUT_WORLD);
 
     return 0;
 }
@@ -471,8 +471,8 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, vector<BaseElemMech*> element
                 elements[iSet]->CalcFint(Fint);
                 VecSetValues(vecFint, nTotDofs, indices, Fint, INSERT_VALUES); 
                 VecAssemblyBegin(vecFint); VecAssemblyEnd(vecFint);
-                // R = Fext - Fint TODO Something is wrong with the sign !!!
-                VecWAXPY(vecR, -1.0, vecFint, vecFext);
+                // R = Fext - Fint >> NOTE << PETSx solves Ju = -R which is making some issurs with the sign of vecR. Keep i tlike this for now. 
+                VecWAXPY(vecR, -1.0, vecFext, vecFint);
                 VecSetValues(vecR, nPresDofs, presDofs, presZeros, INSERT_VALUES); 
                 VecAssemblyBegin(vecR); VecAssemblyEnd(vecR);
 
