@@ -362,27 +362,27 @@ PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
     }
 
     // Intermidiate assembly
-    MatAssemblyBegin(matA, MAT_FLUSH_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FLUSH_ASSEMBLY);
+    MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
 
-    // // For Dirichlet boundary conditions
-    // MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
+    // For Dirichlet boundary conditions
+    MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
 
-    // Dirichlet Boundary conditions
-    PetscScalar zero = 0.0;
-    PetscScalar one = 1.0;
+    // // Dirichlet Boundary conditions
+    // PetscScalar zero = 0.0;
+    // PetscScalar one = 1.0;
 
-    for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
-        // Zero rows
-        MatSetValues(matA, 1, &presDofs[iPresDof], nTotDofs, indices, &zero, INSERT_VALUES);
-        // One diagonal
-        // MatSetValues(matA, 1, &presDofs[iPresDof], 0, &presDofs[iPresDof], &one, INSERT_VALUES);
-    }
+    // for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
+    //     // Zero rows
+    //     MatSetValues(matA, 1, &presDofs[iPresDof], nTotDofs, indices, &zero, INSERT_VALUES);
+    //     // One diagonal
+    //     MatSetValues(matA, 1, &presDofs[iPresDof], 0, &presDofs[iPresDof], &one, INSERT_VALUES);
+    // }
 
     // Final assembly
     MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
 
-    // Sets the final sparsity structure  
-    MatSetOption(matA, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
+    // // Sets the final sparsity structure  
+    // MatSetOption(matA, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
 
     return 0;
 }
@@ -407,6 +407,8 @@ void MechModel::SetupSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
 
     // Set the Jacobian
     SNESSetJacobian(snes, matA, matA, JacobianCallback, user); 
+
+
 }
 
 PetscErrorCode MechModel::ResidualCallback(SNES snes, Vec u, Vec R, void *ctx){
@@ -469,8 +471,8 @@ PetscErrorCode MechModel::CalcResidual(Vec u, vector<BaseElemMech*> elements, ve
                 VecSetValues(vecR, nPresDofs, presDofs, presZeros, INSERT_VALUES); 
                 VecAssemblyBegin(vecR); VecAssemblyEnd(vecR);
 
-                // // TODO: For debugging !
-                // VecView(vecR, PETSC_VIEWER_STDOUT_WORLD);
+                // TODO: For debugging !
+                VecView(u, PETSC_VIEWER_STDOUT_WORLD);
 
             } else {
 
