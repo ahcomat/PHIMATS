@@ -1,5 +1,6 @@
 #include<iostream>
 #include<variant>
+#include <unordered_set>
 
 #include "Models/MechModel.h"
 #include "Materials/Mechanics/Elastic.h"
@@ -141,7 +142,7 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     // MatSetOption(matA, MAT_SYMMETRIC, PETSC_TRUE);
 
     // Preallocate the coefficient matrix.
-    vector<vector<int>> gDofs(nTotDofs); // vector to store dofs per row.
+    vector<unordered_set<int>> gDofs(nTotDofs); // vector to store dofs per row.
     int itotv, jtotv; // for global row and colum dof.
     PetscInt *nnz; // Array for the number of zeros per row
     PetscMalloc1(nTotDofs, &nnz); // Allocates the size of nnz
@@ -167,7 +168,8 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
                     // If jtotv is not in gDofs.at(itotv)
                     if (find(gDofs.at(itotv).begin(), gDofs.at(itotv).end(), jtotv) == gDofs.at(itotv).end()){
 
-                        gDofs.at(itotv).push_back(jtotv);
+                        gDofs[itotv].insert(jtotv); // Insert column index (automatically handles duplicates)
+
                     }
                 }
             }
