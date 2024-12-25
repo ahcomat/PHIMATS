@@ -3,8 +3,6 @@
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
  * @brief J2 plasticity with isotropic hardening.
  * 
-
- * 
  * @date 2024-12-12
  * 
  * @copyright Copyright (C) 2024 Abdelrahman Hussein
@@ -61,7 +59,7 @@ double dR_pow(const double& eps_eq);
 /**
  * @brief Von Mises stress for 3D models. 
  * 
- * @param sig3D 
+ * @param sig3D Stress vector.
  * @return double 
  */
 double Mises3D(const ColVecd6& sig3D);
@@ -91,9 +89,8 @@ const double tol = 1e-6;
 /// @brief Maximum number of iterations.
 const int max_iter = 10;
 
-/// @brief Identity tensor in Voigt notation.
+/// @brief 3D Identity tensor in Voigt notation.
 const ColVecd6 I6 = (ColVecd6() << 1.0, 1.0, 1.0, 0.0, 0.0, 0.0).finished();
-
 
 /// @brief Plasticity type.
 string Platicity;         

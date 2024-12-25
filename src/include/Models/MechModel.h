@@ -109,6 +109,13 @@ PetscErrorCode Assemble(vector<BaseElemMech*> elements);
  */
 void InitializeDirichBC(H5IO& H5File_in);
 
+/**
+ * @brief SNES solve of the current step.
+ * 
+ * @param elements Elements vector.
+ * @param mats Materials vector. 
+ * @param iStep Current step. 
+ */
 void SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
 
 /**
