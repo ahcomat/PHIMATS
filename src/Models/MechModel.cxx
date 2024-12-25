@@ -444,6 +444,7 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, vector<BaseElemMech*> element
 
                 updateStiffMat = iterCounter % NR_freq == 0;
 
+                // Update total displacement vector.
                 VecAXPY(vecDisp, +1.0, deltaU);
                 VecAssemblyBegin(vecDisp); VecAssemblyEnd(vecDisp);
 
@@ -451,14 +452,19 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, vector<BaseElemMech*> element
                 VecGetArrayRead(vecDisp, &globalBuffer);
                 elements[iSet]->CalcElStran(globalBuffer);
                 VecRestoreArrayRead(vecDisp, &globalBuffer);
+
                 // Retrun mapping
                 elements[iSet]->CalcRetrunMapping(mats[iSet], updateStiffMat, iStep);
+
                 // Calculate internal force
                 elements[iSet]->CalcFint(Fint);
                 VecSetValues(vecFint, nTotDofs, indices, Fint, INSERT_VALUES); 
                 VecAssemblyBegin(vecFint); VecAssemblyEnd(vecFint);
-                // << NOTE >> We are solving the system Fext-Fint = R, while PETSc solves Ju = -R. It will multiply
-                // R with -1, se we keep this in mind while providing R. 
+
+                /* 
+                << NOTE >> We are solving the system Fext-Fint = R, while PETSc solves Ju = -R. 
+                It will multiply R with -1, se we keep this in mind while providing R. 
+                */
                 VecWAXPY(vecR, -1.0, vecFext, vecFint);
                 VecSetValues(vecR, nPresDofs, presDofs, presZeros, INSERT_VALUES); 
                 VecAssemblyBegin(vecR); VecAssemblyEnd(vecR);
