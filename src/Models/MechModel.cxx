@@ -457,7 +457,8 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, vector<BaseElemMech*> element
                 elements[iSet]->CalcFint(Fint);
                 VecSetValues(vecFint, nTotDofs, indices, Fint, INSERT_VALUES); 
                 VecAssemblyBegin(vecFint); VecAssemblyEnd(vecFint);
-                // R = Fext - Fint >> NOTE << PETSc solves Ju = -R which is making some issurs with the sign of vecR. Keep i tlike this for now. 
+                // << NOTE >> We are solving the system Fext-Fint = R, while PETSc solves Ju = -R. It will multiply
+                // R with -1, se we keep this in mind while providing R. 
                 VecWAXPY(vecR, -1.0, vecFext, vecFint);
                 VecSetValues(vecR, nPresDofs, presDofs, presZeros, INSERT_VALUES); 
                 VecAssemblyBegin(vecR); VecAssemblyEnd(vecR);
