@@ -33,6 +33,14 @@ class Hex8: public BaseElemMech{
 
 public:
 
+/**
+ * @brief Constructor. Reads data for element set `iSet` in the elements vector and initializes the element set attributes.
+ * 
+ * @param H5File_in Input hdf5 file
+ * @param Nodes Node object. Holds element node coordinates. 
+ * @param iSet Element set number.
+ * @param matModel material model for the element set. Options [`Elastic`, `ElasoPlastic`]. Default `Elastic`.
+ */
 Hex8(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel = "Elastic");   
 ~Hex8() override;
 
@@ -100,24 +108,50 @@ void CalcFint(double* Fint) override;
 
 private:
 
-const vector<double> wts{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};  /// @brief Weights of the gauss points [nElGauss].
+/// @brief Weights of the gauss points [nElGauss].
+const vector<double> wts{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};  
 
-vector<RowVecd8> shapeFunc;      /// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
-vector<Matd3x8> shapeFuncDeriv;  /// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
-vector<Matd8x3> elemNodCoord;          /// @brief Node Coordinates [nElDim, nElNodes]. 
-vector<vector<RowVecd3>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
+/// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
+vector<RowVecd8> shapeFunc; 
 
-vector<vector<ColVecd6>> elStran;   /// @brief Int-pt total strains [nElStres].
-vector<vector<ColVecd6>> elStres;   /// @brief Int-pt stresses [nElStres].
+/// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
+vector<Matd3x8> shapeFuncDeriv;  
 
-vector<vector<ColVecd6>> elStran_e;   /// @brief Int-pt elastic strain [nElStres].
-vector<vector<ColVecd6>> elStran_p;   /// @brief Int-pt plastic strain [nElStres].
-vector<vector<double>> elStran_eq;    /// @brief Int-pt equivalent plastic strain [nElStres].
-vector<vector<double>> elStres_eq;    /// @brief Int-pt equivalent stress (vin Mises) [nElStres].
+/// @brief Node Coordinates [nElDim, nElNodes]. 
+vector<Matd8x3> elemNodCoord;  
 
-vector<vector<Matd3x8>> BMat;       /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
-vector<vector<Matd6x24>> BuMat;     /// @brief Strain matrix [nElStres, nElDispDofs].
-vector<vector<double>> intPtVol;    /// @brief Int-pt volume.
-vector<Matd24x24> elStiffMatx;      /// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].
+/// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
+vector<vector<RowVecd3>> gaussPtCart;  
+
+/// @brief Int-pt total strains [nElStres].
+vector<vector<ColVecd6>> elStran;   
+
+/// @brief Int-pt stresses [nElStres].
+vector<vector<ColVecd6>> elStres;   
+
+/// @brief Int-pt elastic strain [nElStres].
+vector<vector<ColVecd6>> elStran_e;   
+
+/// @brief Int-pt plastic strain [nElStres].
+vector<vector<ColVecd6>> elStran_p;  
+
+/// @brief Int-pt equivalent plastic strain [nElStres].
+vector<vector<double>> elStran_eq;
+    
+/// @brief Int-pt equivalent stress (vin Mises) [nElStres].
+vector<vector<double>> elStres_eq;    
+
+/// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
+vector<vector<Matd3x8>> BMat;   
+
+/// @brief Strain matrix [nElStres, nElDispDofs].
+vector<vector<Matd6x24>> BuMat; 
+
+/// @brief Int-pt volume.
+vector<vector<double>> intPtVol; 
+
+/// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].
+vector<Matd24x24> elStiffMatx;  
+
 };
 #endif

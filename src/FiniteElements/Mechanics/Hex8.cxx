@@ -116,7 +116,7 @@ void Hex8::InitializeElements(Nodes &Nodes){
     // Initialize the vector containing each element stiffness matrix.
     elStiffMatx.resize(nElements); 
 
-    // Pointer to the vector, not the vector itself.
+    // Move after allocation for `elStiffMatx`.
     elStiffMatxVariant = &elStiffMatx;
 
     // Initialize the storages for int-pt stresses/strains

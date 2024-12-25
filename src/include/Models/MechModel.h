@@ -46,6 +46,11 @@ class MechModel: public BaseModel{
 
 public:
 
+/**
+ * @brief Constructor. Reads main data from hdf5 file. 
+ * 
+ * @param H5File_in Input hdf5 file. 
+ */
 MechModel(H5IO& H5File_in);
 ~MechModel();
 
@@ -56,10 +61,9 @@ MechModel(H5IO& H5File_in);
 void setZeroNodVals();
 
 /**
- * @brief Initializes and preallocates the RHS `vecFext`, solution `x` and 
- *        stiffness matrix `A.
+ * @brief Initializes and preallocates PETSc objects.
  * 
- * @param elements 
+ * @param elements Vector of elements.
  */
 void InitializePETSc(vector<BaseElemMech*> elements);
 
@@ -76,41 +80,78 @@ void setDirichBC();
 void UpdateDisp();
 
 /**
- * @brief Get the number of steps to apply load.
+ * @brief Get the number of steps to apply load increment.
  * 
- * @return int 
+ * @return int Number of steps.
  */
 int get_nSteps() const;
 
 /**
  * @brief Calculates the element stiffness matrix. 
  * 
- * @param elements 
- * @param mats 
+ * @param elements Vector of elements.
+ * @param mats Vector of materials.
  */
 void CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats);
 
 /**
  * @brief Assemble the global stiffness matrix.
  * 
+ * @param elements Vector of elements.
+ * @return PetscErrorCode.
  */
 PetscErrorCode Assemble(vector<BaseElemMech*> elements);
 
 /**
  * @brief Reads and initializes Dirichlet BCs.
  * 
- * @param H5File_in 
+ * @param H5File_in Input hdf5 file. 
  */
 void InitializeDirichBC(H5IO& H5File_in);
 
 void SolveSNES();
 
+/**
+ * @brief Sets up the 
+ * 
+ * @param elements 
+ * @param mats 
+ * @param iStep 
+ */
 void SetupSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
 
+/**
+ * @brief Casts `CalcResidual` to static to pass the residual to the SNES solver. 
+ * 
+ * @param snes SNES solver.
+ * @param deltaU Solution vector.
+ * @param R Residual vector
+ * @param ctx Application context.
+ * @return PetscErrorCode 
+ */
 static PetscErrorCode ResidualCallback(SNES snes, Vec deltaU, Vec R, void *ctx);
 
+/**
+ * @brief Casts `Assemble` to static to pass the Jacobian to the SNES solver.
+ * 
+ * @param snes SNES solver.
+ * @param deltaU Solution vector.
+ * @param J Jacobian matix.
+ * @param P Preconditoiner matrix. Same as J.
+ * @param ctx Application context.
+ * @return PetscErrorCode 
+ */
 static PetscErrorCode JacobianCallback(SNES snes, Vec deltaU, Mat J, Mat P, void *ctx);
 
+/**
+ * @brief Calculates the residual vector `vecR`.
+ * 
+ * @param deltaU Displacement increment (solution vector).
+ * @param elements Vector of elements.
+ * @param mats Materials vector.
+ * @param iStep Current step.
+ * @return PetscErrorCode 
+ */
 PetscErrorCode CalcResidual(Vec deltaU, vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
 
 /**
@@ -151,9 +192,6 @@ void WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const string iSt
 
 private:
 
-/// @brief Tolerance for Newton-Raphson iterations.
-const double tol = 1e-6; 
-
 /// @brief Maximum number of iterations.
 const int max_iter = 10;  
 
@@ -180,14 +218,14 @@ vector<int> nodCount;
 
 // PETSc ------------------------
 
-/// @brief For calculating the internal force vector.
+/// @brief Buffer for calculating the internal force vector.
 PetscReal* Fint = NULL;     
+
 /// @brief Indices for `VecSetValues`.
-PetscInt* indices = NULL;       
+PetscInt* indices = NULL;   
+
 /// @brief Prescribed   
 PetscReal* presZeros = NULL;    
-/// @brief L2-Norm 
-PetscReal l2norm;
 
 /// @brief External force vector.
 Vec vecFext; 
@@ -214,7 +252,7 @@ SNES snes;
 struct AppCtx {
     vector<BaseElemMech*> elements;  // Elements vector
     vector<BaseMechanics*> mats;     // Material vector
-    int iStep;                       // Current step
+    int iStep;                       // Current step 
     MechModel *mechModel;            // Pointer to <this>
 };
 

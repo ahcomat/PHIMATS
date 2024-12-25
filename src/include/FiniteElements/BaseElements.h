@@ -56,7 +56,7 @@ int get_nDof() const { return nDof; };
 int get_nElements() const { return nElements; };
 
 /**
- * @brief Return const reference to the vector of element stiffness matrix k_ll.
+ * @brief Returns const reference to the vector of element stiffness matrix `k_ll`.
  * 
  * @return const vector<T_ElStiffMatx>& 
  */
@@ -64,17 +64,28 @@ const T_ElStiffMatx& getElStiffMatx() const { return elStiffMatxVariant; }
 
 protected:
 
-int nElements;         /// @brief Total number of elements in element set.
-int nNodes;            /// @brief Total number of nodes for element set.
-int nDof;              /// @brief Total number of DOFs for element set.
+/// @brief Total number of elements in element set.
+int nElements;         
+
+/// @brief Total number of nodes for element set.
+int nNodes;      
+
+/// @brief Total number of DOFs for element set.
+int nDof;
+
 // int nPresDofs;      /// @brief Number of prescribed displacement dofs.
 
+/// @brief Gauss points in natural coordinates. 
+vector<vector<double>> gaussPts;  
 
-vector<vector<double>> gaussPts;       /// @brief Gauss points in natural coordinates. 
-vector<vector<int>> elemNodeConn;      /// @brief Node connectivity.
-vector<int> elemIDs;                   /// @brief Global element IDs. 
+/// @brief Node connectivity.
+vector<vector<int>> elemNodeConn;  
 
-T_ElStiffMatx elStiffMatxVariant;      /// @brief Variant for returning elStiffMatx. 
+/// @brief Global element IDs. 
+vector<int> elemIDs;                   
+
+/// @brief Variant for returning elStiffMatx. Passed to `Model` for assembling global stiffness matrix.
+T_ElStiffMatx elStiffMatxVariant;      
 
 };
 #endif

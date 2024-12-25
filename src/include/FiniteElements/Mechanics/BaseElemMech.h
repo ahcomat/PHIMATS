@@ -97,24 +97,44 @@ virtual void CalcElStran(const double* globalBuffer) = 0;
 /**
  * @brief Calls return mapping for plasticity.
  * 
- * @param mats 
+ * @param mat Plastic material object.
+ * @param updateStiffMat Flag for updating element stiffness matrix.
+ * @param iStep Current step.
  */
 virtual void CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep) = 0;
 
+/**
+ * @brief Calculates the internal force vector.
+ * 
+ * @param Fint Buffer for vecFint.
+ */
 virtual void CalcFint(double* Fint) = 0;
 
 protected:
 
-const int nElDim;         /// @brief Spatial dimensions of the element.
-const int nElNodes;       /// @brief Number of nodes per element.
-const int dispDofs;       /// @brief Number of displacement dofs per node. 
-const int nElStres;       /// @brief Stress/strain components.
-const int nElDispDofs;    /// @brief Number of element displacement dofs.
-const int nElGauss;       /// @brief Number of gauss points.
+/// @brief Spatial dimensions of the element.
+const int nElDim; 
 
-string materialModel;     /// @brief Flag for material model [`Elastic`, `ElasoPlastic`]
+/// @brief Number of nodes per element.        
+const int nElNodes; 
 
-vector<vector<int>> elemDispDof;    /// @brief Element displacement dofs.
+/// @brief Number of displacement dofs per node. 
+const int dispDofs;  
+
+/// @brief Stress/strain components.
+const int nElStres;      
+
+/// @brief Number of element displacement dofs.
+const int nElDispDofs;    
+
+/// @brief Number of gauss points.
+const int nElGauss;       
+
+/// @brief Flag for material model [`Elastic`, `ElasoPlastic`]
+string materialModel;     
+
+/// @brief Element displacement dofs.
+vector<vector<int>> elemDispDof;    
 
 };
 #endif
