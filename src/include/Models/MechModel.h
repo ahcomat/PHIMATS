@@ -109,16 +109,7 @@ PetscErrorCode Assemble(vector<BaseElemMech*> elements);
  */
 void InitializeDirichBC(H5IO& H5File_in);
 
-void SolveSNES();
-
-/**
- * @brief Sets up the 
- * 
- * @param elements 
- * @param mats 
- * @param iStep 
- */
-void SetupSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
+void SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
 
 /**
  * @brief Casts `CalcResidual` to static to pass the residual to the SNES solver. 

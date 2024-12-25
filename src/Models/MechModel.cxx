@@ -373,17 +373,10 @@ PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
     return 0;
 }
 
-void MechModel::SolveSNES(){
+void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep){
 
     // Set counter to zero.
     iterCounter = 0;
-    
-    // Solve
-    SNESSolve(snes, NULL, vecDeltaDisp);
-
-}
-
-void MechModel::SetupSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep){
 
     // Create a context for PETSc
     AppCtx *user = new AppCtx{elements, mats, iStep, this};
@@ -393,6 +386,9 @@ void MechModel::SetupSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
 
     // Set the Jacobian
     SNESSetJacobian(snes, matA, matA, JacobianCallback, user); 
+    
+    // Solve
+    SNESSolve(snes, NULL, vecDeltaDisp);
 
 }
 
