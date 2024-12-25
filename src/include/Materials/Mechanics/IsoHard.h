@@ -25,10 +25,10 @@
 #ifndef ISOHARD_H
 #define ISOHARD_H
 
-#include "Elastic.h"
+#include "LinearElastic.h"
 #include "H5IO.h"
 
-class IsoHard: public Elastic{
+class IsoHard: public LinearElastic{
 
 public:
 

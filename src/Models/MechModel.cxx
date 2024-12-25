@@ -3,7 +3,6 @@
 #include <unordered_set>
 
 #include "Models/MechModel.h"
-#include "Materials/Mechanics/Elastic.h"
 #include "Materials/Mechanics/IsoHard.h"
 
 using namespace std;
@@ -254,9 +253,9 @@ void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMec
 
         for (int iSet=0; iSet<nElementSets; iSet++){
             
-            if (typeid(*mats[iSet]) == typeid(Elastic)){ // Becuase some material models inherit from `Elastic`
+            if (typeid(*mats[iSet]) == typeid(LinearElastic)){ // Becuase some material models inherit from `Elastic`
 
-                Elastic* elasticMat = dynamic_cast<Elastic*>(mats[iSet]);
+                LinearElastic* elasticMat = dynamic_cast<LinearElastic*>(mats[iSet]);
                 elements[iSet]->CalcElemStiffMatx(elasticMat->getDMatx());
     
             } else if (typeid(*mats[iSet]) == typeid(IsoHard)){
@@ -427,7 +426,7 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, vector<BaseElemMech*> element
         try{
         for (int iSet=0; iSet<nElementSets; iSet++){
             
-            if (typeid(*mats[iSet]) == typeid(Elastic)){ // Becuase some material models inherit from `Elastic`
+            if (typeid(*mats[iSet]) == typeid(LinearElastic)){ // Becuase some material models inherit from `Elastic`
 
     
             } else if (typeid(*mats[iSet]) == typeid(IsoHard)){

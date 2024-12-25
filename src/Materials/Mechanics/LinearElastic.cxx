@@ -2,9 +2,9 @@
 #include <stdexcept>
 #include <cstdlib>  // Add this for EXIT_FAILURE
 
-#include "Materials/Mechanics/Elastic.h"
+#include "Materials/Mechanics/LinearElastic.h"
 
-Elastic::Elastic(string dimensions, H5IO& H5File, int iSet)
+LinearElastic::LinearElastic(string dimensions, H5IO& H5File, int iSet)
     : BaseMechanics(dimensions) {
 
     try {
@@ -40,7 +40,7 @@ Elastic::Elastic(string dimensions, H5IO& H5File, int iSet)
     }
 }
 
-void Elastic::InitializeIsoElasticityMatrix(const string& analysisType, double Emod, double nu, double ho, double uo) {
+void LinearElastic::InitializeIsoElasticityMatrix(const string& analysisType, double Emod, double nu, double ho, double uo) {
 
     if (dims != "3D")
         throw std::invalid_argument("Invalid dimension: < " + dims + " > for < " + analysisType + " > analysis.");
@@ -88,7 +88,7 @@ void Elastic::InitializeIsoElasticityMatrix(const string& analysisType, double E
     }
 }
 
-void Elastic::InitializeCubicElasticityMatrix(const string& analysisType, double C11, double C12, double C44) {
+void LinearElastic::InitializeCubicElasticityMatrix(const string& analysisType, double C11, double C12, double C44) {
     try {
         if (analysisType == "3D") {
             DMatx_e = Matd6x6(Matd6x6::Zero());
@@ -119,7 +119,7 @@ void Elastic::InitializeCubicElasticityMatrix(const string& analysisType, double
     }
 }
 
-T_DMatx Elastic::getDMatx() const{
+T_DMatx LinearElastic::getDMatx() const{
 
     return DMatx_e;
 }

@@ -1,5 +1,5 @@
 /**
- * @file Elastic.h
+ * @file LinearElastic.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
  * @brief Elastic tensor in Voigt notation.
  * 
@@ -31,13 +31,13 @@
  *  
  */
 
-#ifndef ELASTIC_H
-#define ELASTIC_H
+#ifndef LINEARELASTIC_H
+#define LINEARELASTIC_H
 
 #include "BaseMechanics.h"
 #include "H5IO.h"
 
-class Elastic: public BaseMechanics{
+class LinearElastic: public BaseMechanics{
 
 public:
 
@@ -47,7 +47,7 @@ public:
  * @param H5File Input file.
  * @param matType Material isotropy.
  */
-Elastic(string dimensions, H5IO& H5File, int iSet);
+LinearElastic(string dimensions, H5IO& H5File, int iSet);
 
 /**
  * @brief Initialize the isotropic elastic stiffness matrix in Voigt notation

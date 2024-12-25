@@ -4,7 +4,7 @@
 #include "Materials/Mechanics/IsoHard.h"
 
 IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
-    : Elastic(dimensions, H5File, iSet) {
+    : LinearElastic(dimensions, H5File, iSet) {
 
     try {
         // Read plasticity and hardening law
