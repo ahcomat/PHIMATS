@@ -366,6 +366,8 @@ void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int
                 elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*std::get<Matd6x6>(plasticMat->getDMatx())*dummyBu*dummydVol;
             }
         }
+
+        cout << elStran.at(0).at(0) << "\n\n";
     }
 }
 
