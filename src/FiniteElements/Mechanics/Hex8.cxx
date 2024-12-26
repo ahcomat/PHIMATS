@@ -327,7 +327,7 @@ void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int
         cerr << "ERROR: " << e.what() << endl;
     }
 
-    if (updateStiffMat){
+    if (!updateStiffMat){
 
         for(int iElem=0; iElem<nElements; iElem++){
             for(int iGaus=0; iGaus<nElGauss; iGaus++){
@@ -366,9 +366,9 @@ void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int
                 elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*std::get<Matd6x6>(plasticMat->getDMatx())*dummyBu*dummydVol;
             }
         }
-
-        cout << elStran.at(0).at(0) << "\n\n";
     }
+
+    cout << "\n\n" << elStran.at(0).at(0) << "\n\n";
 }
 
 void Hex8::CalcFint(double* Fint){

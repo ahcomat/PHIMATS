@@ -464,7 +464,10 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, vector<BaseElemMech*> element
                 VecSetValues(vecR, nPresDofs, presDofs, presZeros, INSERT_VALUES); 
                 VecAssemblyBegin(vecR); VecAssemblyEnd(vecR);
 
-                // // TODO: For debugging !
+                // Update iteration counter.
+                iterCounter += 1;
+
+                // TODO: For debugging !
                 // VecView(vecFint, PETSC_VIEWER_STDOUT_WORLD);
 
             } else {
