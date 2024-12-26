@@ -366,8 +366,8 @@ PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
     // For Dirichlet boundary conditions (Requires `MAT_FINAL_ASSEMBLY`)
     MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
 
-    // Sets the final sparsity structure  
-    MatSetOption(matA, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
+    // // Sets the final sparsity structure  
+    // MatSetOption(matA, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
 
     return 0;
 }
