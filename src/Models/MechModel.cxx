@@ -107,27 +107,22 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     VecSetType(vecFext, VECSEQ);
     // VecSetFromOptions(vecFext); =// for the general case.
     VecSet(vecFext, 0.0); // Set all values to zero.
-    VecAssemblyBegin(vecFext); VecAssemblyEnd(vecFext);
     
     // Initialize the solution vector
     VecDuplicate(vecFext, &vecDisp);      
     VecSet(vecDisp, 0.0); 
-    VecAssemblyBegin(vecDisp); VecAssemblyEnd(vecDisp);
 
     // Initialize the displacement increment vector
     VecDuplicate(vecFext, &vecDeltaDisp);      
     VecSet(vecDisp, 0.0); 
-    VecAssemblyBegin(vecDisp); VecAssemblyEnd(vecDisp);
     
     // Initialize the Fint vector
     VecDuplicate(vecFext, &vecFint);      
     VecSet(vecFint, 0.0); 
-    VecAssemblyBegin(vecFint); VecAssemblyEnd(vecFint);
     
     // Initialize the residual vector
     VecDuplicate(vecFext, &vecR);         
     VecSet(vecR, 0.0); 
-    VecAssemblyBegin(vecR); VecAssemblyEnd(vecR);
 
     // Initialize the coefficient matrix.
     MatCreate(PETSC_COMM_WORLD, &matA);
