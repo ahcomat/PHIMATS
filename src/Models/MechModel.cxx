@@ -372,6 +372,9 @@ void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     // Set counter to zero.
     iterCounter = 0;
 
+    // Has to be initialized, SNES accumulates solution to initial guess.
+    VecSet(vecDeltaDisp, 0.0); 
+
     // Create a context for PETSc
     AppCtx *user = new AppCtx{elements, mats, iStep, this};
 
