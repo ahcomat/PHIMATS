@@ -7,7 +7,8 @@
 
 using namespace std;
 
-MechModel::MechModel(H5IO& H5File_in){
+MechModel::MechModel(H5IO& H5File_in, const int NR_update)
+    : NR_freq(NR_update) {
 
     string dsetName;
     dsetName = "SimulationParameters/nSteps";

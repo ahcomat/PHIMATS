@@ -50,8 +50,15 @@ public:
  * @brief Constructor. Reads main data from hdf5 file. 
  * 
  * @param H5File_in Input hdf5 file. 
+ * @param NR_update Frequency of updating the Jacobian and its predonditioner.
  */
-MechModel(H5IO& H5File_in);
+
+/**
+ * @brief Construct a new Mech Model object
+ * 
+ * @param H5File_in 
+ */
+MechModel(H5IO& H5File_in, const int NR_update = 3);
 ~MechModel();
 
 /**
@@ -194,7 +201,7 @@ private:
 const int max_iter = 10;  
 
 /// @brief Frequency of updating the stiffness matrix. 
-const int NR_freq = 3;      
+const int NR_freq;      
 
 /// @brief Counter for NR iterations.
 int iterCounter = 0;  
