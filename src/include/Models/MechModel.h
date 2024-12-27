@@ -238,10 +238,10 @@ Vec vecFext;
 /// @brief Residual vector.
 Vec vecR; 
 
-/// @brief solution vector.         
+/// @brief Displacement (solution) vector.         
 Vec vecDisp;
 
-/// @brief solution vector.         
+/// @brief Internal force vector.         
 Vec vecFint;
 
 /// @brief The global coefficient (stiffness) matrix.
