@@ -128,8 +128,8 @@ void IsoHard::ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, Col
         }
 
         // Update variables
-        ColVecd6 sig_trial_dev = sig_trial - (1/3)*sig_trial.segment<3>(0).sum()*I6; // Deviatoric stress
-        ColVecd6 N_tr = (3/2)*sig_trial_dev/sig_trial_eq; // Plastic flow direction
+        ColVecd6 sig_trial_dev = sig_trial - (1.0/3.0)*sig_trial.segment<3>(0).sum()*I6; // Deviatoric stress
+        ColVecd6 N_tr = (3.0/2.0)*sig_trial_dev/sig_trial_eq; // Plastic flow direction
 
         eps_eq = p;             // Equivalent plastic strain
         eps_p += delta_p*N_tr;  // Plastic strain tensor
