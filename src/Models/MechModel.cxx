@@ -519,7 +519,6 @@ void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*>
             std::get<std::vector<ColVecd6>>(nodStran).at(iNod) = std::get<std::vector<ColVecd6>>(nodStran).at(iNod)/nodCount.at(iNod);
             std::get<std::vector<ColVecd6>>(nodStres).at(iNod) = std::get<std::vector<ColVecd6>>(nodStres).at(iNod)/nodCount.at(iNod);
         }
-
     }
 
     // TODO: For debug!

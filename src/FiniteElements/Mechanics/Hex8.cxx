@@ -367,8 +367,6 @@ void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int
             }
         }
     }
-
-    cout << "\n\n" << elStran.at(0).at(0) << "\n\n";
 }
 
 void Hex8::CalcFint(double* Fint){
