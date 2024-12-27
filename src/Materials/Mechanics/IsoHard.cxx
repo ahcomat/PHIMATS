@@ -107,7 +107,7 @@ void IsoHard::ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, Col
         while(abs(f_yield > tol)){
 
             // Update Iteration counter
-            nIter_RM += 1;
+            nIter_RM++;
 
             // Update plastic strain increment 
             delta_p += f_yield/(3*uo + dR_pow(p));

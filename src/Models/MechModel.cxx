@@ -452,10 +452,10 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, Vec R, vector<BaseElemMech*> 
                 VecAssemblyBegin(R); VecAssemblyEnd(vecR);
 
                 // Update iteration counter.
-                iterCounter += 1;
+                iterCounter++;
 
-                // TODO: For debugging !
-                VecView(deltaU, PETSC_VIEWER_STDOUT_WORLD);
+                // // TODO: For debugging !
+                // VecView(deltaU, PETSC_VIEWER_STDOUT_WORLD);
 
             } else {
 
