@@ -117,7 +117,7 @@ void IsoHard::ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, Col
             if(nIter_RM > max_iter){
 
                 std::ostringstream oss;
-                oss << "ERROR: Return mapping did not converge at step: " << iStep << "\n"
+                oss << "\nReturn mapping did not converge at step: " << iStep << "\n"
                     << "Reached maximum iterations: " << nIter_RM << "\n"
                     << "Final yield function value: " << f_yield << "\n"
                     << "Plastic strain increment: " << delta_p << "\n"
