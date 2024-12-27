@@ -93,6 +93,9 @@ void CalcElemStiffMatx(T_DMatx DMatx) override ;
 
 void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) override;
 
+void CalcNodVals(T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<int>& nodCount) override;
+
+
 void CalcElStran(const double* globalBuffer) override;
 
 void CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep) override;
