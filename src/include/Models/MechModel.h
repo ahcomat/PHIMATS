@@ -150,7 +150,7 @@ static PetscErrorCode JacobianCallback(SNES snes, Vec deltaU, Mat J, Mat P, void
  * @param iStep Current step.
  * @return PetscErrorCode 
  */
-PetscErrorCode CalcResidual(Vec deltaU, vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
+PetscErrorCode CalcResidual(Vec deltaU, Vec R, vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
 
 /**
  * @brief Pass reference of RHS (to solver).

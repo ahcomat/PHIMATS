@@ -360,11 +360,9 @@ PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
     // // TODO: For debugging. 
     // MatView(matA, PETSC_VIEWER_STDOUT_WORLD);
 
-
     // // Sets the final sparsity structure  
     // MatSetOption(matA, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
 
-    
     return 0;
 }
 
@@ -396,7 +394,7 @@ PetscErrorCode MechModel::ResidualCallback(SNES snes, Vec deltaU, Vec R, void *c
     AppCtx *user = static_cast<AppCtx*>(ctx);
 
     // Compute the internal forces using your existing CalcResidual method
-    PetscErrorCode ierr = user->mechModel->CalcResidual(deltaU, user->elements, user->mats, user->iStep);
+    PetscErrorCode ierr = user->mechModel->CalcResidual(deltaU, R, user->elements, user->mats, user->iStep);
     CHKERRQ(ierr);
 
     // // TODO: For debugging !
@@ -414,15 +412,13 @@ PetscErrorCode MechModel::JacobianCallback(SNES snes, Vec deltaU, Mat J, Mat P, 
     PetscErrorCode ierr = user->mechModel->Assemble(user->elements);
     CHKERRQ(ierr);
 
-    cout << "Hello \n";
-
     // // TODO: For debugging. 
     // MatView(J, PETSC_VIEWER_STDOUT_WORLD);
 
     return 0;
 }
 
-PetscErrorCode MechModel::CalcResidual(Vec deltaU, vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep){
+PetscErrorCode MechModel::CalcResidual(Vec deltaU, Vec R, vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep){
 
         try{
         for (int iSet=0; iSet<nElementSets; iSet++){
@@ -462,15 +458,15 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, vector<BaseElemMech*> element
                 << NOTE >> We are solving the system Fext-Fint = R, while PETSc solves Ju = -R. 
                 It will multiply R with -1, so we keep this in mind while providing R. 
                 */
-                VecWAXPY(vecR, -1.0, vecFext, vecFint);
-                VecSetValues(vecR, nPresDofs, presDofs, presZeros, INSERT_VALUES); 
-                VecAssemblyBegin(vecR); VecAssemblyEnd(vecR);
+                VecWAXPY(R, -1.0, vecFext, vecFint);
+                VecSetValues(R, nPresDofs, presDofs, presZeros, INSERT_VALUES); 
+                VecAssemblyBegin(R); VecAssemblyEnd(vecR);
 
                 // Update iteration counter.
                 iterCounter += 1;
 
-                // // TODO: For debugging !
-                // VecView(vecFint, PETSC_VIEWER_STDOUT_WORLD);
+                // TODO: For debugging !
+                VecView(deltaU, PETSC_VIEWER_STDOUT_WORLD);
 
             } else {
 
