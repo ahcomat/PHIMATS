@@ -431,9 +431,9 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, vector<BaseElemMech*> element
                 updateStiffMat = iterCounter % NR_freq == 0;
 
                 // Update total displacement vector.
-                VecAXPY(vecDisp, +1.0, deltaU);
-                VecAssemblyBegin(vecDisp); VecAssemblyEnd(vecDisp);
-
+                if (iterCounter!=0){
+                    VecAXPY(vecDisp, +1.0, deltaU);
+                }
                 // Calculate total strain
                 VecGetArrayRead(vecDisp, &globalBuffer);
                 elements[iSet]->CalcElStran(globalBuffer);
