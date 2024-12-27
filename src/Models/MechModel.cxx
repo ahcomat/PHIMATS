@@ -55,7 +55,7 @@ MechModel::~MechModel(){
 
     // Deallocate memory.
     PetscFree(presDofs); PetscFree(presVals); PetscFree(Fint); PetscFree(indices);
-    VecDestroy(&vecFext); VecDestroy(&vecDisp); VecDestroy(&vecDeltaDisp); VecDestroy(&vecFint); 
+    VecDestroy(&vecFext); VecDestroy(&vecDisp); VecDestroy(&vecFint); 
     VecDestroy(&vecR); MatDestroy(&matA);
     SNESDestroy(&snes);
     // Finalize PETSc
@@ -106,10 +106,6 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     
     // Initialize the solution vector
     VecDuplicate(vecFext, &vecDisp);      
-    VecSet(vecDisp, 0.0); 
-
-    // Initialize the displacement increment vector
-    VecDuplicate(vecFext, &vecDeltaDisp);      
     VecSet(vecDisp, 0.0); 
     
     // Initialize the Fint vector
@@ -369,10 +365,7 @@ PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
 void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep){
 
     // Set counter to zero.
-    iterCounter = 0;
-
-    // Has to be initialized, SNES accumulates solution to initial guess.
-    VecSet(vecDeltaDisp, 0.0); 
+    iterCounter = 0; 
 
     // Create a context for PETSc
     AppCtx *user = new AppCtx{elements, mats, iStep, this};
@@ -384,7 +377,7 @@ void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     SNESSetJacobian(snes, matA, matA, JacobianCallback, user); 
     
     // Solve
-    SNESSolve(snes, NULL, vecDeltaDisp);
+    SNESSolve(snes, NULL, vecDisp);
 
 }
 
@@ -433,14 +426,10 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, Vec R, vector<BaseElemMech*> 
 
                 updateStiffMat = iterCounter % NR_freq == 0;
 
-                // Update total displacement vector.
-                if (iterCounter!=0){
-                    VecAXPY(vecDisp, +1.0, deltaU);
-                }
                 // Calculate total strain
-                VecGetArrayRead(vecDisp, &globalBuffer);
+                VecGetArrayRead(deltaU, &globalBuffer);
                 elements[iSet]->CalcElStran(globalBuffer);
-                VecRestoreArrayRead(vecDisp, &globalBuffer);
+                VecRestoreArrayRead(deltaU, &globalBuffer);
 
                 // Retrun mapping
                 elements[iSet]->CalcRetrunMapping(mats[iSet], updateStiffMat, iStep);
