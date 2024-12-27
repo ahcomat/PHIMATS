@@ -69,10 +69,6 @@ double IsoHard::Mises3D(const ColVecd6& sig3D){
     return sqrt(term);
 }
 
-// double PEEQ3D(ColVecd6& eps3D){
-//     double term = 2.0/3.0 * (eps3D)
-// }
-
 void IsoHard::ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, int iStep){
 
     // Elastic strain

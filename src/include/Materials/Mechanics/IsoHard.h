@@ -64,14 +64,6 @@ double dR_pow(const double& eps_eq);
  */
 double Mises3D(const ColVecd6& sig3D);
 
-// /**
-//  * @brief Equivalent plastic strain for 3D models. 
-//  * 
-//  * @param eps3D 
-//  * @return double 
-//  */
-// double PEEQ3D(ColVecd6& eps3D);
-
 void ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, ColVecd6& eps_p, double& eqp, double& sig_eq, int iStep);
 
 /**
