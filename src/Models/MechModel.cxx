@@ -377,7 +377,7 @@ void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     // Set the Jacobian
     SNESSetJacobian(snes, matA, matA, JacobianCallback, user); 
 
-    // Update every `NR_freq` iterations
+    // Update Jacobian and preconditioner every `NR_freq` iterations
     SNESSetLagJacobian(snes, NR_freq); 
     SNESSetLagPreconditioner(snes, NR_freq); 
     
