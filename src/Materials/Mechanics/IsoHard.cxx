@@ -101,6 +101,7 @@ void IsoHard::ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, Col
         int nIter_RM = 0;
 
         // Initialize plastic multiplier
+        double p = eps_eq;
         double delta_p = 0;
 
         while(abs(f_yield > tol)){
@@ -109,9 +110,9 @@ void IsoHard::ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, Col
             nIter_RM += 1;
 
             // Update plastic strain increment 
-            delta_p += f_yield/(3*uo + dR_pow(eps_eq));
-            eps_eq += delta_p;
-            f_yield = sig_trial_eq - 3*uo*delta_p - R_pow(eps_eq) - sig_y0;
+            delta_p += f_yield/(3*uo + dR_pow(p));
+            p = eps_eq + delta_p;
+            f_yield = sig_trial_eq - 3*uo*delta_p - R_pow(p) - sig_y0;
 
             if(nIter_RM > max_iter){
 
@@ -120,7 +121,7 @@ void IsoHard::ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, Col
                     << "Reached maximum iterations: " << nIter_RM << "\n"
                     << "Final yield function value: " << f_yield << "\n"
                     << "Plastic strain increment: " << delta_p << "\n"
-                    << "Equivalent plastic strain: " << eps_eq << "\n";
+                    << "Equivalent plastic strain: " << p << "\n";
                 
                 throw std::runtime_error(oss.str());
             }
@@ -130,6 +131,7 @@ void IsoHard::ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, Col
         ColVecd6 sig_trial_dev = sig_trial - (1/3)*sig_trial.segment<3>(0).sum()*I6; // Deviatoric stress
         ColVecd6 N_tr = (3/2)*sig_trial_dev/sig_trial_eq; // Plastic flow direction
 
+        eps_eq = p;             // Equivalent plastic strain
         eps_p += delta_p*N_tr;  // Plastic strain tensor
         eps_e = eps - eps_p;    // Elastic strain tensor
         
