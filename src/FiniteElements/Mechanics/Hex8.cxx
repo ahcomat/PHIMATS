@@ -298,6 +298,28 @@ void Hex8::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_
     // cout << elStran.at(0).at(0) << "\n\n";
 }
 
+void Hex8::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<int>& nodCount){
+
+    // Integration point values.
+    for(int iElem=0; iElem<nElements; iElem++){
+        // Gauss points
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            // Nodal values
+            for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
+
+                std::get<std::vector<ColVecd6>>(nodStran).at(*iNod2) += elStran.at(iElem).at(iGaus);
+                std::get<std::vector<ColVecd6>>(nodStran_e).at(*iNod2) += elStran_e.at(iElem).at(iGaus);
+                std::get<std::vector<ColVecd6>>(nodStran_p).at(*iNod2) += elStran_p.at(iElem).at(iGaus);
+                std::get<std::vector<ColVecd6>>(nodStres).at(*iNod2) += elStres.at(iElem).at(iGaus);
+                nodStran_eq.at(*iNod2) += elStran_eq.at(iElem).at(iGaus);
+                nodStres_eq.at(*iNod2) += elStres_eq.at(iElem).at(iGaus);
+                nodCount.at(*iNod2) += 1;
+            }
+        }
+    }
+}
+
 void Hex8::CalcElStran(const double* globalBuffer){
 
     ColVecd24 dummyDisp; // for element nodal displacement.

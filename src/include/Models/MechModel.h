@@ -187,6 +187,8 @@ Mat& getA();
  */
 void CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats);
 
+void CalcNodVals(vector<BaseElemMech*> elements);
+
 /**
  * @brief Write nodal values.
  * 
@@ -217,6 +219,18 @@ T_nodStres nodStres;
 
 /// @brief Nodal strain.
 T_nodStres nodStran;  
+
+/// @brief Nodal elastic strain.
+T_nodStres nodStran_e;
+
+/// @brief Nodal plastic strain.
+T_nodStres nodStran_p;
+
+/// @brief Nodal equivalent plastic strain.
+vector<double> nodStran_eq;
+
+/// @brief Nodal equivalent stress (Von Mises).
+vector<double> nodStres_eq;
 
 /// @brief Counter for integration points surrounding nodes.
 vector<int> nodCount;     

@@ -26,15 +26,21 @@ MechModel::MechModel(H5IO& H5File_in, const int NR_update)
 
     // Set the type and size
     nodCount.resize(nTotNodes);
+    nodStran_eq.resize(nTotNodes);
+    nodStres_eq.resize(nTotNodes);
     if (nDim == 2){ // Case 2D model
 
         nodStres = vector<ColVecd3>(nTotNodes);
         nodStran = vector<ColVecd3>(nTotNodes);
+        nodStran_e = vector<ColVecd3>(nTotNodes);
+        nodStran_p = vector<ColVecd3>(nTotNodes);
 
     } else if (nDim == 3){ // Case 3D
 
         nodStres = vector<ColVecd6>(nTotNodes);
         nodStran = vector<ColVecd6>(nTotNodes);
+        nodStran_e = vector<ColVecd6>(nTotNodes);
+        nodStran_p = vector<ColVecd6>(nTotNodes);
 
     }
 
@@ -72,7 +78,11 @@ void MechModel::setZeroNodVals(){
         for(int iNod=0; iNod<nTotNodes; iNod++){
 
             std::get<std::vector<ColVecd3>>(nodStran).at(iNod).setZero();
+            std::get<std::vector<ColVecd3>>(nodStran_e).at(iNod).setZero();
+            std::get<std::vector<ColVecd3>>(nodStran_p).at(iNod).setZero();
             std::get<std::vector<ColVecd3>>(nodStres).at(iNod).setZero();
+            nodStran_eq.at(iNod) = 0;
+            nodStres_eq.at(iNod) = 0;
             nodCount.at(iNod) = 0;
             
         }
@@ -80,9 +90,13 @@ void MechModel::setZeroNodVals(){
     } else if (nDim == 3){ // Case 3D
 
         for(int iNod=0; iNod<nTotNodes; iNod++){
-
+            
             std::get<std::vector<ColVecd6>>(nodStran).at(iNod).setZero();
+            std::get<std::vector<ColVecd6>>(nodStran_e).at(iNod).setZero();
+            std::get<std::vector<ColVecd6>>(nodStran_p).at(iNod).setZero();
             std::get<std::vector<ColVecd6>>(nodStres).at(iNod).setZero();
+            nodStran_eq.at(iNod) = 0;
+            nodStres_eq.at(iNod) = 0;
             nodCount.at(iNod) = 0;
 
         }
@@ -526,6 +540,45 @@ void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*>
 
 }
 
+
+void MechModel::CalcNodVals(vector<BaseElemMech*> elements){
+
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        
+        elements[iSet]->CalcNodVals(nodStres, nodStran, nodStran_e, nodStran_p, nodStran_eq, nodStres_eq, nodCount);
+    }
+
+    // Number averaging the nodal values
+    if (nDim==2){
+
+        for(int iNod=0; iNod<nTotNodes; iNod++){
+            
+            std::get<std::vector<ColVecd3>>(nodStran).at(iNod) = std::get<std::vector<ColVecd3>>(nodStran).at(iNod)/nodCount.at(iNod);
+            std::get<std::vector<ColVecd3>>(nodStran_e).at(iNod) = std::get<std::vector<ColVecd3>>(nodStran_e).at(iNod)/nodCount.at(iNod);
+            std::get<std::vector<ColVecd3>>(nodStran_p).at(iNod) = std::get<std::vector<ColVecd3>>(nodStran_p).at(iNod)/nodCount.at(iNod);
+            std::get<std::vector<ColVecd3>>(nodStres).at(iNod) = std::get<std::vector<ColVecd3>>(nodStres).at(iNod)/nodCount.at(iNod);
+            nodStran_eq.at(iNod) = nodStran_eq.at(iNod)/nodCount.at(iNod);
+            nodStres_eq.at(iNod) = nodStres_eq.at(iNod)/nodCount.at(iNod);
+        }
+
+    } else if (nDim==3){
+
+        for(int iNod=0; iNod<nTotNodes; iNod++){
+            
+            std::get<std::vector<ColVecd6>>(nodStran).at(iNod) = std::get<std::vector<ColVecd6>>(nodStran).at(iNod)/nodCount.at(iNod);
+            std::get<std::vector<ColVecd6>>(nodStran_e).at(iNod) = std::get<std::vector<ColVecd6>>(nodStran_e).at(iNod)/nodCount.at(iNod);
+            std::get<std::vector<ColVecd6>>(nodStran_p).at(iNod) = std::get<std::vector<ColVecd6>>(nodStran_p).at(iNod)/nodCount.at(iNod);
+            std::get<std::vector<ColVecd6>>(nodStres).at(iNod) = std::get<std::vector<ColVecd6>>(nodStres).at(iNod)/nodCount.at(iNod);
+            nodStran_eq.at(iNod) = nodStran_eq.at(iNod)/nodCount.at(iNod);
+            nodStres_eq.at(iNod) = nodStres_eq.at(iNod)/nodCount.at(iNod);
+        }
+    }
+
+    // TODO: For debug!
+    // cout << std::get<std::vector<ColVecd3>>(nodStran).at(0) << "\n";
+
+}
+
 void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const string iStep){
 
     // Displacements
@@ -537,9 +590,13 @@ void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const
     // Stresses and strains
     if (nDim==2){
         H5File_out.WriteStres("Strain/Step_"+iStep, nTotNodes, 3, nodStran);
+        H5File_out.WriteStres("Strain_e/Step_"+iStep, nTotNodes, 3, nodStran_e);
+        H5File_out.WriteStres("Strain_p/Step_"+iStep, nTotNodes, 3, nodStran_p);
         H5File_out.WriteStres("Stress/Step_"+iStep, nTotNodes, 3, nodStres);
     } else if (nDim==3) {
         H5File_out.WriteStres("Strain/Step_"+iStep, nTotNodes, 6, nodStran);
+        H5File_out.WriteStres("Strain_e/Step_"+iStep, nTotNodes, 6, nodStran_e);
+        H5File_out.WriteStres("Strain_p/Step_"+iStep, nTotNodes, 6, nodStran_p);
         H5File_out.WriteStres("Stress/Step_"+iStep, nTotNodes, 6, nodStres);
     }
 

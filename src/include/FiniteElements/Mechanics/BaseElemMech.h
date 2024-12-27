@@ -88,6 +88,19 @@ virtual void CalcElemStiffMatx(T_DMatx DMatx) = 0;
 virtual void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) = 0;
 
 /**
+ * @brief Function for evaluating int-point values at nodal points.
+ * 
+ * @param nodStres 
+ * @param nodStran 
+ * @param nodStran_e 
+ * @param nodStran_p 
+ * @param nodStran_eq 
+ * @param nodStres_eq 
+ * @param nodCount 
+ */
+virtual void CalcNodVals(T_nodStres& nodStres, T_nodStres& nodStran,T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<int>& nodCount) = 0;
+
+/**
  * @brief Calculates the int-pt total strain.
  * 
  * @param globalBuffer 
