@@ -357,9 +357,14 @@ PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
     // For Dirichlet boundary conditions (Requires `MAT_FINAL_ASSEMBLY`)
     MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
 
+    // TODO: For debugging. 
+    MatView(matA, PETSC_VIEWER_STDOUT_WORLD);
+
+
     // // Sets the final sparsity structure  
     // MatSetOption(matA, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
 
+    
     return 0;
 }
 
@@ -408,6 +413,8 @@ PetscErrorCode MechModel::JacobianCallback(SNES snes, Vec deltaU, Mat J, Mat P, 
     // Assemble the Jacobian (stiffness) matrix.
     PetscErrorCode ierr = user->mechModel->Assemble(user->elements);
     CHKERRQ(ierr);
+
+    cout << "Hello \n";
 
     // // TODO: For debugging. 
     // MatView(J, PETSC_VIEWER_STDOUT_WORLD);
