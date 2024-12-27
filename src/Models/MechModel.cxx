@@ -66,10 +66,6 @@ MechModel::~MechModel(){
 
 void MechModel::setZeroNodVals(){
 
-    for (int iDof=0; iDof<nTotDofs; iDof++){
-        Fint[iDof] = 0;
-    }
-
     if (nDim == 2){ // Case 2D model
 
         for(int iNod=0; iNod<nTotNodes; iNod++){
@@ -432,9 +428,6 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, vector<BaseElemMech*> element
                 // // TODO: For debug!
                 // cout << std::string(typeid(*mats[iSet]).name()) << "\n"; 
 
-                // Update iteration counter.
-                iterCounter += 1;
-
                 updateStiffMat = iterCounter % NR_freq == 0;
 
                 // Update total displacement vector.
@@ -449,6 +442,10 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, vector<BaseElemMech*> element
                 // Retrun mapping
                 elements[iSet]->CalcRetrunMapping(mats[iSet], updateStiffMat, iStep);
 
+                // Has to be set to zero before any calculation, otherwise it accumulates.
+                for (int iDof=0; iDof<nTotDofs; iDof++){
+                    Fint[iDof] = 0;
+                }
                 // Calculate internal force
                 elements[iSet]->CalcFint(Fint);
                 VecSetValues(vecFint, nTotDofs, indices, Fint, INSERT_VALUES); 
@@ -465,7 +462,7 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, vector<BaseElemMech*> element
                 // Update iteration counter.
                 iterCounter += 1;
 
-                // TODO: For debugging !
+                // // TODO: For debugging !
                 // VecView(vecFint, PETSC_VIEWER_STDOUT_WORLD);
 
             } else {
@@ -481,7 +478,6 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, vector<BaseElemMech*> element
     }
 
     return 0;
-
 }
 
 Vec& MechModel::getB(){
