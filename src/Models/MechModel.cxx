@@ -357,8 +357,8 @@ PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
     // For Dirichlet boundary conditions (Requires `MAT_FINAL_ASSEMBLY`)
     MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
 
-    // TODO: For debugging. 
-    MatView(matA, PETSC_VIEWER_STDOUT_WORLD);
+    // // TODO: For debugging. 
+    // MatView(matA, PETSC_VIEWER_STDOUT_WORLD);
 
 
     // // Sets the final sparsity structure  
