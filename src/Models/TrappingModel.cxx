@@ -37,7 +37,7 @@ TrappingModel::TrappingModel(vector<BaseElemTrap*> elements, H5IO& H5File_in){
     // Read exit nodes IDs
     ExitNodeIDs.resize(nExitNodes);
     dsetName = "ExitNodes";
-    H5File_in.ReadFieldInt1D(dsetName, ExitNodeIDs);
+    H5File_in.ReadField1D(dsetName, ExitNodeIDs);
 
     // Set the type and size
     nodCount.resize(nTotNodes);
@@ -209,13 +209,13 @@ void TrappingModel::WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_ou
 
     // Flux
     if (nDim==2){
-        H5File_out.WriteStres("GradPhi", nTotNodes, 2, nodGradPhi);
+        H5File_out.WriteTensor("GradPhi", nTotNodes, 2, nodGradPhi);
     } else if (nDim==3) {
-        H5File_out.WriteStres("GradPhi", nTotNodes, 3, nodGradPhi);
+        H5File_out.WriteTensor("GradPhi", nTotNodes, 3, nodGradPhi);
     }
 
     // laplacian
-    H5File_out.WriteArray_1D("LapPhi", nTotDofs, nodLapPhi);
+    H5File_out.WriteArray1D("LapPhi", nTotDofs, nodLapPhi);
     delete [] nodLapPhi;
 }
 
@@ -376,7 +376,7 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool updateTemp){
 void TrappingModel::ReadInitialCon(H5IO& H5File, const int iStep){
 
     vector<double> con_0(nTotDofs);
-    H5File.ReadFieldDoub1D("Con/Step_"+to_string(iStep), con_0);
+    H5File.ReadField1D("Con/Step_"+to_string(iStep), con_0);
 
     for(int iDof=0; iDof<nTotDofs; iDof++){
         VecSetValue(x, iDof, con_0.at(iDof), INSERT_VALUES);
@@ -397,7 +397,7 @@ void TrappingModel::InitializeDirichBC(H5IO& H5File_in){
     for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
         // Read values
         dsetName = "PrescribedDOFs/Prescribed_"+to_string(iPresDof);
-        H5File_in.ReadFieldDoub1D(dsetName, dummy);
+        H5File_in.ReadField1D(dsetName, dummy);
         // Assign values
         presDofs[iPresDof] = dummy.at(0); // nDim*iNode+dof
         presVals[iPresDof] = dummy.at(1);
@@ -455,7 +455,7 @@ void TrappingModel::WriteInPtCoords(vector<BaseElemTrap*> elements, H5IO &H5File
         elements[iSet]->getInPtCoords(glIntPtCoords);
     }
 
-    H5File_out.WriteStres("IntPtCoords", nTotGuasPts, 3, glIntPtCoords);
+    H5File_out.WriteTensor("IntPtCoords", nTotGuasPts, 3, glIntPtCoords);
 }
 
 void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
@@ -495,22 +495,22 @@ void TrappingModel::WriteFlux(H5IO &H5File_out, const string iStep){
 
     // Write to H5 file
     if (nDim==2){
-        H5File_out.WriteStres("Flux/Step_"+iStep, nTotNodes, 2, nodFlux);
+        H5File_out.WriteTensor("Flux/Step_"+iStep, nTotNodes, 2, nodFlux);
     } else if (nDim==3) {
-        H5File_out.WriteStres("Flux/Step_"+iStep, nTotNodes, 3, nodFlux);
+        H5File_out.WriteTensor("Flux/Step_"+iStep, nTotNodes, 3, nodFlux);
     }
 }
 
 void TrappingModel::WriteIntPtFlux(H5IO &H5File_out, const string iStep){
 
-    H5File_out.WriteStres("IntPtFlux/Step_"+iStep, nTotGuasPts, 3, intPtFlux);
+    H5File_out.WriteTensor("IntPtFlux/Step_"+iStep, nTotGuasPts, 3, intPtFlux);
 }
 
 void TrappingModel::WriteOut(H5IO &H5File_out, const string iStep){
 
     // Concentration
     VecGetArrayRead(x, &globalBuffer);
-    H5File_out.WriteArray_1D("Con/Step_"+iStep, nTotDofs, globalBuffer);
+    H5File_out.WriteArray1D("Con/Step_"+iStep, nTotDofs, globalBuffer);
     VecRestoreArrayRead(x, &globalBuffer);
 }
 

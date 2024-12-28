@@ -227,7 +227,7 @@ void MechModel::InitializeDirichBC(H5IO& H5File_in){
     for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
         // Read values
         dsetName = "PrescribedDOFs/Prescribed_"+to_string(iPresDof);
-        H5File_in.ReadFieldDoub1D(dsetName, dummy);
+        H5File_in.ReadField1D(dsetName, dummy);
         // Assign values
         presDofs[iPresDof] = nDim*dummy.at(0)+dummy.at(1); // nDim*iNode+dof
         presVals[iPresDof] = dummy.at(2)/nSteps;
@@ -581,23 +581,29 @@ void MechModel::CalcNodVals(vector<BaseElemMech*> elements){
 
 void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const string iStep){
 
-    // Displacements
+    // Displacement
     VecGetArrayRead(vecDisp, &globalBuffer);
-    H5File_out.WriteArray_1D("Disp/Step_"+iStep, nTotDofs, globalBuffer);
+    H5File_out.WriteArray1D("Disp/Step_"+iStep, nTotDofs, globalBuffer);
     VecRestoreArrayRead(vecDisp, &globalBuffer);
-    H5File_out.WriteArray_1D("Force/Step_"+iStep, nTotDofs, Fint);
+    
+    // Force
+    H5File_out.WriteArray1D("Force/Step_"+iStep, nTotDofs, Fint);
+
+    // Equivalent stress and strain
+    H5File_out.WriteArray1D("Stress_eq/Step_"+iStep, nTotNodes, nodStres_eq.data());
+    H5File_out.WriteArray1D("Strain_eq/Step_"+iStep, nTotNodes, nodStran_eq.data());
 
     // Stresses and strains
     if (nDim==2){
-        H5File_out.WriteStres("Strain/Step_"+iStep, nTotNodes, 3, nodStran);
-        H5File_out.WriteStres("Strain_e/Step_"+iStep, nTotNodes, 3, nodStran_e);
-        H5File_out.WriteStres("Strain_p/Step_"+iStep, nTotNodes, 3, nodStran_p);
-        H5File_out.WriteStres("Stress/Step_"+iStep, nTotNodes, 3, nodStres);
+        H5File_out.WriteTensor("Strain/Step_"+iStep, nTotNodes, 3, nodStran);
+        H5File_out.WriteTensor("Strain_e/Step_"+iStep, nTotNodes, 3, nodStran_e);
+        H5File_out.WriteTensor("Strain_p/Step_"+iStep, nTotNodes, 3, nodStran_p);
+        H5File_out.WriteTensor("Stress/Step_"+iStep, nTotNodes, 3, nodStres);
     } else if (nDim==3) {
-        H5File_out.WriteStres("Strain/Step_"+iStep, nTotNodes, 6, nodStran);
-        H5File_out.WriteStres("Strain_e/Step_"+iStep, nTotNodes, 6, nodStran_e);
-        H5File_out.WriteStres("Strain_p/Step_"+iStep, nTotNodes, 6, nodStran_p);
-        H5File_out.WriteStres("Stress/Step_"+iStep, nTotNodes, 6, nodStres);
+        H5File_out.WriteTensor("Strain/Step_"+iStep, nTotNodes, 6, nodStran);
+        H5File_out.WriteTensor("Strain_e/Step_"+iStep, nTotNodes, 6, nodStran_e);
+        H5File_out.WriteTensor("Strain_p/Step_"+iStep, nTotNodes, 6, nodStran_p);
+        H5File_out.WriteTensor("Stress/Step_"+iStep, nTotNodes, 6, nodStres);
     }
 
     // Set nodal vlaues to zero

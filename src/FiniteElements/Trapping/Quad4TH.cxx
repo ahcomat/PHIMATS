@@ -93,7 +93,7 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
     // Read nodal values of phi
     nodPhi.resize(nNodes);
     string dsetName = "Phi";
-    H5File_in.ReadFieldDoub1D(dsetName, nodPhi);      
+    H5File_in.ReadField1D(dsetName, nodPhi);      
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd4x2 dummyElNodCoord; // For node coordinates.

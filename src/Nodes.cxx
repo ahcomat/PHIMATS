@@ -23,7 +23,7 @@ void Nodes::ReadNodes(H5IO &H5File){
     nodeCoordinates.resize(nTotNodes);
 
     dsetName = "NodeCoordinates";
-    H5File.ReadFieldFloat2D(dsetName, nTotNodes, nDim, nodeCoordinates);
+    H5File.ReadField2D(dsetName, nTotNodes, nDim, nodeCoordinates);
 }
 
 vector<double> Nodes::getNodCoord(int nod){

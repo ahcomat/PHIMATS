@@ -104,7 +104,7 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
         // Read nodal values of gPhi
         nod_gPhi.resize(nNodes);
         string dsetName = "gPhi";
-        H5File_in.ReadFieldDoub1D(dsetName, nod_gPhi);
+        H5File_in.ReadField1D(dsetName, nod_gPhi);
 
         // Loop through elements.
         for(int iElem=0; iElem<nElements; iElem++){
@@ -152,19 +152,19 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
         // Read nodal values of traps
         nod_martensite.resize(nNodes);
         string dsetName = "martensite";
-        H5File_in.ReadFieldDoub1D(dsetName, nod_martensite);
+        H5File_in.ReadField1D(dsetName, nod_martensite);
 
         nod_gPhiff.resize(nNodes);
         dsetName = "gPhi_ff";
-        H5File_in.ReadFieldDoub1D(dsetName, nod_gPhiff);
+        H5File_in.ReadField1D(dsetName, nod_gPhiff);
 
         nod_gPhifM.resize(nNodes);
         dsetName = "gPhi_fM";
-        H5File_in.ReadFieldDoub1D(dsetName, nod_gPhifM);
+        H5File_in.ReadField1D(dsetName, nod_gPhifM);
 
         nod_gPhiMM.resize(nNodes);
         dsetName = "gPhi_MM";
-        H5File_in.ReadFieldDoub1D(dsetName, nod_gPhiMM);
+        H5File_in.ReadField1D(dsetName, nod_gPhiMM);
 
         // Loop through elements.
         for(int iElem=0; iElem<nElements; iElem++){

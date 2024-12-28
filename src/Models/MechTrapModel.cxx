@@ -196,13 +196,13 @@
 
 //     // Flux
 //     if (nDim==2){
-//         H5File_out.WriteStres("GradSigmaH", nTotNodes, 2, nodGradSigmaH);
+//         H5File_out.WriteTensor("GradSigmaH", nTotNodes, 2, nodGradSigmaH);
 //     } else if (nDim==3) {
-//         H5File_out.WriteStres("GradSigmaH", nTotNodes, 3, nodGradSigmaH);
+//         H5File_out.WriteTensor("GradSigmaH", nTotNodes, 3, nodGradSigmaH);
 //     }
 
 //     // laplacian
-//     H5File_out.WriteArray_1D("LapSigmaH", nTotDofs, nodLapSigmaH);
+//     H5File_out.WriteArray1D("LapSigmaH", nTotDofs, nodLapSigmaH);
 //     delete [] nodLapSigmaH;
 // }
 
@@ -312,7 +312,7 @@
 //     for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
 //         // Read values
 //         dsetName = "PrescribedDOFs/Prescribed_"+to_string(iPresDof);
-//         H5File_in.ReadFieldDoub1D(dsetName, dummy);
+//         H5File_in.ReadField1D(dsetName, dummy);
 //         // Assign values
 //         presDofs[iPresDof] = dummy.at(0); // nDim*iNode+dof
 //         presVals[iPresDof] = dummy.at(1);
@@ -416,14 +416,14 @@
 
 //     // Displacements
 //     VecGetArrayRead(x, &globalBuffer);
-//     H5File_out.WriteArray_1D("Con/Step_"+iStep, nTotDofs, globalBuffer);
+//     H5File_out.WriteArray1D("Con/Step_"+iStep, nTotDofs, globalBuffer);
 //     VecRestoreArrayRead(x, &globalBuffer);
 
 //     // // Flux
 //     // if (nDim==2){
-//     //     H5File_out.WriteStres("Flux/Step_"+iStep, nTotNodes, 2, nodFlux);
+//     //     H5File_out.WriteTensor("Flux/Step_"+iStep, nTotNodes, 2, nodFlux);
 //     // } else if (nDim==3) {
-//     //     H5File_out.WriteStres("Flux/Step_"+iStep, nTotNodes, 3, nodFlux);
+//     //     H5File_out.WriteTensor("Flux/Step_"+iStep, nTotNodes, 3, nodFlux);
 //     // }
 
 //     // // set zeros

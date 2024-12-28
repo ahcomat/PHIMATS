@@ -29,7 +29,7 @@ TransportModel::TransportModel(vector<BaseElemTransport*> elements, H5IO& H5File
     // Read exit nodes IDs
     ExitNodeIDs.resize(nExitNodes);
     dsetName = "ExitNodes";
-    H5File_in.ReadFieldInt1D(dsetName, ExitNodeIDs);
+    H5File_in.ReadField1D(dsetName, ExitNodeIDs);
 
     // Set the type and size
     nodCount.resize(nTotNodes);
@@ -260,7 +260,7 @@ void TransportModel::InitializeDirichBC(H5IO& H5File_in){
     for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
         // Read values
         dsetName = "PrescribedDOFs/Prescribed_"+to_string(iPresDof);
-        H5File_in.ReadFieldDoub1D(dsetName, dummy);
+        H5File_in.ReadField1D(dsetName, dummy);
         // Assign values
         presDofs[iPresDof] = dummy.at(0); // nDim*iNode+dof
         presVals[iPresDof] = dummy.at(1);
@@ -342,14 +342,14 @@ void TransportModel::WriteOut(H5IO &H5File_out, const string iStep){
 
     // Displacements
     VecGetArrayRead(x, &globalBuffer);
-    H5File_out.WriteArray_1D("Con/Step_"+iStep, nTotDofs, globalBuffer);
+    H5File_out.WriteArray1D("Con/Step_"+iStep, nTotDofs, globalBuffer);
     VecRestoreArrayRead(x, &globalBuffer);
 
     // Flux
     if (nDim==2){
-        H5File_out.WriteStres("Flux/Step_"+iStep, nTotNodes, 2, nodFlux);
+        H5File_out.WriteTensor("Flux/Step_"+iStep, nTotNodes, 2, nodFlux);
     } else if (nDim==3) {
-        H5File_out.WriteStres("Flux/Step_"+iStep, nTotNodes, 3, nodFlux);
+        H5File_out.WriteTensor("Flux/Step_"+iStep, nTotNodes, 3, nodFlux);
     }
 }
 
