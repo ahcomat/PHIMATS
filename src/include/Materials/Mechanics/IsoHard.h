@@ -65,6 +65,22 @@ double dR_pow(const double& eps_eq);
  */
 double Mises3D(const ColVecd6& sig3D);
 
+/**
+ * @brief Von Mises stress for 2D plane-strain models. 
+ * 
+ * @param sig2D Stress vector.
+ * @return double 
+ */
+double MisesPE(const ColVecd3& sig2D);
+
+/**
+ * @brief Von Mises stress for 2D plane-stress models. 
+ * 
+ * @param sig2D Stress vector.
+ * @return double 
+ */
+double MisesPS(const ColVecd3& sig2D);
+
 void ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, ColVecd6& eps_p, double& eqp, double& sig_eq, int iStep);
 
 /**

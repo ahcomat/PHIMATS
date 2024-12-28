@@ -61,10 +61,44 @@ double IsoHard::dR_pow(const double& eps_eq){
 
 double IsoHard::Mises3D(const ColVecd6& sig3D){
 
-    double term = 0.5 * (pow(sig3D(0) - sig3D(1), 2) + 
-                         pow(sig3D(1) - sig3D(2), 2) + 
-                         pow(sig3D(2) - sig3D(0), 2)) + 
-                  3 * (pow(sig3D(3),2) + pow(sig3D(4),2) + pow(sig3D(5),2));
+    double sx = sig3D(0); 
+    double sy = sig3D(1); 
+    double sz = sig3D(2); 
+    double txy = sig3D(3); 
+    double tyz = sig3D(4); 
+    double tzx = sig3D(5); 
+
+    // Compute von Mises stress term
+    double term = 0.5 * (pow(sx - sy, 2) +
+                         pow(sy - sz, 2) +
+                         pow(sz - sx, 2)) +
+                  3 * (pow(txy, 2) + pow(tyz, 2) + pow(tzx, 2));
+
+    return sqrt(term);
+}
+
+double IsoHard::MisesPE(const ColVecd3& sig2D){
+
+    double sx = sig2D(0); 
+    double sy = sig2D(1); 
+    double txy = sig2D(2); 
+
+    // Poisson's ratio from Lamé constants
+    double nu = ho / (2 * (ho + uo));
+
+    double hydrostatic_term = nu * (sx + sy);
+    double term = sx * sx - sx * sy + sy * sy + 3 * txy * txy - hydrostatic_term * hydrostatic_term;
+
+    return sqrt(term);
+}
+
+double IsoHard::MisesPS(const ColVecd3& sig2D){
+
+    double sx = sig2D(0); 
+    double sy = sig2D(1); 
+    double txy = sig2D(2); 
+
+    double term = sx * sx - sx * sy + sy * sy + 3 * txy * txy;
 
     return sqrt(term);
 }
