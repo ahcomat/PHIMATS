@@ -7,7 +7,7 @@
  * `Isotropic` 
  * `Cubic`
  * 
- * And Elasticities:
+ * And elsticity types:
  * `3D`
  * `PlaneStrain`
  * 'PlaneStress'
