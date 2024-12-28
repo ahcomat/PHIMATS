@@ -146,6 +146,7 @@ void Hex8::InitializeElements(Nodes &Nodes){
         elStran.at(iElem).resize(nElGauss);
 
         if (materialModel=="ElastoPlastic"){
+
             elStran_e.at(iElem).resize(nElGauss);
             elStran_p.at(iElem).resize(nElGauss); 
             elStres_eq.at(iElem).resize(nElGauss);
@@ -153,6 +154,7 @@ void Hex8::InitializeElements(Nodes &Nodes){
 
             // Initilize to zeros.
             for (int iGaus=0; iGaus<nElGauss; iGaus++){
+                
                 elStran_e.at(iElem).at(iGaus).setZero();
                 elStran_p.at(iElem).at(iGaus).setZero();
                 elStran_eq.at(iElem).at(iGaus) = 0;

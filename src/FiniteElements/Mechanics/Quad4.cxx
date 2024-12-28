@@ -92,7 +92,12 @@ void Quad4::InitializeElements(Nodes &Nodes){
     elStiffMatxVariant = &elStiffMatx;
 
     // Initialize the storages for int-pt stresses/strains
-    elStres.resize(nElements); elStran.resize(nElements);      
+    elStres.resize(nElements); elStran.resize(nElements); 
+
+    if (materialModel=="ElastoPlastic"){
+        elStran_e.resize(nElements); elStran_p.resize(nElements); // Elastic and plastic strain tensors
+        elStres_eq.resize(nElements); elStran_eq.resize(nElements); // Equivalent platic strain/stress
+    }     
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd4x2 dummyElNodCoord; // For node coordinates.
@@ -111,6 +116,24 @@ void Quad4::InitializeElements(Nodes &Nodes){
 
         elStres.at(iElem).resize(nElGauss);
         elStran.at(iElem).resize(nElGauss);
+
+        if (materialModel=="ElastoPlastic"){
+
+            elStran_e.at(iElem).resize(nElGauss);
+            elStran_p.at(iElem).resize(nElGauss); 
+            elStres_eq.at(iElem).resize(nElGauss);
+            elStran_eq.at(iElem).resize(nElGauss);
+
+            // Initilize to zeros.
+            for (int iGaus=0; iGaus<nElGauss; iGaus++){
+                
+                elStran_e.at(iElem).at(iGaus).setZero();
+                elStran_p.at(iElem).at(iGaus).setZero();
+                elStran_eq.at(iElem).at(iGaus) = 0;
+                elStres_eq.at(iElem).at(iGaus) = 0;
+            }
+        }
+
         BMat.at(iElem).resize(nElGauss);
         BuMat.at(iElem).resize(nElGauss);
 
