@@ -2,6 +2,7 @@
 #include<algorithm>
 
 #include"FiniteElements/Mechanics/Quad4.h"
+#include"Materials/Mechanics/IsoHard.h"
 
 #ifndef DEBUG
 #define at(x) operator[](x)
