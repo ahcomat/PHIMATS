@@ -283,3 +283,7 @@ void Quad4::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, in
 
 }
 
+void Quad4::CalcFint(double* Fint){
+
+}
+
