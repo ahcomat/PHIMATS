@@ -35,8 +35,9 @@ public:
 /**
  * @brief Constructor, reads plasticity parameters from hdf5 file.
  * 
- * @param H5File Input file.
- * @param matType Material isotropy.
+ * @param dimensions Dimensions of the model. 
+ * @param H5File Input hdf5 file. 
+ * @param iSet Element set number. 
  */
 IsoHard(string dimensions, H5IO& H5File, int iSet);
 
