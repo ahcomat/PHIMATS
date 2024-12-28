@@ -42,11 +42,15 @@ LinearElastic::LinearElastic(string dimensions, H5IO& H5File, int iSet)
 
 void LinearElastic::InitializeIsoElasticityMatrix(const string& analysisType, double Emod, double nu, double ho, double uo) {
 
-    if (dims != "3D")
-        throw std::invalid_argument("Invalid dimension: < " + dims + " > for < " + analysisType + " > analysis.");
+    
 
     try {
         if (analysisType == "3D") {
+
+            if (dims != "3D"){
+                throw std::invalid_argument("Invalid dimension: < " + dims + " > for < " + analysisType + " > analysis.");
+                }
+                
             DMatx_e = Matd6x6(Matd6x6::Zero());
             auto& mat = std::get<Matd6x6>(DMatx_e);
 
