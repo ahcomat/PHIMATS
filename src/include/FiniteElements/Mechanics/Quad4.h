@@ -102,6 +102,8 @@ void CalcElStran(const double* globalBuffer) override;
 
 void CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep) override;
 
+void CalcFint(double* Fint) override;
+
 private:
 
 /// @brief Weights of the gauss points [nElGauss].
@@ -123,7 +125,22 @@ vector<vector<RowVecd2>> gaussPtCart;
 vector<vector<ColVecd3>> elStran;   
 
 /// @brief Int-pt stresses [nElStres].
-vector<vector<ColVecd3>> elStres;   
+vector<vector<ColVecd3>> elStres; 
+
+/// @brief Int-pt elastic strain [nElStres].
+vector<vector<ColVecd3>> elStran_e;   
+
+/// @brief Int-pt plastic strain [nElStres].
+vector<vector<ColVecd3>> elStran_p;  
+
+/// @brief Int-pt equivalent plastic strain [nElStres].
+vector<vector<double>> elStran_eq;
+    
+/// @brief Int-pt equivalent stress (von Mises) [nElStres].
+vector<vector<double>> elStres_eq;
+
+/// @brief Int-pt hydrostatic stress [nElStres].
+vector<vector<double>> elStres_h;
 
 /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
 vector<vector<Matd2x4>> BMat;
