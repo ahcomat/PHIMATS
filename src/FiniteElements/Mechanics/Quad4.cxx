@@ -127,7 +127,7 @@ void Quad4::InitializeElements(Nodes &Nodes){
 
             // Initilize to zeros.
             for (int iGaus=0; iGaus<nElGauss; iGaus++){
-                
+
                 elStran_e.at(iElem).at(iGaus).setZero();
                 elStran_p.at(iElem).at(iGaus).setZero();
                 elStran_eq.at(iElem).at(iGaus) = 0;
@@ -274,9 +274,23 @@ void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T
 
 void Quad4::CalcElStran(const double* globalBuffer){
     
+    ColVecd8 dummyDisp; // for element nodal displacement.
+
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        // Get element nodal displacements from the solution vector. 
+        for(int iDof=0; iDof<nElDispDofs; iDof++){
+            dummyDisp(iDof) = globalBuffer[elemDispDof.at(iElem).at(iDof)];
+        }
+
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+            elStran.at(iElem).at(iGaus) = BuMat.at(iElem).at(iGaus)*dummyDisp;
+        }
+    }
 }
 
 void Quad4::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<int>& nodCount){
+
 
 }
 
