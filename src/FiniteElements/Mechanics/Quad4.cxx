@@ -85,7 +85,11 @@ Matd2x4 Quad4::CalcShapeFuncDeriv(double xi, double eta){
 
 void Quad4::InitializeElements(Nodes &Nodes){
 
-    nDof = dispDofs*nNodes;      // Calc total number of dips DOFs for element set.
+    // Initialize the vector containing each element stiffness matrix.
+    elStiffMatx.resize(nElements); 
+
+    // Move after allocation for `elStiffMatx`.
+    elStiffMatxVariant = &elStiffMatx;
 
     // Initialize the storages for int-pt stresses/strains
     elStres.resize(nElements); elStran.resize(nElements);      
@@ -173,8 +177,6 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
 
     Matd3x3 DMat = std::get<Matd3x3>(DMatx);
 
-    elStiffMatx.resize(nElements); // Initialize the vector containing each element stiffness matrix.
-
     double dummydVol;   // dummy for int-pt volume.
 
     // Loop through all elements.
@@ -197,9 +199,6 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
     // for (auto& iStifMat : elStiffMatx)
     //     cout << iStifMat << "\n\n";
     // cout << elStiffMatx.at(0) << "\n";
-
-    // Pointer to the vector, not the vector itself.
-    elStiffMatxVariant = &elStiffMatx;
 }
 
 void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount){
