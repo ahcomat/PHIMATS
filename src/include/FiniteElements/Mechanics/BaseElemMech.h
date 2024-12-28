@@ -88,7 +88,7 @@ virtual void CalcElemStiffMatx(T_DMatx DMatx) = 0;
 virtual void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) = 0;
 
 /**
- * @brief Function for evaluating int-point values at nodal points.
+ * @brief Function for mapping int-point values to nodal points.
  * 
  * @param nodStres 
  * @param nodStran 
