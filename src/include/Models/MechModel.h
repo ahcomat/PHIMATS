@@ -62,10 +62,17 @@ MechModel(H5IO& H5File_in, const int NR_update = 3);
 ~MechModel();
 
 /**
- * @brief Set nodal quantities `nodStres`, `nodStran`, `nodCount` and `Fint` to zeros.
+ * @brief Reads and initializes Dirichlet BCs.
+ * 
+ * @param H5File_in Input hdf5 file. 
+ */
+void InitializeDirichBC(H5IO& H5File_in);
+
+/**
+ * @brief Set Dirichlet boundary conditions in the RHS `vecFext` and global stiffness matrix `A`.
  * 
  */
-void setZeroNodVals();
+void setDirichBC();
 
 /**
  * @brief Initializes and preallocates PETSc objects.
@@ -75,10 +82,10 @@ void setZeroNodVals();
 void InitializePETSc(vector<BaseElemMech*> elements);
 
 /**
- * @brief Set Dirichlet boundary conditions in the RHS `vecFext` and global stiffness matrix `A`.
+ * @brief Set nodal quantities `nodStres`, `nodStran`, `nodCount` and `Fint` to zeros.
  * 
  */
-void setDirichBC();
+void setZeroNodVals();
 
 /**
  * @brief Updates displacement increment.
@@ -108,13 +115,6 @@ void CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMechanics*> ma
  * @return PetscErrorCode.
  */
 PetscErrorCode Assemble(vector<BaseElemMech*> elements);
-
-/**
- * @brief Reads and initializes Dirichlet BCs.
- * 
- * @param H5File_in Input hdf5 file. 
- */
-void InitializeDirichBC(H5IO& H5File_in);
 
 /**
  * @brief SNES solve of the current step.

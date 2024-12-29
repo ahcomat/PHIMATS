@@ -108,6 +108,36 @@ void MechModel::setZeroNodVals(){
     }
 }
 
+void MechModel::InitializeDirichBC(H5IO& H5File_in){
+
+    // Read Dirichlet BCs
+    string dsetName;
+    dsetName = "SimulationParameters/nPresDofs";
+    nPresDofs = H5File_in.ReadScalar(dsetName);
+    PetscMalloc1(nPresDofs, &presDofs);
+    PetscMalloc1(nPresDofs, &presVals); 
+    PetscMalloc1(nPresDofs, &presZeros);
+
+    vector<double> dummy(3);
+    for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
+        // Read values
+        dsetName = "PrescribedDOFs/Prescribed_"+to_string(iPresDof);
+        H5File_in.ReadField1D(dsetName, dummy);
+        // Assign values
+        presDofs[iPresDof] = nDim*dummy.at(0)+dummy.at(1); // nDim*iNode+dof
+        presVals[iPresDof] = dummy.at(2)/nSteps;
+        // // TODO: For debug!
+        // cout << presDofs[iPresDof] << " --> " << presVals[iPresDof] << "\n";
+        presZeros[iPresDof] = 0;
+    }
+}
+
+void MechModel::setDirichBC(){
+
+    VecSetValues(vecFext, nPresDofs, presDofs, presVals, ADD_VALUES); 
+    VecAssemblyBegin(vecFext); VecAssemblyEnd(vecFext);
+}
+
 void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
 
     // TODO: For debug!
@@ -216,36 +246,6 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     // Initialize the `SNES` solver.
     SNESCreate(PETSC_COMM_WORLD, &snes);
     SNESSetFromOptions(snes);
-}
-
-void MechModel::InitializeDirichBC(H5IO& H5File_in){
-
-    // Read Dirichlet BCs
-    string dsetName;
-    dsetName = "SimulationParameters/nPresDofs";
-    nPresDofs = H5File_in.ReadScalar(dsetName);
-    PetscMalloc1(nPresDofs, &presDofs);
-    PetscMalloc1(nPresDofs, &presVals); 
-    PetscMalloc1(nPresDofs, &presZeros);
-
-    vector<double> dummy(3);
-    for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
-        // Read values
-        dsetName = "PrescribedDOFs/Prescribed_"+to_string(iPresDof);
-        H5File_in.ReadField1D(dsetName, dummy);
-        // Assign values
-        presDofs[iPresDof] = nDim*dummy.at(0)+dummy.at(1); // nDim*iNode+dof
-        presVals[iPresDof] = dummy.at(2)/nSteps;
-        // // TODO: For debug!
-        // cout << presDofs[iPresDof] << " --> " << presVals[iPresDof] << "\n";
-        presZeros[iPresDof] = 0;
-    }
-}
-
-void MechModel::setDirichBC(){
-
-    VecSetValues(vecFext, nPresDofs, presDofs, presVals, ADD_VALUES); 
-    VecAssemblyBegin(vecFext); VecAssemblyEnd(vecFext);
 }
 
 void MechModel::UpdateDisp(){
