@@ -48,6 +48,11 @@ MechModel::MechModel(H5IO& H5File_in, const int NR_update)
     PetscMalloc1(nTotDofs, &Fint);
     PetscMalloc1(nTotDofs, &indices);
 
+    // Initialize to zero.
+    for (int iDof=0; iDof<nTotDofs; iDof++){
+        Fint[iDof] = 0;
+    }
+
     // Initialize to zeros, otherwise will get garbage memory values.
     setZeroNodVals();
 
