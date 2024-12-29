@@ -296,6 +296,14 @@ void Quad4::CalcElStran(const double* globalBuffer){
 
 void Quad4::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<int>& nodCount){
 
+    try {
+        if (elStran_e.data() == nullptr){
+            throw runtime_error("Plasicity strain container vectors were not allocated.\n\n       Please add the keyword argument < Elastoplastic > in the element constructor.\n");
+        }
+    } catch (const exception& e) {
+        cerr << "ERROR: " << e.what() << endl;
+    }
+
     // Integration point values.
     for(int iElem=0; iElem<nElements; iElem++){
         // Gauss points
