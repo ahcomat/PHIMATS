@@ -315,6 +315,57 @@ void Quad4::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres&
 
 void Quad4::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep){
 
+    IsoHard* plasticMat = dynamic_cast<IsoHard*>(mat);
+
+    try {
+        if (elStran_e.data() == nullptr){
+            throw runtime_error("Plasicity strain container vectors were not allocated.\n\n       Please add the keyword argument < Elastoplastic > in the element constructor.\n");
+        }
+    } catch (const exception& e) {
+        cerr << "ERROR: " << e.what() << endl;
+    }
+
+    if (!updateStiffMat){
+
+        for(int iElem=0; iElem<nElements; iElem++){
+            for(int iGaus=0; iGaus<nElGauss; iGaus++){
+                
+                plasticMat->ReturnMapping2D(elStres.at(iElem).at(iGaus),
+                                            elStran.at(iElem).at(iGaus),
+                                            elStran_e.at(iElem).at(iGaus),
+                                            elStran_p.at(iElem).at(iGaus),
+                                            elStran_eq.at(iElem).at(iGaus), 
+                                            elStres_eq.at(iElem).at(iGaus), iStep);
+
+            }
+        }
+
+    } else {  // Update the element stiffness matrix
+
+        double dummydVol;   // dummy for int-pt volume.
+
+        for(int iElem=0; iElem<nElements; iElem++){
+
+            elStiffMatx.at(iElem).setZero(); // Must be populated with zeros.         
+
+            for(int iGaus=0; iGaus<nElGauss; iGaus++){
+                
+                plasticMat->ReturnMapping2D(elStres.at(iElem).at(iGaus),
+                                            elStran.at(iElem).at(iGaus),
+                                            elStran_e.at(iElem).at(iGaus),
+                                            elStran_p.at(iElem).at(iGaus),
+                                            elStran_eq.at(iElem).at(iGaus), 
+                                            elStres_eq.at(iElem).at(iGaus), iStep);
+
+                const Matd3x8& dummyBu = BuMat.at(iElem).at(iGaus); // Strain matrix for the given gauss point.
+                dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current integration point 
+
+                // [B_kl]^T D_kk B_kl
+                elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*std::get<Matd3x3>(plasticMat->getDMatx())*dummyBu*dummydVol;
+            }
+        }
+    }
+
 }
 
 void Quad4::CalcFint(double* Fint){
