@@ -66,20 +66,17 @@ double dR_pow(const double& eps_eq);
 double Mises3D(const ColVecd6& sig3D);
 
 /**
- * @brief Von Mises stress for 2D plane-strain models. 
+ * @brief Return mapping algorithm for isotropic hardening plasticity. 
  * 
- * @param sig2D Stress vector.
- * @return double 
+ * @param sig Stress tensor.
+ * @param eps Total strain tensor.
+ * @param eps_e Elastic strain.
+ * @param eps_p Plastic strain.
+ * @param eqp Equivalent plastic strain.
+ * @param sig_eq Equivalent stress.
+ * @param iStep Step number. 
  */
-double MisesPE(const ColVecd3& sig2D);
-
-/**
- * @brief Von Mises stress for 2D plane-stress models. 
- * 
- * @param sig2D Stress vector.
- * @return double 
- */
-double MisesPS(const ColVecd3& sig2D);
+double MisesPS(const ColVecd3& sig_eq, const int iStep);
 
 void ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, ColVecd6& eps_p, double& eqp, double& sig_eq, int iStep);
 

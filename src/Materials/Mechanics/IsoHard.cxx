@@ -77,33 +77,7 @@ double IsoHard::Mises3D(const ColVecd6& sig3D){
     return sqrt(term);
 }
 
-double IsoHard::MisesPE(const ColVecd3& sig2D){
-
-    double sx = sig2D(0); 
-    double sy = sig2D(1); 
-    double txy = sig2D(2); 
-
-    // Poisson's ratio from Lamé constants
-    double nu = ho / (2 * (ho + uo));
-
-    double hydrostatic_term = nu * (sx + sy);
-    double term = sx * sx - sx * sy + sy * sy + 3 * txy * txy - hydrostatic_term * hydrostatic_term;
-
-    return sqrt(term);
-}
-
-double IsoHard::MisesPS(const ColVecd3& sig2D){
-
-    double sx = sig2D(0); 
-    double sy = sig2D(1); 
-    double txy = sig2D(2); 
-
-    double term = sx * sx - sx * sy + sy * sy + 3 * txy * txy;
-
-    return sqrt(term);
-}
-
-void IsoHard::ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, int iStep){
+void IsoHard::ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, const int iStep){
 
     // Elastic strain
     eps_e = eps - eps_p;
