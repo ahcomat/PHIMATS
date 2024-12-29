@@ -383,5 +383,17 @@ void Quad4::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, in
 
 void Quad4::CalcFint(double* Fint){
 
+    ColVecd8 dummyForc; // for element nodal internal force.
+
+    for(int iElem=0; iElem<nElements; iElem++){
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            dummyForc = BuMat.at(iElem).at(iGaus).transpose()*elStres.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+
+            for(int pom=0; pom<nElDispDofs; pom++){
+                Fint[elemDispDof.at(iElem).at(pom)] += dummyForc(pom);
+            }
+        }
+    }
 }
 
