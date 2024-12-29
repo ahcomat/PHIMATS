@@ -34,19 +34,19 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
         exit(EXIT_FAILURE);
     }
 
-    if (analysisType == "PlaneStrain") {
-        analysis2D = AnalysisType::PlaneStrain;
-    } else if (analysisType == "PlaneStress") {
-        analysis2D = AnalysisType::PlaneStress;
-    } else {
-        throw std::invalid_argument("Invalid 2D analysis type: " + analysisType);
-    }
-
     if (dims == "3D"){
 
         DMatx_ep = Matd6x6(Matd6x6::Zero());
 
     } else if (dims == "2D") {
+
+        if (analysisType == "PlaneStrain") {
+            analysis2D = AnalysisType::PlaneStrain;
+        } else if (analysisType == "PlaneStress") {
+            analysis2D = AnalysisType::PlaneStress;
+        } else {
+            throw std::invalid_argument("Invalid 2D analysis type: " + analysisType);
+        }
 
          DMatx_ep =  Matd3x3(Matd3x3::Zero());
 
