@@ -16,9 +16,13 @@
 */
 
 Hex8::Hex8(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel)
-    : BaseElemMech(3, 8, 3, 6, 24, 8){ // nElDim, nElNodes, dispDofs, nElStres, nElDispDofs, nElGauss
+    : BaseElemMech(3, 8, 3, 6, 24, 8, matModel){ // nElDim, nElNodes, dispDofs, nElStres, nElDispDofs, nElGauss
 
-    materialModel = matModel;
+    if (materialModel != "Elastic" && materialModel != "ElastoPlastic") {
+        
+        throw std::invalid_argument("Invalid material model: < " + materialModel + " >\nAllowed models are < Elastic, ElastoPlastic >\n");
+    }
+
     InitShapeFunc();
     ReadElementsData(H5File_in, iSet);
     InitializeElements(Nodes);

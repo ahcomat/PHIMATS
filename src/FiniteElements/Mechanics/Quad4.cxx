@@ -16,8 +16,13 @@
  l -> total displacement dofs.
 */
 
-Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes, int iSet)
-    : BaseElemMech(2, 4, 2, 3, 8, 4){ // nElDim, nElNodes, dispDofs, nElStres, nElDispDofs, nElGauss
+Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel)
+    : BaseElemMech(2, 4, 2, 3, 8, 4, matModel){ // nElDim, nElNodes, dispDofs, nElStres, nElDispDofs, nElGauss
+
+    if (materialModel != "Elastic" && materialModel != "ElastoPlastic") {
+        
+        throw std::invalid_argument("Invalid material model: < " + materialModel + " >\nAllowed models are < Elastic, ElastoPlastic >\n");
+    }
 
     InitShapeFunc();
     ReadElementsData(H5File_in, iSet);

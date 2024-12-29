@@ -31,9 +31,9 @@ class BaseElemMech: public BaseElements{
 
 public:
 
-BaseElemMech(int nElDim, int nElNodes, int dispDofs, int nElStres, int nElDispDofs, int nElGauss2)
+BaseElemMech(int nElDim, int nElNodes, int dispDofs, int nElStres, int nElDispDofs, int nElGauss2, string matModel)
     : nElDim(nElDim), nElNodes(nElNodes), dispDofs(dispDofs), nElStres(nElStres),
-      nElDispDofs(nElDispDofs), nElGauss(nElGauss2) {};
+      nElDispDofs(nElDispDofs), nElGauss(nElGauss2), materialModel(matModel) {};
 
 /**
  * @brief Get dimensions of the element. 
@@ -143,8 +143,8 @@ const int nElDispDofs;
 /// @brief Number of gauss points.
 const int nElGauss;       
 
-/// @brief Flag for material model [`Elastic`, `ElasoPlastic`]
-string materialModel;     
+/// @brief Flag for material model [`Elastic`, `ElastoPlastic`]
+const string materialModel;     
 
 /// @brief Element displacement dofs.
 vector<vector<int>> elemDispDof;    

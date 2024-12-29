@@ -33,7 +33,7 @@ class Tri3: public BaseElemMech{
 
 public:
 
-Tri3(H5IO &H5File_in, Nodes &Nodes, int iSet);   
+Tri3(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel);   
 
 ~Tri3() override ;
 
