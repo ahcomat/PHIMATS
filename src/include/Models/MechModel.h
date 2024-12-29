@@ -243,7 +243,7 @@ PetscReal* Fint = NULL;
 /// @brief Indices for `VecSetValues`.
 PetscInt* indices = NULL;   
 
-/// @brief Prescribed   
+/// @brief To set the Residual prescribed dofs to zeros.    
 PetscReal* presZeros = NULL;    
 
 /// @brief External force vector.
