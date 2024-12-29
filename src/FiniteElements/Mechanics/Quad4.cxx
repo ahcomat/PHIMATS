@@ -322,8 +322,6 @@ void Quad4::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres&
             }
         }
     }
-
-
 }
 
 void Quad4::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep){
@@ -378,7 +376,6 @@ void Quad4::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, in
             }
         }
     }
-
 }
 
 void Quad4::CalcFint(double* Fint){
