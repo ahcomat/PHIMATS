@@ -28,9 +28,17 @@
 #include "LinearElastic.h"
 #include "H5IO.h"
 
+struct PlaneStrain {};
+struct PlaneStress {};
+
 class IsoHard: public LinearElastic{
 
 public:
+
+enum class AnalysisType{
+    PlaneStrain,
+    PlaneStress
+};
 
 /**
  * @brief Constructor, reads plasticity parameters from hdf5 file.
@@ -76,9 +84,9 @@ double Mises3D(const ColVecd6& sig3D);
  * @param sig_eq Equivalent stress.
  * @param iStep Step number. 
  */
-double MisesPS(const ColVecd3& sig_eq, const int iStep);
+void ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, ColVecd6& eps_p, double& eqp, double& sig_eq, const int iStep);
 
-void ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, ColVecd6& eps_p, double& eqp, double& sig_eq, int iStep);
+void ReturnMapping2D(ColVecd3& sig, ColVecd3& eps, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, const int iStep);
 
 /**
  * @brief Returns the stiffness matrix in Voigt notation.
@@ -89,6 +97,9 @@ T_DMatx getDMatx() const override;
 
 private:
 
+/// @brief Stores the analysis type
+AnalysisType analysis2D; 
+
 /// @brief Tolerance for return mapping algorithm.
 const double tol = 1e-6;    
 
@@ -97,6 +108,9 @@ const int max_iter = 10;
 
 /// @brief 3D Identity tensor in Voigt notation.
 const ColVecd6 I6 = (ColVecd6() << 1.0, 1.0, 1.0, 0.0, 0.0, 0.0).finished();
+
+/// @brief 2D Identity tensor in Voigt notation.
+const ColVecd3 I3 = (ColVecd3() << 1.0, 1.0, 0.0).finished();
 
 /// @brief Plasticity type.
 string Platicity;         
@@ -111,10 +125,24 @@ string HardLaw;
 double K_hard = 0.0;      
 
 /// @brief Strain hardening exponent.
-double n_pow = 0.0;         
+double n_pow = 0.0;  
 
 /// @brief Elastioplastic stiffness matrix in Voigt notation.
-T_DMatx DMatx_ep;          
+T_DMatx DMatx_ep;        
+
+/**
+ * @brief Template for 2D von Mises stress. Works for plane stress and plane strain.  
+ * 
+ * @tparam AnalysisType `enmum` class to store analysis type. 
+ * @param sig2D Stress vector
+ * @return double 
+ */
+template <typename AnalysisType>
+double Mises2D(const ColVecd3& sig2D);
+
+template <typename AnalysisType>
+void ReturnMapping2D(ColVecd3& sig, ColVecd3& eps, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, int iStep);
 
 };
+
 #endif

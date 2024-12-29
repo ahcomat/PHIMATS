@@ -2,6 +2,7 @@
 #include <cmath>
 
 #include "Materials/Mechanics/IsoHard.h"
+#include "Materials/Mechanics/IsoHard.tpp"  // Include template implementation
 
 IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
     : LinearElastic(dimensions, H5File, iSet) {
@@ -31,6 +32,14 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
         cerr << "ERROR: " << e.what() << endl;
         cerr << "Terminating!" << endl;
         exit(EXIT_FAILURE);
+    }
+
+    if (analysisType == "PlaneStrain") {
+        analysis2D = AnalysisType::PlaneStrain;
+    } else if (analysisType == "PlaneStress") {
+        analysis2D = AnalysisType::PlaneStress;
+    } else {
+        throw std::invalid_argument("Invalid 2D analysis type: " + analysisType);
     }
 
     if (dims == "3D"){
@@ -149,7 +158,22 @@ void IsoHard::ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, Col
     }
 }
 
+/// @brief Select appropriate template specialization 
+void IsoHard::ReturnMapping2D(ColVecd3& sig, ColVecd3& eps, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, const int iStep){
+
+    if (analysis2D == AnalysisType::PlaneStrain) {
+        return ReturnMapping2D<PlaneStrain>(sig, eps, eps_e, eps_p, eps_eq, sig_eq, iStep);
+    } else if (analysis2D == AnalysisType::PlaneStress) {
+        return ReturnMapping2D<PlaneStress>(sig, eps, eps_e, eps_p, eps_eq, sig_eq, iStep);
+    } else {
+        throw std::logic_error("Unhandled analysis type.");
+    }
+
+}
+
 T_DMatx IsoHard::getDMatx() const{
 
     return DMatx_ep;
 }
+
+
