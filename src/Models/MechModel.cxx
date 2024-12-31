@@ -217,17 +217,22 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
         nnz[iDof] = gDofs.at(iDof).size();
     }
 
-    // To account for Dirichlet BCs in preallocation. Doesn't work very great though. 
-    for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
-        PetscInt row = presDofs[iPresDof];
 
-        // Ensure the row has at least one nonzero (for boundary conditions)
-        nnz[row] = max(nnz[row], static_cast<PetscInt>(1));
-    }
+    // // To account for Dirichlet BCs in preallocation. Doesn't work very great though. 
+    // for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
+    //     PetscInt row = presDofs[iPresDof];
+
+    //     // Ensure the row has at least one nonzero (for boundary conditions)
+    //     nnz[row] = max(nnz[row], static_cast<PetscInt>(1));
+    // }
 
     // Preallocate the stiffness matrix.
     MatSeqAIJSetPreallocation(matA, PETSC_DEFAULT, nnz); 
     PetscFree(nnz);
+
+    // No new memory is allocated
+    MatSetOption(matA, MAT_NEW_NONZERO_ALLOCATION_ERR, PETSC_TRUE);
+    MatSetOption(matA,MAT_KEEP_NONZERO_PATTERN,PETSC_TRUE);
 
     // // TODO: For debugging. Check the preallocation indirectly by querying the number of nonzeros
     // MatInfo info;
@@ -237,11 +242,6 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     // } else {
     //     PetscPrintf(PETSC_COMM_WORLD, "Matrix is not preallocated.\n");
     // }
-
-    // Throw error if unallocated entry is accessed if "PETSC_TRUE".
-    // Should be added after the matrix is assembled https://lists.mcs.anl.gov/pipermail/petsc-users/2019-October/039608.html
-    // MatSetOption(matA, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
-    MatSetOption(matA, MAT_NEW_NONZERO_LOCATIONS, PETSC_TRUE);
 
     // Initialize the `SNES` solver.
     SNESCreate(PETSC_COMM_WORLD, &snes);
@@ -375,9 +375,6 @@ PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
 
     // // TODO: For debugging. 
     // MatView(matA, PETSC_VIEWER_STDOUT_WORLD);
-
-    // // Sets the final sparsity structure  
-    // MatSetOption(matA, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
 
     return 0;
 }
