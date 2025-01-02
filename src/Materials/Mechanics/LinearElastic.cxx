@@ -57,9 +57,9 @@ void LinearElastic::InitializeIsoElasticityMatrix(const string& analysisType, do
             mat << ho + 2 * uo, ho, ho, 0, 0, 0,
                    ho, ho + 2 * uo, ho, 0, 0, 0,
                    ho, ho, ho + 2 * uo, 0, 0, 0,
-                   0, 0, 0, 2 * uo, 0, 0,
-                   0, 0, 0, 0, 2 * uo, 0,
-                   0, 0, 0, 0, 0, 2 * uo;
+                   0, 0, 0, uo, 0, 0,
+                   0, 0, 0, 0, uo, 0,
+                   0, 0, 0, 0, 0, uo;
 
         } else if (analysisType == "PlaneStrain" || analysisType == "PlaneStress") {
 
