@@ -87,6 +87,8 @@ string analysisType;
 /// @brief Isotropic elasticity parameters.
 double uo = 0.0;
 double ho = 0.0;
+double Emod = 0.0;
+double nu = 0.0;
 
 /// @brief Cubic elasticity parameters.
 double C11 = 0.0;
