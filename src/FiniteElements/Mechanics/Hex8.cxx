@@ -438,3 +438,12 @@ void Hex8::CalcFint(double* Fint){
         }
     }
 }
+
+void Hex8::getNew(){
+
+    elStran_e_old = elStran_e;
+    elStran_p_old = elStran_p;
+    elStres_old = elStres;
+    elStran_eq_old = elStran_eq;
+
+}

@@ -400,6 +400,10 @@ void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     // Solve
     SNESSolve(snes, NULL, vecDisp);
 
+    // Assign values to old
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        elements[iSet]->getNew();
+    }
 }
 
 PetscErrorCode MechModel::ResidualCallback(SNES snes, Vec deltaU, Vec R, void *ctx){

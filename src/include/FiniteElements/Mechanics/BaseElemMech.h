@@ -117,6 +117,12 @@ virtual void CalcElStran(const double* globalBuffer) = 0;
 virtual void CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep) = 0;
 
 /**
+ * @brief Updated _old values.
+ * 
+ */
+virtual void getNew() = 0;
+
+/**
  * @brief Calculates the internal force vector.
  * 
  * @param Fint Buffer for vecFint.
