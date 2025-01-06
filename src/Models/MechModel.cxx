@@ -384,6 +384,9 @@ void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     // Set counter to zero.
     iterCounter = 0; 
 
+    // Set to zero.
+    VecSet(vecDeltaDisp, 0.0); 
+
     // Create a context for PETSc
     AppCtx *user = new AppCtx{elements, mats, iStep, this};
 
@@ -398,7 +401,7 @@ void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     SNESSetLagPreconditioner(snes, NR_freq); 
     
     // Solve
-    SNESSolve(snes, NULL, vecDisp);
+    SNESSolve(snes, NULL, vecDeltaDisp);
 
     // Assign values to old
     for (int iSet=0; iSet<nElementSets; iSet++){
