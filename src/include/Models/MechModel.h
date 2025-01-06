@@ -188,7 +188,7 @@ Mat& getA();
 void CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats);
 
 /**
- * @brief Maps int-point values to nodes for hd
+ * @brief Maps int-point values to nodes for output.
  * 
  * @param elements 
  */
