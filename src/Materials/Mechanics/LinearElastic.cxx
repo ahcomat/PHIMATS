@@ -13,8 +13,8 @@ LinearElastic::LinearElastic(string dimensions, H5IO& H5File, int iSet)
 
         if (isotropy=="Isotropic"){
 
-            double Emod = H5File.ReadScalar("Materials/Material_" + to_string(iSet)+"/Elastic/Emod");
-            double nu = H5File.ReadScalar("Materials/Material_" + to_string(iSet)+"/Elastic/nu");
+            Emod = H5File.ReadScalar("Materials/Material_" + to_string(iSet)+"/Elastic/Emod");
+            nu = H5File.ReadScalar("Materials/Material_" + to_string(iSet)+"/Elastic/nu");
 
             ho = Emod*nu/((1+nu)*(1-2*nu));
             uo = Emod/(2*(1+nu));
