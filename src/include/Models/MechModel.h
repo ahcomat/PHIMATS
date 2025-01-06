@@ -187,6 +187,11 @@ Mat& getA();
  */
 void CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats);
 
+/**
+ * @brief Maps int-point values to nodes for hd
+ * 
+ * @param elements 
+ */
 void CalcNodVals(vector<BaseElemMech*> elements);
 
 /**
@@ -254,6 +259,9 @@ Vec vecR;
 
 /// @brief Displacement (solution) vector.         
 Vec vecDisp;
+
+/// @brief Displacement (solution) vector.         
+Vec vecDeltaDisp;
 
 /// @brief Internal force vector.         
 Vec vecFint;
