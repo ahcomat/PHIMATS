@@ -1,5 +1,5 @@
 /**
- * @file H5IO.cxx
+ * @file H5IO.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
  * @brief Wrapper class for HDF5 files.
  * @date 2024-05-23
