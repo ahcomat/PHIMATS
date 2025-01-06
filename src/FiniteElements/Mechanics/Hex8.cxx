@@ -149,10 +149,14 @@ void Hex8::InitializeElements(Nodes &Nodes){
         elStres.at(iElem).resize(nElGauss);
         elStran.at(iElem).resize(nElGauss);
 
+        elStres_old.at(iElem).resize(nElGauss);
+
         // Initilize to zeros.
         for (int iGaus=0; iGaus<nElGauss; iGaus++){
             elStres.at(iElem).at(iGaus).setZero();
             elStran.at(iElem).at(iGaus).setZero();
+            
+            elStres_old.at(iElem).at(iGaus).setZero();
         }
 
         if (materialModel=="ElastoPlastic"){
@@ -162,13 +166,21 @@ void Hex8::InitializeElements(Nodes &Nodes){
             elStres_eq.at(iElem).resize(nElGauss);
             elStran_eq.at(iElem).resize(nElGauss);
 
+            elStran_e_old.at(iElem).resize(nElGauss);
+            elStran_p_old.at(iElem).resize(nElGauss); 
+            elStran_eq_old.at(iElem).resize(nElGauss);
+
             // Initilize to zeros.
             for (int iGaus=0; iGaus<nElGauss; iGaus++){
                 
                 elStran_e.at(iElem).at(iGaus).setZero();
                 elStran_p.at(iElem).at(iGaus).setZero();
-                elStran_eq.at(iElem).at(iGaus) = 0;
                 elStres_eq.at(iElem).at(iGaus) = 0;
+                elStran_eq.at(iElem).at(iGaus) = 0;
+
+                elStran_e_old.at(iElem).at(iGaus).setZero();
+                elStran_p_old.at(iElem).at(iGaus).setZero();
+                elStran_eq_old.at(iElem).at(iGaus) = 0;
             }
         }
 
