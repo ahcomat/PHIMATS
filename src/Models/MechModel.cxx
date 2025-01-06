@@ -60,6 +60,7 @@ MechModel::MechModel(H5IO& H5File_in, const int NR_update)
     for (int iDof=0; iDof<nTotDofs; iDof++){
         indices[iDof] = iDof;
     }
+
 }
 
 MechModel::~MechModel(){
@@ -133,7 +134,7 @@ void MechModel::InitializeDirichBC(H5IO& H5File_in){
 
 void MechModel::setDirichBC(){
 
-    VecSetValues(vecFext, nPresDofs, presDofs, presVals, ADD_VALUES); 
+    VecSetValues(vecFext, nPresDofs, presDofs, presVals, INSERT_VALUES); 
     VecAssemblyBegin(vecFext); VecAssemblyEnd(vecFext);
 }
 
