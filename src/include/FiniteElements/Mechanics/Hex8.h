@@ -128,6 +128,9 @@ vector<vector<RowVecd3>> gaussPtCart;
 /// @brief Int-pt total strains [nElStres].
 vector<vector<ColVecd6>> elStran;   
 
+/// @brief Int-pt strain increment [nElStres].
+vector<vector<ColVecd6>> elDStran; 
+
 /// @brief Int-pt stresses [nElStres].
 vector<vector<ColVecd6>> elStres;   
 
