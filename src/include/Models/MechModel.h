@@ -257,10 +257,10 @@ Vec vecFext;
 /// @brief Residual vector.
 Vec vecR; 
 
-/// @brief Displacement (solution) vector.         
+/// @brief Displacement vector.         
 Vec vecDisp;
 
-/// @brief Displacement (solution) vector.         
+/// @brief Displacement increment (solution) vector.         
 Vec vecDeltaDisp;
 
 /// @brief Internal force vector.         

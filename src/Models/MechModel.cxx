@@ -60,7 +60,6 @@ MechModel::MechModel(H5IO& H5File_in, const int NR_update)
     for (int iDof=0; iDof<nTotDofs; iDof++){
         indices[iDof] = iDof;
     }
-
 }
 
 MechModel::~MechModel(){
@@ -151,10 +150,13 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
 
     // Since we are interested in sequential implementation for now.
     VecSetType(vecFext, VECSEQ);
-    // VecSetFromOptions(vecFext); =// for the general case.
     VecSet(vecFext, 0.0); // Set all values to zero.
+
+    // Initialize the displacement increment (solution) vector
+    VecDuplicate(vecFext, &vecDeltaDisp);      
+    VecSet(vecDeltaDisp, 0.0); 
     
-    // Initialize the solution vector
+    // Initialize the displacement vector
     VecDuplicate(vecFext, &vecDisp);      
     VecSet(vecDisp, 0.0); 
     
@@ -173,9 +175,6 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     // Since we are interested in only sequential in this implementation. 
     MatSetType(matA, MATSEQAIJ);
     // MatSetFromOptions(matA);  // for command line options, but we dont do it here.
-
-    // // MAT_SYMMETRIC: symmetric in terms of both structure and value
-    // MatSetOption(matA, MAT_SYMMETRIC, PETSC_TRUE);
 
     // Preallocate the coefficient matrix.
     vector<unordered_set<int>> gDofs(nTotDofs); // vector to store dofs per row.
