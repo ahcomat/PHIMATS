@@ -42,8 +42,6 @@ LinearElastic::LinearElastic(string dimensions, H5IO& H5File, int iSet)
 
 void LinearElastic::InitializeIsoElasticityMatrix(const string& analysisType, double Emod, double nu, double ho, double uo) {
 
-    
-
     try {
         if (analysisType == "3D") {
 
