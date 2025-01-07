@@ -350,6 +350,23 @@ void Hex8::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& 
     }
 }
 
+void Hex8::CalcElDStran(const double* globalBuffer){
+
+    ColVecd24 dummyDisp; // for element nodal displacement.
+
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        // Get element nodal displacements from the solution vector. 
+        for(int iDof=0; iDof<nElDispDofs; iDof++){
+            dummyDisp(iDof) = globalBuffer[elemDispDof.at(iElem).at(iDof)];
+        }
+
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+            elDStran.at(iElem).at(iGaus) = BuMat.at(iElem).at(iGaus)*dummyDisp;
+        }
+    }
+}
+
 void Hex8::CalcElStran(const double* globalBuffer){
 
     ColVecd24 dummyDisp; // for element nodal displacement.
@@ -441,7 +458,6 @@ void Hex8::getNew(){
 
     elStran_e_old = elStran_e;
     elStran_p_old = elStran_p;
-    elStres_old = elStres;
     elStran_eq_old = elStran_eq;
 
 }

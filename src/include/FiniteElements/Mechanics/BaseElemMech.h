@@ -101,6 +101,13 @@ virtual void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, 
 virtual void CalcNodVals(T_nodStres& nodStres, T_nodStres& nodStran,T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<int>& nodCount) = 0;
 
 /**
+ * @brief Calculates the int-pt strain increment.
+ * 
+ * @param globalBuffer 
+ */
+virtual void CalcElDStran(const double* globalBuffer) = 0;
+
+/**
  * @brief Calculates the int-pt total strain.
  * 
  * @param globalBuffer 
