@@ -10,22 +10,18 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
     try {
         // Read plasticity and hardening law
         Platicity = H5File.ReadString("Materials/Material_" + to_string(iSet) + "/Plastic/Plasticity");
-        HardLaw = H5File.ReadString("Materials/Material_" + to_string(iSet) + "/Plastic/HardeningLaw");
+        hardLaw = H5File.ReadString("Materials/Material_" + to_string(iSet) + "/Plastic/HardeningLaw");
         sig_y0 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/sig_y0");
 
         // Handle supported hardening laws
-        if (HardLaw == "Linear") {
-
-            K_hard = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/K_hard");
-
-        } else if (HardLaw == "PowerLaw") {
+        if (hardLaw == "PowerLaw") {
 
             K_hard = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/K_hard");
             n_pow = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/n_pow");
 
         } else {
 
-            throw invalid_argument("Undefined hardening law < " + HardLaw + " >");
+            throw invalid_argument("Undefined hardening law < " + hardLaw + " >");
 
         }
     } catch (const exception& e) {
