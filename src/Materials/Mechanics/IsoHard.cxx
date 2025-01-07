@@ -62,6 +62,9 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
         throw std::invalid_argument("Invalid dimension: < " + dims + " > for < " + analysisType + " > analysis.");
 
     }
+
+    // Initalize to elastic values for initial stiffness matrix.
+    DMatx_ep = DMatx_e;
 }
 
 double IsoHard::Mises3D(const ColVecd6& sig3D){
