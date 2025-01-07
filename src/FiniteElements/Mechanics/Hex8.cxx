@@ -124,11 +124,13 @@ void Hex8::InitializeElements(Nodes &Nodes){
     elStiffMatxVariant = &elStiffMatx;
 
     // Initialize the storages for int-pt stresses/strains
-    elStres.resize(nElements); elStran.resize(nElements);      
+    elStres.resize(nElements); elStran.resize(nElements); elDStran.resize(nElements);
 
     if (materialModel=="ElastoPlastic"){
-        elStran_e.resize(nElements); elStran_p.resize(nElements); // Elastic and plastic strain tensors
-        elStres_eq.resize(nElements); elStran_eq.resize(nElements); // Equivalent platic strain/stress
+        elStran_e.resize(nElements); elStran_e_old.resize(nElements);   // Elastic strain tensors
+        elStran_p.resize(nElements); elStran_p_old.resize(nElements);   // Plastic strain tensors
+        elStran_eq.resize(nElements); elStran_eq_old.resize(nElements); // Equivalent platic strain
+        elStres_eq.resize(nElements); // Equivalent (von Mises) stress
     }
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
