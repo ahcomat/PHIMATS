@@ -18,6 +18,12 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
 
             K_hard = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/K_hard");
             n_pow = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/n_pow");
+            hardening = HardeningLaw::PowerLaw;
+
+
+        } else if (hardLaw == "Voce") {
+
+            hardening = HardeningLaw::Voce;
 
         } else {
 
@@ -53,17 +59,6 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
     }
 }
 
-double IsoHard::R_pow(const double& eps_eq){
-    return K_hard*pow(eps_eq, n_pow);
-}
-
-double IsoHard::dR_pow(const double& eps_eq){
-
-    double eps = std::max(eps_eq, 1.0e-12);
-
-    return K_hard*n_pow*pow(eps, n_pow-1);
-}
-
 double IsoHard::Mises3D(const ColVecd6& sig3D){
 
     double sx = sig3D(0); 
@@ -82,89 +77,33 @@ double IsoHard::Mises3D(const ColVecd6& sig3D){
     return sqrt(term);
 }
 
-void IsoHard::ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, const int iStep){
+void IsoHard::ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep){
 
-    // Elastic strain
-    eps_e = eps - eps_p;
-
-    // Trial stress
-    ColVecd6 sig_trial = std::get<Matd6x6>(DMatx_e)*eps_e;
-
-    //Mises stress
-    double sig_trial_eq = Mises3D(sig_trial);
-
-    // Yield function 
-    double f_yield = sig_trial_eq - R_pow(eps_eq) - sig_y0;
-
-    // Check yielding 
-    if (f_yield <= 0){  // --> Elastic step
-
-        // Update 
-        sig = sig_trial;
-        sig_eq = sig_trial_eq;
-        std::get<Matd6x6>(DMatx_ep) = std::get<Matd6x6>(DMatx_e);
-
-    } else { // --> Plastic step
-
-        // Iteration counter
-        int nIter_RM = 0;
-
-        // Initialize plastic multiplier
-        double p = eps_eq;
-        double delta_p = 0;
-
-        while(abs(f_yield > tol)){
-
-            // Update Iteration counter
-            nIter_RM++;
-
-            // Update plastic strain increment 
-            delta_p += f_yield/(3*uo + dR_pow(p));
-            p = eps_eq + delta_p;
-            f_yield = sig_trial_eq - 3*uo*delta_p - R_pow(p) - sig_y0;
-
-            if(nIter_RM > max_iter){
-
-                std::ostringstream oss;
-                oss << "\nReturn mapping did not converge at step: " << iStep << "\n"
-                    << "Reached maximum iterations: " << nIter_RM << "\n"
-                    << "Final yield function value: " << f_yield << "\n"
-                    << "Plastic strain increment: " << delta_p << "\n"
-                    << "Equivalent plastic strain: " << p << "\n";
-                
-                throw std::runtime_error(oss.str());
-            }
-        }
-
-        // Update variables
-        ColVecd6 sig_trial_dev = sig_trial - (1.0/3.0)*sig_trial.segment<3>(0).sum()*I6; // Deviatoric stress
-        ColVecd6 N_tr = (3.0/2.0)*sig_trial_dev/sig_trial_eq; // Plastic flow direction
-
-        eps_eq = p;             // Equivalent plastic strain
-        eps_p += delta_p*N_tr;  // Plastic strain tensor
-        eps_e = eps - eps_p;    // Elastic strain tensor
-        
-        sig = std::get<Matd6x6>(DMatx_e)*eps_e;  // Stress tensor
-        sig_eq = Mises3D(sig);  // Von Mises stress
-
-        // Tangent stiffness matrix
-        double Hmod =  dR_pow(eps_eq);
-        std::get<Matd6x6>(DMatx_ep) = std::get<Matd6x6>(DMatx_e) - 
-                                      (2*uo/(1+Hmod/(3*uo)))*N_tr*N_tr.transpose();
-    }
+    (this->*selectedRM3D)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, eps_e_old, eps_p_old, eps_eq_old, iStep);
 }
 
 /// @brief Select appropriate template specialization 
 void IsoHard::ReturnMapping2D(ColVecd3& sig, ColVecd3& eps, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, const int iStep){
 
     if (analysis2D == AnalysisType::PlaneStrain) {
-        return ReturnMapping2D<PlaneStrain>(sig, eps, eps_e, eps_p, eps_eq, sig_eq, iStep);
+
+        if(hardening == HardeningLaw::PowerLaw){
+            return ReturnMapping2D<PlaneStrain,PowerLaw>(sig, eps, eps_e, eps_p, eps_eq, sig_eq, iStep);
+        } else if (hardening == HardeningLaw::Voce){
+            return ReturnMapping2D<PlaneStrain,Voce>(sig, eps, eps_e, eps_p, eps_eq, sig_eq, iStep);
+        }
+        
     } else if (analysis2D == AnalysisType::PlaneStress) {
-        return ReturnMapping2D<PlaneStress>(sig, eps, eps_e, eps_p, eps_eq, sig_eq, iStep);
+
+        if(hardening == HardeningLaw::PowerLaw){
+            return ReturnMapping2D<PlaneStress,PowerLaw>(sig, eps, eps_e, eps_p, eps_eq, sig_eq, iStep);
+        } else if (hardening == HardeningLaw::Voce){
+            return ReturnMapping2D<PlaneStress,Voce>(sig, eps, eps_e, eps_p, eps_eq, sig_eq, iStep);
+        }
+
     } else {
         throw std::logic_error("Unhandled analysis type.");
     }
-
 }
 
 T_DMatx IsoHard::getDMatx() const{

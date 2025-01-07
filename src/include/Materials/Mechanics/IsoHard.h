@@ -31,6 +31,9 @@
 struct PlaneStrain {};
 struct PlaneStress {};
 
+struct PowerLaw {};
+struct Voce {};
+
 class IsoHard: public LinearElastic{
 
 public:
@@ -38,6 +41,11 @@ public:
 enum class AnalysisType{
     PlaneStrain,
     PlaneStress
+};
+
+enum class HardeningLaw{
+    PowerLaw,
+    Voce
 };
 
 /**
@@ -50,22 +58,6 @@ enum class AnalysisType{
 IsoHard(string dimensions, H5IO& H5File, int iSet);
 
 /**
- * @brief Power-law hardening
- * 
- * @param eps_eq 
- * @return double 
- */
-double R_pow(const double& eps_eq);
-
-/**
- * @brief Derivative of power-law hardening
- * 
- * @param eps_eq 
- * @return double 
- */
-double dR_pow(const double& eps_eq);
-
-/**
  * @brief Von Mises stress for 3D models. 
  * 
  * @param sig3D Stress vector.
@@ -76,15 +68,19 @@ double Mises3D(const ColVecd6& sig3D);
 /**
  * @brief Return mapping algorithm for isotropic hardening plasticity. 
  * 
+ * @param deps Strain increment
  * @param sig Stress tensor.
- * @param eps Total strain tensor.
  * @param eps_e Elastic strain.
  * @param eps_p Plastic strain.
- * @param eqp Equivalent plastic strain.
+ * @param eqp Equivalent plastic strain
  * @param sig_eq Equivalent stress.
- * @param iStep Step number. 
+ * @param sig_old 
+ * @param eps_e_old 
+ * @param eps_p_old 
+ * @param eqp_old 
+ * @param iStep Step number.
  */
-void ReturnMapping3D(ColVecd6& sig, ColVecd6& eps, ColVecd6& eps_e, ColVecd6& eps_p, double& eqp, double& sig_eq, const int iStep);
+void ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep);
 
 void ReturnMapping2D(ColVecd3& sig, ColVecd3& eps, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, const int iStep);
 
@@ -97,8 +93,11 @@ T_DMatx getDMatx() const override;
 
 private:
 
-/// @brief Stores the analysis type
+/// @brief Stores the analysis type.
 AnalysisType analysis2D; 
+
+/// @brief Stores hardening law.
+HardeningLaw hardening;
 
 /// @brief Tolerance for return mapping algorithm.
 const double tol = 1e-6;    
@@ -119,7 +118,7 @@ string Platicity;
 double sig_y0;              
 
  /// @brief Hardening law. 
-string HardLaw;     
+string hardLaw;     
 
 /// @brief Strength coefficient.       
 double K_hard = 0.0;      
@@ -128,7 +127,38 @@ double K_hard = 0.0;
 double n_pow = 0.0;  
 
 /// @brief Elastioplastic stiffness matrix in Voigt notation.
-T_DMatx DMatx_ep;        
+T_DMatx DMatx_ep;
+
+/**
+ * @brief Function to calculate update in plastic stress and hardening modulus
+ * 
+ * @tparam HardeningLaw type of hardening law
+ * @param eqpl Equivalent plastic strain
+ * @param syield Current yield stress
+ * @param hard Hardening modulus
+ */
+template <typename HardeningLaw>
+void UHard(const double& eqpl, double& syield, double& hard);
+
+template <typename HardeningLaw>
+void RM3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep);
+
+using RM3DFn = void (IsoHard::*)(ColVecd6&, ColVecd6&, ColVecd6&, ColVecd6&, double&, double&, const ColVecd6&, const ColVecd6&, const double&, const int);
+
+// Function pointer for the selected ReturnMapping variant
+RM3DFn selectedRM3D;
+
+// Function to map HardeningLaw to the appropriate ReturnMapping
+static RM3DFn selectRM3D(HardeningLaw hardening) {
+    switch (hardening) {
+        case HardeningLaw::PowerLaw:
+            return &IsoHard::RM3D<PowerLaw>;
+        case HardeningLaw::Voce:
+            return &IsoHard::RM3D<Voce>;
+        default:
+            throw std::runtime_error("Unsupported hardening law.");
+    }
+}
 
 /**
  * @brief Template for 2D von Mises stress. Works for plane stress and plane strain.  
