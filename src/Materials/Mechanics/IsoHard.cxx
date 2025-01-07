@@ -20,10 +20,15 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
             n_pow = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/n_pow");
             hardening = HardeningLaw::PowerLaw;
 
+            // Initialize the function pointer
+            selectedRM3D = &IsoHard::RM3D<PowerLaw>;
+
 
         } else if (hardLaw == "Voce") {
 
             hardening = HardeningLaw::Voce;
+
+            selectedRM3D = &IsoHard::RM3D<Voce>;
 
         } else {
 
@@ -78,6 +83,11 @@ double IsoHard::Mises3D(const ColVecd6& sig3D){
 }
 
 void IsoHard::ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep){
+
+    // Ensure selectedRM3D is valid
+    if (!selectedRM3D) {
+        throw std::runtime_error("ReturnMapping3D function pointer is not set.");
+    }
 
     (this->*selectedRM3D)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, eps_e_old, eps_p_old, eps_eq_old, iStep);
 }
