@@ -267,7 +267,13 @@ Vec vecDeltaDisp;
 Vec vecFint;
 
 /// @brief The global coefficient (stiffness) matrix.
-Mat matA;     
+Mat matA;
+
+/// @brief `KSP` object for controlling the linear system.
+KSP ksp;
+
+/// @brief `PC` object for controlling the preconditioner. 
+PC pc;
 
 /// @brief `SNES` object.         
 SNES snes; 
