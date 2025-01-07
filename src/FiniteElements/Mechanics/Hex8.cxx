@@ -401,12 +401,15 @@ void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int
         for(int iElem=0; iElem<nElements; iElem++){
             for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                plasticMat->ReturnMapping3D(elStres.at(iElem).at(iGaus),
-                                            elStran.at(iElem).at(iGaus),
+                plasticMat->ReturnMapping3D(elDStran.at(iElem).at(iGaus),
+                                            elStres.at(iElem).at(iGaus),
                                             elStran_e.at(iElem).at(iGaus),
                                             elStran_p.at(iElem).at(iGaus),
                                             elStran_eq.at(iElem).at(iGaus), 
-                                            elStres_eq.at(iElem).at(iGaus), iStep);
+                                            elStres_eq.at(iElem).at(iGaus),
+                                            elStran_e_old.at(iElem).at(iGaus),
+                                            elStran_p_old.at(iElem).at(iGaus),
+                                            elStran_eq_old.at(iElem).at(iGaus), iStep);
 
             }
         }
@@ -421,12 +424,15 @@ void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int
 
             for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                plasticMat->ReturnMapping3D(elStres.at(iElem).at(iGaus),
-                                            elStran.at(iElem).at(iGaus),
+                plasticMat->ReturnMapping3D(elDStran.at(iElem).at(iGaus),
+                                            elStres.at(iElem).at(iGaus),
                                             elStran_e.at(iElem).at(iGaus),
                                             elStran_p.at(iElem).at(iGaus),
                                             elStran_eq.at(iElem).at(iGaus), 
-                                            elStres_eq.at(iElem).at(iGaus), iStep);
+                                            elStres_eq.at(iElem).at(iGaus),
+                                            elStran_e_old.at(iElem).at(iGaus),
+                                            elStran_p_old.at(iElem).at(iGaus),
+                                            elStran_eq_old.at(iElem).at(iGaus), iStep);
 
                 const Matd6x24& dummyBu = BuMat.at(iElem).at(iGaus); // Strain matrix for the given gauss point.
                 dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current integration point 
