@@ -512,8 +512,13 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, Vec R, vector<BaseElemMech*> 
                 // Update iteration counter.
                 iterCounter++;
 
-                // // TODO: For debugging !
+                // // TODO: For debugging 
                 // VecView(deltaU, PETSC_VIEWER_STDOUT_WORLD);
+
+                PetscReal l2norm;
+                VecNorm(R, NORM_2, &l2norm);
+                cout << "-- L2Norm: " << l2norm << "\n" ;
+
 
             } else {
 
