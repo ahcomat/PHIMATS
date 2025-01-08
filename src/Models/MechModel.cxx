@@ -245,7 +245,8 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
 
     // Initialize the `SNES` solver.
     SNESCreate(PETSC_COMM_WORLD, &snes);
-    SNESSetTolerances(snes, 1e-6, 1e-8, 1e-8, 50, 1000);
+
+    // SNESSetTolerances(snes, 1e-6, 1e-8, 1e-8, 50, 1000);
 
     // Get KSP from SNES
     SNESGetKSP(snes, &ksp);
@@ -253,13 +254,12 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     // Get PC from KSP
     KSPGetPC(ksp, &pc);
 
-    // First iteration: Use direct solver (LU)
     PCSetType(pc, PCLU);
     PCFactorSetMatSolverType(pc, MATSOLVERMUMPS);
 
     // KSPSetType(ksp, KSPGMRES);
     // KSPGMRESSetRestart(ksp, 50); // Optional: Set GMRES restart value
-    // KSPSetTolerances(ksp, 1e-8, 1e-12, PETSC_DEFAULT, 1000);
+    // KSPSetTolerances(ksp, 1e-12, 1e-12, PETSC_DEFAULT, 1000);
     // PCSetType(pc, PCILU);
     // PCFactorSetLevels(pc, 2); // ILU with limited fill
 
