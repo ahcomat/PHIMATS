@@ -423,6 +423,16 @@ void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     // Solve
     SNESSolve(snes, NULL, vecDeltaDisp);
 
+    // Update total displacement
+    VecAXPY(vecDisp, 1.0, vecDeltaDisp);
+
+    // Calculate total strain
+    VecGetArrayRead(vecDisp, &globalBuffer);
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        elements[iSet]->CalcElStran(globalBuffer);
+    }
+    VecRestoreArrayRead(vecDisp, &globalBuffer);
+
     // Assign values to old
     for (int iSet=0; iSet<nElementSets; iSet++){
         elements[iSet]->getNew();
