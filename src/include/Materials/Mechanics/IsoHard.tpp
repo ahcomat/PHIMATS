@@ -23,7 +23,7 @@ void IsoHard::RM3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps
     double Ebulk3 = Emod/(1.0 - 2.0*nu);
 
     // Elastic strain
-    eps_e = eps_e + deps;
+    eps_e = eps_e_old + deps;
 
     // Trial stress
     ColVecd6 sig_trial = std::get<Matd6x6>(DMatx_e)*eps_e;
@@ -67,7 +67,7 @@ void IsoHard::RM3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps
 
             // Update plastic strain increment 
             deqpl += f_yield/(3*uo + hard);
-            p += deqpl;
+            p = eps_eq_old + deqpl;
             UHard<HardeningLaw>(p, sYield, hard);
             f_yield = sig_trial_eq - 3*uo*deqpl - sYield;
 
@@ -95,9 +95,11 @@ void IsoHard::RM3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps
 
         // Tangent stiffness matrix
 
-        double effg = uo+sYield/sig_trial_eq;
+        double effg = uo * sYield/sig_trial_eq;
         double efflam = (Ebulk3 - 2.0*effg)/3.0;
         double effhard = 3.0*uo * hard/(3.0*uo + hard) - (3*effg);
+
+        std::get<Matd6x6>(DMatx_ep).setZero();
 
         std::get<Matd6x6>(DMatx_ep).topLeftCorner<3, 3>().setConstant(efflam);
 
