@@ -499,9 +499,9 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, Vec R, vector<BaseElemMech*> 
 
                 updateStiffMat = iterCounter % NR_freq == 0;
 
-                // Calculate total strain
+                // Calculate strain increment
                 VecGetArrayRead(deltaU, &globalBuffer);
-                elements[iSet]->CalcElStran(globalBuffer);
+                elements[iSet]->CalcElDStran(globalBuffer);
                 VecRestoreArrayRead(deltaU, &globalBuffer);
 
                 // Retrun mapping
