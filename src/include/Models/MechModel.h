@@ -88,12 +88,6 @@ void InitializePETSc(vector<BaseElemMech*> elements);
 void setZeroNodVals();
 
 /**
- * @brief Updates displacement increment.
- * 
- */
-void UpdateDisp();
-
-/**
  * @brief Get the number of steps to apply load increment.
  * 
  * @return int Number of steps.

@@ -268,12 +268,6 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     SNESSetFromOptions(snes);
 }
 
-void MechModel::UpdateDisp(){
-
-    VecSetValues(vecDisp, nPresDofs, presDofs, presVals, ADD_VALUES); 
-    VecAssemblyBegin(vecDisp); VecAssemblyEnd(vecDisp);
-}
-
 void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats){
 
     try{
