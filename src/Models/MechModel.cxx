@@ -287,10 +287,14 @@ void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMec
     
             } else if (typeid(*mats[iSet]) == typeid(IsoHard)){
 
+                IsoHard*plasticMat = dynamic_cast<IsoHard*>(mats[iSet]);
+                elements[iSet]->CalcElemStiffMatx(plasticMat->getDMatx());
+
             } else {
 
                 throw std::runtime_error("Undefined material model < " + std::string(typeid(*mats[iSet]).name()) + " >");
             }
+
         }
 
     } catch (const exception& e) {
