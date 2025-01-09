@@ -400,6 +400,13 @@ PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
     // // TODO: For debugging. 
     // MatView(matA, PETSC_VIEWER_STDOUT_WORLD);
 
+    // PetscViewer viewer;
+    // PetscViewerASCIIOpen(PETSC_COMM_WORLD, "matrix_output.txt", &viewer);
+    // // View the matrix
+    // MatView(matA, viewer);
+    // // Clean up
+    // PetscViewerDestroy(&viewer);
+
     return 0;
 }
 
