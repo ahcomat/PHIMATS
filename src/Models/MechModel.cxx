@@ -516,6 +516,8 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, Vec R, vector<BaseElemMech*> 
                 VecSetValues(vecFint, nTotDofs, indices, Fint, INSERT_VALUES); 
                 VecAssemblyBegin(vecFint); VecAssemblyEnd(vecFint);
 
+                // VecSetValues(vecFext, nPresDofs, indices, presZeros, INSERT_VALUES); 
+                // VecAssemblyBegin(vecFext); VecAssemblyEnd(vecFext);
                 /* 
                 << NOTE >> We are solving the system Fext-Fint = R, while PETSc solves Ju = -R. 
                 It will multiply R with -1, so we keep this in mind while providing R. 
