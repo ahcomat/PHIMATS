@@ -21,18 +21,18 @@
  *  
  */
 
-#ifndef LINEARELASTIC_H
-#define LINEARELASTIC_H
+#ifndef LINEARMECH_H
+#define LINEARMECH_H
 
 #include "BaseSolver.h"
 
-class LinearElastic: public BaseSolver{
+class LinearMech: public BaseSolver{
 
 public:
 
-LinearElastic(Mat &A);
+LinearMech(Mat &A);
 
-~LinearElastic() override;
+~LinearMech() override;
 
 /**
  * @brief Solve the linear system `Ax=b`.

@@ -1,7 +1,7 @@
-#include "Solvers/LinearElastic.h"
+#include "Solvers/LinearMech.h"
 #include<iostream>
 
-LinearElastic::LinearElastic(Mat &A){
+LinearMech::LinearMech(Mat &A){
 
     // Initialize the solver. Default GMRES. We could use direct solver.
     KSPCreate(PETSC_COMM_WORLD, &ksp);
@@ -15,13 +15,13 @@ LinearElastic::LinearElastic(Mat &A){
     PCSetFromOptions(pc);
 }
 
-LinearElastic::~LinearElastic(){
+LinearMech::~LinearMech(){
 
     // Exit message
-    std::cout << "LinearElastic solver exited correctly" << "\n";
+    std::cout << "LinearMech solver exited correctly" << "\n";
 }
 
-void LinearElastic::Solve(Vec &x, Vec &b){
+void LinearMech::Solve(Vec &x, Vec &b){
 
     KSPSolve(ksp, b, x);
 }
