@@ -298,111 +298,188 @@ void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMec
     }
 }
 
-PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
+// PetscErrorCode MechModel::Assemble(vector<BaseElemMech*> elements){
 
-    // Has to be zeroed for iterative solver. 
-    MatZeroEntries(matA);
+//     // Has to be zeroed for iterative solver. 
+//     MatZeroEntries(matA);
 
-    for (auto* elem : elements){  // Loop through element sets
+//     for (auto* elem : elements){  // Loop through element sets
 
-        // Pointer to the element dip DOFs. Will vanish out the "for" element set loop.
-        const vector<vector<int>>& elemDispDof_ptr = elem->get_elemDispDof();
-        // Get the number of element dips DOFs. 
-        nElDispDofs = elem->get_nElDispDofs();
-        // Get the number of elements in the set. 
-        nElements = elem->get_nElements();
+//         // Pointer to the element dip DOFs. Will vanish out the "for" element set loop.
+//         const vector<vector<int>>& elemDispDof_ptr = elem->get_elemDispDof();
+//         // Get the number of element dips DOFs. 
+//         nElDispDofs = elem->get_nElDispDofs();
+//         // Get the number of elements in the set. 
+//         nElements = elem->get_nElements();
 
-        //  Assemble the coefficient matrix.        
-        PetscInt* i1; PetscInt* j1; // Indices for row and columns to insert.
-        PetscMalloc1(nElDispDofs, &i1);
-        PetscMalloc1(nElDispDofs, &j1);
+//         //  Assemble the coefficient matrix.        
+//         PetscInt* i1; PetscInt* j1; // Indices for row and columns to insert.
+//         PetscMalloc1(nElDispDofs, &i1);
+//         PetscMalloc1(nElDispDofs, &j1);
 
-        /* matA constatn reference to the std::variant object returned by `elem->getElStiffMatx()`, 
-        in this case `T_ElStiffMatx` variant that holds a pointer to a vector.
-        You cannot modify the object through T_elStiffMatx_ref (because it's a constant reference).
-        */
-        const T_ElStiffMatx& T_elStiffMatx_ref = elem->getElStiffMatx();
+//         /* matA constatn reference to the std::variant object returned by `elem->getElStiffMatx()`, 
+//         in this case `T_ElStiffMatx` variant that holds a pointer to a vector.
+//         You cannot modify the object through T_elStiffMatx_ref (because it's a constant reference).
+//         */
+//         const T_ElStiffMatx& T_elStiffMatx_ref = elem->getElStiffMatx();
 
-        // // TODO: For debugging.
-        // std::cout << "Active index: " << T_elStiffMatx_ref.index() << std::endl;
+//         // // TODO: For debugging.
+//         // std::cout << "Active index: " << T_elStiffMatx_ref.index() << std::endl;
 
-        if (std::holds_alternative<vector<Matd8x8>*>(T_elStiffMatx_ref)){  // Quad4 elements.
+//         if (std::holds_alternative<vector<Matd8x8>*>(T_elStiffMatx_ref)){  // Quad4 elements.
 
-            /* The "*" operator dereferences the pointer stored in the std::variant, giving
-            you a reference to the actual vector. 
-            This way avoids copying the vector and can safely read from it without modifying it.
-            */ 
-            const vector<Matd8x8>& elStiffMatx_ref = *std::get<vector<Matd8x8>*>(T_elStiffMatx_ref);
+//             /* The "*" operator dereferences the pointer stored in the std::variant, giving
+//             you a reference to the actual vector. 
+//             This way avoids copying the vector and can safely read from it without modifying it.
+//             */ 
+//             const vector<Matd8x8>& elStiffMatx_ref = *std::get<vector<Matd8x8>*>(T_elStiffMatx_ref);
 
-            for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
+//             for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
 
-                // Get the disp dofs associated with the element
-                for(int iElDof=0; iElDof<nElDispDofs; iElDof++){
+//                 // Get the disp dofs associated with the element
+//                 for(int iElDof=0; iElDof<nElDispDofs; iElDof++){
 
-                    i1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
-                    j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
+//                     i1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
+//                     j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
 
-                }
+//                 }
 
-                MatSetValues(matA, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
-            }
+//                 MatSetValues(matA, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+//             }
 
-        } else if (std::holds_alternative<vector<Matd6x6>*>(T_elStiffMatx_ref)){  // Tri3 elements.
+//         } else if (std::holds_alternative<vector<Matd6x6>*>(T_elStiffMatx_ref)){  // Tri3 elements.
  
-            const vector<Matd6x6>& elStiffMatx_ref = *std::get<vector<Matd6x6>*>(T_elStiffMatx_ref);
+//             const vector<Matd6x6>& elStiffMatx_ref = *std::get<vector<Matd6x6>*>(T_elStiffMatx_ref);
 
-            for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
+//             for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
 
-                // Get the disp dofs associated with the element
-                for(int iElDof=0; iElDof<nElDispDofs; iElDof++){
+//                 // Get the disp dofs associated with the element
+//                 for(int iElDof=0; iElDof<nElDispDofs; iElDof++){
 
-                    i1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
-                    j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
-                }
+//                     i1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
+//                     j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
+//                 }
 
-                MatSetValues(matA, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
-            }
+//                 MatSetValues(matA, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+//             }
 
-        } else if (std::holds_alternative<vector<Matd24x24>*>(T_elStiffMatx_ref)){  // Hex8 elements.
+//         } else if (std::holds_alternative<vector<Matd24x24>*>(T_elStiffMatx_ref)){  // Hex8 elements.
  
-            const vector<Matd24x24>& elStiffMatx_ref = *std::get<vector<Matd24x24>*>(T_elStiffMatx_ref);
+//             const vector<Matd24x24>& elStiffMatx_ref = *std::get<vector<Matd24x24>*>(T_elStiffMatx_ref);
 
-            for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
+//             for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
 
-                // Get the disp dofs associated with the element
-                for(int iElDof=0; iElDof<nElDispDofs; iElDof++){
+//                 // Get the disp dofs associated with the element
+//                 for(int iElDof=0; iElDof<nElDispDofs; iElDof++){
 
-                    i1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
-                    j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
-                }
+//                     i1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
+//                     j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
+//                 }
 
-                MatSetValues(matA, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
-            }
+//                 MatSetValues(matA, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+//             }
+//         }
+
+//         // Free memory
+//         PetscFree(i1);
+//         PetscFree(j1);
+//     }
+
+//     // Final assembly
+//     MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
+
+//     // For Dirichlet boundary conditions (Requires `MAT_FINAL_ASSEMBLY`)
+//     MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
+
+//     // // TODO: For debugging. 
+//     // MatView(matA, PETSC_VIEWER_STDOUT_WORLD);
+
+//     PetscViewer viewer;
+
+//     // PetscViewerASCIIOpen(PETSC_COMM_WORLD, "matrix_output.txt", &viewer);
+//     // MatView(matA, viewer);
+
+//     PetscViewerASCIIOpen(PETSC_COMM_WORLD, "matrix_output.mtx", &viewer);
+//     PetscViewerPushFormat(viewer, PETSC_VIEWER_ASCII_MATRIXMARKET);
+//     MatView(matA, viewer);
+
+//     PetscViewerDestroy(&viewer);
+
+//     return 0;
+// }
+
+PetscErrorCode MechModel::AssembleElementMatrix(const auto* elStiffMatx_ptr,
+                                                const std::vector<std::vector<int>>& elemDispDof_ptr,
+                                                PetscInt nElDispDofs,
+                                                PetscInt nElements) {
+    const auto& elStiffMatx_ref = *elStiffMatx_ptr; // Dereference the pointer
+
+    // Allocate memory for indices
+    PetscInt* i1;
+    PetscInt* j1;
+    PetscMalloc1(nElDispDofs, &i1);
+    PetscMalloc1(nElDispDofs, &j1);
+
+    for (int iElem = 0; iElem < nElements; iElem++) {
+        // Get the DOFs associated with the element
+        for (int iElDof = 0; iElDof < nElDispDofs; iElDof++) {
+            i1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
+            j1[iElDof] = elemDispDof_ptr.at(iElem).at(iElDof);
         }
 
-        // Free memory
-        PetscFree(i1);
-        PetscFree(j1);
+        // Add the local stiffness matrix to the global matrix
+        MatSetValues(matA, nElDispDofs, i1, nElDispDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
     }
 
-    // Final assembly
-    MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
-
-    // For Dirichlet boundary conditions (Requires `MAT_FINAL_ASSEMBLY`)
-    MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
-
-    // // TODO: For debugging. 
-    // MatView(matA, PETSC_VIEWER_STDOUT_WORLD);
-
-    // PetscViewer viewer;
-    // PetscViewerASCIIOpen(PETSC_COMM_WORLD, "matrix_output.txt", &viewer);
-    // // View the matrix
-    // MatView(matA, viewer);
-    // // Clean up
-    // PetscViewerDestroy(&viewer);
+    // Free memory
+    CHKERRQ(PetscFree(i1)); // Check return value of PetscFree
+    CHKERRQ(PetscFree(j1)); // Check return value of PetscFree
 
     return 0;
 }
+
+PetscErrorCode MechModel::Assemble(std::vector<BaseElemMech*> elements) {
+    // Has to be zeroed for iterative solver. 
+    MatZeroEntries(matA);
+
+    for (auto* elem : elements) {  // Loop through element sets
+        // Element properties
+        const auto& elemDispDof_ptr = elem->get_elemDispDof();
+        PetscInt nElDispDofs = elem->get_nElDispDofs();
+        PetscInt nElements = elem->get_nElements();
+
+        // Get the stiffness matrix variant
+        const T_ElStiffMatx& T_elStiffMatx_ref = elem->getElStiffMatx();
+
+        // Use std::visit to handle the variant
+        std::visit(
+            [&](auto&& elStiffMatx_ptr) {
+                if (elStiffMatx_ptr) {
+                    AssembleElementMatrix(elStiffMatx_ptr, elemDispDof_ptr, nElDispDofs, nElements);
+                } else {
+                    throw std::runtime_error("Unsupported element type in T_elStiffMatx_ref");
+                }
+            },
+            T_elStiffMatx_ref);
+    }
+
+    // Final assembly
+    MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);
+    MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
+
+    // Apply Dirichlet boundary conditions (requires MAT_FINAL_ASSEMBLY)
+    MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
+
+    // Save the matrix to MatrixMarket format
+    PetscViewer viewer;
+    PetscViewerASCIIOpen(PETSC_COMM_WORLD, "matrix_output.mtx", &viewer);
+    PetscViewerPushFormat(viewer, PETSC_VIEWER_ASCII_MATRIXMARKET);
+    MatView(matA, viewer);
+    PetscViewerDestroy(&viewer);
+
+    return 0;
+}
+
 
 void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep){
 

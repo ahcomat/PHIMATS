@@ -102,6 +102,11 @@ int get_nSteps() const;
  */
 void CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats);
 
+PetscErrorCode AssembleElementMatrix(const auto* elStiffMatx_ptr,
+                                     const std::vector<std::vector<int>>& elemDispDof_ptr,
+                                     PetscInt nElDispDofs,
+                                     PetscInt nElements);
+
 /**
  * @brief Assemble the global stiffness matrix.
  * 
