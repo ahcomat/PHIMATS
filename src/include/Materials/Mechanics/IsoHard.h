@@ -28,11 +28,13 @@
 #include "LinearElastic.h"
 #include "H5IO.h"
 
+/// @cond
 struct PlaneStrain {};
 struct PlaneStress {};
 
 struct PowerLaw {};
 struct Voce {};
+/// @endcond
 
 class IsoHard: public LinearElastic{
 
