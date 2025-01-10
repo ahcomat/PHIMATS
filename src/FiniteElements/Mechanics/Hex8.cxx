@@ -201,10 +201,17 @@ void Hex8::InitializeElements(Nodes &Nodes){
 
         // Loop through integration points.
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            /*
+            In 3D the values are directly set, so we have to initialize it to zeros or we will get garbage
+            */ 
+            BMat.at(iElem).at(iGaus).setZero();
+            BuMat.at(iElem).at(iGaus).setZero();
         
             // Cart coord of iGaus point.
             dummyElemGauss.at(iGaus) = getGaussCart(shapeFunc.at(iGaus), dummyElNodCoord);
             CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGaus), wts.at(iGaus), dummyIntVol.at(iGaus), BMat.at(iElem).at(iGaus), BuMat.at(iElem).at(iGaus));
+
         }
         gaussPtCart.at(iElem) = dummyElemGauss;
         intPtVol.at(iElem) = dummyIntVol;
