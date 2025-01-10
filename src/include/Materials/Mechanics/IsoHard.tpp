@@ -147,71 +147,71 @@ inline double IsoHard::Mises2D<PlaneStress>(const ColVecd3& sig2D){
 template <typename AnalysisType, typename HardeningLaw>
 void IsoHard::ReturnMapping2D(ColVecd3& sig, ColVecd3& eps, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, int iStep){
 
-    // Elastic strain
-    eps_e = eps - eps_p;
+    // // Elastic strain
+    // eps_e = eps - eps_p;
 
-    // Trial stress
-    ColVecd3 sig_trial = std::get<Matd3x3>(DMatx_e)*eps_e;
+    // // Trial stress
+    // ColVecd3 sig_trial = std::get<Matd3x3>(DMatx_e)*eps_e;
 
-    double sig_trial_eq = Mises2D<AnalysisType>(sig_trial);
+    // double sig_trial_eq = Mises2D<AnalysisType>(sig_trial);
 
-    // Yield function 
-    double f_yield = sig_trial_eq - R_pow(eps_eq) - sig_y0;
+    // // Yield function 
+    // double f_yield = sig_trial_eq - R_pow(eps_eq) - sig_y0;
 
-    // Check yielding 
-    if (f_yield <= 0){  // --> Elastic step
+    // // Check yielding 
+    // if (f_yield <= 0){  // --> Elastic step
 
-        // Update 
-        sig = sig_trial;
-        sig_eq = sig_trial_eq;
-        std::get<Matd3x3>(DMatx_ep) = std::get<Matd3x3>(DMatx_e);
+    //     // Update 
+    //     sig = sig_trial;
+    //     sig_eq = sig_trial_eq;
+    //     std::get<Matd3x3>(DMatx_ep) = std::get<Matd3x3>(DMatx_e);
 
-    } else { // --> Plastic step
+    // } else { // --> Plastic step
 
-        // Iteration counter
-        int nIter_RM = 0;
+    //     // Iteration counter
+    //     int nIter_RM = 0;
 
-        // Initialize plastic multiplier
-        double p = eps_eq;
-        double delta_p = 0;
+    //     // Initialize plastic multiplier
+    //     double p = eps_eq;
+    //     double delta_p = 0;
 
-        while(abs(f_yield > tol)){
+    //     while(abs(f_yield > tol)){
 
-            // Update Iteration counter
-            nIter_RM++;
+    //         // Update Iteration counter
+    //         nIter_RM++;
 
-            // Update plastic strain increment 
-            delta_p += f_yield/(3*uo + dR_pow(p));
-            p = eps_eq + delta_p;
-            f_yield = sig_trial_eq - 3*uo*delta_p - R_pow(p) - sig_y0;
+    //         // Update plastic strain increment 
+    //         delta_p += f_yield/(3*uo + dR_pow(p));
+    //         p = eps_eq + delta_p;
+    //         f_yield = sig_trial_eq - 3*uo*delta_p - R_pow(p) - sig_y0;
 
-            if(nIter_RM > max_iter){
+    //         if(nIter_RM > max_iter){
 
-                std::ostringstream oss;
-                oss << "\nReturn mapping did not converge at step: " << iStep << "\n"
-                    << "Reached maximum iterations: " << nIter_RM << "\n"
-                    << "Final yield function value: " << f_yield << "\n"
-                    << "Plastic strain increment: " << delta_p << "\n"
-                    << "Equivalent plastic strain: " << p << "\n";
+    //             std::ostringstream oss;
+    //             oss << "\nReturn mapping did not converge at step: " << iStep << "\n"
+    //                 << "Reached maximum iterations: " << nIter_RM << "\n"
+    //                 << "Final yield function value: " << f_yield << "\n"
+    //                 << "Plastic strain increment: " << delta_p << "\n"
+    //                 << "Equivalent plastic strain: " << p << "\n";
                 
-                throw std::runtime_error(oss.str());
-            }
-        }
+    //             throw std::runtime_error(oss.str());
+    //         }
+    //     }
 
-        // Update variables
-        ColVecd3 sig_trial_dev = sig_trial - (1.0/3.0)*sig_trial.segment<2>(0).sum()*I3; // Deviatoric stress
-        ColVecd3 N_tr = (3.0/2.0)*sig_trial_dev/sig_trial_eq; // Plastic flow direction
+    //     // Update variables
+    //     ColVecd3 sig_trial_dev = sig_trial - (1.0/3.0)*sig_trial.segment<2>(0).sum()*I3; // Deviatoric stress
+    //     ColVecd3 N_tr = (3.0/2.0)*sig_trial_dev/sig_trial_eq; // Plastic flow direction
 
-        eps_eq = p;             // Equivalent plastic strain
-        eps_p += delta_p*N_tr;  // Plastic strain tensor
-        eps_e = eps - eps_p;    // Elastic strain tensor
+    //     eps_eq = p;             // Equivalent plastic strain
+    //     eps_p += delta_p*N_tr;  // Plastic strain tensor
+    //     eps_e = eps - eps_p;    // Elastic strain tensor
         
-        sig = std::get<Matd3x3>(DMatx_e)*eps_e;  // Stress tensor
-        sig_eq = Mises2D<AnalysisType>(sig);  // Von Mises stress
+    //     sig = std::get<Matd3x3>(DMatx_e)*eps_e;  // Stress tensor
+    //     sig_eq = Mises2D<AnalysisType>(sig);  // Von Mises stress
 
-        // Tangent stiffness matrix
-        double Hmod =  dR_pow(eps_eq);
-        std::get<Matd3x3>(DMatx_ep) = std::get<Matd3x3>(DMatx_e) - 
-                                      (2*uo/(1+Hmod/(3*uo)))*N_tr*N_tr.transpose();
-    }
+    //     // Tangent stiffness matrix
+    //     double Hmod =  dR_pow(eps_eq);
+    //     std::get<Matd3x3>(DMatx_ep) = std::get<Matd3x3>(DMatx_e) - 
+    //                                   (2*uo/(1+Hmod/(3*uo)))*N_tr*N_tr.transpose();
+    // }
 }

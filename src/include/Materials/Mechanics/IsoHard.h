@@ -170,7 +170,7 @@ static RM3DFn selectRM3D(HardeningLaw hardening) {
 template <typename AnalysisType>
 double Mises2D(const ColVecd3& sig2D);
 
-template <typename AnalysisType>
+template <typename AnalysisType, typename HardeningLaw>
 void ReturnMapping2D(ColVecd3& sig, ColVecd3& eps, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, int iStep);
 
 };
