@@ -2,6 +2,8 @@
 
 #include"FiniteElements/Mechanics/Hex8.h"
 #include"Materials/Mechanics/IsoHard.h"
+#include <iomanip> // For std::setprecision
+
 
 #ifndef DEBUG
 #define at(x) operator[](x)
@@ -272,13 +274,25 @@ void Hex8::CalcElemStiffMatx(T_DMatx DMatx){
 
             // [B_kl]^T D_kk B_kl
             elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*std::get<Matd6x6>(DMatx)*dummyBu*dummydVol;
-        }  
+        }
     }
 
     // // TODO: For debug!
     // for (auto& iStifMat : elStiffMatx)
     //     cout << iStifMat << "\n\n";
-    // cout << elStiffMatx.at(0) << "\n";
+    // cout << std::setprecision(15) << elStiffMatx.at(44)(16,21) << "\n";
+    
+    // for (int i = 0; i < elStiffMatx.at(45).rows(); ++i) {
+    //     for (int j = 0; j < elStiffMatx.at(45).cols(); ++j) {
+    //         std::cout << elStiffMatx.at(45)(i, j);
+    //         if (j < elStiffMatx.at(45).cols() - 1) {
+    //             std::cout << ", "; // Use a comma to separate columns
+    //         }
+    //     }
+    //     std::cout << "\n"; // New line after each row
+    // }
+    // std::cout << "\n"; // New line after each row
+
 }
 
 void Hex8::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount){
