@@ -124,7 +124,10 @@ vector<Matd4x2> elemNodCoord;
 vector<vector<RowVecd2>> gaussPtCart;  
 
 /// @brief Int-pt strains [nElStres].
-vector<vector<ColVecd3>> elStran;   
+vector<vector<ColVecd3>> elStran;  
+
+/// @brief Int-pt strain increment [nElStres].
+vector<vector<ColVecd3>> elDStran; 
 
 /// @brief Int-pt stresses [nElStres].
 vector<vector<ColVecd3>> elStres; 

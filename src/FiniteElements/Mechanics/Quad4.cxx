@@ -98,11 +98,13 @@ void Quad4::InitializeElements(Nodes &Nodes){
     elStiffMatxVariant = &elStiffMatx;
 
     // Initialize the storages for int-pt stresses/strains
-    elStres.resize(nElements); elStran.resize(nElements); 
+    elStres.resize(nElements); elStran.resize(nElements); elDStran.resize(nElements);
 
     if (materialModel=="ElastoPlastic"){
-        elStran_e.resize(nElements); elStran_p.resize(nElements); // Elastic and plastic strain tensors
-        elStres_eq.resize(nElements); elStran_eq.resize(nElements); // Equivalent platic strain/stress
+        elStran_e.resize(nElements); elStran_e_old.resize(nElements);   // Elastic strain tensors
+        elStran_p.resize(nElements); elStran_p_old.resize(nElements);   // Plastic strain tensors
+        elStran_eq.resize(nElements); elStran_eq_old.resize(nElements); // Equivalent platic strain
+        elStres_eq.resize(nElements); // Equivalent (von Mises) stress
     }     
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
@@ -122,6 +124,14 @@ void Quad4::InitializeElements(Nodes &Nodes){
 
         elStres.at(iElem).resize(nElGauss);
         elStran.at(iElem).resize(nElGauss);
+        elDStran.at(iElem).resize(nElGauss);
+
+        // Initilize to zeros.
+        for (int iGaus=0; iGaus<nElGauss; iGaus++){
+            elStres.at(iElem).at(iGaus).setZero();
+            elStran.at(iElem).at(iGaus).setZero();
+            elDStran.at(iElem).at(iGaus).setZero();
+        }
 
         if (materialModel=="ElastoPlastic"){
 
@@ -130,6 +140,10 @@ void Quad4::InitializeElements(Nodes &Nodes){
             elStres_eq.at(iElem).resize(nElGauss);
             elStran_eq.at(iElem).resize(nElGauss);
 
+            elStran_e_old.at(iElem).resize(nElGauss);
+            elStran_p_old.at(iElem).resize(nElGauss); 
+            elStran_eq_old.at(iElem).resize(nElGauss);
+
             // Initilize to zeros.
             for (int iGaus=0; iGaus<nElGauss; iGaus++){
 
@@ -137,6 +151,10 @@ void Quad4::InitializeElements(Nodes &Nodes){
                 elStran_p.at(iElem).at(iGaus).setZero();
                 elStran_eq.at(iElem).at(iGaus) = 0;
                 elStres_eq.at(iElem).at(iGaus) = 0;
+
+                elStran_e_old.at(iElem).at(iGaus).setZero();
+                elStran_p_old.at(iElem).at(iGaus).setZero();
+                elStran_eq_old.at(iElem).at(iGaus) = 0;
             }
         }
 
