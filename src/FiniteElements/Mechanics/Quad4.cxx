@@ -40,9 +40,9 @@ void Quad4::InitShapeFunc(){
     // Initialize the Gauss points vectors.
     vector<double> ip = {-0.57735027, 0.57735027};
     vector<double> dummy(nElDim);
-    for(std::size_t iGauss=0; iGauss<ip.size(); iGauss++){
+    for(std::size_t iGaus=0; iGaus<ip.size(); iGaus++){
         for(std::size_t jGauss=0; jGauss<ip.size(); jGauss++){
-            dummy.at(0) = ip.at(iGauss);
+            dummy.at(0) = ip.at(iGaus);
             dummy.at(1) = ip.at(jGauss);
             gaussPts.push_back(dummy);
         }
@@ -152,11 +152,15 @@ void Quad4::InitializeElements(Nodes &Nodes){
         elemNodCoord.at(iElem) = dummyElNodCoord;
 
         // Loop through integration points.
-        for(int iGauss=0; iGauss<nElGauss; iGauss++){
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            // For safety
+            BMat.at(iElem).at(iGaus).setZero();
+            BuMat.at(iElem).at(iGaus).setZero();
         
-            // Cart coord of iGauss point.
-            dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
-            CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss), BuMat.at(iElem).at(iGauss));
+            // Cart coord of iGaus point.
+            dummyElemGauss.at(iGaus) = getGaussCart(shapeFunc.at(iGaus), dummyElNodCoord);
+            CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGaus), wts.at(iGaus), dummyIntVol.at(iGaus), BMat.at(iElem).at(iGaus), BuMat.at(iElem).at(iGaus));
         }
         gaussPtCart.at(iElem) = dummyElemGauss;
         intPtVol.at(iElem) = dummyIntVol;
@@ -214,10 +218,10 @@ void Quad4::CalcElemStiffMatx(T_DMatx DMatx){
         elStiffMatx.at(iElem).setZero(); // Must be populated with zeros.         
 
         // Integration over all Gauss points.
-        for (int iGauss=0; iGauss<nElGauss; iGauss++){
+        for (int iGaus=0; iGaus<nElGauss; iGaus++){
 
-            const Matd3x8& dummyBu = BuMat.at(iElem).at(iGauss); // Strain matrix for the given gauss point.
-            dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current integration point 
+            const Matd3x8& dummyBu = BuMat.at(iElem).at(iGaus); // Strain matrix for the given gauss point.
+            dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current integration point 
 
             // [B_kl]^T D_kk B_kl
             elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*DMat*dummyBu*dummydVol;
