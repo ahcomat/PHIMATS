@@ -254,14 +254,14 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     // Get PC from KSP
     KSPGetPC(ksp, &pc);
 
-    PCSetType(pc, PCLU);
-    PCFactorSetMatSolverType(pc, MATSOLVERMUMPS);
+    // PCSetType(pc, PCLU);
+    // PCFactorSetMatSolverType(pc, MATSOLVERMUMPS);
 
-    // KSPSetType(ksp, KSPGMRES);
-    // KSPGMRESSetRestart(ksp, 50); // Optional: Set GMRES restart value
-    // KSPSetTolerances(ksp, 1e-12, 1e-12, PETSC_DEFAULT, 1000);
-    // PCSetType(pc, PCILU);
-    // PCFactorSetLevels(pc, 2); // ILU with limited fill
+    KSPSetType(ksp, KSPGMRES);
+    KSPGMRESSetRestart(ksp, 50); // Optional: Set GMRES restart value
+    KSPSetTolerances(ksp, 1e-12, 1e-12, PETSC_DEFAULT, 1000);
+    PCSetType(pc, PCILU);
+    PCFactorSetLevels(pc, 2); // ILU with limited fill
 
     KSPSetFromOptions(ksp);
     PCSetFromOptions(pc);
