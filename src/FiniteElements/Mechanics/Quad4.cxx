@@ -299,6 +299,23 @@ void Quad4::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T
     // cout << elStran.at(0).at(0) << "\n\n";
 }
 
+void Quad4::CalcElDStran(const double* globalBuffer){
+
+    ColVecd8 dummyDisp; // for element nodal displacement.
+
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        // Get element nodal displacements from the solution vector. 
+        for(int iDof=0; iDof<nElDispDofs; iDof++){
+            dummyDisp(iDof) = globalBuffer[elemDispDof.at(iElem).at(iDof)];
+        }
+
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+            elDStran.at(iElem).at(iGaus) = BuMat.at(iElem).at(iGaus)*dummyDisp;
+        }
+    }
+}
+
 void Quad4::CalcElStran(const double* globalBuffer){
     
     ColVecd8 dummyDisp; // for element nodal displacement.
