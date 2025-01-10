@@ -439,6 +439,7 @@ PetscErrorCode MechModel::AssembleElementMatrix(const auto* elStiffMatx_ptr,
 }
 
 PetscErrorCode MechModel::Assemble(std::vector<BaseElemMech*> elements) {
+    
     // Has to be zeroed for iterative solver. 
     MatZeroEntries(matA);
 
@@ -471,15 +472,16 @@ PetscErrorCode MechModel::Assemble(std::vector<BaseElemMech*> elements) {
     MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
 
     // Save the matrix to MatrixMarket format
-    PetscViewer viewer;
-    PetscViewerASCIIOpen(PETSC_COMM_WORLD, "matrix_output.mtx", &viewer);
-    PetscViewerPushFormat(viewer, PETSC_VIEWER_ASCII_MATRIXMARKET);
-    MatView(matA, viewer);
-    PetscViewerDestroy(&viewer);
+    // PetscViewer viewer;
+    // PetscViewerASCIIOpen(PETSC_COMM_WORLD, "matrix_output.mtx", &viewer);
+    // PetscViewerPushFormat(viewer,  PETSC_VIEWER_ASCII_MATRIXMARKET);
+    // PetscViewerPushFormat(viewer,  PETSC_VIEWER_ASCII_MATLAB);
+
+    // MatView(matA, viewer);
+    // PetscViewerDestroy(&viewer);
 
     return 0;
 }
-
 
 void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep){
 
