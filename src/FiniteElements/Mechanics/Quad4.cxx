@@ -394,3 +394,11 @@ void Quad4::CalcFint(double* Fint){
     }
 }
 
+void Quad4::getNew(){
+
+    elStran_e_old = elStran_e;
+    elStran_p_old = elStran_p;
+    elStran_eq_old = elStran_eq;
+
+}
+

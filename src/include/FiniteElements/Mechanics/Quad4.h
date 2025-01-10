@@ -104,6 +104,8 @@ void CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep
 
 void CalcFint(double* Fint) override;
 
+void getNew() override;
+
 private:
 
 /// @brief Weights of the gauss points [nElGauss].
