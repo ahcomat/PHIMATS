@@ -277,7 +277,7 @@ PC pc;
 /// @brief `SNES` object.         
 SNES snes; 
 
-/// @brief Definint application context structure for SNES. 
+/// @brief Define application context structure for SNES. 
 struct AppCtx {
     vector<BaseElemMech*> elements;  // Elements vector
     vector<BaseMechanics*> mats;     // Material vector
