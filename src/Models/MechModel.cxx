@@ -675,7 +675,6 @@ void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*>
 
 }
 
-
 void MechModel::CalcNodVals(vector<BaseElemMech*> elements){
 
     for (int iSet=0; iSet<nElementSets; iSet++){
