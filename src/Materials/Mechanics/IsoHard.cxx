@@ -20,15 +20,9 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
             n_pow = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/n_pow");
             hardening = HardeningLaw::PowerLaw;
 
-            // Initialize the function pointer
-            selectedRM3D = &IsoHard::RM3D<PowerLaw>;
-
-
         } else if (hardLaw == "Voce") {
 
             hardening = HardeningLaw::Voce;
-
-            selectedRM3D = &IsoHard::RM3D<Voce>;
 
         } else {
 
@@ -43,14 +37,34 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
 
     if (dims == "3D"){
 
+        if (hardLaw == "PowerLaw") {
+            // Initialize the function pointer
+            selectedRM3D = &IsoHard::RM3D<PowerLaw>;
+        } else if (hardLaw == "Voce") {
+            selectedRM3D = &IsoHard::RM3D<Voce>;
+        }
+
         DMatx_ep = Matd6x6(Matd6x6::Zero());
+        double dummy;
 
     } else if (dims == "2D") {
 
         if (analysisType == "PlaneStrain") {
             analysis2D = AnalysisType::PlaneStrain;
+            if (hardLaw == "PowerLaw") {
+                // Initialize the function pointer
+                selectedRM2D = &IsoHard::RM2D<PlaneStrain, PowerLaw>;
+            } else if (hardLaw == "Voce") {
+                selectedRM2D = &IsoHard::RM2D<PlaneStrain, Voce>;
+            }
         } else if (analysisType == "PlaneStress") {
             analysis2D = AnalysisType::PlaneStress;
+            if (hardLaw == "PowerLaw") {
+                // Initialize the function pointer
+                selectedRM2D = &IsoHard::RM2D<PlaneStress, PowerLaw>;
+            } else if (hardLaw == "Voce") {
+                selectedRM2D = &IsoHard::RM2D<PlaneStress, Voce>;
+            }
         } else {
             throw std::invalid_argument("Invalid 2D analysis type: " + analysisType);
         }
@@ -96,27 +110,14 @@ void IsoHard::ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, Co
 }
 
 /// @brief Select appropriate template specialization 
-void IsoHard::ReturnMapping2D(ColVecd3& sig, ColVecd3& eps, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, const int iStep){
+void IsoHard::ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep){
 
-    if (analysis2D == AnalysisType::PlaneStrain) {
-
-        if(hardening == HardeningLaw::PowerLaw){
-            return ReturnMapping2D<PlaneStrain,PowerLaw>(sig, eps, eps_e, eps_p, eps_eq, sig_eq, iStep);
-        } else if (hardening == HardeningLaw::Voce){
-            return ReturnMapping2D<PlaneStrain,Voce>(sig, eps, eps_e, eps_p, eps_eq, sig_eq, iStep);
-        }
-        
-    } else if (analysis2D == AnalysisType::PlaneStress) {
-
-        if(hardening == HardeningLaw::PowerLaw){
-            return ReturnMapping2D<PlaneStress,PowerLaw>(sig, eps, eps_e, eps_p, eps_eq, sig_eq, iStep);
-        } else if (hardening == HardeningLaw::Voce){
-            return ReturnMapping2D<PlaneStress,Voce>(sig, eps, eps_e, eps_p, eps_eq, sig_eq, iStep);
-        }
-
-    } else {
-        throw std::logic_error("Unhandled analysis type.");
+        // Ensure selectedRM3D is valid
+    if (!selectedRM2D) {
+        throw std::runtime_error("ReturnMapping2D function pointer is not set.");
     }
+
+    (this->*selectedRM2D)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, eps_e_old, eps_p_old, eps_eq_old, iStep);
 }
 
 T_DMatx IsoHard::getDMatx() const{

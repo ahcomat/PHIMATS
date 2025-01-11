@@ -68,7 +68,7 @@ IsoHard(string dimensions, H5IO& H5File, int iSet);
 double Mises3D(const ColVecd6& sig3D);
 
 /**
- * @brief Return mapping algorithm for isotropic hardening plasticity. 
+ * @brief Return mapping algorithm for 3D isotropic hardening plasticity. 
  * 
  * @param deps Strain increment
  * @param sig Stress tensor.
@@ -84,7 +84,21 @@ double Mises3D(const ColVecd6& sig3D);
  */
 void ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep);
 
-void ReturnMapping2D(ColVecd3& sig, ColVecd3& eps, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, const int iStep);
+/**
+ * @brief Return mapping algorithm for 2D isotropic hardening plasticity. 
+ * 
+ * @param deps Strain increment
+ * @param sig Stress tensor.
+ * @param eps_e Elastic strain.
+ * @param eps_p Plastic strain.
+ * @param eps_eq Equivalent plastic strain
+ * @param sig_eq Equivalent stress.
+ * @param eps_e_old 
+ * @param eps_p_old 
+ * @param eps_eq_old 
+ * @param iStep 
+ */
+void ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep);
 
 /**
  * @brief Returns the stiffness matrix in Voigt notation.
@@ -142,6 +156,21 @@ T_DMatx DMatx_ep;
 template <typename HardeningLaw>
 void UHard(const double& eqpl, double& syield, double& hard);
 
+/**
+ * @brief 3D Return-mapping to handle different hardening laws
+ * 
+ * @tparam HardeningLaw 
+ * @param deps 
+ * @param sig 
+ * @param eps_e 
+ * @param eps_p 
+ * @param eps_eq 
+ * @param sig_eq 
+ * @param eps_e_old 
+ * @param eps_p_old 
+ * @param eps_eq_old 
+ * @param iStep 
+ */
 template <typename HardeningLaw>
 void RM3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep);
 
@@ -172,8 +201,55 @@ static RM3DFn selectRM3D(HardeningLaw hardening) {
 template <typename AnalysisType>
 double Mises2D(const ColVecd3& sig2D);
 
+/**
+ * @brief Template for 2D hydrostatic stress. Works for plane stress and plane strain.  
+ * 
+ * @tparam AnalysisType `enmum` class to store analysis type. 
+ * @param sig2D Stress vector
+ * @return double 
+ */
+template <typename AnalysisType>
+double Shydro2D(const ColVecd3& sig2D);
+
+// 2D Return-mapping to handle different hardening laws and stress state.
 template <typename AnalysisType, typename HardeningLaw>
-void ReturnMapping2D(ColVecd3& sig, ColVecd3& eps, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, int iStep);
+void RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep);
+
+using RM2DFn = void (IsoHard::*)(ColVecd3&, ColVecd3&, ColVecd3&, ColVecd3&, double&, double&, const ColVecd3&, const ColVecd3&, const double&, const int);
+
+// Function pointer for the selected ReturnMapping variant
+RM2DFn selectedRM2D;
+
+// Function to map HardeningLaw to the appropriate ReturnMapping
+static RM2DFn selectRM2D(AnalysisType analysis2D, HardeningLaw hardening) {
+    
+    switch (analysis2D){
+
+        case AnalysisType::PlaneStrain:
+            switch (hardening) {
+                case HardeningLaw::PowerLaw:
+                    return &IsoHard::RM2D<PlaneStrain, PowerLaw>;
+                case HardeningLaw::Voce:
+                    return &IsoHard::RM2D<PlaneStrain, Voce>;
+                default:
+                    throw std::runtime_error("Unsupported hardening law.");
+            }
+        
+        case AnalysisType::PlaneStress:
+            switch (hardening) {
+                case HardeningLaw::PowerLaw:
+                    return &IsoHard::RM2D<PlaneStress, PowerLaw>;
+                case HardeningLaw::Voce:
+                    return &IsoHard::RM2D<PlaneStress, Voce>;
+                default:
+                    throw std::runtime_error("Unsupported hardening law.");
+            }
+
+        default:
+            throw std::runtime_error("Unsupported analysis type.");
+
+    }
+}
 
 };
 
