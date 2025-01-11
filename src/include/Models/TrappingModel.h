@@ -209,27 +209,52 @@ void WriteExitFlux(H5IO &H5File_out, const int tStep);
 
 private:
 
-int nElConDofs;     /// @brief Number of element concentration (temp) dofs.
-int nExitNodes;     /// @brief Number of exit nodes.
-double dt;          /// @brief Time increment.
-double T0;          /// @brief Initial temperature.
-double T;           /// @brief Current temperature.
-double TotTime = 0;     /// @brief Total time.
+/// @brief Number of element concentration (temp) dofs.
+int nElConDofs;     
 
-int  nTotGuasPts = 0;   /// @brief Total number of integration points.
+/// @brief Number of exit nodes.
+int nExitNodes;
 
-T_nodStres intPtFlux;        /// @brief int-pt flux.
-T_nodStres nodFlux;          /// @brief Nodal flux.
-vector<double> nodCount;     /// @brief Counter for integration points surrounding nodes.
+/// @brief Time increment.
+double dt;    
 
-vector<int> ExitNodeIDs;     /// @brief Exit nodes IDs.
+/// @brief Initial temperature.
+double T0;
+
+/// @brief Current temperature.
+double T;
+
+/// @brief Total time.
+double TotTime = 0;     
+
+/// @brief Total number of integration points.
+int  nTotGuasPts = 0;   
+
+/// @brief int-pt flux.
+T_nodStres intPtFlux;  
+
+/// @brief Nodal flux.
+T_nodStres nodFlux;    
+
+/// @brief Counter for integration points surrounding nodes.
+vector<double> nodCount;     
+
+/// @brief Exit nodes IDs.
+vector<int> ExitNodeIDs;     
 
 // PETSc ------------------------
 
-Vec F;      /// @brief RHS vector.
-Vec x;      /// @brief solution vector.
-Mat K;    /// @brief The global diffusivity matrix.
-Mat M;    /// @brief The global [M-KT] matrix.
+/// @brief RHS vector.
+Vec F;  
+
+/// @brief solution vector.
+Vec x;    
+
+/// @brief The global diffusivity matrix.
+Mat K;      
+
+/// @brief The global [M-KT] matrix.
+Mat M;      
 
 };
 #endif
