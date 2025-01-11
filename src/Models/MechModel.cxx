@@ -511,6 +511,13 @@ void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     // Solve
     SNESSolve(snes, NULL, vecDeltaDisp);
 
+    // Check convergence
+    ierr = SNESGetConvergedReason(snes, &reason);
+    if (reason < 0) { // Convergence failure
+        PetscPrintf(PETSC_COMM_WORLD, "SNES failed to converge: reason %d\n", reason);
+        throw std::runtime_error("SNES failed to converge");
+    }
+
     // Update total displacement
     VecAXPY(vecDisp, 1.0, vecDeltaDisp);
 

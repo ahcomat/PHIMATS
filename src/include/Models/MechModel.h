@@ -277,6 +277,12 @@ PC pc;
 /// @brief `SNES` object.         
 SNES snes; 
 
+/// @brief `SNES` convergence reason.
+SNESConvergedReason reason; // Convergence reason
+
+/// @brief Error code.
+PetscErrorCode ierr;        // Error code
+
 /// @brief Define application context structure for SNES. 
 struct AppCtx {
     vector<BaseElemMech*> elements;  // Elements vector
