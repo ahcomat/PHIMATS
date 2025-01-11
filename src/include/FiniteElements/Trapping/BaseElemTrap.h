@@ -126,19 +126,35 @@ virtual void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
 
 protected:
 
-const int nElDim;              /// @brief Spatial dimensions of the element.
-const int nElNodes;            /// @brief Number of nodes per element.
-const int nElConDofs;          /// @brief Number of element concentration (temperature) dofs.
-const int nElGauss;            /// @brief Number of gauss points.
+/// @brief Universal gas constant [J/mol.K]
+const double R = 8.31446261815324; 
 
-double dt;                     /// @brief Time increment.     
-int Trapping;                  /// @brief Flag for trapping type.
+/// @brief Spatial dimensions of the element.
+const int nElDim;  
 
-vector<vector<double>> intPtVol;    /// @brief Int-pt volume.       
+/// @brief Number of nodes per element.
+const int nElNodes;    
 
-vector<vector<int>> elemConDof;    /// @brief Element concentration (temperature) dofs. In this case, it is identical to `elemNodeConn`.
+/// @brief Number of element concentration (temperature) dofs.
+const int nElConDofs;   
 
-T_ElStiffMatx elCapMatxVariant;   /// @brief Variant for returning elCapMatx. 
+/// @brief Number of gauss points.
+const int nElGauss;            
+
+/// @brief Time increment.   
+double dt;          
+
+/// @brief Flag for trapping type.
+int Trapping;                  
+
+/// @brief Int-pt volume.       
+vector<vector<double>> intPtVol;    
+
+/// @brief Element concentration (temperature) dofs. In this case, it is identical to `elemNodeConn`.
+vector<vector<int>> elemConDof;    
+
+/// @brief Variant for returning elCapMatx. 
+T_ElStiffMatx elCapMatxVariant;   
 
 };
 #endif

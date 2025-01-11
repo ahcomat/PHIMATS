@@ -132,37 +132,62 @@ void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux
 
 private:
 
-const double R = 8.31446261815324; /// @brief Universal gas constant [J/mol.K]
+/// @brief Weights of the gauss points [nElGauss].
+const vector<double> wts{1.0/6.0, 1.0/6.0, 1.0/6};  
 
-const vector<double> wts{1.0/6.0, 1.0/6.0, 1.0/6};  /// @brief Weights of the gauss points [nElGauss].
+/// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
+vector<RowVecd3> shapeFunc; 
 
-vector<RowVecd3> shapeFunc; /// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
-vector<Matd2x3> shapeFuncDeriv; /// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
+/// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
+vector<Matd2x3> shapeFuncDeriv; 
 
-vector<Matd3x2> elemNodCoord;   /// @brief Node Coordinates [nElDim, nElNodes]. 
+/// @brief Node Coordinates [nElDim, nElNodes]. 
+vector<Matd3x2> elemNodCoord;   
 
-vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
+/// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
+vector<vector<RowVecd2>> gaussPtCart;  
 
-vector<vector<ColVecd2>> elFlux;         /// @brief Int-pt flux [nElStres]
+/// @brief Int-pt flux [nElStres]
+vector<vector<ColVecd2>> elFlux;         
 
-vector<vector<double>> el_gPhi;          /// @brief Int-pt phi [nElStres]. 
+/// @brief Int-pt phi [nElStres]. 
+vector<vector<double>> el_gPhi;          
 
-vector<vector<double>> el_martensite;    /// @brief Int-pt martensite [nElStres]. 
-vector<vector<double>> el_gPhiMM;        /// @brief Int-pt gPhiMM [nElStres]. 
-vector<vector<double>> el_gPhifM;        /// @brief Int-pt gPhifM [nElStres]. 
-vector<vector<double>> el_gPhiff;        /// @brief Int-pt gPhiff [nElStres]. 
+/// @brief Int-pt martensite [nElStres]. 
+vector<vector<double>> el_martensite;    
 
-vector<double> nod_gPhi;        /// @brief nodal values of phi [nTotNodes]
+/// @brief Int-pt gPhiMM [nElStres]. 
+vector<vector<double>> el_gPhiMM;        
 
-vector<double> nod_martensite;  /// @brief nodal values of martensite [nTotNodes]
-vector<double> nod_gPhiMM;      /// @brief nodal values of gPhiMM [nTotNodes]
-vector<double> nod_gPhifM;      /// @brief nodal values of gPhifM [nTotNodes]
-vector<double> nod_gPhiff;      /// @brief nodal values of gPhiff [nTotNodes]
+/// @brief Int-pt gPhifM [nElStres]. 
+vector<vector<double>> el_gPhifM;  
 
-vector<vector<Matd2x3>> BMat;   /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
+/// @brief Int-pt gPhiff [nElStres].
+vector<vector<double>> el_gPhiff;         
 
-vector<Matd3x3> elStiffMatx;    /// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].    
-vector<Matd3x3> elCapMatx;      /// @brief Element capacitance matrix [nElDispDofs, nElDispDofs].   
+/// @brief nodal values of phi [nTotNodes]
+vector<double> nod_gPhi;        
+
+/// @brief nodal values of martensite [nTotNodes]
+vector<double> nod_martensite;  
+
+/// @brief nodal values of gPhiMM [nTotNodes]
+vector<double> nod_gPhiMM;      
+
+/// @brief nodal values of gPhifM [nTotNodes]
+vector<double> nod_gPhifM; 
+
+/// @brief nodal values of gPhiff [nTotNodes]
+vector<double> nod_gPhiff;      
+
+/// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
+vector<vector<Matd2x3>> BMat;   
+
+/// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].
+vector<Matd3x3> elStiffMatx;  
+
+/// @brief Element capacitance matrix [nElDispDofs, nElDispDofs].
+vector<Matd3x3> elCapMatx;         
 
 };
 #endif
