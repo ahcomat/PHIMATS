@@ -11,8 +11,8 @@ The `phase-FIEld MATerials Simulator` (pronounced Phi-MATS) is a finite element 
 
 ## Features
 
-- Pre and post processing using `Python`.
-- Modular design using object oriented `C++` with `inheritance` and `polymorphism`.
+- Pre-processing using `Python` interface.
+- Modular design using object-oriented `C++` with `inheritance` and `polymorphism`.
 - Data storage in `HDF5` format.
 - `XDMF` for visualization in `Paraview`.
 
