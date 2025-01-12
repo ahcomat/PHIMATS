@@ -37,7 +37,8 @@ public:
 Logger(const std::string& fileName = "", MPI_Comm comm = PETSC_COMM_WORLD);
 ~Logger();
 
-void log(const std::string& message, const std::string& level = "INFO");
+void log(const std::string& message, const std::string& level = "INFO", bool includeTimestamp=true);
+
 void showIntroMessage();
 
 private:
