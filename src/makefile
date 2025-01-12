@@ -20,9 +20,16 @@ SUBDIRS := $(filter-out $(EXCLUDE), $(SUBDIRS))
 all: $(SUBDIRS) ${OBJECTS}
 
 obj/%.o: %.cxx
-	${CXX} $(CPPFLAGS) -c $< -o $@ -I $(PHIMATSINCLUDES) -I $(H5ID) -I $(EIGEN) -L $(H5LD) -lhdf5 -lhdf5_cpp
+	# ${CXX} $(CPPFLAGS) -c $< -o $@ -I $(H5ID) -I $(EIGEN) -L $(H5LD) -lhdf5 -lhdf5_cpp
+	$(COMPILE.cc) ${$(SETTINGS)} $< -I ${PETSC_DIR}/include/ -I $(EIGEN) -I $(PHIMATSINCLUDES) -L ${PETSC_LIB} -I $(H5ID) -L $(H5LD) -lhdf5 -lhdf5_cpp
+	mv *.o obj
 
 $(SUBDIRS):
 	$(MAKE) -C $@
 
 .PHONY: all $(SUBDIRS)
+	
+include ${PETSC_DIR}/lib/petsc/conf/variables
+include ${PETSC_DIR}/lib/petsc/conf/rules
+
+
