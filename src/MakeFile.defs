@@ -16,13 +16,3 @@ else ifeq ($(SETTINGS), OPTIM)
 endif
 
 MAKE = make SETTINGS="$(SETTINGS)"
-
-ifeq "${HOME}" "/home/abdu"
-    H5LD = /usr/lib/x86_64-linux-gnu/hdf5/serial 
-    H5ID = /usr/include/hdf5/serial/
-    EIGEN = /home/abdu/eigen/
-else ifeq "${HOME}" "/user/gent/456/vsc45632"
-    H5LD = ${EBROOTHDF5}/lib
-    H5ID = ${EBROOTHDF5}/include
-    EIGEN = /apps/gent/RHEL8/zen2-ib/software/Eigen/3.4.0-GCCcore-13.2.0/include
-endif
