@@ -10,11 +10,6 @@ SOURCES:=${wildcard *.cxx}
 # Name of objects
 OBJECTS:=${patsubst %.cxx,${OBJDIR}/%.o,${SOURCES}}
 
-# all: ${OBJECTS}
-
-# ../obj/%.o: %.cxx
-# 	${CXX} $(CFLAGS) -c $< -o $@ -I $(PHIMATSINCLUDES) -I $(EIGEN) -I $(H5ID) -L $(H5LD) -lhdf5 -lhdf5_cpp
-
 all: ${OBJECTS}
 
 # in PETSc we need "mv *.o ../obj"
