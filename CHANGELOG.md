@@ -13,13 +13,20 @@
 ### Added
 - `IsoHard` material for isotropic hardening in J2 plasticity.
 
+### Removed
+- `PlaneStrain.cxx` and `PlaneStress.cxx` : Integrated functionality into `LinearElasti.cxx`.
+
 ### Changed
 - `MechModel`:
-  - Implemented `PETSc` `SNES` non-linear solver using incremental iterative analysis.
+  - Implemented `SNES` non-linear solver using incremental iterative analysis.
   - Optimized `Assemble` by removing redundant loops.
 - Added J2 plasticity support to:
   - `Hex8` elements.
   - `Quad4` elements.
+- `H5IO`:
+  - Added `ReadString` for reading `string` HDF5 input file.
+  - Templates in `ReadField1D` and `ReadField2D` to support `int` and `double` types. 
+  - Added `try-catch` for improved error handling.
 
 ### Fixed
 - `MechModel`:
