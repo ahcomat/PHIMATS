@@ -1,9 +1,6 @@
 # Include makefile definitions
 include MakeFile.defs
 
-# include dir
-INCLUDES = include
-
 # Objects dir
 OBJDIR := obj
 
@@ -23,7 +20,7 @@ SUBDIRS := $(filter-out $(EXCLUDE), $(SUBDIRS))
 all: $(SUBDIRS) ${OBJECTS}
 
 obj/%.o: %.cxx
-	${CXX} $(CPPFLAGS) -c $< -o $@ -I $(INCLUDES) -I $(H5ID) -I $(EIGEN) -L $(H5LD) -lhdf5 -lhdf5_cpp
+	${CXX} $(CPPFLAGS) -c $< -o $@ -I $(PHIMATSINCLUDES) -I $(H5ID) -I $(EIGEN) -L $(H5LD) -lhdf5 -lhdf5_cpp
 
 $(SUBDIRS):
 	$(MAKE) -C $@
