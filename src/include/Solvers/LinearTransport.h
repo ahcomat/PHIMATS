@@ -25,12 +25,17 @@
 #define LINEARTRANSPORT_H
 
 #include "BaseSolver.h"
+#include "Logger.h"
+
+#include <string>
+
+using namespace std;
 
 class LinearTransport: public BaseSolver{
 
 public:
 
-LinearTransport(Mat &A);
+LinearTransport(Mat &A, Logger& logger, string solverType="DIRECT");
 
 ~LinearTransport() override;
 
