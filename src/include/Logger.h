@@ -30,16 +30,54 @@
 
 #include <petscsys.h>  // PETSc header for parallel utilities
 
+using namespace std;
+
 class Logger {
 
 public:
 
+enum LogLevel {
+    INFO,
+    WARNING,
+    ERROR,
+};
+
 Logger(const std::string& fileName = "", MPI_Comm comm = PETSC_COMM_WORLD);
 ~Logger();
 
+/**
+ * @brief Get the string of level.
+ * 
+ * @param level 
+ * @return string 
+ */
+string LevelToString(LogLevel level);
+
 void log(const std::string& message, const std::string& level = "INFO", bool includeTimestamp=true);
 
-void showIntroMessage();
+/**
+ * @brief Show PhiMATS intro message. 
+ * 
+ */
+void IntroMessage();
+
+/**
+ * @brief Show entering loop message
+ * 
+ */
+void LoopMessage();
+
+/**
+ * @brief Show message for step increment. 
+ * 
+ */
+void StepIncrement(const int& iStep);
+
+/**
+ * @brief Show message for step increment. 
+ * 
+ */
+void FieldOutput(const int& iStep);
 
 private:
 

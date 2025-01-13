@@ -35,6 +35,17 @@ Logger::~Logger() {
 
 }
 
+string Logger::LevelToString(LogLevel level) {
+
+    switch (level) {
+        case INFO: return "INFO";
+        case WARNING: return "WARNING";
+        case ERROR: return "ERROR";
+        default: return "UNKNOWN";
+    }
+    
+}
+
 void Logger::log(const std::string& message, const std::string& level, bool includeTimestamp) {
     std::string fullMessage;
     if (includeTimestamp) {
@@ -56,7 +67,7 @@ void Logger::log(const std::string& message, const std::string& level, bool incl
     }
 }
 
-void Logger::showIntroMessage() {
+void Logger::IntroMessage() {
     if (rank == 0) {
         const std::string redPhi = "\033[31mφ\033[0m";  // Red phi (phi) for terminal output
         const std::string plainPhi = "φ";              // Plain phi for log file output
@@ -65,8 +76,36 @@ void Logger::showIntroMessage() {
         log("*       Phase-field Multiphysics Materials Simulator (" + redPhi + "MATS) ", "", false);
         log("*       Version: " + std::string(VERSION_STRING), "", false);
         log("*       Release date: " + std::string(VERSION_DATE), "", false);
-        log("*       Website: " + std::string(PROJECT_WEBSITE), "", false);
-        log("*       For citation, please use: " + std::string(PROJECT_CITATION), "", false);
+        // log("*       Website: " + std::string(PROJECT_WEBSITE), "", false);
+        // log("*       For citation, please use: " + std::string(PROJECT_CITATION), "", false);
         log("", "", false);
     }
 }
+
+void Logger::LoopMessage(){
+
+    if (rank == 0) {
+        log("", "", false);
+        log("   >>> Entering the solver loop <<<", LevelToString(INFO));
+        log("", "", false);
+    }
+}
+
+void Logger::StepIncrement(const int& iStep){
+
+        if (rank == 0) {
+        log("", "", false);
+        log("   Increment " + std::to_string(iStep), LevelToString(INFO));
+        log("", "", false);
+    }
+}
+
+void Logger::StepIncrement(const int& iStep){
+
+        if (rank == 0) {
+        log("", "", false);
+        log("   Field output for Step_" + std::to_string(iStep), LevelToString(INFO));
+        log("", "", false);
+    }
+}
+
