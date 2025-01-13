@@ -6,6 +6,7 @@
 
 ### Changed
 - `makefile` now uses machine-independent path variables: `PHIMATSINCLUDES`, `EIGEN`, `H5ID`, and `H5LD`.
+- Compile PhiMATS as a library `-libphimats`
 
 ---
 
