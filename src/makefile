@@ -3,29 +3,37 @@ include MakeFile.defs
 
 # Objects dir
 OBJDIR := obj
+LIBDIR := lib
 
 # Finds .cxx files in current folder
 SOURCES:=${wildcard *.cxx}
-
 # Name of objects
 OBJECTS:=${patsubst %.cxx,${OBJDIR}/%.o,${SOURCES}}
 
-export EXCLUDE = obj/ include/ FEM_utils/ #Solvers/ FiniteElements/ Materials/ 
+export EXCLUDE = obj/ lib/ include/ FEM_utils/ #Solvers/ FiniteElements/ Materials/ 
 
 SUBDIRS := $(wildcard */)
 SUBDIRS :=$(sort $(dir $(wildcard */)))
 # Exlude entries from list above
 SUBDIRS := $(filter-out $(EXCLUDE), $(SUBDIRS))
 
-all: $(SUBDIRS) ${OBJECTS}
+# Static library
+STATIC_LIB := $(LIBDIR)/libphimats.a
+
+all: $(SUBDIRS) ${OBJECTS} $(STATIC_LIB)
 
 obj/%.o: %.cxx
-	# ${CXX} $(CPPFLAGS) -c $< -o $@ -I $(H5ID) -I $(EIGEN) -L $(H5LD) -lhdf5 -lhdf5_cpp
-	$(COMPILE.cc) ${$(SETTINGS)} $< -I ${PETSC_DIR}/include/ -I $(EIGEN) -I $(PHIMATSINCLUDES) -L ${PETSC_LIB} -I $(H5ID) -L $(H5LD) -lhdf5 -lhdf5_cpp
+	$(COMPILE.cc) ${$(SETTINGS)} $< -I${PETSC_DIR}/include/ -I$(EIGEN) -I$(PHIMATSINCLUDES) -L${PETSC_LIB} -I$(H5ID) $(LDFLAGS)
 	mv *.o obj
 
 $(SUBDIRS):
 	$(MAKE) -C $@
+
+# Create static library
+$(STATIC_LIB): $(OBJECTS)
+	# @echo $(wildcard $(OBJDIR)/*.o)  # Debug: List all object files in obj/
+	ar rcs $@ $(wildcard $(OBJDIR)/*.o)
+
 
 .PHONY: all $(SUBDIRS)
 	

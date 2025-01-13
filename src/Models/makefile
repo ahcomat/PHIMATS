@@ -1,6 +1,3 @@
-# Include makefile definitions
-include ../MakeFile.defs
-
 # Objects dir
 OBJDIR := ../obj
 
@@ -14,8 +11,7 @@ all: ${OBJECTS}
 
 # in PETSc we need "mv *.o ../obj"
 ${OBJDIR}/%.o: %.cxx
-	#@echo ${OBJDIR}
-	$(COMPILE.cc) ${$(SETTINGS)} $< -I ${PETSC_DIR}/include/ -I $(EIGEN) -I $(PHIMATSINCLUDES) -L ${PETSC_LIB} -I $(H5ID) -L $(H5LD) -lhdf5 -lhdf5_cpp
+	$(COMPILE.cc) ${$(SETTINGS)} $< -I${PETSC_DIR}/include/ -I$(EIGEN) -I$(PHIMATSINCLUDES) -L${PETSC_LIB} -I$(H5ID) $(LDFLAGS)
 	mv *.o ../obj
 	
 include ${PETSC_DIR}/lib/petsc/conf/variables

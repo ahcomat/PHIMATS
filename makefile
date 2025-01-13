@@ -7,6 +7,7 @@ all :
 	@echo "Start: " $(shell date)
 	@echo "---------------------------------"
 	mkdir -p src/obj
+	mkdir -p src/lib
 	make -C src/
 	@echo "---------------------------------"
 	@echo "End: " $(shell date)
@@ -22,4 +23,4 @@ options:
 	@echo "  PETSC  -> with petsc compiler and linker"
 	
 clean : 
-	rm -rf src/obj
+	rm -rf src/obj src/lib

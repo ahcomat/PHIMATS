@@ -16,3 +16,7 @@ else ifeq ($(SETTINGS), OPTIM)
 endif
 
 MAKE = make SETTINGS="$(SETTINGS)"
+
+# Flags
+LDFLAGS := -L$(H5LD) -lhdf5 -lhdf5_cpp 
+

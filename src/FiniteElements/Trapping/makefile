@@ -1,6 +1,3 @@
-# Include makefile definitions
-include ../../MakeFile.defs
-
 # Objects dir
 OBJDIR := ../../obj
 
@@ -16,4 +13,4 @@ all: ${OBJECTS}
 	# @echo "${OBJECTS}"
 
 ../../obj/%.o: %.cxx
-	${CXX} $(CPPFLAGS) -c $< -o $@ -I $(PHIMATSINCLUDES) -I $(EIGEN) -I $(H5ID) -L $(H5LD) -lhdf5 -lhdf5_cpp
+	${CXX} $(CPPFLAGS) -c $< -o $@ -I$(PHIMATSINCLUDES) -I$(EIGEN) -I$(H5ID) $(LDFLAGS)
