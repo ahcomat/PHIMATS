@@ -355,8 +355,7 @@ PetscErrorCode MechModel::Assemble(std::vector<BaseElemMech*> elements) {
     }
 
     // Final assembly
-    MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY);
-    MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
+    MatAssemblyBegin(matA, MAT_FINAL_ASSEMBLY); MatAssemblyEnd(matA, MAT_FINAL_ASSEMBLY);
 
     // Apply Dirichlet boundary conditions (requires MAT_FINAL_ASSEMBLY)
     MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
