@@ -1,5 +1,6 @@
 #include<iostream>
 #include<variant>
+#include <unordered_set>
 
 #include "Models/TrappingModel.h"
 
@@ -120,7 +121,7 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
     MatDuplicate(K, MAT_DO_NOT_COPY_VALUES, &M);
 
     // Preallocate the coefficient matrix.
-    vector<vector<int>> gDofs(nTotDofs); // vector to store dofs per row.
+    vector<unordered_set<int>> gDofs(nTotDofs); // vector to store dofs per row.
     int itotv, jtotv; // for global row and colum dof.
     PetscInt *nnz; // Array for the number of zeros per row
     PetscMalloc1(nTotDofs, &nnz); // Allocates the size of nnz
@@ -145,7 +146,8 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
                     // If jtotv is not in gDofs.at(itotv)
                     if (find(gDofs.at(itotv).begin(), gDofs.at(itotv).end(), jtotv) == gDofs.at(itotv).end()){
 
-                        gDofs.at(itotv).push_back(jtotv);
+                        gDofs[itotv].insert(jtotv); // Insert column index (automatically handles duplicates)
+
                     }
                 }
             }
@@ -157,11 +159,18 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
         nnz[iDof] = gDofs.at(iDof).size();
     }
 
-    // Preallocate the stiffness matrix.
+    // Preallocation.
     MatSeqAIJSetPreallocation(K, PETSC_DEFAULT, nnz);
-    MatSeqAIJSetPreallocation(M, PETSC_DEFAULT, nnz); 
-    PetscFree(nnz);
+    // No new memory is allocated
+    MatSetOption(K, MAT_NEW_NONZERO_ALLOCATION_ERR, PETSC_TRUE);
+    MatSetOption(K,MAT_KEEP_NONZERO_PATTERN,PETSC_TRUE);
 
+    MatSeqAIJSetPreallocation(M, PETSC_DEFAULT, nnz); 
+    // No new memory is allocated
+    MatSetOption(M, MAT_NEW_NONZERO_ALLOCATION_ERR, PETSC_TRUE);
+    MatSetOption(M,MAT_KEEP_NONZERO_PATTERN,PETSC_TRUE);
+
+    PetscFree(nnz);
 }
 
 void TrappingModel::WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_out){
