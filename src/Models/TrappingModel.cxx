@@ -356,7 +356,8 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool updateTemp){
     }
 
     MatAssemblyBegin(K, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(K, MAT_FINAL_ASSEMBLY);
-    MatSetOption(K, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_FALSE);
+    // For Dirichlet boundary conditions
+    MatZeroRows(K, nPresDofs, presDofs, 1.0, NULL, NULL);
 
     // TODO: For debug!
     // // Extract a specific row
@@ -378,7 +379,6 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool updateTemp){
 
     if (!updateTemp){
         MatAssemblyBegin(M, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(M, MAT_FINAL_ASSEMBLY);
-        MatSetOption(M, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
     }
 }
 
@@ -414,9 +414,6 @@ void TrappingModel::InitializeDirichBC(H5IO& H5File_in){
         // cout << presDofs[iPresDof] << " --> " << presVals[iPresDof] << "\n";
     }
 
-    // For the coefficient matrix
-    MatZeroRows(K, nPresDofs, presDofs, 1.0, NULL, NULL);
-    MatAssemblyBegin(K, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(K, MAT_FINAL_ASSEMBLY);
 }
 
 void TrappingModel::setDirichBC(){
