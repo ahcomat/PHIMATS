@@ -30,12 +30,12 @@ $(SUBDIRS):
 	$(MAKE) -C $@
 
 # Create static library
-$(STATIC_LIB): $(wildcard $(OBJDIR)/*.o)
+$(STATIC_LIB): $(OBJECTS)
 	# @echo $(wildcard $(OBJDIR)/*.o)  # Debug: List all object files in obj/
 	ar rcs $@ $(wildcard $(OBJDIR)/*.o)
 
 
-.PHONY: all $(SUBDIRS)
+.PHONY: all $(SUBDIRS) $(STATIC_LIB)
 	
 include ${PETSC_DIR}/lib/petsc/conf/variables
 include ${PETSC_DIR}/lib/petsc/conf/rules
