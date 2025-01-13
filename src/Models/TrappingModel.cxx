@@ -49,7 +49,6 @@ TrappingModel::TrappingModel(vector<BaseElemTrap*> elements, H5IO& H5File_in){
     } else if (nDim == 3){ // Case 3D
 
         nodFlux = vector<ColVecd3>(nTotNodes);
-
     }
 
     // Initialize to zeros
@@ -62,7 +61,7 @@ TrappingModel::~TrappingModel(){
 
     // Deallocate memory.
     PetscFree(presDofs); PetscFree(presVals);
-    VecDestroy(&F); VecDestroy(&x); MatDestroy(&K); MatDestroy(&M);
+    VecDestroy(&vecF); VecDestroy(&vecx); MatDestroy(&matK); MatDestroy(&matM);
     // Finalize PETSc
     PetscFinalize();
     // Exit message
@@ -99,26 +98,26 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
     //         cout << dispDof << "\n";
 
     // Initialize the vectors
-    VecCreate(PETSC_COMM_WORLD, &F);
-    VecSetSizes(F, PETSC_DECIDE, nTotDofs);
+    VecCreate(PETSC_COMM_WORLD, &vecF);
+    VecSetSizes(vecF, PETSC_DECIDE, nTotDofs);
 
-    VecSetType(F, VECSEQ);
-    VecDuplicate(F, &x);      
+    VecSetType(vecF, VECSEQ);
+    VecDuplicate(vecF, &vecx);      
 
-    VecSet(F, 0.0); // Set all values to zero.
-    VecAssemblyBegin(F); VecAssemblyEnd(F);
+    VecSet(vecF, 0.0); // Set all values to zero.
+    VecAssemblyBegin(vecF); VecAssemblyEnd(vecF);
 
-    VecSet(x, 0.0); // Set all values to zero.
-    VecAssemblyBegin(x); VecAssemblyEnd(x);
+    VecSet(vecx, 0.0); // Set all values to zero.
+    VecAssemblyBegin(vecx); VecAssemblyEnd(vecx);
 
     // Initialize the coefficient matrices.
-    MatCreateSeqAIJ(PETSC_COMM_WORLD, nTotDofs, nTotDofs, PETSC_DEFAULT, NULL, &K); // Works better for HPC
+    MatCreateSeqAIJ(PETSC_COMM_WORLD, nTotDofs, nTotDofs, PETSC_DEFAULT, NULL, &matK); // Works better for HPC
 
-    // MatCreate(PETSC_COMM_WORLD, &K);
-    // MatSetSizes(K, PETSC_DECIDE, PETSC_DECIDE, nTotDofs, nTotDofs);
-    // MatSetType(K, MATSEQAIJ); 
+    // MatCreate(PETSC_COMM_WORLD, &matK);
+    // MatSetSizes(matK, PETSC_DECIDE, PETSC_DECIDE, nTotDofs, nTotDofs);
+    // MatSetType(matK, MATSEQAIJ); 
 
-    MatDuplicate(K, MAT_DO_NOT_COPY_VALUES, &M);
+    MatDuplicate(matK, MAT_DO_NOT_COPY_VALUES, &matM);
 
     // Preallocate the coefficient matrix.
     vector<unordered_set<int>> gDofs(nTotDofs); // vector to store dofs per row.
@@ -160,15 +159,15 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
     }
 
     // Preallocation.
-    MatSeqAIJSetPreallocation(K, PETSC_DEFAULT, nnz);
+    MatSeqAIJSetPreallocation(matK, PETSC_DEFAULT, nnz);
     // No new memory is allocated
-    MatSetOption(K, MAT_NEW_NONZERO_ALLOCATION_ERR, PETSC_TRUE);
-    MatSetOption(K,MAT_KEEP_NONZERO_PATTERN,PETSC_TRUE);
+    MatSetOption(matK, MAT_NEW_NONZERO_ALLOCATION_ERR, PETSC_TRUE);
+    MatSetOption(matK,MAT_KEEP_NONZERO_PATTERN,PETSC_TRUE);
 
-    MatSeqAIJSetPreallocation(M, PETSC_DEFAULT, nnz); 
+    MatSeqAIJSetPreallocation(matM, PETSC_DEFAULT, nnz); 
     // No new memory is allocated
-    MatSetOption(M, MAT_NEW_NONZERO_ALLOCATION_ERR, PETSC_TRUE);
-    MatSetOption(M,MAT_KEEP_NONZERO_PATTERN,PETSC_TRUE);
+    MatSetOption(matM, MAT_NEW_NONZERO_ALLOCATION_ERR, PETSC_TRUE);
+    MatSetOption(matM,MAT_KEEP_NONZERO_PATTERN,PETSC_TRUE);
 
     PetscFree(nnz);
 }
@@ -290,8 +289,8 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool updateTemp){
 
                     }
 
-                    MatSetValues(K, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
-                    MatSetValues(M, nElConDofs, i1, nElConDofs, j1, elCapMatx_ref.at(iElem).data(), ADD_VALUES);
+                    MatSetValues(matK, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+                    MatSetValues(matM, nElConDofs, i1, nElConDofs, j1, elCapMatx_ref.at(iElem).data(), ADD_VALUES);
                 }
 
             } else if (std::holds_alternative<vector<Matd3x3>*>(T_elStiffMatx_ref)){  // Tri3 elements.
@@ -308,8 +307,8 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool updateTemp){
                         j1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
                     }
                     
-                    MatSetValues(K, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
-                    MatSetValues(M, nElConDofs, i1, nElConDofs, j1, elCapMatx_ref.at(iElem).data(), ADD_VALUES);
+                    MatSetValues(matK, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+                    MatSetValues(matM, nElConDofs, i1, nElConDofs, j1, elCapMatx_ref.at(iElem).data(), ADD_VALUES);
                 }
             }
 
@@ -329,7 +328,7 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool updateTemp){
 
                     }
 
-                    MatSetValues(K, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+                    MatSetValues(matK, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
                 }
 
             } else if (std::holds_alternative<vector<Matd3x3>*>(T_elStiffMatx_ref)){  // Tri3 elements.
@@ -345,7 +344,7 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool updateTemp){
                         j1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
                     }
                     
-                    MatSetValues(K, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
+                    MatSetValues(matK, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
                 }
             } // Element type
         }
@@ -355,9 +354,9 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool updateTemp){
         PetscFree(j1);
     }
 
-    MatAssemblyBegin(K, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(K, MAT_FINAL_ASSEMBLY);
+    MatAssemblyBegin(matK, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matK, MAT_FINAL_ASSEMBLY);
     // For Dirichlet boundary conditions
-    MatZeroRows(K, nPresDofs, presDofs, 1.0, NULL, NULL);
+    MatZeroRows(matK, nPresDofs, presDofs, 1.0, NULL, NULL);
 
     // TODO: For debug!
     // // Extract a specific row
@@ -366,19 +365,19 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool updateTemp){
     // const PetscScalar *VAL;
     // PetscInt NCOL;
 
-    // MatGetRow(K, ROW, &NCOL, &COL, &VAL);
+    // MatGetRow(matK, ROW, &NCOL, &COL, &VAL);
 
     // for (int w = 0; w < NCOL; w++) {
     //     cout << "Col: " << COL[w] << ", Val: " << VAL[w] << "\n";
     // }
 
     // // Restore the row
-    // MatRestoreRow(K, ROW, &NCOL, &COL, &VAL); 
+    // MatRestoreRow(matK, ROW, &NCOL, &COL, &VAL); 
 
-    // MatView(K, PETSC_VIEWER_STDOUT_WORLD);
+    // MatView(matK, PETSC_VIEWER_STDOUT_WORLD);
 
     if (!updateTemp){
-        MatAssemblyBegin(M, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(M, MAT_FINAL_ASSEMBLY);
+        MatAssemblyBegin(matM, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matM, MAT_FINAL_ASSEMBLY);
     }
 }
 
@@ -388,9 +387,9 @@ void TrappingModel::ReadInitialCon(H5IO& H5File, const int iStep){
     H5File.ReadField1D("Con/Step_"+to_string(iStep), con_0);
 
     for(int iDof=0; iDof<nTotDofs; iDof++){
-        VecSetValue(x, iDof, con_0.at(iDof), INSERT_VALUES);
+        VecSetValue(vecx, iDof, con_0.at(iDof), INSERT_VALUES);
     }
-    VecAssemblyBegin(x);  VecAssemblyEnd(x);
+    VecAssemblyBegin(vecx);  VecAssemblyEnd(vecx);
 }
 
 void TrappingModel::InitializeDirichBC(H5IO& H5File_in){
@@ -420,16 +419,16 @@ void TrappingModel::setDirichBC(){
 
     Update_F();
     
-    VecSetValues(F, nPresDofs, presDofs, presVals, INSERT_VALUES); 
-    VecAssemblyBegin(F); VecAssemblyEnd(F);
+    VecSetValues(vecF, nPresDofs, presDofs, presVals, INSERT_VALUES); 
+    VecAssemblyBegin(vecF); VecAssemblyEnd(vecF);
 
     // // TODO: For debug!
-    // VecView(F, PETSC_VIEWER_STDOUT_WORLD);
+    // VecView(vecF, PETSC_VIEWER_STDOUT_WORLD);
 }
 
 void TrappingModel::Update_F(){
 
-    MatMult(M, x, F);
+    MatMult(matM, vecx, vecF);
 }
 
 int TrappingModel::get_nSteps() const{
@@ -439,17 +438,17 @@ int TrappingModel::get_nSteps() const{
 
 Vec& TrappingModel::getF(){
 
-    return F;
+    return vecF;
 }
 
 Vec& TrappingModel::getX(){
 
-    return x;
+    return vecx;
 }
 
 Mat& TrappingModel::getK(){
 
-    return K;
+    return matK;
 }
 
 void TrappingModel::WriteInPtCoords(vector<BaseElemTrap*> elements, H5IO &H5File_out){
@@ -469,7 +468,7 @@ void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping
     // set zeros
     setZero_nodFlux();
 
-    VecGetArrayRead(x, &globalBuffer);
+    VecGetArrayRead(vecx, &globalBuffer);
 
     for (int iSet=0; iSet<nElementSets; iSet++){
         elements[iSet]->CalcFlux(mats[iSet], globalBuffer, nodFlux, intPtFlux, nodCount, T);
@@ -494,7 +493,7 @@ void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping
     // TODO: For debug!
     // cout << std::get<std::vector<ColVecd3>>(nodStran).at(0) << "\n";
 
-    VecRestoreArrayRead(x, &globalBuffer);
+    VecRestoreArrayRead(vecx, &globalBuffer);
 }
 
 void TrappingModel::WriteFlux(H5IO &H5File_out, const string iStep){
@@ -515,9 +514,9 @@ void TrappingModel::WriteIntPtFlux(H5IO &H5File_out, const string iStep){
 void TrappingModel::WriteOut(H5IO &H5File_out, const string iStep){
 
     // Concentration
-    VecGetArrayRead(x, &globalBuffer);
+    VecGetArrayRead(vecx, &globalBuffer);
     H5File_out.WriteArray1D("Con/Step_"+iStep, nTotDofs, globalBuffer);
-    VecRestoreArrayRead(x, &globalBuffer);
+    VecRestoreArrayRead(vecx, &globalBuffer);
 }
 
 void TrappingModel::WriteAvCon(vector<BaseElemTrap*> elements, H5IO &H5File_out, const int iStep){
@@ -525,9 +524,9 @@ void TrappingModel::WriteAvCon(vector<BaseElemTrap*> elements, H5IO &H5File_out,
     double AvCon = 0;
 
     for (int iSet=0; iSet<nElementSets; iSet++){
-        VecGetArrayRead(x, &globalBuffer);
+        VecGetArrayRead(vecx, &globalBuffer);
         AvCon += elements[iSet]->CalcAvCon(globalBuffer);
-        VecRestoreArrayRead(x, &globalBuffer);
+        VecRestoreArrayRead(vecx, &globalBuffer);
     }
 
     TotTime += dt;
@@ -541,7 +540,7 @@ void TrappingModel::WriteExitFlux(H5IO &H5File_out, const int iStep){
     double sum = 0;
 
     for (int iExNod : ExitNodeIDs){ 
-        sum += std::get<std::vector<ColVecd2>>(nodFlux).at(iExNod)[0];  // x-component
+        sum += std::get<std::vector<ColVecd2>>(nodFlux).at(iExNod)[0];  // vecx-component
     }
 
     sum = sum/nExitNodes;  // Number averaging

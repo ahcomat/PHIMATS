@@ -245,16 +245,16 @@ vector<int> ExitNodeIDs;
 // PETSc ------------------------
 
 /// @brief RHS vector.
-Vec F;  
+Vec vecF;  
 
 /// @brief solution vector.
-Vec x;    
+Vec vecx;    
 
-/// @brief The global diffusivity matrix.
-Mat K;      
+/// @brief The global stiffness matrix.
+Mat matK;      
 
 /// @brief The global [M-KT] matrix.
-Mat M;      
+Mat matM;
 
 };
 #endif
