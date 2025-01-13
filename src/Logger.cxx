@@ -1,10 +1,10 @@
 #include "Logger.h"
 #include "Version.h"
 #include <iostream>
-#include <ctime>
 #include <stdexcept>
 
 std::string Logger::getCurrentTime() const {
+    
     std::time_t now = std::time(nullptr);
     char buf[80];
     std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", std::localtime(&now));
@@ -35,21 +35,26 @@ Logger::~Logger() {
 
 }
 
-string Logger::LevelToString(LogLevel level) {
+string Logger::applyColor(const std::string& level) {
 
-    switch (level) {
-        case INFO: return "INFO";
-        case WARNING: return "WARNING";
-        case ERROR: return "ERROR";
-        default: return "UNKNOWN";
+    if (level == "INFO") {
+        return "\033[32m" + level  + "\033[0m"; // Green
+    } else if (level == "WARNING") {
+        return "\033[33m" + level  + "\033[0m"; // Yellow
+    } else if (level == "ERROR" || level == "CRITICAL") {
+        return "\033[31m" + level  + "\033[0m"; // Red
     }
+    return level ; // Default: No color
     
 }
 
+
 void Logger::log(const std::string& message, const std::string& level, bool includeTimestamp) {
+    
     std::string fullMessage;
+
     if (includeTimestamp) {
-        fullMessage = "[" + getCurrentTime() + "] [" + level + "] " + message;
+        fullMessage = "[" + getCurrentTime() + "] [" + applyColor(level) + "] " + message;
     } else {
         fullMessage = message;
     }
@@ -60,12 +65,14 @@ void Logger::log(const std::string& message, const std::string& level, bool incl
         std::string consoleMessage = fullMessage;
         std::cout << consoleMessage << std::endl;
 
-        // File output: Exclude ANSI escape sequences (clean plain text)
+        // File output: Plain text without ANSI escape codes
         if (logToFile) {
-            logFile << fullMessage << std::endl;
+            std::string cleanMessage = "[" + level + "] " + message;
+            logFile << cleanMessage << std::endl;
         }
     }
 }
+
 
 void Logger::IntroMessage() {
     if (rank == 0) {
@@ -73,11 +80,15 @@ void Logger::IntroMessage() {
         const std::string plainPhi = "φ";              // Plain phi for log file output
 
         log("", "", false);
-        log("*       Phase-field Multiphysics Materials Simulator (" + redPhi + "MATS) ", "", false);
-        log("*       Version: " + std::string(VERSION_STRING), "", false);
-        log("*       Release date: " + std::string(VERSION_DATE), "", false);
+        log("********************************************************************", "", false);
+        log("*                                                                  *", "", false);
+        log("*       Phase-field Multiphysics Materials Simulator (" + redPhi + "MATS)       *", "", false);
+        log("*       Version: " + std::string(VERSION_STRING) + "                                            *", "", false);
+        log("*       Release date: " + std::string(VERSION_DATE)+ "                                   *", "", false);
         // log("*       Website: " + std::string(PROJECT_WEBSITE), "", false);
         // log("*       For citation, please use: " + std::string(PROJECT_CITATION), "", false);
+        log("*                                                                  *", "", false);
+        log("********************************************************************", "", false);
         log("", "", false);
     }
 }
@@ -85,8 +96,7 @@ void Logger::IntroMessage() {
 void Logger::LoopMessage(){
 
     if (rank == 0) {
-        log("", "", false);
-        log("   >>> Entering the solver loop <<<", LevelToString(INFO));
+        log("   >>> Entering the solver loop <<<", "INFO");
         log("", "", false);
     }
 }
@@ -94,8 +104,7 @@ void Logger::LoopMessage(){
 void Logger::StepIncrement(const int& iStep){
 
         if (rank == 0) {
-        log("", "", false);
-        log("   Increment " + std::to_string(iStep), LevelToString(INFO));
+        log("   Increment " + std::to_string(iStep), "INFO");
         log("", "", false);
     }
 }
@@ -103,8 +112,22 @@ void Logger::StepIncrement(const int& iStep){
 void Logger::FieldOutput(const int& iStep){
 
         if (rank == 0) {
+        log("   Field output for Step_" + std::to_string(iStep), "INFO");
         log("", "", false);
-        log("   Field output for Step_" + std::to_string(iStep), LevelToString(INFO));
+    }
+}
+
+void Logger::StartTimer() {
+    startTime = std::time(nullptr); // Record the start time
+}
+
+void Logger::ExitMessage(){
+
+    endTime = std::time(nullptr); // Record the current (or end) time
+
+    if (rank == 0) {
+        log("   Simulation completed successfully", "INFO");
+        log("   Total run time is: "+to_string(std::difftime(endTime, startTime)/60.0)+" minutes." , "INFO");
         log("", "", false);
     }
 }

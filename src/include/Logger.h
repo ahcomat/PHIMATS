@@ -27,31 +27,21 @@
 
 #include <string>
 #include <fstream>
+#include <ctime>
 
 #include <petscsys.h>  // PETSc header for parallel utilities
 
 using namespace std;
 
+
 class Logger {
 
 public:
 
-enum LogLevel {
-    INFO,
-    WARNING,
-    ERROR,
-};
-
 Logger(const std::string& fileName = "", MPI_Comm comm = PETSC_COMM_WORLD);
 ~Logger();
 
-/**
- * @brief Get the string of level.
- * 
- * @param level 
- * @return string 
- */
-string LevelToString(LogLevel level);
+string applyColor(const std::string& level);
 
 void log(const std::string& message, const std::string& level = "INFO", bool includeTimestamp=true);
 
@@ -79,7 +69,14 @@ void StepIncrement(const int& iStep);
  */
 void FieldOutput(const int& iStep);
 
+void StartTimer();
+
+void ExitMessage();
+
 private:
+
+std::time_t startTime;
+std::time_t endTime;
 
 std::ofstream logFile;
 bool logToFile;
