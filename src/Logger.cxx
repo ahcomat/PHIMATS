@@ -100,7 +100,7 @@ void Logger::StepIncrement(const int& iStep){
     }
 }
 
-void Logger::StepIncrement(const int& iStep){
+void Logger::FieldOutput(const int& iStep){
 
         if (rank == 0) {
         log("", "", false);
