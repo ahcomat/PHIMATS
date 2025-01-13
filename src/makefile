@@ -30,7 +30,7 @@ $(SUBDIRS):
 	$(MAKE) -C $@
 
 # Create static library
-$(STATIC_LIB): $(OBJECTS)
+$(STATIC_LIB): $(wildcard $(OBJDIR)/*.o)
 	# @echo $(wildcard $(OBJDIR)/*.o)  # Debug: List all object files in obj/
 	ar rcs $@ $(wildcard $(OBJDIR)/*.o)
 
