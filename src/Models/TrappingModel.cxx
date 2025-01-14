@@ -6,7 +6,8 @@
 
 using namespace std;
 
-TrappingModel::TrappingModel(vector<BaseElemTrap*> elements, H5IO& H5File_in){
+TrappingModel::TrappingModel(vector<BaseElemTrap*> elements, H5IO& H5File_in, Logger& logger)
+              :logger(logger) {
 
     string dsetName;
     dsetName = "SimulationParameters/nSteps";
@@ -298,16 +299,23 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool assembleM){
             T_elCapMatx_ref = &elem->getElCapMatx();
         }
 
-        // Use std::visit to handle the variant
         auto assembleMatrix = [&](const auto* elMatx_ptr, Mat globalMat) {
-            if (elMatx_ptr) {
-                AssembleElementMatrix(elMatx_ptr, elemConDof_ptr, nElConDofs, nElements, globalMat);
-            } else {
-                throw std::runtime_error("Unsupported element type in T_elStiffMatx_ref");
+            try{
+                if (elMatx_ptr) {
+                    AssembleElementMatrix(elMatx_ptr, elemConDof_ptr, nElConDofs, nElements, globalMat);
+                } else {
+                    logger.log("Unsupported element type in T_elStiffMatx_ref", "ERROR");
+                    throw std::runtime_error("Unsupported element type in T_elStiffMatx_ref");
+                }
+            } catch (const std::runtime_error& e) {
+                logger.log("\nException caught in TrappingModel::Assemble:\n", "", false);
+                logger.log("    " + std::string(e.what()), "", false);
+                logger.log("\nCritical error encountered. Terminating!\n", "", false);
+                exit(EXIT_FAILURE);
             }
         };
 
-        // Assemble stiffness matrix
+        // Use std::visit to handle the variant
         std::visit(
             [&](auto&& elStiffMatx_ptr) { assembleMatrix(elStiffMatx_ptr, matK); },
             T_elStiffMatx_ref);

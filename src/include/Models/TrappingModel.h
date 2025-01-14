@@ -35,6 +35,7 @@
 #include <petscvec.h>
 #include <petscmat.h>
 #include "BaseModel.h"
+#include "Logger.h"
 #include "FiniteElements/Trapping/BaseElemTrap.h"
 #include "Materials/Trapping/BaseTrapping.h"
 #include "H5IO.h"
@@ -43,7 +44,7 @@ class TrappingModel: public BaseModel{
 
 public:
 
-TrappingModel(vector<BaseElemTrap*> elements, H5IO& H5File_in);
+TrappingModel(vector<BaseElemTrap*> elements, H5IO& H5File_in, Logger& logger);
 ~TrappingModel();
 
 /**
@@ -223,6 +224,12 @@ void WriteAvCon(vector<BaseElemTrap*> elements, H5IO &H5File_out, const int iSte
 void WriteExitFlux(H5IO &H5File_out, const int tStep);
 
 private:
+
+/**
+ * @brief Logger object for handeling interface messages.
+ * 
+ */
+Logger& logger;
 
 /// @brief Number of element concentration (temp) dofs.
 int nElConDofs;     
