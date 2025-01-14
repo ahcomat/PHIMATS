@@ -102,6 +102,15 @@ int get_nSteps() const;
  */
 void CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats);
 
+/**
+ * @brief Helper function for `Assemble`.
+ * 
+ * @param elStiffMatx_ptr 
+ * @param elemDispDof_ptr 
+ * @param nElDispDofs 
+ * @param nElements 
+ * @return PetscErrorCode 
+ */
 PetscErrorCode AssembleElementMatrix(const auto* elStiffMatx_ptr,
                                      const std::vector<std::vector<int>>& elemDispDof_ptr,
                                      PetscInt nElDispDofs,
