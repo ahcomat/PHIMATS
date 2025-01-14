@@ -1,11 +1,6 @@
-FEM.pdf
 dev
-Eason
-Liese
-Macro
-Duplex
+private
 Doxygen/*
 src/FEM_utils/__pycache__
-src/testing
 src/obj
 src/lib
