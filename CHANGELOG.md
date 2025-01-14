@@ -1,12 +1,21 @@
 # Changelog
 
 ## [Unreleased]
+
+## [v0.3.0]
 ### Added
 - `Logger` for consistent messaging, integrated with `PETSc`.
 
 ### Changed
 - `makefile` now uses machine-independent path variables: `PHIMATSINCLUDES`, `EIGEN`, `H5ID`, and `H5LD`.
-- Compile PhiMATS as a library `-libphimats`
+- Compile PhiMATS as a library `-libphimats`.
+- `LinearTransport`
+  - `GMRES` option as solver. 
+  - Include `logger` for handling user interface.
+- `TrappingModel`
+  - Updated matrix allocation strategy.
+  - Optimized `Assemble` by removing redundant loops.
+  - Include `logger` for handling user interface.
 
 ---
 
