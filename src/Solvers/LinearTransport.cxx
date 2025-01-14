@@ -47,8 +47,9 @@ LinearTransport::LinearTransport(Mat &A, Logger& logger, string solverType)
 
         }
     } catch (const std::runtime_error& e) {
-        cerr << "\nException caught:: " << e.what() << endl;
-        cerr << "Terminating!\n" << endl;
+        logger.log("\nException caught in LinearTransport::LinearTransport:\n", "", false);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("\nCritical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
     }
 }

@@ -56,7 +56,7 @@ private:
  * @brief Logger object for handeling interface messages.
  * 
  */
-const Logger& logger;
+Logger& logger;
 
 };
 #endif
