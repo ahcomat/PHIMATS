@@ -77,7 +77,6 @@
         "alignedvector3": "cpp",
         "fft": "cpp",
         "dense": "cpp",
-        "*.cxx2": "c",
         "*.tpp": "cpp"
     }
 }

@@ -45,6 +45,8 @@ Logger(const std::string& fileName = "", MPI_Comm comm = PETSC_COMM_WORLD);
 
 string applyColor(const std::string& level);
 
+string stripAnsiCodes(const std::string& input);
+
 void log(const std::string& message, const std::string& level = "INFO", bool includeTimestamp=true);
 
 /**

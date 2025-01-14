@@ -2,6 +2,7 @@
 #include "Version.h"
 #include <iostream>
 #include <stdexcept>
+#include <regex>
 
 std::string Logger::getCurrentTime() const {
     
@@ -49,6 +50,13 @@ string Logger::applyColor(const std::string& level) {
 }
 
 
+std::string Logger::stripAnsiCodes(const std::string& input) {
+    // Regex to match ANSI escape sequences
+    static const std::regex ansiRegex(R"(\x1B\[[0-9;]*m)");
+    return std::regex_replace(input, ansiRegex, "");
+}
+
+
 void Logger::log(const std::string& message, const std::string& level, bool includeTimestamp) {
     
     std::string fullMessage;
@@ -57,7 +65,7 @@ void Logger::log(const std::string& message, const std::string& level, bool incl
         fullMessage = "[" + getCurrentTime() + "] [" + applyColor(level) + "] " + message;
     } else {
         fullMessage = message;
-    }
+    }   
 
     // Only rank 0 logs to console and file
     if (rank == 0) {
@@ -67,8 +75,8 @@ void Logger::log(const std::string& message, const std::string& level, bool incl
 
         // File output: Plain text without ANSI escape codes
         if (logToFile) {
-            std::string cleanMessage = "[" + level + "] " + message;
-            logFile << cleanMessage << std::endl;
+            std::string plainMessage = stripAnsiCodes(fullMessage); // Strip ANSI codes
+            logFile << plainMessage << std::endl;
         }
     }
 }
@@ -112,7 +120,7 @@ void Logger::StepIncrement(const int& iStep){
 void Logger::FieldOutput(const int& iStep){
 
         if (rank == 0) {
-        log("   Field output for Step_" + std::to_string(iStep), "INFO");
+        log("   Field output Step_" + std::to_string(iStep), "INFO");
         log("", "", false);
     }
 }
