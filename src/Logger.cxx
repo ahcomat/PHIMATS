@@ -120,7 +120,7 @@ void Logger::StepIncrement(const int& iStep){
 void Logger::FieldOutput(const int& iStep){
 
         if (rank == 0) {
-        log("   Field output Step_" + std::to_string(iStep), "INFO");
+        log("   Field output for Step_" + std::to_string(iStep), "INFO");
         log("", "", false);
     }
 }
