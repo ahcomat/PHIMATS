@@ -1,7 +1,9 @@
 /**
  * @file Logger.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief Class for handling messages.          
+ * @brief Class for managing application logging.
+ * 
+ * Provides functionality for logging messages with various severity levels (INFO, WARNING, ERROR).      
  * 
  * @date 2025-01-12
  * 
