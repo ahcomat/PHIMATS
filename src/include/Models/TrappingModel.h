@@ -102,12 +102,27 @@ void WriteTemp(H5IO &H5File_out, const int iStep);
 void CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
 
 /**
+ * @brief Helper function for `Assemble`.
+ * 
+ * @param elMatx_ptr 
+ * @param elemConDof_ptr 
+ * @param nElConDofs 
+ * @param nElements 
+ * @param globalMat 
+ */
+void AssembleElementMatrix(const auto* elMatx_ptr,
+                           const vector<vector<int>>& elemConDof_ptr,
+                           PetscInt nElConDofs,
+                           PetscInt nElements,
+                           Mat globalMat);
+
+/**
  * @brief Assemble the global stiffness matrix.
  * 
- * @param elements 
- * @param updateTemp 
+ * @param elements Vector of element set pointers.
+ * @param assembleM Flag for updating the capacitance matrix, default=true.
  */
-void Assemble(vector<BaseElemTrap*> elements, bool updateTemp=false);
+void Assemble(vector<BaseElemTrap*> elements, bool assembleM=true);
 
 /**
  * @brief Reads initial conditions from H5File.

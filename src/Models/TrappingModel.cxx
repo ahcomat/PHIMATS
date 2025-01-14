@@ -255,108 +255,79 @@ void TrappingModel::CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<Bas
         }
 }
 
-void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool updateTemp){
+void TrappingModel::AssembleElementMatrix(const auto* elMatx_ptr,
+                                          const vector<vector<int>>& elemConDof_ptr,
+                                          PetscInt nElConDofs,
+                                          PetscInt nElements,
+                                          Mat globalMat) {
+    PetscInt* i1;
+    PetscInt* j1;
 
-    for (auto* elem : elements){  // Loop through element sets
+    // Allocate memory for indices
+    PetscMalloc1(nElConDofs, &i1);
+    PetscMalloc1(nElConDofs, &j1);
+
+    for (int iElem = 0; iElem < nElements; iElem++) {
+        // Map local DOFs to global DOFs
+        for (int iElDof = 0; iElDof < nElConDofs; iElDof++) {
+            i1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
+            j1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
+        }
+
+        // Add matrix values
+        MatSetValues(globalMat, nElConDofs, i1, nElConDofs, j1, elMatx_ptr->at(iElem).data(), ADD_VALUES);
+    }
+
+    // Free memory
+    PetscFree(i1);
+    PetscFree(j1);
+}
+
+void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool assembleM){
+
+    for (auto* elem : elements) {
 
         const vector<vector<int>>& elemConDof_ptr = elem->get_elemConDof();
         nElConDofs = elem->get_nElConDofs();
         nElements = elem->get_nElements();
 
-        //  Assemble the coefficient matrix.        
-        PetscInt* i1; PetscInt* j1; // Indices for row and columns to insert.
-        PetscMalloc1(nElConDofs, &i1);
-        PetscMalloc1(nElConDofs, &j1);
-
         const T_ElStiffMatx& T_elStiffMatx_ref = elem->getElStiffMatx();
+        const T_ElStiffMatx* T_elCapMatx_ref = nullptr;
 
-        if (!updateTemp){
-
-            const T_ElStiffMatx& T_elCapMatx_ref = elem->getElCapMatx();
-
-            if (std::holds_alternative<vector<Matd4x4>*>(T_elStiffMatx_ref)){  // Quad4 elements.
-    
-                const vector<Matd4x4>& elStiffMatx_ref = *std::get<vector<Matd4x4>*>(T_elStiffMatx_ref);
-                const vector<Matd4x4>& elCapMatx_ref = *std::get<vector<Matd4x4>*>(T_elCapMatx_ref);
-
-                for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
-
-                    // Get the con dofs associated with the element
-                    for(int iElDof=0; iElDof<nElConDofs; iElDof++){
-
-                        i1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
-                        j1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
-
-                    }
-
-                    MatSetValues(matK, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
-                    MatSetValues(matM, nElConDofs, i1, nElConDofs, j1, elCapMatx_ref.at(iElem).data(), ADD_VALUES);
-                }
-
-            } else if (std::holds_alternative<vector<Matd3x3>*>(T_elStiffMatx_ref)){  // Tri3 elements.
-    
-                const vector<Matd3x3>& elStiffMatx_ref = *std::get<vector<Matd3x3>*>(T_elStiffMatx_ref);
-                const vector<Matd3x3>& elCapMatx_ref = *std::get<vector<Matd3x3>*>(T_elCapMatx_ref);
-
-                for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
-
-                    // Get the con dofs associated with the element
-                    for(int iElDof=0; iElDof<nElConDofs; iElDof++){
-
-                        i1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
-                        j1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
-                    }
-                    
-                    MatSetValues(matK, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
-                    MatSetValues(matM, nElConDofs, i1, nElConDofs, j1, elCapMatx_ref.at(iElem).data(), ADD_VALUES);
-                }
-            }
-
-        } else {
-
-            if (std::holds_alternative<vector<Matd4x4>*>(T_elStiffMatx_ref)){  // Quad4 elements.
-    
-                const vector<Matd4x4>& elStiffMatx_ref = *std::get<vector<Matd4x4>*>(T_elStiffMatx_ref);
-
-                for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
-
-                    // Get the con dofs associated with the element
-                    for(int iElDof=0; iElDof<nElConDofs; iElDof++){
-
-                        i1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
-                        j1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
-
-                    }
-
-                    MatSetValues(matK, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
-                }
-
-            } else if (std::holds_alternative<vector<Matd3x3>*>(T_elStiffMatx_ref)){  // Tri3 elements.
-    
-                const vector<Matd3x3>& elStiffMatx_ref = *std::get<vector<Matd3x3>*>(T_elStiffMatx_ref);
-
-                for (int iElem =0; iElem<nElements; iElem++){ // Loop through elements
-
-                    // Get the con dofs associated with the element
-                    for(int iElDof=0; iElDof<nElConDofs; iElDof++){
-
-                        i1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
-                        j1[iElDof] = elemConDof_ptr.at(iElem).at(iElDof);
-                    }
-                    
-                    MatSetValues(matK, nElConDofs, i1, nElConDofs, j1, elStiffMatx_ref.at(iElem).data(), ADD_VALUES);
-                }
-            } // Element type
+        if (assembleM) {
+            T_elCapMatx_ref = &elem->getElCapMatx();
         }
 
-        // Free memory
-        PetscFree(i1);
-        PetscFree(j1);
+        // Use std::visit to handle the variant
+        auto assembleMatrix = [&](const auto* elMatx_ptr, Mat globalMat) {
+            if (elMatx_ptr) {
+                AssembleElementMatrix(elMatx_ptr, elemConDof_ptr, nElConDofs, nElements, globalMat);
+            } else {
+                throw std::runtime_error("Unsupported element type in T_elStiffMatx_ref");
+            }
+        };
+
+        // Assemble stiffness matrix
+        std::visit(
+            [&](auto&& elStiffMatx_ptr) { assembleMatrix(elStiffMatx_ptr, matK); },
+            T_elStiffMatx_ref);
+
+        // Assemble capacity matrix (if applicable)
+        if (assembleM) {
+            std::visit(
+                [&](auto&& elCapMatx_ptr) { assembleMatrix(elCapMatx_ptr, matM); },
+                *T_elCapMatx_ref);
+        }
     }
 
-    MatAssemblyBegin(matK, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matK, MAT_FINAL_ASSEMBLY);
-    // For Dirichlet boundary conditions
+    // Finalize stiffness matrix assembly
+    MatAssemblyBegin(matK, MAT_FINAL_ASSEMBLY); MatAssemblyEnd(matK, MAT_FINAL_ASSEMBLY);
     MatZeroRows(matK, nPresDofs, presDofs, 1.0, NULL, NULL);
+
+    if (assembleM) {
+        // Finalize capacity matrix assembly
+        MatAssemblyBegin(matM, MAT_FINAL_ASSEMBLY); MatAssemblyEnd(matM, MAT_FINAL_ASSEMBLY);
+    }
 
     // TODO: For debug!
     // // Extract a specific row
@@ -375,10 +346,6 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool updateTemp){
     // MatRestoreRow(matK, ROW, &NCOL, &COL, &VAL); 
 
     // MatView(matK, PETSC_VIEWER_STDOUT_WORLD);
-
-    if (!updateTemp){
-        MatAssemblyBegin(matM, MAT_FINAL_ASSEMBLY);  MatAssemblyEnd(matM, MAT_FINAL_ASSEMBLY);
-    }
 }
 
 void TrappingModel::ReadInitialCon(H5IO& H5File, const int iStep){
