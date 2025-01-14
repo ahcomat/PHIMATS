@@ -1,7 +1,8 @@
 #include "Solvers/LinearTransport.h"
 #include<iostream>
 
-LinearTransport::LinearTransport(Mat &A, Logger& logger, string solverType){
+LinearTransport::LinearTransport(Mat &A, Logger& logger, string solverType)
+                :logger(logger) {
 
     // Initialize the solver.
     KSPCreate(PETSC_COMM_WORLD, &ksp);

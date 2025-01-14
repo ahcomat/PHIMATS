@@ -50,5 +50,13 @@ void UpdateKSP(Mat &A);
  */
 void SolveTransport(Vec &x, Vec &F);
 
+private:
+
+/**
+ * @brief Logger object for handeling interface messages.
+ * 
+ */
+const Logger& logger;
+
 };
 #endif
