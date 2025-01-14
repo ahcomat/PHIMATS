@@ -2,17 +2,21 @@
 .PHONY : clean all options
 
 all : 
+	@echo ""
 	@echo "---------------------------------"
-	@echo "Compiling PhiMATSFEM ... "
+	@echo "Compiling PHIMATS ... "
 	@echo "Start: " $(shell date)
 	@echo "---------------------------------"
+	@echo ""
 	mkdir -p src/obj
 	mkdir -p src/lib
 	make -C src/
+	@echo ""
 	@echo "---------------------------------"
 	@echo "End: " $(shell date)
-	@echo "Compiling PhiMATSFEM was successful "
+	@echo "Compiling PHIMATS was successful "
 	@echo "---------------------------------"
+	@echo ""
 
 options: 
 	@echo " "
