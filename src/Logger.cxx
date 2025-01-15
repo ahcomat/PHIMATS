@@ -90,7 +90,7 @@ void Logger::IntroMessage() {
         log("", "", false);
         log("********************************************************************", "", false);
         log("*                                                                  *", "", false);
-        log("*       Phase-field Multiphysics Materials Simulator (" + redPhi + "MATS)       *", "", false);
+        log("*       Phase-field Multiphysics Materials Simulator (" + plainPhi + "\033[31mMATS\033[0m)       *", "", false);
         log("*       Version: " + std::string(VERSION_STRING) + "                                            *", "", false);
         log("*       Release date: " + std::string(VERSION_DATE)+ "                                   *", "", false);
         // log("*       Website: " + std::string(PROJECT_WEBSITE), "", false);
