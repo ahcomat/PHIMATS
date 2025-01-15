@@ -1,6 +1,15 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- `BoundaryConditions.py` dedicated module for handling boundary conditions.
+- `ReadMesh` for parsing INP file and reading mesh.
+- `WriteXDMF` for centralized handing of XDMF files.
+
+### Changed
+- `preprocessing.py` to `PreProcessing.py`.
+- `postprocessing.py` to `PostProcessing.py`.
+- Restructuring of `PreProcessing`
 
 ## [v0.3.0]
 ### Added
