@@ -2,6 +2,7 @@ import numpy as np
 import meshio
 from pathlib import Path
 import h5py
+import os
 
 
 def ReadMesh(input_file):
@@ -439,12 +440,70 @@ class PreProcessing:
 
 #-----------------------------------------------------------------------------#
     
-    def CloseFileHDF5(self):
+    def WriteOutputFile(self, FName=None, overwrite=False, AvCon=True, ExitFlux=False, TDS=False, Plasticity=True):
+        """Creates the _out.hdf5 file.
+
+        Args:
+            FName (str, optional): The base name of the output file. Defaults to `self.Simul`.
+            overwrite (bool, optional): Flag for overwriting the file. Defaults to False.
+            AvCon (bool, optional): Average concentration flag. Defaults to True.
+            ExitFlux (bool, optional): Exit flux flag. Defaults to False.
+            TDS (bool, optional): TDS simulation flag. Defaults to False.
+            Plasticity (bool, optional): Plasticity parameters flag. Defaults to True.
+
+        Raises:
+            OSError: If file exists anr overwrite==False
+            
         """
-        Closes HDF5 file
-        """
+               
+        # Set FName to self.Simul if not provided
+        if FName is None:
+            FName = self.Simul
+            
+        FName = FName+"_out.hdf5"
         
-        self.fh5.close()
+        if overwrite:
+            mode = "w"  # Overwrite the file if it exists
+        else:
+            if os.path.exists(FName):
+                raise OSError(f"File '{FName}' already exists and overwrite is set to False.")
+            mode = "x"  
+            
+        if os.path.exists(FName):
+            try:
+                with h5py.File(FName, "r") as test:
+                    pass  # File can be opened for reading, so it's not locked
+            except OSError as e:
+                print(f"File '{FName}' appears to be locked or already open: {e}")
+                raise
+            
+        # Create the file and its groups
+        try:
+            
+            with h5py.File(FName, mode) as fh5:
+                # Handle groups based on SimulType
+                if self.SimulType in ["Transport", "PhaseTrapping", "GBTrapping"]:
+                    fh5.create_group('Con')
+                    if AvCon:
+                        fh5.create_group('AvCon')
+                    if ExitFlux:
+                        fh5.create_group('ExitFlux')
+                    if TDS:
+                        fh5.create_group('Temp')
+
+                elif self.SimulType == "Mechanical":
+                    fh5.create_group('Disp')
+                    fh5.create_group('Force')
+                    fh5.create_group('Stress')
+                    fh5.create_group('Strain')
+                    if Plasticity:
+                        fh5.create_group('Strain_e')
+                        fh5.create_group('Strain_p')
+                        fh5.create_group('Strain_eq')
+                        fh5.create_group('Stress_eq')
+                        
+        except OSError as e:
+            raise RuntimeError(f"Failed to create the HDF5 file '{FName}': {e}")
         
-        pass
+
 
