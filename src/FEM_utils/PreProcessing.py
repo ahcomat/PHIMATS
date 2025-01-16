@@ -459,20 +459,21 @@ class PreProcessing:
     
 #-----------------------------------------------------------------------------#
     
-    def WriteOutputFile(self, FName=None, overwrite=False, AvCon=True, Flux=False, ExitFlux=False, TDS=False, Plasticity=True):
+    def WriteOutputFile(self, FName=None, OVERWRITE=False, AVCON=True, FLUX=False, AVFLUX=False, TDS=False, Plasticity=True):
         """
         Creates the _out.hdf5 file.
 
         Args:
             FName (str, optional): The base name of the output file. Defaults to `self.Simul`.
-            overwrite (bool, optional): Flag for overwriting the file. Defaults to False.
-            AvCon (bool, optional): Average concentration flag. Defaults to True.
-            ExitFlux (bool, optional): Exit flux flag. Defaults to False.
+            OVERWRITE (bool, optional): Flag for overwriting the file. Defaults to False.
+            AVCON (bool, optional): Average concentration flag. Defaults to True.
+            FLUX (bool, optional): Flux field flag. Defaults to False.
+            AVFLUX (bool, optional): Average flux flag. Defaults to False.
             TDS (bool, optional): TDS simulation flag. Defaults to False.
             Plasticity (bool, optional): Plasticity parameters flag. Defaults to True.
 
         Raises:
-            OSError: If file exists anr overwrite==False
+            OSError: If file exists anr OVERWRITE==False
             
         """
                
@@ -482,7 +483,7 @@ class PreProcessing:
             
         FName = FName+"_out.hdf5"
         
-        if overwrite:
+        if OVERWRITE:
             mode = "w"  # Overwrite the file if it exists
         else:
             if os.path.exists(FName):
@@ -504,12 +505,12 @@ class PreProcessing:
                 # Handle groups based on SimulType
                 if self.SimulType in ["Transport", "PhaseTrapping", "GBTrapping"]:
                     fh5.create_group('Con')
-                    if AvCon:
+                    if AVCON:
                         fh5.create_group('AvCon')
                         fh5.create_group('Time')
-                    if Flux:
+                    if AVCON:
                         fh5.create_group('Flux')
-                    if ExitFlux:
+                    if AVFLUX:
                         fh5.create_group('AvFlux')
                     if TDS:
                         fh5.create_group('Temp')
