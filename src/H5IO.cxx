@@ -4,8 +4,8 @@
 #define at(x) operator[](x)
 #endif
 
-H5IO::H5IO(string H5FName)
-    : H5FileName(H5FName) {
+H5IO::H5IO(string H5FName, Logger& logger)
+    : H5FileName(H5FName), logger(logger) {
 
     // Attempt to open the file
     hid_t file_id = H5Fopen(H5FileName.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);

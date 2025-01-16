@@ -32,6 +32,7 @@
 #include <vector>
 #include "Matrix.h"
 #include "hdf5.h"
+#include "Logger.h"
 
 
 #ifndef DEBUG
@@ -49,7 +50,7 @@ public:
  * 
  * @param H5FileName Name of hdf5 file. 
  */
-H5IO(string H5FileName);
+H5IO(string H5FileName, Logger& logger);
 ~H5IO();
 
 /**
@@ -230,7 +231,13 @@ void WriteTensor(const string& dsetName,const int nNodes, const int nStres, cons
 private:
 
 /// @brief Name of HDF file. 
-const string H5FileName;         
+const string H5FileName;       
+
+/**
+ * @brief Logger object for handeling interface messages.
+ * 
+ */
+Logger& logger;
 
 };
 
