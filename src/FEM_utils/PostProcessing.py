@@ -7,7 +7,8 @@ import xml.dom.minidom as minidom
 class WriteXDMF:
     
     def __init__(self, fileName, elementName, nSteps, simulationType, skip=1):
-        """A class to write xdmf file for paraview visualization of the results in _out.hdf5 file.
+        """
+        A class to write xdmf file for paraview visualization of the results in _out.hdf5 file.
 
         Args:
             inputData (_type_): _description_

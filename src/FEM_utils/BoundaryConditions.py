@@ -8,8 +8,8 @@ import meshio
 from pathlib import Path
 
 def TensileDisp2D(ly, yDisp, mesh):
-    """Applies tensile displacement boundary conditions to a regular 
-    quadrilateral in the y direction. The origin point must be (0,0)
+    """
+    Applies tensile displacement boundary conditions to a regular quadrilateral in the y direction. The origin point must be (0,0).
 
     Args:
         ly (float): y-length
@@ -55,8 +55,8 @@ def TensileDisp2D(ly, yDisp, mesh):
     return presBCs
 
 def TensileDisp3D(lz, zDisp, mesh): 
-    """Applies tensile displacement boundary conditions to a regular 
-    quadrilateral in the z direction. The origin point must be (0,0,)
+    """
+    Applies tensile displacement boundary conditions to a regular quadrilateral in the z direction. The origin point must be (0,0,0).
 
     Args:
         lz (float): z-length
@@ -116,8 +116,8 @@ def TensileDisp3D(lz, zDisp, mesh):
 
 
 def PermeationX(lx, Con_b, mesh, Charging=False):
-    """Applies boundary conditions for charging/discharging BCs to a regular 
-    quadrilateral in the x direction. The origin point must be (0,0)
+    """
+    Applies boundary conditions for charging/discharging BCs to a regular quadrilateral in the x direction. The origin point must be (0,0).
     
     Args:
         lx (float): Edge length 
@@ -156,7 +156,8 @@ def PermeationX(lx, Con_b, mesh, Charging=False):
 #-----------------------------------------------------------------------------#
 
 def WriteDispBCs(Simul, elementName, mesh, presBCs, dispDofs=2):
-    """Function to help visualize the displacement BCs in Paraview. Writes mesh with prescibed BCs as vtk.
+    """
+    Function to help visualize the displacement BCs in Paraview. Writes mesh with prescibed BCs as vtk.
 
     Args:
         Simul (str): Simulation name
@@ -226,9 +227,9 @@ def WriteDispBCs(Simul, elementName, mesh, presBCs, dispDofs=2):
 
 #-----------------------------------------------------------------------------#
 
-@staticmethod
 def WriteConBCs(Simul, elementName, mesh, presBCs, dims=2):
-    """Function to help visualize the concentration BCs in Paraview. Writes mesh with prescibed BCs as vtk.
+    """
+    Function to help visualize the concentration BCs in Paraview. Writes mesh with prescibed BCs as vtk.
 
     Args:
         Simul (str): Simulation name
