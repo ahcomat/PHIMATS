@@ -6,94 +6,64 @@ import xml.dom.minidom as minidom
 
 class WriteXDMF:
     
-    def __init__(self, fileName, elementName, nSteps, simulationType, skip=1):
+    def __init__(self, fileName, elementName, nSteps=None, simulationType=None, skip=1):
         """
-        A class to write xdmf file for paraview visualization of the results in _out.hdf5 file.
+        A class to write XDMF files for ParaView visualization of results stored in _out.hdf5.
 
         Args:
-            inputData (_type_): _description_
+            fileName (str): Base name for the XDMF file.
+            elementName (str): Mesh element type (meshio convention).
+            nSteps (int, optional): Number of time steps. If None, reads from the HDF5 file.
+            simulationType (str, optional): Type of simulation. Allowed: ["Transport2D", "Elastic2D", "Elastic3D", "Plastic2D", "Plastic3D"].
+            skip (int, optional): Number of steps to skip when writing outputs. Defaults to 1.
         """
-        
-        # Name of file
-        self.FName = fileName     
-        
-        # Read mesh parameters from _in.hdf5        
+        self.FName = fileName  # Base file name
+
+        # Read mesh parameters from HDF5
         try:
-            fh5 = h5py.File(fileName+"_in.hdf5", "r")
-
+            with h5py.File(f"{fileName}_in.hdf5", "r") as fh5:
+                self.nTotNodes = fh5["SimulationParameters"]["nTotNodes"][()]
+                self.nTotDofs = fh5["SimulationParameters"]["nTotDofs"][()]
+                self.nDim = fh5["SimulationParameters"]["nDim"][()]
+                self.nTotElements = fh5["SimulationParameters"]["nTotElements"][()]
         except OSError as e:
-            print(f"Error opening file {fileName}: {e}")
-        except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            raise OSError(f"Error opening file '{fileName}_in.hdf5': {e}")
 
-        self.nTotNodes = fh5["SimulationParameters"]["nTotNodes"][()]
-        self.nTotDofs = fh5["SimulationParameters"]["nTotDofs"][()]
-        self.nDim = fh5["SimulationParameters"]["nDim"][()]
-        self.nTotElements = fh5["SimulationParameters"]["nTotElements"][()]
-        self.nSteps = fh5["SimulationParameters"]["nSteps"][()]
+        # Validate element type
+        self.element_config = {
+            "triangle": {"ElTopology": "Triangle", "nElNodes": 3},
+            "quad": {"ElTopology": "Quadrilateral", "nElNodes": 4, "nElStres": 3},
+            "hexahedron": {"ElTopology": "Hexahedron", "nElNodes": 8, "nElStres": 6},
+        }
+        
+        if elementName not in self.element_config:
+            raise ValueError(f"Unknown element name '{elementName}'. Allowed: {', '.join(self.element_config.keys())}")
+        
+        self.ElTopology = self.element_config[elementName]["ElTopology"]
+        self.nElNodes = self.element_config[elementName]["nElNodes"]
+        self.nElStres = self.element_config[elementName].get("nElStres")
 
-        fh5.close()  
-        
-        # ---------------------------------------- #   
-        
-        # Read element type
-        # Allowed elements (naming should match with meshio)
-        allowedElements = ["quad", "quad8", "triangle", "triangle6", "hexahedron"]
-        
-        if not elementName in allowedElements:
-            ErrString = "ERROR! Unknown element name < " + elementName + " >\n"
-            ErrString += "Allowed elements are: \n"
-            for elem in allowedElements:
-                ErrString += elem + "\n"
-            raise ValueError(ErrString)
-        
-        if elementName=="triangle":
-            self.ElTopology = "Triangle"
-            self.nElNodes = 3
-        elif elementName=="quad":
-            self.ElTopology = "Quadrilateral"
-            self.nElNodes = 4
-            self.nElStres = 3
-        elif elementName=="":
-            self.ElTopology = "Hexahedron"
-            self.nElNodes = 8
-            self.nElStres = 6
-            
-        # ---------------------------------------- #  
-        
-        allowedSimTypes = ["Transport2D", "Elastic2D", "Elastic3D", "Plastic2D", "Plastic3D"] 
+        # Validate simulation type
+        allowedSimTypes = ["Transport2D", "Elastic2D", "Elastic3D", "Plastic2D", "Plastic3D"]
+        if simulationType not in allowedSimTypes:
+            raise ValueError(f"Unknown simulation type '{simulationType}'. Allowed: {', '.join(allowedSimTypes)}")
         
         self.simType = simulationType
-        
-        if not self.simType in allowedSimTypes:
-            ErrString = "ERROR! Unknown simulation type < " + self.simType + " >\n"
-            ErrString += "Allowed simulation types are: \n"
-            for elem in allowedSimTypes:
-                ErrString += elem + "\n"
-            raise ValueError(ErrString)
-        
-        # ---------------------------------------- #   
-        
+
+        # Initialize XDMF structure
         root = ET.Element("Xdmf", Version="3.0", xmlns="http://www.w3.org/2001/XInclude")
         domain = ET.SubElement(root, "Domain")
-        self.time_series_grid = ET.SubElement(domain, "Grid", Name="TimeSeries", GridType="Collection", CollectionType="Temporal")  
-        
-        for t in range(0, nSteps+1, skip):
-            
-            if self.simType=="Transport2D":
+        self.time_series_grid = ET.SubElement(domain, "Grid", Name="TimeSeries", GridType="Collection", CollectionType="Temporal")
+
+        # Write time steps
+        for t in range(0, self.nSteps + 1, skip):
+            if self.simType == "Transport2D":
                 self.WriteCon2D(t)
-            elif self.simType=="Plastic2D":
+            elif self.simType == "Plastic2D":
                 self.WritePlastic2D(t)
-                
-        # ---------------------------------------- #   
-                
-        # Write the pretty-printed XML to a file
-        with open(self.FName+".xdmf", "w") as f:
-            f.write(self.prettify(root))
-            
-    pass
 
     def prettify(self, elem):
+        """Returns a pretty-printed XML string for the given element."""
         
         rough_string = ET.tostring(elem, 'utf-8')
         reparsed = minidom.parseString(rough_string)
