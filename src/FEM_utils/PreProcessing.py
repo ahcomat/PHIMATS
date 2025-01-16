@@ -416,27 +416,45 @@ class PreProcessing:
 
 #-----------------------------------------------------------------------------#
 
-    def OpenFileHDF5(self, mode="w"):
+    def OpenFileHDF5(self, overwrite=True):
         """
-        Opens HDF5 file
+        Creates _in.hdf5 input file. If the file exists, behavior depends on `overwrite`.
+
+        Args:
+            overwrite (bool): Overwrite the file if it exists. Defaults to True.
+
+        Raises:
+            OSError: If the file exists and overwrite is set to False.
         """
-        
-        # TODO: Do we need this with separate input/output files?
-        
-        # #----------------------------------------------------------------------
-        # # Check if hdf5 file exists to avoid override
-        # #----------------------------------------------------------------------
-        
-        # path = Path(self.Simul+'.hdf5')
+        file_path = self.Simul + "_in.hdf5"
 
-        # if path.is_file():
-        #     ErrString = 'File '+ self.Simul+ '.hdf5 exists. Can not override!'
-        #     raise Exception(ErrString)
-        
-        self.fh5 = h5py.File(self.Simul+"_in.hdf5", mode)
-        
-        pass
+        if not overwrite and os.path.exists(file_path):
+            raise OSError(f"File '{file_path}' already exists and overwrite is set to False.")
 
+        try:
+            self.fh5 = h5py.File(file_path, "w")
+            print(f"HDF5 file '{file_path}' opened successfully in write mode.")
+        except OSError as e:
+            raise RuntimeError(f"Failed to open HDF5 file '{file_path}' in write mode: {e}")
+        
+#-----------------------------------------------------------------------------#
+
+    def CloseFileHDF5(self):
+        """
+        Closes the currently open _in.hdf5 input file.
+
+        Raises:
+            RuntimeError: If no file is open or an error occurs during closing.
+        """
+        try:
+            if hasattr(self, "fh5") and self.fh5:
+                self.fh5.close()
+                print("HDF5 file closed successfully.")
+            else:
+                print("No HDF5 file is currently open.")
+        except Exception as e:
+            raise RuntimeError(f"Error occurred while closing the HDF5 file: {e}")
+    
 #-----------------------------------------------------------------------------#
     
     def WriteOutputFile(self, FName=None, overwrite=False, AvCon=True, ExitFlux=False, TDS=False, Plasticity=True):
