@@ -43,6 +43,7 @@ typedef Eigen::Vector<double, 24> ColVecd24;
 typedef Eigen::RowVector<double, 2> RowVecd2; 
 typedef Eigen::RowVector<double, 3> RowVecd3;             
 typedef Eigen::RowVector<double, 4> RowVecd4;
+typedef Eigen::RowVector<double, 6> RowVecd6;
 typedef Eigen::RowVector<double, 8> RowVecd8; 
 
 typedef Eigen::Matrix<double, 2, 2> Matd2x2;
@@ -57,6 +58,9 @@ typedef Eigen::Matrix<double, 2, 4> Matd2x4;
 
 typedef Eigen::Matrix<double, 2, 3> Matd2x3;            
 typedef Eigen::Matrix<double, 3, 2> Matd3x2;   
+
+typedef Eigen::Matrix<double, 2, 6> Matd2x6;            
+typedef Eigen::Matrix<double, 6, 2> Matd6x2;
 
 typedef Eigen::Matrix<double, 3, 6> Matd3x6;     
 typedef Eigen::Matrix<double, 3, 8> Matd3x8;
