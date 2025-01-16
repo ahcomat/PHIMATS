@@ -199,7 +199,7 @@ class PreProcessing:
     
 #-----------------------------------------------------------------------------#
     
-    def WriteFileHDF5(self):
+    def WriteInputFileHDF5(self):
         """
         Creates and writes data to hdf5 input file
         """
