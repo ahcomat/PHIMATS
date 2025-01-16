@@ -8,7 +8,7 @@
  * @todo Consider having only elements rather than element set-container.
  *       But this will require another class as element container. 
  * 
- * @copyright Copyright (C) 2024 Abdelrahman Hussein
+ * @copyright Copyright (C) 2025 Abdelrahman Hussein
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

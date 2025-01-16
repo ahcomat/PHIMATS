@@ -4,7 +4,7 @@
  * @brief A wrapper for PETSc linear solver `ksp` mainly for linear elasticity.
  * @date 2024-05-28
  * 
- * @copyright Copyright (C) 2024 Abdelrahman Hussein
+ * @copyright Copyright (C) 2025 Abdelrahman Hussein
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

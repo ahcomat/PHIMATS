@@ -4,7 +4,7 @@
  * @brief The base class for material types for heat and mass transport.
  * @date 2024-05-18
  * 
- * @copyright Copyright (C) 2024 Abdelrahman Hussein
+ * @copyright Copyright (C) 2025 Abdelrahman Hussein
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
