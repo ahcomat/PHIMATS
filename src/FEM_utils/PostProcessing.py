@@ -36,6 +36,7 @@ class WriteXDMF:
         # Validate element type
         self.element_config = {
             "triangle": {"ElTopology": "Triangle", "nElNodes": 3},
+            "triangle6": {"ElTopology": "Triangle", "nElNodes": 6},
             "quad": {"ElTopology": "Quadrilateral", "nElNodes": 4, "nElStres": 3},
             "hexahedron": {"ElTopology": "Hexahedron", "nElNodes": 8, "nElStres": 6},
         }
