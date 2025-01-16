@@ -1,4 +1,4 @@
-CXX=g++
+export CXX=mpic++
 
 SETTINGS = DEBUG
 
@@ -18,5 +18,5 @@ endif
 MAKE = make SETTINGS="$(SETTINGS)"
 
 # Flags
-LDFLAGS := -L$(H5LD) -lhdf5 -lhdf5_cpp 
+LDFLAGS := -L$(H5LD) -lhdf5 -lhdf5_cpp -L$(MPICHLD)
 

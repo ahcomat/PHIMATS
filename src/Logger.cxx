@@ -12,7 +12,7 @@ std::string Logger::getCurrentTime() const {
     return std::string(buf);
 }
 
-Logger::Logger(const std::string& fileName, MPI_Comm comm)
+Logger::Logger(MPI_Comm comm, const std::string& fileName)
     : logToFile(!fileName.empty()) {
 
     // Get rank and size from PETSc communicator

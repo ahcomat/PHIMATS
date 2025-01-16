@@ -31,7 +31,7 @@
 #include <fstream>
 #include <ctime>
 
-#include <petscsys.h>  // PETSc header for parallel utilities
+#include <mpi.h>  
 
 using namespace std;
 
@@ -40,7 +40,7 @@ class Logger {
 
 public:
 
-Logger(const std::string& fileName = "", MPI_Comm comm = PETSC_COMM_WORLD);
+Logger(MPI_Comm comm, const std::string& fileName = "");
 ~Logger();
 
 string applyColor(const std::string& level);
