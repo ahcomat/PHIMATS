@@ -459,7 +459,7 @@ class PreProcessing:
     
 #-----------------------------------------------------------------------------#
     
-    def WriteOutputFile(self, FName=None, overwrite=False, AvCon=True, ExitFlux=False, TDS=False, Plasticity=True):
+    def WriteOutputFile(self, FName=None, overwrite=False, AvCon=True, Flux=False, ExitFlux=False, TDS=False, Plasticity=True):
         """
         Creates the _out.hdf5 file.
 
@@ -506,8 +506,11 @@ class PreProcessing:
                     fh5.create_group('Con')
                     if AvCon:
                         fh5.create_group('AvCon')
+                        fh5.create_group('Time')
+                    if Flux:
+                        fh5.create_group('Flux')
                     if ExitFlux:
-                        fh5.create_group('ExitFlux')
+                        fh5.create_group('AvFlux')
                     if TDS:
                         fh5.create_group('Temp')
 
