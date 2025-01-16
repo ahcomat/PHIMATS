@@ -1,7 +1,7 @@
 /**
  * @file Quad4TH.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief Class for managing Quad4TH elements for hydrogen diffusion and trapping. 
+ * @brief Class for managing Quad4TH elements for full-fileld hydrogen trapping. 
  * @date 2024-06-26
  * 
  * @copyright Copyright (C) 2025 Abdelrahman Hussein

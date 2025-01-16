@@ -1,7 +1,7 @@
 /**
  * @file Tri3TH.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief Class for managing Tri3TH elements for grain boundary trapping. 
+ * @brief Class for managing Tri3TH elements for full-fileld hydrogen trapping. 
  * @date 2024-07-13
  * 
  * @copyright Copyright (C) 2025 Abdelrahman Hussein
