@@ -6,15 +6,17 @@ import xml.dom.minidom as minidom
 
 class WriteXDMF:
     
-    def __init__(self, fileName, elementName, nSteps=None, simulationType=None, skip=1):
+    def __init__(self, fileName, elementName, nSteps, simulationType, START=1, FLUX=False, skip=1):
         """
         A class to write XDMF files for ParaView visualization of results stored in _out.hdf5.
 
         Args:
             fileName (str): Base name for the XDMF file.
             elementName (str): Mesh element type (meshio convention).
-            nSteps (int, optional): Number of time steps. If None, reads from the HDF5 file.
-            simulationType (str, optional): Type of simulation. Allowed: ["Transport2D", "Elastic2D", "Elastic3D", "Plastic2D", "Plastic3D"].
+            nSteps (int): Number of time steps.
+            simulationType (str): Type of simulation. Allowed: ["Transport2D", "Elastic2D", "Elastic3D", "Plastic2D", "Plastic3D"].
+            START (int, optional): Initial step number. Defaults to 1.
+            FLUX (bool, optional): Flag for flux field. Defaults to False.
             skip (int, optional): Number of steps to skip when writing outputs. Defaults to 1.
         """
         self.FName = fileName  # Base file name
@@ -28,6 +30,8 @@ class WriteXDMF:
                 self.nTotElements = fh5["SimulationParameters"]["nTotElements"][()]
         except OSError as e:
             raise OSError(f"Error opening file '{fileName}_in.hdf5': {e}")
+        
+        self.nSteps = nSteps
 
         # Validate element type
         self.element_config = {
@@ -56,11 +60,19 @@ class WriteXDMF:
         self.time_series_grid = ET.SubElement(domain, "Grid", Name="TimeSeries", GridType="Collection", CollectionType="Temporal")
 
         # Write time steps
-        for t in range(0, self.nSteps + 1, skip):
+        for t in range(START, self.nSteps + 1, skip):
             if self.simType == "Transport2D":
-                self.WriteCon2D(t)
+                self.WriteCon2D(t, FLUX)
             elif self.simType == "Plastic2D":
                 self.WritePlastic2D(t)
+                
+        # ---------------------------------------- #   
+                
+        # Write the pretty-printed XML to a file
+        with open(self.FName+".xdmf", "w") as f:
+            f.write(self.prettify(root))
+            
+#-----------------------------------------------------------------------------#
 
     def prettify(self, elem):
         """Returns a pretty-printed XML string for the given element."""
@@ -70,7 +82,9 @@ class WriteXDMF:
         
         return reparsed.toprettyxml(indent="  ")
     
-    def WriteCon2D(self, t):
+#-----------------------------------------------------------------------------#
+    
+    def WriteCon2D(self, t, FLUX):
         
         timestep_grid = ET.SubElement(self.time_series_grid, "Grid", Name=f"TimeStep_{t:.1f}")
         ET.SubElement(timestep_grid, "Time", Value=f"{t:.1f}")
@@ -87,8 +101,13 @@ class WriteXDMF:
         attribute = ET.SubElement(timestep_grid, "Attribute", Name="con", AttributeType="Scalar", Center="Node")
         ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)).text = self.FName+"_out.hdf5:/Con/Step_"+str(t)
         
-        pass
-    
+        if FLUX:
+            # Add attribute element for flux
+            attribute = ET.SubElement(timestep_grid, "Attribute", Name="flux", AttributeType="Vector", Center="Node")
+            ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nDim)).text = self.FName+"_out.hdf5:/Flux/Step_"+str(t)
+        
+#-----------------------------------------------------------------------------#
+
     def WritePlastic2D(self, t):
         
         timestep_grid = ET.SubElement(self.time_series_grid, "Grid", Name=f"TimeStep_{t:.1f}")
@@ -134,7 +153,7 @@ class WriteXDMF:
         attribute = ET.SubElement(timestep_grid, "Attribute", Name="stress_eq", AttributeType="Scalar", Center="Node")
         ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(1)).text = self.FName+"_out.hdf5:/Stress_eq/Step_"+str(t)
         
-        pass
+#-----------------------------------------------------------------------------#
     
     def WritePlastic2D(self, t):
         
@@ -181,4 +200,5 @@ class WriteXDMF:
         attribute = ET.SubElement(timestep_grid, "Attribute", Name="strain_eq", AttributeType="Scalar", Center="Node")
         ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)).text = self.FName+"_out.hdf5:/Strain_eq/Step_"+str(t)
         
-        pass
+#-----------------------------------------------------------------------------#
+
