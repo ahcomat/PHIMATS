@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 ### Added
-- `Tri6TH` second order elements to improve the accuracy of flux calclulation.
+- `Tri6TH` second order elements to improve the accuracy of flux calculation.
 - `WriteOutputFile` in PreProcessing for centralized creation of _out.hdf5 output files.
 
 ### Changed
