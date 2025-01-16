@@ -141,7 +141,7 @@ vector<RowVecd3> shapeFunc;
 /// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
 vector<Matd2x3> shapeFuncDeriv; 
 
-/// @brief Node Coordinates [nElDim, nElNodes]. 
+/// @brief Node Coordinates [nElNodes, nElDim]. 
 vector<Matd3x2> elemNodCoord;   
 
 /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
