@@ -2,10 +2,12 @@
 
 ## [Unreleased]
 ### Added
+- `Tri6TH` second order elements to improve the accuracy of flux calclulation.
 - `WriteOutputFile` in PreProcessing for centralized creation of _out.hdf5 output files.
 
 ### Changed
 - Error handling in `OpenFileHDF5` and `CloseFileHDF5` in PreProcessing.
+- `mpi` handles COMM in `Logger` instead of `PETSC`.
 
 ## [v0.4.0]
 ### Added
