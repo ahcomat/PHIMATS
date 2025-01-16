@@ -1,7 +1,11 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- `WriteOutputFile` in PreProcessing for centralized creation of _out.hdf5 output files.
 
+### Changed
+- Error handling in `OpenFileHDF5` and `CloseFileHDF5` in PreProcessing.
 
 ## [v0.4.0]
 ### Added
