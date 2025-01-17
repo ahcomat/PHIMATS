@@ -1,7 +1,7 @@
 /**
  * @file Quad4.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief Class for managing quad4 elements. 
+ * @brief Class for managing Quad4 elements. 
  * @date 2024-05-22
  * 
  * @copyright Copyright (C) 2025 Abdelrahman Hussein

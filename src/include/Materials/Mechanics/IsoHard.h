@@ -1,7 +1,7 @@
 /**
  * @file IsoHard.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief J2 plasticity with isotropic hardening.
+ * @brief J2 plasticity with isotropic hardening. Inherits from `LinearElastic`.
  * 
  * @date 2024-12-12
  * 

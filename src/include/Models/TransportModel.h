@@ -1,7 +1,6 @@
 /**
  * @file TransportModel.h
- * @brief A class based on heat and mass transport models to interface with PETSc based global
- * capacitance matrix `C`, conductivity matrix `K`, solution vector `x` and RHS `F`.
+ * @brief A class for heat and mass transport models. Interefaces with `PETSc`.
  * 
  * @details Main functions:
  * - Calls `BaseElemTransport::CalcElemStiffMatx` to build the local diffusivity and capacitance matrix.

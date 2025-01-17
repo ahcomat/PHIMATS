@@ -1,7 +1,7 @@
 /**
- * @file LinearTransport.cxx
+ * @file LinearTransport.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief A wrapper for PETSc linear solver `ksp` mainly for linear heat and mass transport.
+ * @brief A wrapper for PETSc linear solver `ksp` for linear transport models.
  * @date 2024-06-18
  * 
  * @copyright Copyright (C) 2025 Abdelrahman Hussein

@@ -1,7 +1,7 @@
 /**
  * @file Tri3.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief Class for managing tri3 elements.
+ * @brief Class for managing Tri3 elements.
  * @date 2024-05-23
  * 
  * @copyright Copyright (C) 2025 Abdelrahman Hussein

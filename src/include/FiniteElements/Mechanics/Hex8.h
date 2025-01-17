@@ -1,7 +1,7 @@
 /**
  * @file Hex8.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief Class for managing hex8 elements. 
+ * @brief Class for managing Hex8 elements. 
  * @date 2024-05-23
  * 
  * @copyright Copyright (C) 2025 Abdelrahman Hussein

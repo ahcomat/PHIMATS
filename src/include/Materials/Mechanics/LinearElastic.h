@@ -1,7 +1,7 @@
 /**
  * @file LinearElastic.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief Elastic tensor in Voigt notation.
+ * @brief Class for linear elasticity. Supports `3D`, `PlaneStress` and `PlaneStrain`. Also works for `Isotropic` and `Cubic` anisotropy.
  * 
  * The class supports the following isotropies:
  * `Isotropic` 

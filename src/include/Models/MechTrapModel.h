@@ -1,7 +1,6 @@
 /**
  * @file MechTrapModel.h
- * @brief A class based on heat and mass transport models to interface with PETSc based global
- * capacitance matrix `C`, conductivity matrix `K_D`, solution vector `x` and RHS `F`.
+ * @brief To be removed.
  * 
  * @details Main functions:
  * - Calls `BaseElemTrap::CalcElemStiffMatx` to build the local diffusivity and capacitance matrix.

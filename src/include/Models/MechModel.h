@@ -1,12 +1,12 @@
 /**
  * @file MechModel.h
- * @brief A class based on mechanical models to interface with PETSc based global
- * stiffness matrix `A`, solution vector `x` and RHS `a`.
+ * @brief A class for mechanical models. Interface with `PETSc`.
  * 
  * @details Main functions:
  * - Calls `BaseElemMech::CalcElemStiffMatx` to build the local stiffness matrix.
  * - Assembles the global stiffness matrix.
  * - Initializes and applies boundary conditions.
+ * - Manages non-linear solvers through `SNES`.
  * - Manages the output by writing to H5file_out.
  * 
  * @todo - Consider inheritance.
