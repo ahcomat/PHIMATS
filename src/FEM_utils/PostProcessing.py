@@ -64,6 +64,8 @@ class WriteXDMF:
         for t in range(START, self.nSteps + 1, skip):
             if self.simType == "Transport2D":
                 self.WriteCon2D(t, FLUX)
+            elif self.simType == "Elastic2D":
+                self.WriteElastic2D(t)
             elif self.simType == "Plastic2D":
                 self.WritePlastic2D(t)
                 
@@ -106,7 +108,38 @@ class WriteXDMF:
             # Add attribute element for flux
             attribute = ET.SubElement(timestep_grid, "Attribute", Name="flux", AttributeType="Vector", Center="Node")
             ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nDim)).text = self.FName+"_out.hdf5:/Flux/Step_"+str(t)
+            
+#-----------------------------------------------------------------------------#
+
+    def WriteElastic2D(self, t):
         
+        timestep_grid = ET.SubElement(self.time_series_grid, "Grid", Name=f"TimeStep_{t:.1f}")
+        ET.SubElement(timestep_grid, "Time", Value=f"{t:.1f}")
+
+        # Add topology element
+        topology = ET.SubElement(timestep_grid, "Topology", TopologyType=self.ElTopology, NumberOfElements=str(self.nTotElements))
+        ET.SubElement(topology, "DataItem", Format="HDF", DataType="Int", Dimensions=str(self.nTotElements)+" "+str(self.nElNodes)).text = self.FName+"_in.hdf5:/NodeConnectivity"
+
+        # Add geometry element
+        geometry = ET.SubElement(timestep_grid, "Geometry", GeometryType="XY")
+        ET.SubElement(geometry, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nDim)).text = self.FName+"_in.hdf5:/NodeCoordinates"
+
+        # Add attribute element for displacement
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="disp", AttributeType="Vector", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nDim)).text = self.FName+"_out.hdf5:/Disp/Step_"+str(t)
+        
+        # Add attribute element for force
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="force", AttributeType="Vector", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nDim)).text = self.FName+"_out.hdf5:/Force/Step_"+str(t)
+        
+        # Add attribute element for strain
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="strain", AttributeType="Tensor", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nElStres)).text = self.FName+"_out.hdf5:/Strain/Step_"+str(t)
+        
+        # Add attribute element for stress
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="stress", AttributeType="Tensor", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nElStres)).text = self.FName+"_out.hdf5:/Stress/Step_"+str(t)
+                
 #-----------------------------------------------------------------------------#
 
     def WritePlastic2D(self, t):
