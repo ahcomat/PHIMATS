@@ -68,6 +68,8 @@ class WriteXDMF:
                 self.WriteElastic2D(t)
             elif self.simType == "Plastic2D":
                 self.WritePlastic2D(t)
+            elif self.simType == "Plastic3D":
+                self.WritePlastic2D(t)
                 
         # ---------------------------------------- #   
                 
@@ -177,7 +179,7 @@ class WriteXDMF:
         
         # Add attribute element for Strain_e
         attribute = ET.SubElement(timestep_grid, "Attribute", Name="strain_e", AttributeType="Tensor", Center="Node")
-        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nElStres)).text = self.FName+"_out.hdf5:/Strain_e/Step_"+str(t)# Add attribute element for stress
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nElStres)).text = self.FName+"_out.hdf5:/Strain_e/Step_"+str(t)
         
         # Add attribute element for Strain_eq
         attribute = ET.SubElement(timestep_grid, "Attribute", Name="strain_eq", AttributeType="Scalar", Center="Node")
@@ -187,9 +189,9 @@ class WriteXDMF:
         attribute = ET.SubElement(timestep_grid, "Attribute", Name="stress_eq", AttributeType="Scalar", Center="Node")
         ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(1)).text = self.FName+"_out.hdf5:/Stress_eq/Step_"+str(t)
         
-#-----------------------------------------------------------------------------#
+    #-----------------------------------------------------------------------------#
     
-    def WritePlastic2D(self, t):
+    def WritePlastic3D(self, t):
         
         timestep_grid = ET.SubElement(self.time_series_grid, "Grid", Name=f"TimeStep_{t:.1f}")
         ET.SubElement(timestep_grid, "Time", Value=f"{t:.1f}")
