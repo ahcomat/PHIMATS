@@ -61,7 +61,7 @@ class WriteXDMF:
         self.time_series_grid = ET.SubElement(domain, "Grid", Name="TimeSeries", GridType="Collection", CollectionType="Temporal")
 
         # Write time steps
-        for t in range(START, self.nSteps + 1, skip):
+        for t in range(START, self.nSteps, skip):
             if self.simType == "Transport2D":
                 self.WriteCon2D(t, FLUX)
             elif self.simType == "Elastic2D":
