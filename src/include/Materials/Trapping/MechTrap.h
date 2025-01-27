@@ -37,7 +37,7 @@ public:
  * @param H5File Input file.
  * @param matType Material isotropy.
  */
-MechTrap(string dimensions, H5IO& H5File, int iSet);
+MechTrap(string dimensions, H5IO& H5File, int iSet, Logger& logger);
 
 /**
  * @brief Calculates the diffusivity matrix.
@@ -59,6 +59,12 @@ T_DMatx CalcTMatx(const double T);
 double getDiffRatio();
 
 private:
+
+/**
+ * @brief Logger object for handeling interface messages.
+ * 
+ */
+Logger& logger;
 
 /// @brief Anisotropic diffusivity parameters
 double D0x, D0y, D0z, DQx, DQy, DQz; 
