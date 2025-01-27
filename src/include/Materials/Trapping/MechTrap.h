@@ -56,7 +56,7 @@ T_DMatx CalcTMatx(const double T);
  * 
  * @return double
  */
-double getDiffRatio();
+double getDiffRatio() const;
 
 private:
 

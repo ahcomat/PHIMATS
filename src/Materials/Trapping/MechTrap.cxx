@@ -110,7 +110,7 @@ T_DMatx MechTrap::CalcTMatx(const double T){
     return TMatx;
 }
 
-double MechTrap::getDiffRatio(){
+double MechTrap::getDiffRatio() const {
 
     return m;
 }
