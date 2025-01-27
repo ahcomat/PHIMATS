@@ -103,7 +103,7 @@ void Tri6TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
     intPtVol.resize(nElements);   
     vector<double> dummyIntVol(nElGauss);  // For integration point volume.
 
-    if (Trapping==1){       // GB
+    if (Trapping=="GBTrapping"){       // GB
 
         ColVecd6 dummyElNod_gPhi;  // For element nodal values of phi.
 
@@ -148,7 +148,7 @@ void Tri6TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             intPtVol.at(iElem) = dummyIntVol;
         }   
 
-    } else if (Trapping==2) {       // Phase 
+    } else if (Trapping=="2PhaseTrapping") {       // Phase 
 
         ColVecd6 dummyElNod_martensite; ColVecd6 dummyElNod_gPhiMM;
         ColVecd6 dummyElNod_gPhiff; ColVecd6 dummyElNod_gPhifM;
@@ -283,7 +283,7 @@ void Tri6TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
     double dummydVol;       // dummy for int-pt volume.
 
-    if (Trapping==1){       // GB
+    if (Trapping=="GBTrapping"){       // GB
 
         Matd2x2 TMat; 
 
@@ -326,7 +326,7 @@ void Tri6TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
             elStiffMatx.at(iElem) = dt*elKDMatx.at(iElem) - dt*elKTMatx.at(iElem) + elCapMatx.at(iElem);
         } 
-    } else if (Trapping==2){        // Phase
+    } else if (Trapping=="2PhaseTrapping"){        // Phase
 
         ColVecd6 dummyElNod_martensite, dummyElNod_gPhifM, dummyElNod_gPhiff,
         dummyElNod_gPhiMM;
@@ -428,7 +428,7 @@ void Tri6TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
     ColVecd6 dummyCon; // for element nodal concentration.
     int iNode=0;
 
-    if (Trapping==1){       // GB
+    if (Trapping=="GBTrapping"){       // GB
         
         Matd2x2 TMat; 
         double gPhi;
@@ -480,7 +480,7 @@ void Tri6TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
             }
         }
 
-    } else if (Trapping==2){        // Phase
+    } else if (Trapping=="2PhaseTrapping"){        // Phase
 
         ColVecd6 dummyElNod_martensite, dummyElNod_gPhifM, dummyElNod_gPhiff,
         dummyElNod_gPhiMM;

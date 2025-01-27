@@ -144,8 +144,8 @@ const int nElGauss;
 /// @brief Time increment.   
 double dt;          
 
-/// @brief Flag for trapping type.
-int Trapping;                  
+/// @brief Trapping type.
+string Trapping;                  
 
 /// @brief Int-pt volume.       
 vector<vector<double>> intPtVol;    
