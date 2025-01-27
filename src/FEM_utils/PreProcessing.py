@@ -67,9 +67,9 @@ class PreProcessing:
         #----------------------------------------------------------------------
         
         # Allowed simulation types
-        allowedSimulTypes = ["Mechanical", "Transport", "PhaseTrapping", "GBTrapping", "MechTrapping"]
+        allowedSimulTypes = ["Mechanical", "Transport", "2PhaseTrapping", "GBTrapping", "MechTrapping"]
         
-        self.TransportSimulTypes = ["Transport", "PhaseTrapping", "GBTrapping", "MechTrapping"]
+        self.TransportSimulTypes = ["Transport", "2PhaseTrapping", "GBTrapping", "MechTrapping"]
                 
         if not self.SimulType in allowedSimulTypes:
             ErrString = "ERROR! Unknown simulation type < " + self.SimulType + " >\n"
@@ -90,7 +90,7 @@ class PreProcessing:
             self.T = inputData["T"]
             self.gPhi = inputData["gPhi"]
             
-        elif self.SimulType=="PhaseTrapping":
+        elif self.SimulType=="2PhaseTrapping":
             
             self.exitNods = inputData["exitNods"]
             self.dt = inputData["dt"]
@@ -167,7 +167,7 @@ class PreProcessing:
             self.nTotDofs = self.nTotNodes
         elif self.SimulType == "GBTrapping":
             self.nTotDofs = self.nTotNodes
-        elif self.SimulType == "PhaseTrapping":
+        elif self.SimulType == "2PhaseTrapping":
             self.nTotDofs = self.nTotNodes
         elif self.SimulType == "MechTrapping":
             self.nTotDofs = self.nTotNodes
@@ -262,7 +262,7 @@ class PreProcessing:
             self.fh5.create_dataset('gPhi', data=self.gPhi, dtype = np.float64)
             
         # Case Trapping 
-        if self.SimulType == "PhaseTrapping":
+        if self.SimulType == "2PhaseTrapping":
             self.grp_Sim_Params.create_dataset("dt", data=self.dt)
             self.grp_Sim_Params.create_dataset("T", data=self.T)
             self.fh5.create_dataset('gPhi_MM', data=self.gPhi_MM, dtype = np.float64) 
@@ -354,7 +354,7 @@ class PreProcessing:
                 if self.nDim == 3:
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
                     
-        elif self.SimulType == "PhaseTrapping":
+        elif self.SimulType == "2PhaseTrapping":
             for mat in self.Materials:
                 counter = 1
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x1", data=self.Materials[mat]["D0x1"])
@@ -514,7 +514,7 @@ class PreProcessing:
             
             with h5py.File(FName, mode) as fh5:
                 # Handle groups based on SimulType
-                if self.SimulType in ["Transport", "PhaseTrapping", "GBTrapping"]:
+                if self.SimulType in ["Transport", "2PhaseTrapping", "GBTrapping"]:
                     fh5.create_group('Con')
                     if AVCON:
                         fh5.create_group('AvCon')
