@@ -75,5 +75,8 @@ double Vh;
 /// @brief Dislocation to lattice diffusivity ratio  
 double m;
 
+/// @brief Trapping capacity  
+double s;
+
 };
 #endif

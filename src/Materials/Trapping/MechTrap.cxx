@@ -5,7 +5,7 @@
 using namespace std;
 
 MechTrap::MechTrap(string dimensions, H5IO& H5File, int iSet, Logger& logger)
-    : BaseTrapping(dimensions), logger(logger){
+    : BaseTrapping(dimensions), logger(logger) {
 
     string dsetName;
 
@@ -26,6 +26,9 @@ MechTrap::MechTrap(string dimensions, H5IO& H5File, int iSet, Logger& logger)
 
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/m";
     m = H5File.ReadScalar(dsetName);
+
+    dsetName = "Materials/Material_"+ std::to_string(iSet)+"/s";
+    s = H5File.ReadScalar(dsetName);
 
     if (dims=="3D"){
 
@@ -113,4 +116,9 @@ T_DMatx MechTrap::CalcTMatx(const double T){
 double MechTrap::getDiffRatio() const {
 
     return m;
+}
+
+double MechTrap::getTrappingCapacity() const {
+
+    return s;
 }
