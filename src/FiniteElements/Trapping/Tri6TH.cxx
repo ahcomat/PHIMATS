@@ -150,39 +150,39 @@ void Tri6TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
 
     } else if (Trapping=="2PhaseTrapping") {       // Phase 
 
-        ColVecd6 dummyElNod_martensite; ColVecd6 dummyElNod_gPhiMM;
-        ColVecd6 dummyElNod_gPhiff; ColVecd6 dummyElNod_gPhifM;
+        ColVecd6 dummyElNod_phi_j; ColVecd6 dummyElNod_gPhi_jj;
+        ColVecd6 dummyElNod_gPhi_ii; ColVecd6 dummyElNod_gPhi_ij;
 
         // Initialize the storages for int-pt traps
-        el_martensite.resize(nElements); el_gPhiff.resize(nElements);
-        el_gPhiMM.resize(nElements); el_gPhifM.resize(nElements);
+        el_phi_j.resize(nElements); el_gPhi_ii.resize(nElements);
+        el_gPhi_jj.resize(nElements); el_gPhi_ij.resize(nElements);
 
         // Read nodal values of traps
-        nod_martensite.resize(nNodes);
-        string dsetName = "martensite";
-        H5File_in.ReadField1D(dsetName, nod_martensite);
+        nod_phi_j.resize(nNodes);
+        string dsetName = "phi_j";
+        H5File_in.ReadField1D(dsetName, nod_phi_j);
 
-        nod_gPhiff.resize(nNodes);
+        nod_gPhi_ii.resize(nNodes);
         dsetName = "gPhi_ff";
-        H5File_in.ReadField1D(dsetName, nod_gPhiff);
+        H5File_in.ReadField1D(dsetName, nod_gPhi_ii);
 
-        nod_gPhifM.resize(nNodes);
+        nod_gPhi_ij.resize(nNodes);
         dsetName = "gPhi_fM";
-        H5File_in.ReadField1D(dsetName, nod_gPhifM);
+        H5File_in.ReadField1D(dsetName, nod_gPhi_ij);
 
-        nod_gPhiMM.resize(nNodes);
+        nod_gPhi_jj.resize(nNodes);
         dsetName = "gPhi_MM";
-        H5File_in.ReadField1D(dsetName, nod_gPhiMM);
+        H5File_in.ReadField1D(dsetName, nod_gPhi_jj);
 
         // Loop through elements.
         for(int iElem=0; iElem<nElements; iElem++){
 
             elFlux.at(iElem).resize(nElGauss);
 
-            el_martensite.at(iElem).resize(nElGauss);
-            el_gPhiff.at(iElem).resize(nElGauss);
-            el_gPhifM.at(iElem).resize(nElGauss);
-            el_gPhiMM.at(iElem).resize(nElGauss);
+            el_phi_j.at(iElem).resize(nElGauss);
+            el_gPhi_ii.at(iElem).resize(nElGauss);
+            el_gPhi_ij.at(iElem).resize(nElGauss);
+            el_gPhi_jj.at(iElem).resize(nElGauss);
 
             gaussPtCart.at(iElem).resize(nElGauss);
             BMat.at(iElem).resize(nElGauss);
@@ -193,10 +193,10 @@ void Tri6TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
                 dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
                 dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
 
-                dummyElNod_martensite[iNod] = nod_martensite.at(elemNodeConn.at(iElem).at(iNod));
-                dummyElNod_gPhiff[iNod] = nod_gPhiff.at(elemNodeConn.at(iElem).at(iNod));
-                dummyElNod_gPhifM[iNod] = nod_gPhifM.at(elemNodeConn.at(iElem).at(iNod));
-                dummyElNod_gPhiMM[iNod] = nod_gPhiMM.at(elemNodeConn.at(iElem).at(iNod));
+                dummyElNod_phi_j[iNod] = nod_phi_j.at(elemNodeConn.at(iElem).at(iNod));
+                dummyElNod_gPhi_ii[iNod] = nod_gPhi_ii.at(elemNodeConn.at(iElem).at(iNod));
+                dummyElNod_gPhi_ij[iNod] = nod_gPhi_ij.at(elemNodeConn.at(iElem).at(iNod));
+                dummyElNod_gPhi_jj[iNod] = nod_gPhi_jj.at(elemNodeConn.at(iElem).at(iNod));
             }
 
             elemNodCoord.at(iElem) = dummyElNodCoord;
@@ -209,10 +209,10 @@ void Tri6TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
                 // Derivatives and int-pt volume
                 CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
                 // Int-pt phi
-                el_martensite.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_martensite;
-                el_gPhiff.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhiff;
-                el_gPhifM.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhifM;
-                el_gPhiMM.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhiMM;
+                el_phi_j.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_phi_j;
+                el_gPhi_ii.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ii;
+                el_gPhi_ij.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ij;
+                el_gPhi_jj.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_jj;
 
             }
             gaussPtCart.at(iElem) = dummyElemGauss;
@@ -328,9 +328,9 @@ void Tri6TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
         } 
     } else if (Trapping=="2PhaseTrapping"){        // Phase
 
-        ColVecd6 dummyElNod_martensite, dummyElNod_gPhifM, dummyElNod_gPhiff,
-        dummyElNod_gPhiMM;
-        double martensite, gPhiff, gPhifM, gPhiMM;              
+        ColVecd6 dummyElNod_phi_j, dummyElNod_gPhi_ij, dummyElNod_gPhi_ii,
+        dummyElNod_gPhi_jj;
+        double phi_j, gPhi_ii, gPhi_ij, gPhi_jj;              
 
         vector<int> NodeConn;
 
@@ -352,21 +352,21 @@ void Tri6TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
             // Loop through element nodes to get nodal values.
             for(int iNod=0; iNod<nElNodes; iNod++){
-                dummyElNod_martensite[iNod] = nod_martensite.at(NodeConn.at(iNod));
-                dummyElNod_gPhiff[iNod] = nod_gPhiff.at(NodeConn.at(iNod));
-                dummyElNod_gPhifM[iNod] = nod_gPhifM.at(NodeConn.at(iNod));
-                dummyElNod_gPhiMM[iNod] = nod_gPhiMM.at(NodeConn.at(iNod));
+                dummyElNod_phi_j[iNod] = nod_phi_j.at(NodeConn.at(iNod));
+                dummyElNod_gPhi_ii[iNod] = nod_gPhi_ii.at(NodeConn.at(iNod));
+                dummyElNod_gPhi_ij[iNod] = nod_gPhi_ij.at(NodeConn.at(iNod));
+                dummyElNod_gPhi_jj[iNod] = nod_gPhi_jj.at(NodeConn.at(iNod));
             }              
 
             // Integration over all Gauss points.
             for (int iGauss=0; iGauss<nElGauss; iGauss++){
 
-                martensite = el_martensite.at(iElem).at(iGauss);  // values of the current int-pt
-                gPhiff = el_gPhiff.at(iElem).at(iGauss);
-                gPhifM = el_gPhifM.at(iElem).at(iGauss);
-                gPhiMM = el_gPhiMM.at(iElem).at(iGauss);
+                phi_j = el_phi_j.at(iElem).at(iGauss);  // values of the current int-pt
+                gPhi_ii = el_gPhi_ii.at(iElem).at(iGauss);
+                gPhi_ij = el_gPhi_ij.at(iElem).at(iGauss);
+                gPhi_jj = el_gPhi_jj.at(iElem).at(iGauss);
 
-                DMat = std::get<Matd2x2>(dynamic_cast<TrapPhase*>(mat)->CalcDMatx(martensite, T));
+                DMat = std::get<Matd2x2>(dynamic_cast<TrapPhase*>(mat)->CalcDMatx(phi_j, T));
 
                 const Matd2x6& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
                 const RowVecd6& dummyShFunc = shapeFunc.at(iGauss);
@@ -375,10 +375,10 @@ void Tri6TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
                 // [B_ji]^T k_jj B_ji
                 elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
                 // [B_ji]^T k_jj B_ji
-                elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*zeta_M/(R*T)*dummyBMat*dummyElNod_martensite*dummyShFunc*dummydVol + 
-                dummyBMat.transpose()*DMat*zeta_ff/(R*T)*dummyBMat*dummyElNod_gPhiff*dummyShFunc*dummydVol + 
-                dummyBMat.transpose()*DMat*zeta_fM/(R*T)*dummyBMat*dummyElNod_gPhifM*dummyShFunc*dummydVol +
-                dummyBMat.transpose()*DMat*zeta_MM/(R*T)*dummyBMat*dummyElNod_gPhiMM*dummyShFunc*dummydVol; 
+                elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*zeta_M/(R*T)*dummyBMat*dummyElNod_phi_j*dummyShFunc*dummydVol + 
+                dummyBMat.transpose()*DMat*zeta_ff/(R*T)*dummyBMat*dummyElNod_gPhi_ii*dummyShFunc*dummydVol + 
+                dummyBMat.transpose()*DMat*zeta_fM/(R*T)*dummyBMat*dummyElNod_gPhi_ij*dummyShFunc*dummydVol +
+                dummyBMat.transpose()*DMat*zeta_MM/(R*T)*dummyBMat*dummyElNod_gPhi_jj*dummyShFunc*dummydVol; 
                 // [N_i]^T N_i
                 elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
             }
@@ -482,9 +482,9 @@ void Tri6TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
 
     } else if (Trapping=="2PhaseTrapping"){        // Phase
 
-        ColVecd6 dummyElNod_martensite, dummyElNod_gPhifM, dummyElNod_gPhiff,
-        dummyElNod_gPhiMM;
-        double martensite, gPhiff, gPhifM, gPhiMM;              
+        ColVecd6 dummyElNod_phi_j, dummyElNod_gPhi_ij, dummyElNod_gPhi_ii,
+        dummyElNod_gPhi_jj;
+        double phi_j, gPhi_ii, gPhi_ij, gPhi_jj;              
 
         double zeta_M = dynamic_cast<TrapPhase*>(mat)->get_zeta_M();
         double zeta_fM = dynamic_cast<TrapPhase*>(mat)->get_zeta_fM();
@@ -497,10 +497,10 @@ void Tri6TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
             // Loop through element nodes to get nodal values.
             for(int iDof=0; iDof<nElConDofs; iDof++){
                 dummyCon[iDof] = globalBuffer[elemConDof.at(iElem).at(iDof)];
-                dummyElNod_martensite[iDof] = nod_martensite.at(elemConDof.at(iElem).at(iDof));
-                dummyElNod_gPhiff[iDof] = nod_gPhiff.at(elemConDof.at(iElem).at(iDof));
-                dummyElNod_gPhifM[iDof] = nod_gPhifM.at(elemConDof.at(iElem).at(iDof));
-                dummyElNod_gPhiMM[iDof] = nod_gPhiMM.at(elemConDof.at(iElem).at(iDof));
+                dummyElNod_phi_j[iDof] = nod_phi_j.at(elemConDof.at(iElem).at(iDof));
+                dummyElNod_gPhi_ii[iDof] = nod_gPhi_ii.at(elemConDof.at(iElem).at(iDof));
+                dummyElNod_gPhi_ij[iDof] = nod_gPhi_ij.at(elemConDof.at(iElem).at(iDof));
+                dummyElNod_gPhi_jj[iDof] = nod_gPhi_jj.at(elemConDof.at(iElem).at(iDof));
             }
 
             // Gauss points
@@ -508,19 +508,19 @@ void Tri6TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
 
                 IntPtCon = shapeFunc.at(iGaus)*dummyCon;
 
-                martensite = el_martensite.at(iElem).at(iGaus);  // values of the current int-pt
-                gPhiff = el_gPhiff.at(iElem).at(iGaus);
-                gPhifM = el_gPhifM.at(iElem).at(iGaus);
-                gPhiMM = el_gPhiMM.at(iElem).at(iGaus);
+                phi_j = el_phi_j.at(iElem).at(iGaus);  // values of the current int-pt
+                gPhi_ii = el_gPhi_ii.at(iElem).at(iGaus);
+                gPhi_ij = el_gPhi_ij.at(iElem).at(iGaus);
+                gPhi_jj = el_gPhi_jj.at(iElem).at(iGaus);
 
-                DMat = std::get<Matd2x2>(dynamic_cast<TrapPhase*>(mat)->CalcDMatx(martensite, T));
+                DMat = std::get<Matd2x2>(dynamic_cast<TrapPhase*>(mat)->CalcDMatx(phi_j, T));
 
                 // Int pt flux
                 elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon 
-                                             + DMat*zeta_M/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_martensite
-                                             + DMat*zeta_ff/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhiff
-                                             + DMat*zeta_fM/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhifM
-                                             + DMat*zeta_MM/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhiMM;
+                                             + DMat*zeta_M/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_phi_j
+                                             + DMat*zeta_ff/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi_ii
+                                             + DMat*zeta_fM/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi_ij
+                                             + DMat*zeta_MM/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi_jj;
 
                 std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[0] =  elFlux.at(iElem).at(iGaus)[0];
                 std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[1] =  elFlux.at(iElem).at(iGaus)[1];

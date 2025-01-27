@@ -96,10 +96,10 @@ class PreProcessing:
             self.dt = inputData["dt"]
             self.T = inputData["T"]
             
-            self.martensite = inputData["martensite"]
-            self.gPhi_MM = inputData["gPhi_MM"]
-            self.gPhi_ff = inputData["gPhi_ff"]
-            self.gPhi_fM = inputData["gPhi_fM"]
+            self.phi_j = inputData["phi_j"]
+            self.gPhi_jj = inputData["gPhi_jj"]
+            self.gPhi_ii = inputData["gPhi_ii"]
+            self.gPhi_ij = inputData["gPhi_ij"]
             
         elif self.SimulType=="MechTrapping":
             
@@ -267,10 +267,10 @@ class PreProcessing:
         if self.SimulType == "2PhaseTrapping":
             self.grp_Sim_Params.create_dataset("dt", data=self.dt)
             self.grp_Sim_Params.create_dataset("T", data=self.T)
-            self.fh5.create_dataset('gPhi_MM', data=self.gPhi_MM, dtype = np.float64) 
-            self.fh5.create_dataset('gPhi_fM', data=self.gPhi_fM, dtype = np.float64) 
-            self.fh5.create_dataset('gPhi_ff', data=self.gPhi_ff, dtype = np.float64) 
-            self.fh5.create_dataset('martensite', data=self.martensite, dtype = np.float64) 
+            self.fh5.create_dataset('gPhi_jj', data=self.gPhi_jj, dtype = np.float64) 
+            self.fh5.create_dataset('gPhi_ij', data=self.gPhi_ij, dtype = np.float64) 
+            self.fh5.create_dataset('gPhi_ii', data=self.gPhi_ii, dtype = np.float64) 
+            self.fh5.create_dataset('phi_j', data=self.phi_j, dtype = np.float64) 
             
         # Case MechTrapping 
         if self.SimulType == "MechTrapping":
