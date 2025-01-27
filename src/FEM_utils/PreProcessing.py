@@ -62,6 +62,10 @@ class PreProcessing:
         self.nPresDofs = len(self.presBCs)
         self.nSteps = inputData["nSteps"]
         
+        #----------------------------------------------------------------------
+        # Check for simulation type and assign relevant data
+        #----------------------------------------------------------------------
+        
         # Allowed simulation types
         allowedSimulTypes = ["Mechanical", "Transport", "PhaseTrapping", "GBTrapping", "MechTrapping"]
         
@@ -75,27 +79,36 @@ class PreProcessing:
             raise ValueError(ErrString)
         
         if self.SimulType=="Transport":
+            
             self.exitNods = inputData["exitNods"]
             self.dt = inputData["dt"]
+            
         elif self.SimulType=="GBTrapping":
+            
             self.exitNods = inputData["exitNods"]
             self.dt = inputData["dt"]
             self.T = inputData["T"]
             self.gPhi = inputData["gPhi"]
+            
         elif self.SimulType=="PhaseTrapping":
+            
             self.exitNods = inputData["exitNods"]
             self.dt = inputData["dt"]
             self.T = inputData["T"]
+            
             self.martensite = inputData["martensite"]
             self.gPhi_MM = inputData["gPhi_MM"]
             self.gPhi_ff = inputData["gPhi_ff"]
             self.gPhi_fM = inputData["gPhi_fM"]
+            
         elif self.SimulType=="MechTrapping":
+            
             self.exitNods = inputData["exitNods"]
             self.dt = inputData["dt"]
-            self.R = inputData["R"]
             self.T = inputData["T"]
+            
             self.sigmaH = inputData["sigmaH"]
+            self.rho_norm = inputData["rho_norm"]
         
         #----------------------------------------------------------------------
         # Check for allowed elements and assign element data (number of nodes,
@@ -173,6 +186,8 @@ class PreProcessing:
         # Read materials dict
         self.Materials = inputData["Materials"]
         
+        # For mechanical simulations ----------
+        
         # Check isotropy
         Isotropy = ["Isotropic", "Cubic"]
         
@@ -207,9 +222,7 @@ class PreProcessing:
         
         # Open hdf5 file 
         self.OpenFileHDF5()
-        
-        # try :
-        
+                
         #----------------------------------------------------------------------
         # Write simulation parameters to hdf5  
         #----------------------------------------------------------------------
@@ -260,13 +273,14 @@ class PreProcessing:
         # Case MechTrapping 
         if self.SimulType == "MechTrapping":
             self.grp_Sim_Params.create_dataset("dt", data=self.dt)
-            self.grp_Sim_Params.create_dataset("R", data=self.R)
             self.grp_Sim_Params.create_dataset("T", data=self.T)
-            self.fh5.create_dataset('sigmaH', data=self.sigmaH, dtype = np.float64)  
+            self.fh5.create_dataset('sigmaH', data=self.sigmaH, dtype = np.float64) 
+            self.fh5.create_dataset('rho_norm', data=self.rho_norm, dtype = np.float64)  
         
         #----------------------------------------------------------------------
         # Material data
         #----------------------------------------------------------------------
+        
         self.grp_Materials = self.fh5.create_group('Materials')
         
         if self.SimulType == "Mechanical":
@@ -410,11 +424,6 @@ class PreProcessing:
         #----------------------------------------------------------------------
         
         self.CloseFileHDF5()
-    
-        # except:
-        #     # Close hdf5 file
-        #     self.CloseFileHDF5()
-        #     print("Some error occurred with hdf5 file handle. The file is correctly closed.")
             
         pass
 
