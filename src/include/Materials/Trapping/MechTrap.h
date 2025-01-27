@@ -40,24 +40,31 @@ public:
 MechTrap(string dimensions, H5IO& H5File, int iSet);
 
 /**
- * @brief Calculates the phase-field dependent diffusivity matrix.
+ * @brief Calculates the diffusivity matrix.
  * 
  */
 T_DMatx CalcKMatx(const double T);
 
 /**
- * @brief Calculates the phase-field dependent trapping matrix.
+ * @brief Calculates the dislocation trapping matrix.
  * 
  */
 T_DMatx CalcTMatx(const double T);
+
+/**
+ * @brief Get the diffusivity ratio `m`.
+ * 
+ * @return double
+ */
+double getDiffRatio();
 
 private:
 
 /// @brief Anisotropic diffusivity parameters
 double D0x, D0y, D0z, DQx, DQy, DQz; 
 
-/// @brief Phase trapping parameter  
-double Vh; 
+/// @brief Partial molar volume for hydrogen [m]
+double Vh;       
 
 /// @brief Dislocation to lattice diffusivity ratio  
 double m;
