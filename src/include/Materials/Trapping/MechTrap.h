@@ -32,10 +32,12 @@ class MechTrap: public BaseTrapping{
 public:
 
 /**
- * @brief Constructor, reads mechanical trapping parameters from hdf5 file.
+ * @brief Constructor, reads mechanical trapping parameters from HDF5 file.
  * 
- * @param H5File Input file.
- * @param matType Material isotropy.
+ * @param dimensions Dimensions of the model. Options ["2D" or "3D"].
+ * @param H5File Input HDF5 file.
+ * @param iSet Set number. 
+ * @param logger Logger object. 
  */
 MechTrap(string dimensions, H5IO& H5File, int iSet, Logger& logger);
 
@@ -57,6 +59,13 @@ T_DMatx CalcTMatx(const double T);
  * @return double
  */
 double getDiffRatio() const;
+
+/**
+ * @brief Get the trapping capacity `s`.
+ * 
+ * @return double
+ */
+double getTrappingCapacity() const;
 
 private:
 
