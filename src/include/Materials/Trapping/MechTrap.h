@@ -53,17 +53,14 @@ T_DMatx CalcTMatx(const double T);
 
 private:
 
-/// @ brief diffusivity parameters @todo have to modify
-double D0x1, D0y1, DQx1, DQy1; 
+/// @brief Anisotropic diffusivity parameters
+double D0x, D0y, D0z, DQx, DQy, DQz; 
 
 /// @brief Phase trapping parameter  
 double Vh; 
 
-// /// @brief Variant for storing the diffusivity (conductivity) matrix
-// T_DMatx KMatx; 
-
-// /// @brief Variant for storing the trapping matrix D*zeta/(RT)
-// T_DMatx TMatx;      
+/// @brief Dislocation to lattice diffusivity ratio  
+double m;
 
 };
 #endif

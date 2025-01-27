@@ -10,16 +10,16 @@ MechTrap::MechTrap(string dimensions, H5IO& H5File, int iSet)
     string dsetName;
 
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/D0x1";
-    D0x1 = H5File.ReadScalar(dsetName);
+    D0x = H5File.ReadScalar(dsetName);
 
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/D0y1";
-    D0y1 = H5File.ReadScalar(dsetName);
+    D0y = H5File.ReadScalar(dsetName);
 
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/DQx1";
-    DQx1 = H5File.ReadScalar(dsetName);
+    DQx = H5File.ReadScalar(dsetName);
 
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/DQy1";
-    DQy1 = H5File.ReadScalar(dsetName);
+    DQy = H5File.ReadScalar(dsetName);
 
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/Vh";
     Vh = H5File.ReadScalar(dsetName);
@@ -31,8 +31,8 @@ MechTrap::MechTrap(string dimensions, H5IO& H5File, int iSet)
 
 T_DMatx MechTrap::CalcKMatx(const double T){
 
-    double DLx = D0x1*exp(-DQx1/(T*R));
-    double DLy = D0y1*exp(-DQy1/(T*R));
+    double DLx = D0x*exp(-DQx/(T*R));
+    double DLy = D0y*exp(-DQy/(T*R));
 
     // Variant for storing the diffusivity (conductivity) matrix
     T_DMatx KMatx;
@@ -56,8 +56,8 @@ T_DMatx MechTrap::CalcKMatx(const double T){
 
 T_DMatx MechTrap::CalcTMatx(const double T){
 
-    double DLx = D0x1*exp(-DQx1/(T*R));
-    double DLy = D0y1*exp(-DQy1/(T*R));
+    double DLx = D0x*exp(-DQx/(T*R));
+    double DLy = D0y*exp(-DQy/(T*R));
 
     // Variant for storing the trapping matrix D*zeta/(RT)
     T_DMatx TMatx;
