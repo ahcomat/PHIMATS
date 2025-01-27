@@ -313,11 +313,13 @@ class PreProcessing:
         elif self.SimulType == "MechTrapping":
             for mat in self.Materials:
                 counter = 1
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x1", data=self.Materials[mat]["D0x1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y1", data=self.Materials[mat]["D0y1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx1", data=self.Materials[mat]["DQx1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy1", data=self.Materials[mat]["DQy1"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x", data=self.Materials[mat]["D0x"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y", data=self.Materials[mat]["D0y"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx", data=self.Materials[mat]["DQx"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy", data=self.Materials[mat]["DQy"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/m", data=self.Materials[mat]["m"])
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/Vh", data=self.Materials[mat]["Vh"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/s", data=self.Materials[mat]["s"])
 
                 if self.nDim == 3:
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
