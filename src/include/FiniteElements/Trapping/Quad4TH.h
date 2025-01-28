@@ -123,28 +123,44 @@ void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux
 
 private:
 
-const vector<double> wts{1.0, 1.0, 1.0, 1.0};  /// @brief Weights of the gauss points [nElGauss].
+/// @brief Weights of the gauss points [nElGauss].
+const vector<double> wts{1.0, 1.0, 1.0, 1.0};  
 
+/// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
+vector<RowVecd4> shapeFunc; 
 
-vector<RowVecd4> shapeFunc; /// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
-vector<Matd2x4> shapeFuncDeriv; /// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
+/// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
+vector<Matd2x4> shapeFuncDeriv; 
 
-vector<Matd4x2> elemNodCoord;   /// @brief Node Coordinates [nElDim, nElNodes]. 
+/// @brief Node Coordinates [nElNodes, nElDim]. 
+vector<Matd4x2> elemNodCoord;   
 
-vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
+/// @brief Cartesian coordinates of Gauss points for all elements [nElDim].
+vector<vector<RowVecd2>> gaussPtCart;   
 
-vector<vector<ColVecd2>> elFlux; /// @brief Int-pt flux [nElStres]
-vector<vector<double>> elPhi;    /// @brief Int-pt phi [nElStres]. 
+/// @brief Int-pt flux [nElStres].
+vector<vector<ColVecd2>> elFlux; 
 
-vector<double> nodPhi;  /// @brief nodal values of phi [nTotNodes]
+/// @brief Int-pt phi.
+vector<vector<double>> elPhi;     
 
-vector<vector<Matd2x4>> BMat;   /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
+/// @brief nodal values of phi [nTotNodes]
+vector<double> nodPhi;  
 
-vector<vector<double>> intPtVol;    /// @brief Int-pt volume.       
+/// @brief Derivatives (scalar) matrix [nElDim, nElNodes]
+vector<vector<Matd2x4>> BMat;   
 
-vector<Matd4x4> elStiffMatx;    /// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].    
-vector<Matd4x4> elCapMatx;      /// @brief Element capacitance matrix [nElDispDofs, nElDispDofs].   
-vector<Matd4x4> elMKTMatx;       /// @brief Element trapping matrix [nElDispDofs, nElDispDofs].   
+/// @brief Int-pt volume.
+vector<vector<double>> intPtVol;           
+
+/// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].
+vector<Matd4x4> elStiffMatx;    
+
+/// @brief Element capacitance matrix [nElDispDofs, nElDispDofs].
+vector<Matd4x4> elCapMatx;       
+
+/// @brief Element trapping matrix [nElDispDofs, nElDispDofs].  
+vector<Matd4x4> elMKTMatx;          
 
 };
 #endif
