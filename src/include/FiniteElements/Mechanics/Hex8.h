@@ -144,12 +144,6 @@ vector<vector<ColVecd6>> elStran_e;
 /// @brief Int-pt plastic strain [nElStres].
 vector<vector<ColVecd6>> elStran_p;  
 
-/// @brief Int-pt equivalent plastic strain [nElStres].
-vector<vector<double>> elStran_eq;
-    
-/// @brief Int-pt equivalent stress (von Mises) [nElStres].
-vector<vector<double>> elStres_eq;
-
 /// @brief Int-pt elastic strain (last convergged increment) [nElStres].
 vector<vector<ColVecd6>> elStran_e_old;   
 

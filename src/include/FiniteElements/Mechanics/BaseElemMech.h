@@ -153,5 +153,11 @@ const string materialModel;
 /// @brief Element displacement dofs.
 vector<vector<int>> elemDispDof;    
 
+/// @brief Int-pt equivalent plastic strain [nElStres].
+vector<vector<double>> elStran_eq;
+    
+/// @brief Int-pt equivalent stress (von Mises) [nElStres].
+vector<vector<double>> elStres_eq;
+
 };
 #endif
