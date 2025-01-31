@@ -175,10 +175,7 @@ vector<double> nod_gPhi_jj;
 vector<double> nod_gPhi_ij; 
 
 /// @brief nodal values of gPhi_ii [nTotNodes]
-vector<double> nod_gPhi_ii; 
-
-/// @brief Int-pt volume.       
-vector<vector<double>> intPtVol;    
+vector<double> nod_gPhi_ii;    
 
 /// @brief Element concentration (temperature) dofs. In this case, it is identical to `elemNodeConn`.
 vector<vector<int>> elemConDof;    

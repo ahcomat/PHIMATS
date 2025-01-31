@@ -163,10 +163,7 @@ vector<vector<double>> elStran_eq_old;
 vector<vector<Matd3x8>> BMat;   
 
 /// @brief Strain matrix [nElStres, nElDispDofs].
-vector<vector<Matd6x24>> BuMat; 
-
-/// @brief Int-pt volume.
-vector<vector<double>> intPtVol; 
+vector<vector<Matd6x24>> BuMat;  
 
 /// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].
 vector<Matd24x24> elStiffMatx;  

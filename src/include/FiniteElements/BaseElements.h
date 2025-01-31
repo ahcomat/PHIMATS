@@ -73,7 +73,11 @@ int nNodes;
 /// @brief Total number of DOFs for element set.
 int nDof;
 
-// int nPresDofs;      /// @brief Number of prescribed displacement dofs.
+/// @brief Logger object for handeling interface messages.
+Logger& logger;
+
+/// @brief Int-pt volume.
+vector<vector<double>> intPtVol;
 
 /// @brief Gauss points in natural coordinates. 
 vector<vector<double>> gaussPts;  
