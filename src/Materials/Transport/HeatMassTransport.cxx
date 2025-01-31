@@ -4,8 +4,8 @@
 
 using namespace std;
 
-HeatMassTransport::HeatMassTransport(string dimensions, H5IO& H5File, int iSet)
-    : BaseTransport(dimensions) {
+HeatMassTransport::HeatMassTransport(string dimensions, H5IO& H5File, int iSet, Logger& logger)
+    : BaseTransport(dimensions, logger) {
 
     string dsetName;
 

@@ -31,7 +31,7 @@ class BaseMechanics: public BaseMaterial{
 
 public:
 
-BaseMechanics(string dimensions): BaseMaterial(dimensions) {};
+BaseMechanics(string dimensions, Logger& logger): BaseMaterial(dimensions, logger) {};
 
 /**
  * @brief Returns a stiffness matrix variant.

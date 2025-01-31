@@ -31,7 +31,7 @@ class BaseTransport: public BaseMaterial{
 
 public:
 
-BaseTransport(string dimensions): BaseMaterial(dimensions) {};
+BaseTransport(string dimensions, Logger& logger): BaseMaterial(dimensions, logger) {};
 virtual ~BaseTransport() override {};
 
 /**

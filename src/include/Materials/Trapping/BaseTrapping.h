@@ -31,7 +31,7 @@ class BaseTrapping: public BaseMaterial{
 
 public:
 
-BaseTrapping(string dimensions): BaseMaterial(dimensions) {};
+BaseTrapping(string dimensions, Logger& logger): BaseMaterial(dimensions, logger) {};
 virtual ~BaseTrapping() override {};
 
 protected:

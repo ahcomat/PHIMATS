@@ -4,8 +4,8 @@
 #include "Materials/Mechanics/IsoHard.h"
 #include "Materials/Mechanics/IsoHard.tpp"  // Include template implementation
 
-IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet)
-    : LinearElastic(dimensions, H5File, iSet) {
+IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
+    : LinearElastic(dimensions, H5File, iSet, logger) {
 
     try {
         // Read plasticity and hardening law

@@ -57,7 +57,7 @@ enum class HardeningLaw{
  * @param H5File Input hdf5 file. 
  * @param iSet Element set number. 
  */
-IsoHard(string dimensions, H5IO& H5File, int iSet);
+IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger);
 
 /**
  * @brief Von Mises stress for 3D models. 

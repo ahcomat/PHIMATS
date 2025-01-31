@@ -4,8 +4,8 @@
 
 #include "Materials/Mechanics/LinearElastic.h"
 
-LinearElastic::LinearElastic(string dimensions, H5IO& H5File, int iSet)
-    : BaseMechanics(dimensions) {
+LinearElastic::LinearElastic(string dimensions, H5IO& H5File, int iSet, Logger& logger)
+    : BaseMechanics(dimensions, logger) {
 
     try {
         analysisType = H5File.ReadString("Materials/Material_" + to_string(iSet)+"/Elastic/AnalysisType");

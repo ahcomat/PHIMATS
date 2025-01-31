@@ -37,7 +37,7 @@ public:
  * @param H5File Input file.
  * @param matType Material isotropy.
  */
-TrapGB(string dimensions, H5IO& H5File, int iSet);
+TrapGB(string dimensions, H5IO& H5File, int iSet, Logger& logger);
 
 /**
  * @brief Calculates the phase-field dependent diffusivity matrix.

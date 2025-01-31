@@ -47,7 +47,7 @@ public:
  * @param H5File Input file.
  * @param matType Material isotropy.
  */
-LinearElastic(string dimensions, H5IO& H5File, int iSet);
+LinearElastic(string dimensions, H5IO& H5File, int iSet, Logger& logger);
 
 /**
  * @brief Initialize the isotropic elastic stiffness matrix in Voigt notation

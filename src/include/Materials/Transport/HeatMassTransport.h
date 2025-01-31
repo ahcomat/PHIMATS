@@ -37,7 +37,7 @@ public:
  * @param H5File Input file.
  * @param matType Material isotropy.
  */
-HeatMassTransport(string dimensions, H5IO& H5File, int iSet);
+HeatMassTransport(string dimensions, H5IO& H5File, int iSet, Logger& logger);
 
 /**
  * @brief Returns the diffusivity (conductivity) matrix.

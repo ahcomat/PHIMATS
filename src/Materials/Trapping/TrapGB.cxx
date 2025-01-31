@@ -5,8 +5,8 @@
 
 using namespace std;
 
-TrapGB::TrapGB(string dimensions, H5IO& H5File, int iSet)
-    : BaseTrapping(dimensions) {
+TrapGB::TrapGB(string dimensions, H5IO& H5File, int iSet, Logger& logger)
+    : BaseTrapping(dimensions, logger) {
 
     string dsetName;
 

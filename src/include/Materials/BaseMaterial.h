@@ -26,13 +26,15 @@
 
 #include <string>
 
+#include "Logger.h"
+
 using namespace std;
 
 class BaseMaterial{
 
 public:
 
-BaseMaterial(string dimensions): dims(dimensions) {};
+BaseMaterial(string dimensions, Logger& logger): dims(dimensions), logger(logger) {};
 virtual ~BaseMaterial() = default;
 
 string getDims(){ return dims; }
@@ -40,6 +42,12 @@ string getDims(){ return dims; }
 protected:
 
 const string dims;      /// @brief Dimensions of the material model.
+
+/**
+ * @brief Logger object for handeling interface messages.
+ * 
+ */
+Logger& logger;
 
 };
 #endif

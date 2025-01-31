@@ -69,12 +69,6 @@ double getTrappingCapacity() const;
 
 private:
 
-/**
- * @brief Logger object for handeling interface messages.
- * 
- */
-Logger& logger;
-
 /// @brief Anisotropic diffusivity parameters
 double D0x, D0y, D0z, DQx, DQy, DQz; 
 
