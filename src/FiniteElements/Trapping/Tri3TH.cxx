@@ -95,9 +95,11 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
     intPtVol.resize(nElements);   
     vector<double> dummyIntVol(nElGauss);  // For integration point volume.
 
-    if (Trapping=="GBTrapping"){       // GB
+    try{
 
-        ColVecd3 dummyElNod_gPhi;  // For element nodal values of phi.
+    if (Trapping=="GBTrapping"){    // GB
+
+        ColVecd3 dummyElNod_gPhi;   // For element nodal values of phi.
 
         // Initialize the storages for int-pt gPhi
         el_gPhi.resize(nElements);
@@ -209,13 +211,25 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             }
             gaussPtCart.at(iElem) = dummyElemGauss;
             intPtVol.at(iElem) = dummyIntVol;
-        }   
+        }
+    // }  else {
 
-    }  else {
+    //     cerr << "Error trapping flag: " << Trapping << "\n";
+    //     cerr << "Terminating!\n\n";
+    //     exit(10);
+    // }
 
-        cerr << "Error trapping flag: " << Trapping << "\n";
-        cerr << "Terminating!\n\n";
-        exit(10);
+    } else {
+
+            // logger.log("Undefined solver type < " + solverType + " >", "ERROR");
+            // throw std::runtime_error("Undefined solver type < " + solverType + " >. Supported options are < DIRECT, GMRES >");
+
+        }
+    } catch (const std::runtime_error& e) {
+        logger.log("\nException caught in LinearTransport::LinearTransport:\n", "", false);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("\nCritical error encountered. Terminating!\n", "", false);
+        exit(EXIT_FAILURE);
     }
 }
 
