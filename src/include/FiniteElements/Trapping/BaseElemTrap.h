@@ -124,22 +124,10 @@ const T_ElStiffMatx& getElCapMatx() const { return elCapMatxVariant; }
  */
 virtual void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T) = 0;
 
-protected:
-
-/// @brief Universal gas constant [J/mol.K]
-const double R = 8.31446261815324; 
-
-/// @brief Spatial dimensions of the element.
-const int nElDim;  
-
-/// @brief Number of nodes per element.
-const int nElNodes;    
+protected:      
 
 /// @brief Number of element concentration (temperature) dofs.
-const int nElConDofs;   
-
-/// @brief Number of gauss points.
-const int nElGauss;            
+const int nElConDofs;            
 
 /// @brief Time increment.   
 double dt;          

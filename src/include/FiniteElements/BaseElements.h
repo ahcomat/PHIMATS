@@ -64,6 +64,18 @@ const T_ElStiffMatx& getElStiffMatx() const { return elStiffMatxVariant; }
 
 protected:
 
+/// @brief Universal gas constant [J/mol.K]
+const double R = 8.31446261815324;
+
+/// @brief Spatial dimensions of the element.
+const int nElDim; 
+
+/// @brief Number of nodes per element.        
+const int nElNodes;  
+
+/// @brief Number of gauss points.
+const int nElGauss;
+
 /// @brief Total number of elements in element set.
 int nElements;         
 

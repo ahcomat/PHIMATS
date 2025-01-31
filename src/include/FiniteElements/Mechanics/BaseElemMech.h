@@ -138,23 +138,14 @@ virtual void CalcFint(double* Fint) = 0;
 
 protected:
 
-/// @brief Spatial dimensions of the element.
-const int nElDim; 
-
-/// @brief Number of nodes per element.        
-const int nElNodes; 
-
 /// @brief Number of displacement dofs per node. 
-const int dispDofs;  
+const int dispDofs; 
 
 /// @brief Stress/strain components.
-const int nElStres;      
+const int nElStres;                 
 
 /// @brief Number of element displacement dofs.
-const int nElDispDofs;    
-
-/// @brief Number of gauss points.
-const int nElGauss;       
+const int nElDispDofs;
 
 /// @brief Flag for material model [`Elastic`, `ElastoPlastic`]
 const string materialModel;     
