@@ -16,8 +16,8 @@
  l -> total displacement dofs.
 */
 
-Quad4TH::Quad4TH(H5IO &H5File_in, Nodes &Nodes, int iSet)
-    : BaseElemTrap(2, 4, 4, 4){ // nElDim, nElNodes, nElConDofs, nElGauss 
+Quad4TH::Quad4TH(H5IO &H5File_in, Nodes &Nodes, int iSet, Logger& logger)
+    : BaseElemTrap(2, 4, 4, 4, logger){ // nElDim, nElNodes, nElGauss, nElConDofs 
 
     InitShapeFunc();
     ReadElementsData(H5File_in, iSet);

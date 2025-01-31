@@ -31,7 +31,7 @@ class Quad4TH: public BaseElemTrap{
 
 public:
 
-Quad4TH(H5IO &H5File_in, Nodes &Nodes, int iSet);   
+Quad4TH(H5IO &H5File_in, Nodes &Nodes, int iSet, Logger& logger);   
 
 ~Quad4TH() override ;
 

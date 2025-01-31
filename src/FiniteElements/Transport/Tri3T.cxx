@@ -15,8 +15,8 @@
  l -> total displacement dofs.
 */
 
-Tri3T::Tri3T(H5IO &H5File_in, Nodes &Nodes, int iSet)
-    : BaseElemTransport(2, 3, 3, 3){ // nElDim, nElNodes, nElConDofs, nElGauss 
+Tri3T::Tri3T(H5IO &H5File_in, Nodes &Nodes, int iSet, Logger& logger)
+    : BaseElemTransport(2, 3, 3, 3, logger){ // nElDim, nElNodes, nElGauss, nElConDofs 
 
     InitShapeFunc();
     ReadElementsData(H5File_in, iSet);

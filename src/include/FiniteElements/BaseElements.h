@@ -39,6 +39,9 @@ class BaseElements{
 
 public:
 
+BaseElements(int nElDim, int nElNodes, int nElGauss, Logger& logger): 
+    nElDim(nElDim), nElNodes(nElNodes), nElGauss(nElGauss), logger(logger) {};
+
 virtual ~BaseElements() = default;
 
 /**

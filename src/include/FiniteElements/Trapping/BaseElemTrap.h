@@ -31,8 +31,8 @@ class BaseElemTrap: public BaseElements{
 
 public:
 
-BaseElemTrap(int nElDim, int nElNodes, int nElConDofs, int nElGauss)
-    : nElDim(nElDim), nElNodes(nElNodes), nElConDofs(nElConDofs), nElGauss(nElGauss) {};
+BaseElemTrap(int nElDim, int nElNodes, int nElGauss, int nElConDofs, Logger& logger)
+    : BaseElements(nElDim, nElNodes, nElGauss, logger), nElConDofs(nElConDofs) {};
 
 /**
  * @brief Get dimensions of the element. 

@@ -18,8 +18,8 @@
  l -> total displacement dofs.
 */
 
-Tri3TH::Tri3TH(H5IO &H5File_in, Nodes &Nodes, int iSet)
-    : BaseElemTrap(2, 3, 3, 3){ // nElDim, nElNodes, nElConDofs, nElGauss 
+Tri3TH::Tri3TH(H5IO &H5File_in, Nodes &Nodes, int iSet, Logger& logger)
+    : BaseElemTrap(2, 3, 3, 3, logger){ // nElDim, nElNodes, nElGauss, nElConDofs
 
     InitShapeFunc();
     ReadElementsData(H5File_in, iSet);

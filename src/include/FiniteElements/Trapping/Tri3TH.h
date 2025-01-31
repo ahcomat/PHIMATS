@@ -31,7 +31,7 @@ class Tri3TH: public BaseElemTrap{
 
 public:
 
-Tri3TH(H5IO &H5File_in, Nodes &Nodes, int iSet);   
+Tri3TH(H5IO &H5File_in, Nodes &Nodes, int iSet, Logger& logger);   
 
 ~Tri3TH() override ;
 

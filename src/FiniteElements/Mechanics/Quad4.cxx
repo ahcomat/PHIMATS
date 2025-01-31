@@ -16,8 +16,8 @@
  l -> total displacement dofs.
 */
 
-Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel)
-    : BaseElemMech(2, 4, 2, 3, 8, 4, matModel){ // nElDim, nElNodes, dispDofs, nElStres, nElDispDofs, nElGauss
+Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel, Logger& logger)
+    : BaseElemMech(2, 4, 4, 2, 3, 8, matModel, logger){ // nElDim, nElNodes, nElGauss, dispDofs, nElStres, nElDispDofs
 
     if (materialModel != "Elastic" && materialModel != "ElastoPlastic") {
         

@@ -17,8 +17,8 @@
  l -> total displacement dofs.
 */
 
-Hex8::Hex8(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel)
-    : BaseElemMech(3, 8, 3, 6, 24, 8, matModel){ // nElDim, nElNodes, dispDofs, nElStres, nElDispDofs, nElGauss
+Hex8::Hex8(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel, Logger& logger)
+    : BaseElemMech(3, 8, 8, 3, 6, 24,  matModel, logger){ // nElDim, nElNodes, nElGauss, dispDofs, nElStres, nElDispDofs
 
     if (materialModel != "Elastic" && materialModel != "ElastoPlastic") {
         

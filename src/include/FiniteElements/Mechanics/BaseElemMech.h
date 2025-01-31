@@ -31,9 +31,9 @@ class BaseElemMech: public BaseElements{
 
 public:
 
-BaseElemMech(int nElDim, int nElNodes, int dispDofs, int nElStres, int nElDispDofs, int nElGauss2, string matModel)
-    : nElDim(nElDim), nElNodes(nElNodes), dispDofs(dispDofs), nElStres(nElStres),
-      nElDispDofs(nElDispDofs), nElGauss(nElGauss2), materialModel(matModel) {};
+BaseElemMech(int nElDim, int nElNodes, int nElGauss, int dispDofs, int nElStres, int nElDispDofs,  string matModel, Logger& logger)
+    : BaseElements(nElDim, nElNodes, nElGauss, logger), dispDofs(dispDofs), 
+      nElStres(nElStres), nElDispDofs(nElDispDofs), materialModel(matModel) {};
 
 /**
  * @brief Get dimensions of the element. 

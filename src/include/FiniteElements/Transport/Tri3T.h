@@ -31,7 +31,7 @@ class Tri3T: public BaseElemTransport{
 
 public:
 
-Tri3T(H5IO &H5File_in, Nodes &Nodes, int iSet);   
+Tri3T(H5IO &H5File_in, Nodes &Nodes, int iSet, Logger& logger);   
 
 ~Tri3T() override ;
 

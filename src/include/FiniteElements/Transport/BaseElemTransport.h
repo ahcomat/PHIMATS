@@ -30,8 +30,8 @@ class BaseElemTransport: public BaseElements{
 
 public:
 
-BaseElemTransport(int nElDim, int nElNodes, int nElConDofs, int nElGauss)
-    : nElDim(nElDim), nElNodes(nElNodes), nElConDofs(nElConDofs), nElGauss(nElGauss) {};
+BaseElemTransport(int nElDim, int nElNodes, int nElGauss, int nElConDofs, Logger& logger)
+    : BaseElements(nElDim, nElNodes, nElGauss, logger), nElConDofs(nElConDofs) {};
 
 /**
  * @brief Get dimensions of the element. 
