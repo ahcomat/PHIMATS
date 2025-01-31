@@ -43,10 +43,7 @@ protected:
 
 const string dims;      /// @brief Dimensions of the material model.
 
-/**
- * @brief Logger object for handeling interface messages.
- * 
- */
+/// @brief Logger object for handeling interface messages.
 Logger& logger;
 
 };

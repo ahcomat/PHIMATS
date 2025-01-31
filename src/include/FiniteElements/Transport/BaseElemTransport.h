@@ -93,16 +93,17 @@ virtual double CalcAvCon(const double* globalBuffer) = 0;
 
 protected:
 
-const int nElDim;              /// @brief Spatial dimensions of the element.
-const int nElNodes;            /// @brief Number of nodes per element.
-const int nElConDofs;          /// @brief Number of element concentration (temperature) dofs.
-const int nElGauss;            /// @brief Number of gauss points.
+/// @brief Number of element concentration (temperature) dofs.
+const int nElConDofs;          
 
-double dt;                     /// @brief Time increment.     
+/// @brief Time increment.
+double dt;                          
 
-vector<vector<int>> elemConDof;    /// @brief Element concentration (temperature) dofs. In this case, it is identical to `elemNodeConn`.
+/// @brief Element concentration (temperature) dofs. In this case, it is identical to `elemNodeConn`.
+vector<vector<int>> elemConDof;    
 
-T_ElStiffMatx elCapMatxVariant;   /// @brief Variant for returning elCapMatx. 
+/// @brief Variant for returning elCapMatx. 
+T_ElStiffMatx elCapMatxVariant;   
 
 };
 #endif

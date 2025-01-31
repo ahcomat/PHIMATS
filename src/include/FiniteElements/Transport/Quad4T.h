@@ -106,19 +106,32 @@ void CalcFlux(T_DMatx KMatx, const double* globalBuffer, T_nodStres& nodFlux, ve
 
 private:
 
-const vector<double> wts{1.0, 1.0, 1.0, 1.0};  /// @brief Weights of the gauss points [nElGauss].
+/// @brief Weights of the gauss points [nElGauss].
+const vector<double> wts{1.0, 1.0, 1.0, 1.0};  
 
-vector<RowVecd4> shapeFunc; /// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
-vector<Matd2x4> shapeFuncDeriv;  /// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
-vector<Matd4x2> elemNodCoord;     /// @brief Node Coordinates [nElDim, nElNodes]. 
-vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
+/// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
+vector<RowVecd4> shapeFunc; 
 
-vector<vector<ColVecd2>> elFlux;   /// @brief Int-pt flux [nElStres].
+/// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
+vector<Matd2x4> shapeFuncDeriv;  
 
-vector<vector<Matd2x4>> BMat;       /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
-vector<vector<double>> intPtVol;    /// @brief Int-pt volume.
-vector<Matd4x4> elStiffMatx;        /// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].
-vector<Matd4x4> elCapMatx;          /// @brief Element capacitance matrix [nElDispDofs, nElDispDofs].
+/// @brief Node Coordinates [nElDim, nElNodes]. 
+vector<Matd4x2> elemNodCoord;     
+
+/// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
+vector<vector<RowVecd2>> gaussPtCart;  
+
+/// @brief Int-pt flux [nElDim].
+vector<vector<ColVecd2>> elFlux;   
+
+/// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
+vector<vector<Matd2x4>> BMat;           
+
+/// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].
+vector<Matd4x4> elStiffMatx;        
+
+/// @brief Element capacitance matrix [nElDispDofs, nElDispDofs].
+vector<Matd4x4> elCapMatx;          
 
 };
 #endif

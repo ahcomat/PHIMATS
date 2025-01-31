@@ -114,19 +114,32 @@ double CalcAvCon(const double* globalBuffer) override;
 
 private:
 
-const vector<double> wts{1.0/6.0, 1.0/6.0, 1.0/6};  /// @brief Weights of the gauss points [nElGauss].
+/// @brief Weights of the gauss points [nElGauss].
+const vector<double> wts{1.0/6.0, 1.0/6.0, 1.0/6};  
 
-vector<RowVecd3> shapeFunc; /// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
-vector<Matd2x3> shapeFuncDeriv;  /// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
-vector<Matd3x2> elemNodCoord;     /// @brief Node Coordinates [nElNodes, nElDim]. 
-vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
+/// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
+vector<RowVecd3> shapeFunc; 
 
-vector<vector<ColVecd2>> elFlux;   /// @brief Int-pt flux [nElStres].
+/// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes].
+vector<Matd2x3> shapeFuncDeriv;  
 
-vector<vector<Matd2x3>> BMat;       /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
-vector<vector<double>> intPtVol;    /// @brief Int-pt volume.
-vector<Matd3x3> elStiffMatx;        /// @brief Element stiffness matrix [nElConDofs, nElConDofs].
-vector<Matd3x3> elCapMatx;          /// @brief Element capacitance matrix [nElConDofs, nElConDofs].
+/// @brief Node Coordinates [nElNodes, nElDim]. 
+vector<Matd3x2> elemNodCoord;    
+
+/// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
+vector<vector<RowVecd2>> gaussPtCart;  
+
+/// @brief Int-pt flux [nElDim].
+vector<vector<ColVecd2>> elFlux;   
+
+/// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
+vector<vector<Matd2x3>> BMat;        
+
+/// @brief Element stiffness matrix [nElConDofs, nElConDofs].
+vector<Matd3x3> elStiffMatx;   
+
+/// @brief Element capacitance matrix [nElConDofs, nElConDofs].
+vector<Matd3x3> elCapMatx;          
 
 };
 #endif

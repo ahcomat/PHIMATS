@@ -148,7 +148,7 @@ vector<Matd6x2> elemNodCoord;
 /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
 vector<vector<RowVecd2>> gaussPtCart;  
 
-/// @brief Int-pt flux [nElStres]
+/// @brief Int-pt flux [nElDim]
 vector<vector<ColVecd2>> elFlux;         
 
 /// @brief Int-pt phi [nElStres]. 

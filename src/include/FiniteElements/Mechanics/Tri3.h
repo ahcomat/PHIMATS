@@ -102,20 +102,35 @@ void CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep
 
 private:
 
-const vector<double> wts{0.5};  /// @brief Weights of the gauss points [nElGauss].
+/// @brief Weights of the gauss points [nElGauss].
+const vector<double> wts{0.5};  
 
-vector<RowVecd3> shapeFunc; /// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
-vector<Matd2x3> shapeFuncDeriv;  /// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
-vector<Matd3x2> elemNodCoord;     /// @brief Node Coordinates [nElDim, nElNodes]. 
-vector<vector<RowVecd2>> gaussPtCart;  /// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
+/// @brief Values of the shape functions at integration points in natural coordinates [nElNodes].
+vector<RowVecd3> shapeFunc; 
 
-vector<vector<ColVecd3>> elStran;   /// @brief Int-pt strains [nElStres].
-vector<vector<ColVecd3>> elStres;   /// @brief Int-pt stresses [nElStres].
+/// @brief Values of the shape function derivatives at integration points in natural coordinates [nElDim, nElNodes]. 
+vector<Matd2x3> shapeFuncDeriv; 
 
-vector<vector<Matd2x3>> BMat;       /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
-vector<vector<Matd3x6>> BuMat;      /// @brief Strain matrix [nElStres, nElDispDofs].
-vector<vector<double>> intPtVol;    /// @brief Int-pt volume.
-vector<Matd6x6> elStiffMatx;        /// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].
+/// @brief Node Coordinates [nElDim, nElNodes]. 
+vector<Matd3x2> elemNodCoord;     
+
+/// @brief Cartesian coordinates of Gauss points for all elements [nElDim]. 
+vector<vector<RowVecd2>> gaussPtCart;  
+
+/// @brief Int-pt strains [nElStres].
+vector<vector<ColVecd3>> elStran;   
+
+/// @brief Int-pt stresses [nElStres].
+vector<vector<ColVecd3>> elStres;   
+
+/// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
+vector<vector<Matd2x3>> BMat;       
+
+/// @brief Strain matrix [nElStres, nElDispDofs].
+vector<vector<Matd3x6>> BuMat;      
+
+/// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].
+vector<Matd6x6> elStiffMatx;        
 
 };
 #endif
