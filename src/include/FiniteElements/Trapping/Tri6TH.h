@@ -150,37 +150,7 @@ vector<vector<RowVecd2>> gaussPtCart;
 
 /// @brief Int-pt flux [nElDim]
 vector<vector<ColVecd2>> elFlux;         
-
-/// @brief Int-pt phi [nElStres]. 
-vector<vector<double>> el_gPhi;          
-
-/// @brief Int-pt phi_j [nElStres]. 
-vector<vector<double>> el_phi_j;    
-
-/// @brief Int-pt gPhi_jj [nElStres]. 
-vector<vector<double>> el_gPhi_jj;        
-
-/// @brief Int-pt gPhi_ij [nElStres]. 
-vector<vector<double>> el_gPhi_ij;  
-
-/// @brief Int-pt gPhi_ii [nElStres].
-vector<vector<double>> el_gPhi_ii;         
-
-/// @brief nodal values of phi [nTotNodes]
-vector<double> nod_gPhi;        
-
-/// @brief nodal values of phi_j [nTotNodes]
-vector<double> nod_phi_j;  
-
-/// @brief nodal values of gPhi_jj [nTotNodes]
-vector<double> nod_gPhi_jj;      
-
-/// @brief nodal values of gPhi_ij [nTotNodes]
-vector<double> nod_gPhi_ij; 
-
-/// @brief nodal values of gPhi_ii [nTotNodes]
-vector<double> nod_gPhi_ii;      
-
+   
 /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
 vector<vector<Matd2x6>> BMat;   
 
