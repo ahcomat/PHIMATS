@@ -138,14 +138,8 @@ vector<Matd4x2> elemNodCoord;
 /// @brief Cartesian coordinates of Gauss points for all elements [nElDim].
 vector<vector<RowVecd2>> gaussPtCart;   
 
-/// @brief Int-pt flux [nElStres].
-vector<vector<ColVecd2>> elFlux; 
-
-/// @brief Int-pt phi.
-vector<vector<double>> elPhi;     
-
-/// @brief nodal values of phi [nTotNodes]
-vector<double> nodPhi;  
+/// @brief Int-pt flux [nElDim].
+vector<vector<ColVecd2>> elFlux;
 
 /// @brief Derivatives (scalar) matrix [nElDim, nElNodes]
 vector<vector<Matd2x4>> BMat;              
@@ -154,10 +148,7 @@ vector<vector<Matd2x4>> BMat;
 vector<Matd4x4> elStiffMatx;    
 
 /// @brief Element capacitance matrix [nElDispDofs, nElDispDofs].
-vector<Matd4x4> elCapMatx;       
-
-/// @brief Element trapping matrix [nElDispDofs, nElDispDofs].  
-vector<Matd4x4> elMKTMatx;          
+vector<Matd4x4> elCapMatx;              
 
 };
 #endif
