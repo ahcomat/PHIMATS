@@ -88,16 +88,11 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
 
     // Initialize the storages for int-pt flux and phi
     elFlux.resize(nElements);
-    elPhi.resize(nElements);
-
-    // Read nodal values of phi
-    nodPhi.resize(nNodes);
-    string dsetName = "Phi";
-    H5File_in.ReadField1D(dsetName, nodPhi);      
+    elStiffMatx.resize(nElements);
+    elCapMatx.resize(nElements);     
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd4x2 dummyElNodCoord; // For node coordinates.
-    ColVecd4 dummyElNodPhi;  // For element nodal values of phi.
 
     gaussPtCart.resize(nElements);  // Initialize the size of the Cart Gauss points.
     vector<RowVecd2> dummyElemGauss(nElGauss); // For element Gauss points.
@@ -111,7 +106,6 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
     for(int iElem=0; iElem<nElements; iElem++){
 
         elFlux.at(iElem).resize(nElGauss);
-        elPhi.at(iElem).resize(nElGauss);
         gaussPtCart.at(iElem).resize(nElGauss);
         BMat.at(iElem).resize(nElGauss);
 
@@ -121,7 +115,6 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
             dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
 
-            dummyElNodPhi[iNod] = nodPhi.at(elemNodeConn.at(iElem).at(iNod));
         }
 
         elemNodCoord.at(iElem) = dummyElNodCoord;
@@ -133,8 +126,6 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
             // Derivatives and int-pt volume
             CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
-            // Int-pt phi
-            elPhi.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNodPhi;
         }
         gaussPtCart.at(iElem) = dummyElemGauss;
         intPtVol.at(iElem) = dummyIntVol;
@@ -184,11 +175,6 @@ void Quad4TH::CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* no
     for(int iElem=0; iElem<nElements; iElem++){
 
         elGradPhi.at(iElem).resize(nElGauss);
-
-        // Loop through element nodes to get nodal values.
-        for(int iNod=0; iNod<nElNodes; iNod++){
-            dummyElNodPhi[iNod] = nodPhi.at(elemNodeConn.at(iElem).at(iNod));
-        }
 
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
