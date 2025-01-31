@@ -145,7 +145,37 @@ const int nElGauss;
 double dt;          
 
 /// @brief Trapping type.
-string Trapping;                  
+string Trapping;      
+
+/// @brief Int-pt phi [nElGauss]. 
+vector<vector<double>> el_gPhi;          
+
+/// @brief Int-pt phi_j [nElGauss]. 
+vector<vector<double>> el_phi_j;    
+
+/// @brief Int-pt gPhi_jj [nElGauss]. 
+vector<vector<double>> el_gPhi_jj;        
+
+/// @brief Int-pt gPhi_ij [nElGauss]. 
+vector<vector<double>> el_gPhi_ij;  
+
+/// @brief Int-pt gPhi_ii [nElGauss].
+vector<vector<double>> el_gPhi_ii;         
+
+/// @brief nodal values of phi [nTotNodes]
+vector<double> nod_gPhi;        
+
+/// @brief nodal values of phi_j [nTotNodes]
+vector<double> nod_phi_j;  
+
+/// @brief nodal values of gPhi_jj [nTotNodes]
+vector<double> nod_gPhi_jj;      
+
+/// @brief nodal values of gPhi_ij [nTotNodes]
+vector<double> nod_gPhi_ij; 
+
+/// @brief nodal values of gPhi_ii [nTotNodes]
+vector<double> nod_gPhi_ii; 
 
 /// @brief Int-pt volume.       
 vector<vector<double>> intPtVol;    

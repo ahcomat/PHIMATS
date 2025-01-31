@@ -148,10 +148,7 @@ vector<vector<double>> elPhi;
 vector<double> nodPhi;  
 
 /// @brief Derivatives (scalar) matrix [nElDim, nElNodes]
-vector<vector<Matd2x4>> BMat;   
-
-/// @brief Int-pt volume.
-vector<vector<double>> intPtVol;           
+vector<vector<Matd2x4>> BMat;              
 
 /// @brief Element stiffness matrix [nElDispDofs, nElDispDofs].
 vector<Matd4x4> elStiffMatx;    
