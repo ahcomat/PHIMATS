@@ -2,7 +2,7 @@
 .PHONY : clean all options
 
 # Compiler
-CXX = g++
+export CXX = mpic++
 
 OPTIM = -O3 -std=c++20 
 DEBUG = -O0 -g -Wall -DDEBUG -std=c++20 
