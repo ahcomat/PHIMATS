@@ -114,6 +114,7 @@ def TensileDisp3D(lz, zDisp, mesh):
             
     return presBCs
 
+#-----------------------------------------------------------------------------#
 
 def PermeationX(lx, Con_b, mesh, Charging=False):
     """
@@ -273,6 +274,6 @@ def WriteConBCs(Simul, elementName, mesh, presBCs, dims=2):
     # Append and write to vtk    
     BCmesh.point_data.update({"con": uCon})
     BCmesh.point_data.update({"FlagBC": flagsCon})
-    BCmesh.write(Simul+"_BC.vtk")
+    BCmesh.write(Simul+"_BC.vtu")
     
     return BCmesh
