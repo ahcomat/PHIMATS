@@ -97,136 +97,124 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
 
     try{
 
-    if (Trapping=="GBTrapping"){    // GB
+        if (Trapping=="GBTrapping"){    // GB
 
-        ColVecd3 dummyElNod_gPhi;   // For element nodal values of phi.
+            ColVecd3 dummyElNod_gPhi;   // For element nodal values of phi.
 
-        // Initialize the storages for int-pt gPhi
-        el_gPhi.resize(nElements);
-        // Read nodal values of gPhi
-        nod_gPhi.resize(nNodes);
-        string dsetName = "gPhi";
-        H5File_in.ReadField1D(dsetName, nod_gPhi);
+            // Initialize the storages for int-pt gPhi
+            el_gPhi.resize(nElements);
+            // Read nodal values of gPhi
+            nod_gPhi.resize(nNodes);
+            string dsetName = "gPhi";
+            H5File_in.ReadField1D(dsetName, nod_gPhi);
 
-        // Loop through elements.
-        for(int iElem=0; iElem<nElements; iElem++){
+            // Loop through elements.
+            for(int iElem=0; iElem<nElements; iElem++){
 
-            elFlux.at(iElem).resize(nElGauss);
-            el_gPhi.at(iElem).resize(nElGauss);
+                elFlux.at(iElem).resize(nElGauss);
+                el_gPhi.at(iElem).resize(nElGauss);
 
-            gaussPtCart.at(iElem).resize(nElGauss);
-            BMat.at(iElem).resize(nElGauss);
+                gaussPtCart.at(iElem).resize(nElGauss);
+                BMat.at(iElem).resize(nElGauss);
 
-            // Loop through nodes to get coordinates.
-            for(int iNod=0; iNod<nElNodes; iNod++){
+                // Loop through nodes to get coordinates.
+                for(int iNod=0; iNod<nElNodes; iNod++){
 
-                dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
-                dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
+                    dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
+                    dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
 
-                dummyElNod_gPhi[iNod] = nod_gPhi.at(elemNodeConn.at(iElem).at(iNod));
+                    dummyElNod_gPhi[iNod] = nod_gPhi.at(elemNodeConn.at(iElem).at(iNod));
+                }
+
+                elemNodCoord.at(iElem) = dummyElNodCoord;
+
+                // Loop through integration points.
+                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                
+                    // Cart coord of iGauss point.
+                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Derivatives and int-pt volume
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    // Int-pt phi
+                    el_gPhi.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi;
+                }
+                gaussPtCart.at(iElem) = dummyElemGauss;
+                intPtVol.at(iElem) = dummyIntVol;
+            }   
+
+        } else if (Trapping=="2PhaseTrapping") {       // 2Phase 
+
+            ColVecd3 dummyElNod_phi_j; ColVecd3 dummyElNod_gPhi_jj;
+            ColVecd3 dummyElNod_gPhi_ii; ColVecd3 dummyElNod_gPhi_ij;
+
+            // Initialize the storages for int-pt traps
+            el_phi_j.resize(nElements); el_gPhi_ii.resize(nElements);
+            el_gPhi_jj.resize(nElements); el_gPhi_ij.resize(nElements);
+
+            // Read nodal values of traps
+            nod_phi_j.resize(nNodes);
+            string dsetName = "phi_j";
+            H5File_in.ReadField1D(dsetName, nod_phi_j);
+
+            nod_gPhi_ii.resize(nNodes);
+            dsetName = "gPhi_ff";
+            H5File_in.ReadField1D(dsetName, nod_gPhi_ii);
+
+            nod_gPhi_ij.resize(nNodes);
+            dsetName = "gPhi_fM";
+            H5File_in.ReadField1D(dsetName, nod_gPhi_ij);
+
+            nod_gPhi_jj.resize(nNodes);
+            dsetName = "gPhi_MM";
+            H5File_in.ReadField1D(dsetName, nod_gPhi_jj);
+
+            // Loop through elements.
+            for(int iElem=0; iElem<nElements; iElem++){
+
+                elFlux.at(iElem).resize(nElGauss);
+
+                el_phi_j.at(iElem).resize(nElGauss);
+                el_gPhi_ii.at(iElem).resize(nElGauss);
+                el_gPhi_ij.at(iElem).resize(nElGauss);
+                el_gPhi_jj.at(iElem).resize(nElGauss);
+
+                gaussPtCart.at(iElem).resize(nElGauss);
+                BMat.at(iElem).resize(nElGauss);
+
+                // Loop through nodes to get coordinates.
+                for(int iNod=0; iNod<nElNodes; iNod++){
+
+                    dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
+                    dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
+
+                    dummyElNod_phi_j[iNod] = nod_phi_j.at(elemNodeConn.at(iElem).at(iNod));
+                    dummyElNod_gPhi_ii[iNod] = nod_gPhi_ii.at(elemNodeConn.at(iElem).at(iNod));
+                    dummyElNod_gPhi_ij[iNod] = nod_gPhi_ij.at(elemNodeConn.at(iElem).at(iNod));
+                    dummyElNod_gPhi_jj[iNod] = nod_gPhi_jj.at(elemNodeConn.at(iElem).at(iNod));
+                }
+
+                elemNodCoord.at(iElem) = dummyElNodCoord;
+
+                // Loop through integration points.
+                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                
+                    // Cart coord of iGauss point.
+                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Derivatives and int-pt volume
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    // Int-pt phi
+                    el_phi_j.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_phi_j;
+                    el_gPhi_ii.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ii;
+                    el_gPhi_ij.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ij;
+                    el_gPhi_jj.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_jj;
+
+                }
+                gaussPtCart.at(iElem) = dummyElemGauss;
+                intPtVol.at(iElem) = dummyIntVol;
             }
-
-            elemNodCoord.at(iElem) = dummyElNodCoord;
-
-            // Loop through integration points.
-            for(int iGauss=0; iGauss<nElGauss; iGauss++){
-            
-                // Cart coord of iGauss point.
-                dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
-                // Derivatives and int-pt volume
-                CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
-                // Int-pt phi
-                el_gPhi.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi;
-            }
-            gaussPtCart.at(iElem) = dummyElemGauss;
-            intPtVol.at(iElem) = dummyIntVol;
-        }   
-
-    } else if (Trapping=="2PhaseTrapping") {       // 2Phase 
-
-        ColVecd3 dummyElNod_phi_j; ColVecd3 dummyElNod_gPhi_jj;
-        ColVecd3 dummyElNod_gPhi_ii; ColVecd3 dummyElNod_gPhi_ij;
-
-        // Initialize the storages for int-pt traps
-        el_phi_j.resize(nElements); el_gPhi_ii.resize(nElements);
-        el_gPhi_jj.resize(nElements); el_gPhi_ij.resize(nElements);
-
-        // Read nodal values of traps
-        nod_phi_j.resize(nNodes);
-        string dsetName = "phi_j";
-        H5File_in.ReadField1D(dsetName, nod_phi_j);
-
-        nod_gPhi_ii.resize(nNodes);
-        dsetName = "gPhi_ff";
-        H5File_in.ReadField1D(dsetName, nod_gPhi_ii);
-
-        nod_gPhi_ij.resize(nNodes);
-        dsetName = "gPhi_fM";
-        H5File_in.ReadField1D(dsetName, nod_gPhi_ij);
-
-        nod_gPhi_jj.resize(nNodes);
-        dsetName = "gPhi_MM";
-        H5File_in.ReadField1D(dsetName, nod_gPhi_jj);
-
-        // Loop through elements.
-        for(int iElem=0; iElem<nElements; iElem++){
-
-            elFlux.at(iElem).resize(nElGauss);
-
-            el_phi_j.at(iElem).resize(nElGauss);
-            el_gPhi_ii.at(iElem).resize(nElGauss);
-            el_gPhi_ij.at(iElem).resize(nElGauss);
-            el_gPhi_jj.at(iElem).resize(nElGauss);
-
-            gaussPtCart.at(iElem).resize(nElGauss);
-            BMat.at(iElem).resize(nElGauss);
-
-            // Loop through nodes to get coordinates.
-            for(int iNod=0; iNod<nElNodes; iNod++){
-
-                dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
-                dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
-
-                dummyElNod_phi_j[iNod] = nod_phi_j.at(elemNodeConn.at(iElem).at(iNod));
-                dummyElNod_gPhi_ii[iNod] = nod_gPhi_ii.at(elemNodeConn.at(iElem).at(iNod));
-                dummyElNod_gPhi_ij[iNod] = nod_gPhi_ij.at(elemNodeConn.at(iElem).at(iNod));
-                dummyElNod_gPhi_jj[iNod] = nod_gPhi_jj.at(elemNodeConn.at(iElem).at(iNod));
-            }
-
-            elemNodCoord.at(iElem) = dummyElNodCoord;
-
-            // Loop through integration points.
-            for(int iGauss=0; iGauss<nElGauss; iGauss++){
-            
-                // Cart coord of iGauss point.
-                dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
-                // Derivatives and int-pt volume
-                CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
-                // Int-pt phi
-                el_phi_j.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_phi_j;
-                el_gPhi_ii.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ii;
-                el_gPhi_ij.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ij;
-                el_gPhi_jj.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_jj;
-
-            }
-            gaussPtCart.at(iElem) = dummyElemGauss;
-            intPtVol.at(iElem) = dummyIntVol;
-        }
-    // }  else {
-
-    //     cerr << "Error trapping flag: " << Trapping << "\n";
-    //     cerr << "Terminating!\n\n";
-    //     exit(10);
-    // }
-
-    } else {
-
-            // logger.log("Undefined solver type < " + solverType + " >", "ERROR");
-            // throw std::runtime_error("Undefined solver type < " + solverType + " >. Supported options are < DIRECT, GMRES >");
-
-        }
+        } 
     } catch (const std::runtime_error& e) {
-        logger.log("\nException caught in LinearTransport::LinearTransport:\n", "", false);
+        logger.log("\nException caught in Tri3TH::InitializeElements:\n", "", false);
         logger.log("    " + std::string(e.what()), "", false);
         logger.log("\nCritical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
