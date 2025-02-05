@@ -485,7 +485,7 @@ class PreProcessing:
             Plasticity (bool, optional): Plasticity parameters flag. Defaults to True.
 
         Raises:
-            OSError: If file exists anr OVERWRITE==False
+            OSError: If file exists and OVERWRITE==False
             
         """
                
