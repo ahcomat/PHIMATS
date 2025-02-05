@@ -367,10 +367,10 @@ class PreProcessing:
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y2", data=self.Materials[mat]["D0y2"])
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx2", data=self.Materials[mat]["DQx2"])
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy2", data=self.Materials[mat]["DQy2"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_MM", data=self.Materials[mat]["zeta_MM"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_M", data=self.Materials[mat]["zeta_M"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_fM", data=self.Materials[mat]["zeta_fM"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_ff", data=self.Materials[mat]["zeta_ff"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_jj", data=self.Materials[mat]["zeta_jj"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_j", data=self.Materials[mat]["zeta_j"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_ij", data=self.Materials[mat]["zeta_ij"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_ii", data=self.Materials[mat]["zeta_ii"])
 
                 if self.nDim == 3:
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
@@ -396,16 +396,15 @@ class PreProcessing:
             self.grp_elemSet = self.fh5.create_group('Elements/ElementSet_'+str(counter))
             elemIDs = list(elSet.values())[0]
             nElems = elemIDs.shape[0]
-            print(nElems)
             self.grp_elemSet.create_dataset("nElements", data=nElems, dtype = np.int64)
             self.grp_elemSet.create_dataset("ElementSetIDs", data=elemIDs, dtype = np.int64)  
+        
         # Nodes
         counter = 0
         for pSet in self.mesh.point_sets:
             counter+=1
             elNodes = self.mesh.point_sets[pSet]
             nElTotNodes = len(elNodes)
-            print(len(self.mesh.point_sets[pSet]))
             self.fh5.create_dataset('Elements/ElementSet_'+str(counter)+'/nNodes', data=nElTotNodes, dtype = np.int64)
             self.fh5.create_dataset('Elements/ElementSet_'+str(counter)+'/NodeSetIDs', data=elNodes, dtype = np.int64)  
         
