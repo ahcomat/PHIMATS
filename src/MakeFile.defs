@@ -1,18 +1,17 @@
 export CXX=mpic++
 
-SETTINGS = DEBUG
+DEFAULT = -std=c++20 
+DEBUG = -g -Wall -DDEBUG -std=c++20 -pedantic  
+OPTIM =-O3 -std=c++20 
 
-DEFAULT= -std=c++20 
-DEBUG= -g -Wall -DDEBUG -std=c++20 -pedantic  
-OPTIM=-O3 -std=c++20 
-
+SETTINGS ?= OPTIM
 
 ifeq ($(SETTINGS), DEFAULT)
-	CPPFLAGS = $(DEFAULT)
+	CXXFLAGS = $(DEFAULT)
 else ifeq ($(SETTINGS), DEBUG)
-	CPPFLAGS =  $(DEBUG)
+	CXXFLAGS =  $(DEBUG)
 else ifeq ($(SETTINGS), OPTIM)
-	CPPFLAGS =  $(OPTIM)
+	CXXFLAGS =  $(OPTIM)
 endif
 
 MAKE = make SETTINGS="$(SETTINGS)"
