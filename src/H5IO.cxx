@@ -259,9 +259,11 @@ void H5IO::WriteTensor(const string& dsetName, const int nNodes, const int nStre
         H5Sclose(dataspace_id);
         H5Fclose(file_id);
 
-    } catch (const std::exception& e) {
-        std::cerr << "ERROR in WriteTensor: " << e.what() << std::endl;
-        throw; // Rethrow the exception for higher-level handling if needed
+    } catch (const std::runtime_error& e) {
+        logger.log("\nException caught in H5IO::WriteTensor:\n", "", false);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("\nCritical error encountered. Terminating!\n", "", false);
+        exit(EXIT_FAILURE);
     }
 
 }

@@ -134,9 +134,11 @@ void ReadField1D(const std::string& dsetName, std::vector<T>& Field) {
         H5Dclose(dataset_id);
         H5Fclose(file_id);
 
-    } catch (const std::exception& e) {
-        std::cerr << "ERROR in ReadField1D: " << e.what() << std::endl;
-        throw; // Rethrow for higher-level handling
+    } catch (const std::runtime_error& e) {
+        logger.log("\nException caught in H5IO::ReadField1D:\n", "", false);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("\nCritical error encountered. Terminating!\n", "", false);
+        exit(EXIT_FAILURE);
     }
 }
 
