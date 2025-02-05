@@ -34,17 +34,17 @@ TrapPhase::TrapPhase(string dimensions, H5IO &H5File, int iSet, Logger& logger)
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/DQy2";
     DQy2 = H5File.ReadScalar(dsetName);
 
-    dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_M";
-    zeta_M = H5File.ReadScalar(dsetName);
+    dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_j";
+    zeta_j = H5File.ReadScalar(dsetName);
 
-    dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_MM";
-    zeta_MM = H5File.ReadScalar(dsetName);
+    dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_jj";
+    zeta_jj = H5File.ReadScalar(dsetName);
 
-    dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_fM";
-    zeta_fM = H5File.ReadScalar(dsetName);
+    dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_ij";
+    zeta_ij = H5File.ReadScalar(dsetName);
 
-    dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_ff";
-    zeta_ff = H5File.ReadScalar(dsetName);
+    dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_ii";
+    zeta_ii = H5File.ReadScalar(dsetName);
 
     if (dims=="3D"){
 

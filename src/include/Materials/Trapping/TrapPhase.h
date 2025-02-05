@@ -45,13 +45,13 @@ TrapPhase(string dimensions, H5IO &H5File, int iSet, Logger& logger);
  */
 T_DMatx CalcDMatx(const double phi, const double T);
 
-double get_zeta_M() const {return zeta_M;};
+double get_zeta_j() const {return zeta_j;};
 
-double get_zeta_MM() const {return zeta_MM;};
+double get_zeta_jj() const {return zeta_jj;};
 
-double get_zeta_fM() const {return zeta_fM;};
+double get_zeta_ij() const {return zeta_ij;};
 
-double get_zeta_ff() const {return zeta_ff;};
+double get_zeta_ii() const {return zeta_ii;};
 
 
 private:
@@ -59,10 +59,10 @@ private:
 /// @ brief diffusivity parameters @todo have to modify
 double D0x1, D0y1, DQx1, DQy1, D0x2, D0y2, DQx2, DQy2;  
 
-double zeta_M;       /// @brief martensite phase trapping parameter  
-double zeta_MM;      /// @brief martensite-martensite interface trapping parameter  
-double zeta_fM;      /// @brief ferrite-martensite trapping parameter  
-double zeta_ff;      /// @brief ferrite-ferrite trapping parameter  
+double zeta_j;       /// @brief Phase phi_j trapping parameter  
+double zeta_jj;      /// @brief gPhi_jj interface trapping parameter  
+double zeta_ij;      /// @brief gPhi_ij trapping parameter  
+double zeta_ii;      /// @brief gPhi_ii trapping parameter  
 
 };
 #endif

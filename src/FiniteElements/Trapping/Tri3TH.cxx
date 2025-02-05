@@ -370,10 +370,10 @@ void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
         vector<int> NodeConn;
 
-        double zeta_M = dynamic_cast<TrapPhase*>(mat)->get_zeta_M();
-        double zeta_fM = dynamic_cast<TrapPhase*>(mat)->get_zeta_fM();
-        double zeta_MM = dynamic_cast<TrapPhase*>(mat)->get_zeta_MM();
-        double zeta_ff = dynamic_cast<TrapPhase*>(mat)->get_zeta_ff();
+        double zeta_j = dynamic_cast<TrapPhase*>(mat)->get_zeta_j();
+        double zeta_ij = dynamic_cast<TrapPhase*>(mat)->get_zeta_ij();
+        double zeta_jj = dynamic_cast<TrapPhase*>(mat)->get_zeta_jj();
+        double zeta_ii = dynamic_cast<TrapPhase*>(mat)->get_zeta_ii();
 
         // Loop through all elements.
         for(int iElem=0; iElem<nElements; iElem++){
@@ -411,10 +411,10 @@ void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
                 // [B_ji]^T k_jj B_ji
                 elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
                 // [B_ji]^T k_jj B_ji
-                elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*zeta_M/(R*T)*dummyBMat*dummyElNod_phi_j*dummyShFunc*dummydVol + 
-                dummyBMat.transpose()*DMat*zeta_ff/(R*T)*dummyBMat*dummyElNod_gPhi_ii*dummyShFunc*dummydVol + 
-                dummyBMat.transpose()*DMat*zeta_fM/(R*T)*dummyBMat*dummyElNod_gPhi_ij*dummyShFunc*dummydVol +
-                dummyBMat.transpose()*DMat*zeta_MM/(R*T)*dummyBMat*dummyElNod_gPhi_jj*dummyShFunc*dummydVol; 
+                elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*zeta_j/(R*T)*dummyBMat*dummyElNod_phi_j*dummyShFunc*dummydVol + 
+                dummyBMat.transpose()*DMat*zeta_ii/(R*T)*dummyBMat*dummyElNod_gPhi_ii*dummyShFunc*dummydVol + 
+                dummyBMat.transpose()*DMat*zeta_ij/(R*T)*dummyBMat*dummyElNod_gPhi_ij*dummyShFunc*dummydVol +
+                dummyBMat.transpose()*DMat*zeta_jj/(R*T)*dummyBMat*dummyElNod_gPhi_jj*dummyShFunc*dummydVol; 
                 // [N_i]^T N_i
                 elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
             }
@@ -522,10 +522,10 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
         dummyElNod_gPhi_jj;
         double phi_j, gPhi_ii, gPhi_ij, gPhi_jj;              
 
-        double zeta_M = dynamic_cast<TrapPhase*>(mat)->get_zeta_M();
-        double zeta_fM = dynamic_cast<TrapPhase*>(mat)->get_zeta_fM();
-        double zeta_MM = dynamic_cast<TrapPhase*>(mat)->get_zeta_MM();
-        double zeta_ff = dynamic_cast<TrapPhase*>(mat)->get_zeta_ff();
+        double zeta_j = dynamic_cast<TrapPhase*>(mat)->get_zeta_j();
+        double zeta_ij = dynamic_cast<TrapPhase*>(mat)->get_zeta_ij();
+        double zeta_jj = dynamic_cast<TrapPhase*>(mat)->get_zeta_jj();
+        double zeta_ii = dynamic_cast<TrapPhase*>(mat)->get_zeta_ii();
 
         // Integration point values.
         for(int iElem=0; iElem<nElements; iElem++){
@@ -553,10 +553,10 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
 
                 // Int pt flux
                 elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon 
-                                             + DMat*zeta_M/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_phi_j
-                                             + DMat*zeta_ff/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi_ii
-                                             + DMat*zeta_fM/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi_ij
-                                             + DMat*zeta_MM/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi_jj;
+                                             + DMat*zeta_j/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_phi_j
+                                             + DMat*zeta_ii/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi_ii
+                                             + DMat*zeta_ij/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi_ij
+                                             + DMat*zeta_jj/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi_jj;
 
                 std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[0] =  elFlux.at(iElem).at(iGaus)[0];
                 std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[1] =  elFlux.at(iElem).at(iGaus)[1];
