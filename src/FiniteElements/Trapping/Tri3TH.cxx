@@ -157,15 +157,15 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             H5File_in.ReadField1D(dsetName, nod_phi_j);
 
             nod_gPhi_ii.resize(nNodes);
-            dsetName = "gPhi_ff";
+            dsetName = "gPhi_ii";
             H5File_in.ReadField1D(dsetName, nod_gPhi_ii);
 
             nod_gPhi_ij.resize(nNodes);
-            dsetName = "gPhi_fM";
+            dsetName = "gPhi_ij";
             H5File_in.ReadField1D(dsetName, nod_gPhi_ij);
 
             nod_gPhi_jj.resize(nNodes);
-            dsetName = "gPhi_MM";
+            dsetName = "gPhi_jj";
             H5File_in.ReadField1D(dsetName, nod_gPhi_jj);
 
             // Loop through elements.
