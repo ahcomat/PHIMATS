@@ -44,8 +44,11 @@ double H5IO::ReadScalar(const string& dsetName){
         if (H5Dread(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, &value) < 0)
             throw std::runtime_error("Failed to read dataset " + dsetName);
 
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+    } catch (const std::runtime_error& e) {
+        logger.log("\nException caught in H5IO::ReadScalar:\n", "", false);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("\nCritical error encountered. Terminating!\n", "", false);
+        exit(EXIT_FAILURE);
     }
 
     // Ensure resources are released
