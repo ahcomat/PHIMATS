@@ -3,6 +3,7 @@
 
 #include "FiniteElements/Trapping/Quad4TH.h"
 #include "Materials/Trapping/TrapGB.h"
+#include "Materials/Trapping/TrapPhase.h"
 
 #ifndef DEBUG
 #define at(x) operator[](x)
@@ -102,6 +103,138 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
     intPtVol.resize(nElements);   
     vector<double> dummyIntVol(nElGauss);  // For integration point volume.
 
+    try{
+
+        if (Trapping=="GBTrapping"){    // GB
+
+            ColVecd4 dummyElNod_gPhi;   // For element nodal values of phi.
+
+            // Initialize the storages for int-pt gPhi
+            el_gPhi.resize(nElements);
+            // Read nodal values of gPhi
+            nod_gPhi.resize(nNodes);
+            string dsetName = "gPhi";
+            H5File_in.ReadField1D(dsetName, nod_gPhi);
+
+            // Loop through elements.
+            for(int iElem=0; iElem<nElements; iElem++){
+
+                elFlux.at(iElem).resize(nElGauss);
+
+                el_gPhi.at(iElem).resize(nElGauss);
+
+                gaussPtCart.at(iElem).resize(nElGauss);
+                BMat.at(iElem).resize(nElGauss);
+
+                // Loop through nodes to get coordinates.
+                for(int iNod=0; iNod<nElNodes; iNod++){
+
+                    dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
+                    dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
+
+                    dummyElNod_gPhi[iNod] = nod_gPhi.at(elemNodeConn.at(iElem).at(iNod));
+                }
+
+                elemNodCoord.at(iElem) = dummyElNodCoord;
+
+                // Loop through integration points.
+                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                
+                    // Cart coord of iGauss point.
+                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Derivatives and int-pt volume
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    // Int-pt phi
+                    el_gPhi.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi;
+                }
+                gaussPtCart.at(iElem) = dummyElemGauss;
+                intPtVol.at(iElem) = dummyIntVol;
+            }
+
+        } else if (Trapping=="2PhaseTrapping") {       // 2Phase 
+
+            ColVecd4 dummyElNod_phi_j; ColVecd4 dummyElNod_gPhi_jj;
+            ColVecd4 dummyElNod_gPhi_ii; ColVecd4 dummyElNod_gPhi_ij;
+
+            // Initialize the storages for int-pt traps
+            el_phi_j.resize(nElements); el_gPhi_ii.resize(nElements);
+            el_gPhi_jj.resize(nElements); el_gPhi_ij.resize(nElements);
+
+            // Read nodal values of traps
+            nod_phi_j.resize(nNodes);
+            string dsetName = "phi_j";
+            H5File_in.ReadField1D(dsetName, nod_phi_j);
+
+            nod_gPhi_ii.resize(nNodes);
+            dsetName = "gPhi_ii";
+            H5File_in.ReadField1D(dsetName, nod_gPhi_ii);
+
+            nod_gPhi_ij.resize(nNodes);
+            dsetName = "gPhi_ij";
+            H5File_in.ReadField1D(dsetName, nod_gPhi_ij);
+
+            nod_gPhi_jj.resize(nNodes);
+            dsetName = "gPhi_jj";
+            H5File_in.ReadField1D(dsetName, nod_gPhi_jj);
+
+            // Loop through elements.
+            for(int iElem=0; iElem<nElements; iElem++){
+
+                elFlux.at(iElem).resize(nElGauss);
+
+                el_phi_j.at(iElem).resize(nElGauss);
+                el_gPhi_ii.at(iElem).resize(nElGauss);
+                el_gPhi_ij.at(iElem).resize(nElGauss);
+                el_gPhi_jj.at(iElem).resize(nElGauss);
+
+                gaussPtCart.at(iElem).resize(nElGauss);
+                BMat.at(iElem).resize(nElGauss);
+
+                // Loop through nodes to get coordinates.
+                for(int iNod=0; iNod<nElNodes; iNod++){
+
+                    dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
+                    dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
+
+                    dummyElNod_phi_j[iNod] = nod_phi_j.at(elemNodeConn.at(iElem).at(iNod));
+                    dummyElNod_gPhi_ii[iNod] = nod_gPhi_ii.at(elemNodeConn.at(iElem).at(iNod));
+                    dummyElNod_gPhi_ij[iNod] = nod_gPhi_ij.at(elemNodeConn.at(iElem).at(iNod));
+                    dummyElNod_gPhi_jj[iNod] = nod_gPhi_jj.at(elemNodeConn.at(iElem).at(iNod));
+                }
+
+                elemNodCoord.at(iElem) = dummyElNodCoord;
+
+                // Loop through integration points.
+                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                
+                    // Cart coord of iGauss point.
+                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Derivatives and int-pt volume
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    // Int-pt phi
+                    el_phi_j.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_phi_j;
+                    el_gPhi_ii.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ii;
+                    el_gPhi_ij.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ij;
+                    el_gPhi_jj.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_jj;
+
+                }
+                gaussPtCart.at(iElem) = dummyElemGauss;
+                intPtVol.at(iElem) = dummyIntVol;
+            }
+
+        } else if (Trapping=="MechTrapping") {         // Stresses and dislocations 
+        
+        }
+
+    } catch (const std::runtime_error& e) {
+
+        logger.log("\nException caught in Quad4TH::InitializeElements:\n", "", false);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("\nCritical error encountered. Terminating!\n", "", false);
+        exit(EXIT_FAILURE);
+
+    }
+
     // Loop through elements.
     for(int iElem=0; iElem<nElements; iElem++){
 
@@ -161,6 +294,17 @@ void Quad4TH::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const doub
 }
 
 void Quad4TH::getInPtCoords(T_nodStres& glIntPtCoords){
+
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            std::get<std::vector<ColVecd4>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+iGaus)[0] =  gaussPtCart.at(iElem).at(iGaus)[0];
+            std::get<std::vector<ColVecd4>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+iGaus)[1] =  gaussPtCart.at(iElem).at(iGaus)[1];
+            std::get<std::vector<ColVecd4>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+iGaus)[2] =  0;
+
+        }
+    }
     
 }
 
@@ -196,70 +340,131 @@ void Quad4TH::getInPtCoords(T_nodStres& glIntPtCoords){
 
 void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
-    // Matd2x2 KMat; 
-    // Matd2x2 TMat; 
+    Matd2x2 DMat; 
 
-    // elStiffMatx.resize(nElements);
-    // elCapMatx.resize(nElements);
-    // elMKTMatx.resize(nElements);
-    // vector<Matd4x4> elKDMatx(nElements); 
-    // vector<Matd4x4> elKTMatx(nElements); 
+    vector<Matd4x4> elKDMatx(nElements); 
+    vector<Matd4x4> elKTMatx(nElements);
 
-    // double dummydVol;        // dummy for int-pt volume.
-    // ColVecd4 dummyElNodPhi;  // For element nodal values of phi.
-    // double phi;              // dummy for int-pt phi.
+    double dummydVol;       // dummy for int-pt volume.
 
-    // // Loop through all elements.
-    // for(int iElem=0; iElem<nElements; iElem++){
+    try{
 
-    //     // MUST BE POPULATED WITH ZEROS    
-    //     elStiffMatx.at(iElem).setZero();
-    //     elKDMatx.at(iElem).setZero();  
-    //     elKTMatx.at(iElem).setZero();  
-    //     elCapMatx.at(iElem).setZero(); 
+        if (Trapping=="GBTrapping"){                   // GB
 
-    //     // Loop through element nodes to get nodal values.
-    //     for(int iNod=0; iNod<nElNodes; iNod++){
-    //         dummyElNodPhi[iNod] = nodPhi.at(elemNodeConn.at(iElem).at(iNod));
-    //     }              
+            Matd2x2 TMat; 
 
-    //     // Integration over all Gauss points.
-    //     for (int iGauss=0; iGauss<nElGauss; iGauss++){
+            ColVecd4 dummyElNod_gPhi;  // For element nodal values of phi.
+            double gPhi;               // dummy for int-pt phi.
 
-    //         phi = elPhi.at(iElem).at(iGauss);  // Phi of the current int-pt
+            // Loop through all elements.
+            for(int iElem=0; iElem<nElements; iElem++){
 
-    //         KMat = std::get<Matd2x2>(dynamic_cast<PhaseTrap*>(mat)->CalcKMatx((1-phi),  phi, T));
-    //         TMat = std::get<Matd2x2>(dynamic_cast<PhaseTrap*>(mat)->CalcTMatx((1-phi),  phi, T));
+                // MUST BE POPULATED WITH ZEROS    
+                elStiffMatx.at(iElem).setZero();
+                elKDMatx.at(iElem).setZero();  
+                elKTMatx.at(iElem).setZero();  
+                elCapMatx.at(iElem).setZero(); 
 
-    //         const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
-    //         const RowVecd4& dummyShFunc = shapeFunc.at(iGauss);
-    //         dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
-    //         // [B_ji]^T k_jj B_ji
-    //         elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*KMat*dummyBMat*dummydVol;
-    //         // [B_ji]^T k_jj B_ji
-    //         // elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*dummyElNodPhi*dummyShFunc*dummydVol; 
-    //         elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*phi*dummydVol; 
+                // Loop through element nodes to get nodal values.
+                for(int iNod=0; iNod<nElNodes; iNod++){
+                    dummyElNod_gPhi[iNod] = nod_gPhi.at(elemNodeConn.at(iElem).at(iNod));
+                }              
 
-    //         // [N_i]^T s N_i
-    //         elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
-    //     }
+                // Integration over all Gauss points.
+                for (int iGauss=0; iGauss<nElGauss; iGauss++){
 
-    //     // cout << elKTMatx.at(iElem) << "\n\n";
-    //     elStiffMatx.at(iElem) = dt*(elKDMatx.at(iElem) - elKTMatx.at(iElem)) + elCapMatx.at(iElem);
-    //     elMKTMatx.at(iElem) = elCapMatx.at(iElem);
-    //     // elMKTMatx.at(iElem) = elCapMatx.at(iElem);
-    // }
+                    gPhi = el_gPhi.at(iElem).at(iGauss);  // gPhi of the current int-pt
 
-    // // // TODO: For debug!
-    // // for (auto& iStifMat : elKDMatx)
-    // //     cout << iStifMat << "\n\n";
-    // // cout << elKDMatx.at(0) << "\n";
+                    DMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcDMatx(gPhi, T));
+                    TMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcTMatx(gPhi, T));
 
-    // // Pointer to the vector, not the vector itself.
-    // elStiffMatxVariant = &elStiffMatx;
-    // // elCapMatxVariant = &elCapMatx;
-    // elMKTMatxVariant = &elMKTMatx;
+                    const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
+                    const RowVecd4& dummyShFunc = shapeFunc.at(iGauss);
+                    dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
 
+                    // [B_ji]^T k_jj B_ji
+                    elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
+                    // [B_ji]^T k_jj B_ji
+                    elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*dummyElNod_gPhi*dummyShFunc*dummydVol; 
+                    // [N_i]^T N_i
+                    elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
+                }
+
+                elStiffMatx.at(iElem) = dt*elKDMatx.at(iElem) - dt*elKTMatx.at(iElem) + elCapMatx.at(iElem);
+            } 
+
+        } else if (Trapping=="2PhaseTrapping") {       // 2Phase 
+
+            ColVecd4 dummyElNod_phi_j, dummyElNod_gPhi_ij, dummyElNod_gPhi_ii,
+            dummyElNod_gPhi_jj;
+            double phi_j, gPhi_ii, gPhi_ij, gPhi_jj;              
+
+            vector<int> NodeConn;
+
+            double zeta_j  = dynamic_cast<TrapPhase*>(mat)->get_zeta_j();
+            double zeta_ij = dynamic_cast<TrapPhase*>(mat)->get_zeta_ij();
+            double zeta_jj = dynamic_cast<TrapPhase*>(mat)->get_zeta_jj();
+            double zeta_ii = dynamic_cast<TrapPhase*>(mat)->get_zeta_ii();
+
+            // Loop through all elements.
+            for(int iElem=0; iElem<nElements; iElem++){
+
+                NodeConn = elemNodeConn.at(iElem);
+
+                // MUST BE POPULATED WITH ZEROS    
+                elStiffMatx.at(iElem).setZero();
+                elKDMatx.at(iElem).setZero();  
+                elKTMatx.at(iElem).setZero();  
+                elCapMatx.at(iElem).setZero(); 
+
+                // Loop through element nodes to get nodal values.
+                for(int iNod=0; iNod<nElNodes; iNod++){
+                    dummyElNod_phi_j[iNod] = nod_phi_j.at(NodeConn.at(iNod));
+                    dummyElNod_gPhi_ii[iNod] = nod_gPhi_ii.at(NodeConn.at(iNod));
+                    dummyElNod_gPhi_ij[iNod] = nod_gPhi_ij.at(NodeConn.at(iNod));
+                    dummyElNod_gPhi_jj[iNod] = nod_gPhi_jj.at(NodeConn.at(iNod));
+                }              
+
+                // Integration over all Gauss points.
+                for (int iGauss=0; iGauss<nElGauss; iGauss++){
+
+                    phi_j   = el_phi_j.at(iElem).at(iGauss);  // values of the current int-pt
+                    gPhi_ii = el_gPhi_ii.at(iElem).at(iGauss);
+                    gPhi_ij = el_gPhi_ij.at(iElem).at(iGauss);
+                    gPhi_jj = el_gPhi_jj.at(iElem).at(iGauss);
+
+                    DMat = std::get<Matd2x2>(dynamic_cast<TrapPhase*>(mat)->CalcDMatx(phi_j, T));
+
+                    const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
+                    const RowVecd4& dummyShFunc = shapeFunc.at(iGauss);
+                    dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
+
+                    // [B_ji]^T k_jj B_ji
+                    elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
+                    // [B_ji]^T k_jj B_ji
+                    elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*zeta_j/(R*T)*dummyBMat*dummyElNod_phi_j*dummyShFunc*dummydVol + 
+                    dummyBMat.transpose()*DMat*zeta_ii/(R*T)*dummyBMat*dummyElNod_gPhi_ii*dummyShFunc*dummydVol + 
+                    dummyBMat.transpose()*DMat*zeta_ij/(R*T)*dummyBMat*dummyElNod_gPhi_ij*dummyShFunc*dummydVol +
+                    dummyBMat.transpose()*DMat*zeta_jj/(R*T)*dummyBMat*dummyElNod_gPhi_jj*dummyShFunc*dummydVol; 
+                    // [N_i]^T N_i
+                    elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
+                }
+
+                elStiffMatx.at(iElem) = dt*elKDMatx.at(iElem) - dt*elKTMatx.at(iElem) + elCapMatx.at(iElem);
+            }
+        
+        } else if (Trapping=="MechTrapping") {         // Stresses and dislocations 
+        
+        }
+
+    } catch (const std::runtime_error& e) {
+
+        logger.log("\nException caught in Quad4TH::CalcElemStiffMatx:\n", "", false);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("\nCritical error encountered. Terminating!\n", "", false);
+        exit(EXIT_FAILURE);
+
+    }
 }
 
 double Quad4TH::CalcAvCon(const double* globalBuffer){
