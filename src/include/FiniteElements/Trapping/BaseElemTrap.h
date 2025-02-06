@@ -77,6 +77,13 @@ const vector<vector<int>>& get_elemConDof() const { return elemConDof; };
 void ReadElementsData(H5IO &H5File_in, int iSet);
 
 /**
+ * @brief Return const reference to the vector of element capacitance matrix c_ii.
+ * 
+ * @return const vector<T_ElStiffMatx>& 
+ */
+const T_ElStiffMatx& getElCapMatx() const { return elCapMatxVariant; }
+
+/**
  * @brief Get the int-pt coordinates
  * 
  * @param glIntPtCoords 
@@ -99,20 +106,13 @@ virtual void CalcElemStiffMatx(BaseTrapping* mat, const double T) = 0;
  */
 virtual double CalcAvCon(const double* globalBuffer) = 0;
 
-/**
- * @brief Evaluates the gradients of scalar field at the int-points and maps them to the nodes. 
- * 
- * @param nodGrad
- * @param nodCount 
- */
-virtual void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapSigmaH) = 0;
-
-/**
- * @brief Return const reference to the vector of element capacitance matrix c_ii.
- * 
- * @return const vector<T_ElStiffMatx>& 
- */
-const T_ElStiffMatx& getElCapMatx() const { return elCapMatxVariant; }
+// /**
+//  * @brief Evaluates the gradients of scalar field at the int-points and maps them to the nodes. 
+//  * 
+//  * @param nodGrad
+//  * @param nodCount 
+//  */
+// virtual void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapSigmaH) = 0;
 
 /**
  * @brief Evaluates the int-pt flux vector. Also evaluates the flux at the nodes.

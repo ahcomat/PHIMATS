@@ -94,15 +94,15 @@ void CalcCartDeriv(Matd3x2& elNodCoord, Matd2x3& sFuncDeriv, const double& wt, d
  */
 void getInPtCoords(T_nodStres& glIntPtCoords) override;
 
-/**
- * @brief Evaluates the gradients of phi at the int-points and maps them to the nodes. 
- * 
- * @param nodGrad
- * @param nodCount 
- * 
- * @todo Move to BaseElemTrap.
- */
-void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi) override;
+// /**
+//  * @brief Evaluates the gradients of phi at the int-points and maps them to the nodes. 
+//  * 
+//  * @param nodGrad
+//  * @param nodCount 
+//  * 
+//  * @todo Move to BaseElemTrap.
+//  */
+// void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi) override;
 
 /**
  * @brief Calculates the element stiffness and capacitance matrix for all elements.

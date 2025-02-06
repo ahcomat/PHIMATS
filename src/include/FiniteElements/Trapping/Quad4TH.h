@@ -87,15 +87,15 @@ RowVecd2 getGaussCart(RowVecd4& sFunc, Matd4x2& elCoord);
  */
 void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double& wt, double& intVol, Matd2x4& cartDeriv);
 
-/**
- * @brief Evaluates the gradients of phi at the int-points and maps them to the nodes. 
- * 
- * @param nodGrad
- * @param nodCount 
- * 
- * @todo Move to BaseElemTrap.
- */
-void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi) override;
+// /**
+//  * @brief Evaluates the gradients of phi at the int-points and maps them to the nodes. 
+//  * 
+//  * @param nodGrad
+//  * @param nodCount 
+//  * 
+//  * @todo Move to BaseElemTrap.
+//  */
+// void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi) override;
 
 /**
  * @brief Get the int-pt coordinates

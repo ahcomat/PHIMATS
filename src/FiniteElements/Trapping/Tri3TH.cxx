@@ -263,40 +263,40 @@ void Tri3TH::getInPtCoords(T_nodStres& glIntPtCoords){
     }
 }
 
-void Tri3TH::CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi){
+// void Tri3TH::CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi){
 
-    // Int-pt gradients of phi.
-    vector<vector<ColVecd2>> elGrad_gPhi(nElements);    // For element nodal values of gPhi.
-    ColVecd3 dummyElNodPhi;        // For element nodal values of phi.
-    ColVecd3 dummyElNodLapPhi;     // For element nodal values of phi laplacian.
-    int iNode;                     // counter for the number of nodes.
+//     // Int-pt gradients of phi.
+//     vector<vector<ColVecd2>> elGrad_gPhi(nElements);    // For element nodal values of gPhi.
+//     ColVecd3 dummyElNodPhi;        // For element nodal values of phi.
+//     ColVecd3 dummyElNodLapPhi;     // For element nodal values of phi laplacian.
+//     int iNode;                     // counter for the number of nodes.
 
-    for(int iElem=0; iElem<nElements; iElem++){
+//     for(int iElem=0; iElem<nElements; iElem++){
 
-        elGrad_gPhi.at(iElem).resize(nElGauss);
+//         elGrad_gPhi.at(iElem).resize(nElGauss);
 
-        // Loop through element nodes to get nodal values.
-        for(int iNod=0; iNod<nElNodes; iNod++){
-            dummyElNodPhi[iNod] = nod_gPhi.at(elemNodeConn.at(iElem).at(iNod));
-        }
+//         // Loop through element nodes to get nodal values.
+//         for(int iNod=0; iNod<nElNodes; iNod++){
+//             dummyElNodPhi[iNod] = nod_gPhi.at(elemNodeConn.at(iElem).at(iNod));
+//         }
 
-        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+//         for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-            const Matd2x3& dummyBMat = BMat.at(iElem).at(iGaus); // derivative matrix for the given gauss point.
-            elGrad_gPhi.at(iElem).at(iGaus) = dummyBMat*dummyElNodPhi;
-            dummyElNodLapPhi = dummyBMat.transpose()*dummyBMat*dummyElNodPhi;
+//             const Matd2x3& dummyBMat = BMat.at(iElem).at(iGaus); // derivative matrix for the given gauss point.
+//             elGrad_gPhi.at(iElem).at(iGaus) = dummyBMat*dummyElNodPhi;
+//             dummyElNodLapPhi = dummyBMat.transpose()*dummyBMat*dummyElNodPhi;
 
-            iNode = 0;
-            for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
+//             iNode = 0;
+//             for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
 
-                std::get<std::vector<ColVecd2>>(nodGrad).at(*iNod2) += elGrad_gPhi.at(iElem).at(iGaus);
-                nodCount.at(*iNod2) += 1;
-                nodLapPhi[*iNod2]   += dummyElNodLapPhi[iNode]; 
-                iNode += 1;
-            }
-        }
-    }
-}
+//                 std::get<std::vector<ColVecd2>>(nodGrad).at(*iNod2) += elGrad_gPhi.at(iElem).at(iGaus);
+//                 nodCount.at(*iNod2) += 1;
+//                 nodLapPhi[*iNod2]   += dummyElNodLapPhi[iNode]; 
+//                 iNode += 1;
+//             }
+//         }
+//     }
+// }
 
 void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
