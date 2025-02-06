@@ -96,4 +96,4 @@ using T_ElStiffMatx = std::variant<vector<Matd3x3>*, vector<Matd4x4>*, vector<Ma
  * @brief Variants for vector (tensor in Voigt notation) quantities.
  * 
  */
-using T_nodStres = std::variant<vector<ColVecd2>, vector<ColVecd3>, vector<ColVecd6>>;
+using T_nodStres = std::variant<vector<ColVecd2>, vector<ColVecd3>, vector<ColVecd4>, vector<ColVecd6>>;
