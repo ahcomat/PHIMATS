@@ -24,6 +24,7 @@
 #ifndef BASEELEMTRAP_H
 #define BASEELEMTRAP_H
 
+#include "H5IO.h"
 #include "FiniteElements/BaseElements.h"
 #include "Materials/Trapping/BaseTrapping.h"
 
@@ -89,6 +90,8 @@ const T_ElStiffMatx& getElCapMatx() const { return elCapMatxVariant; }
  * @param glIntPtCoords 
  */
 virtual void getInPtCoords(T_nodStres& glIntPtCoords) = 0;
+
+virtual void ReadNodalStress(H5IO &H5File_in, int iStep) = 0;
 
 /**
  * @brief Calculates the element stiffness and capacitances matrix.
@@ -164,6 +167,9 @@ vector<double> nod_gPhi_ij;
 
 /// @brief nodal values of gPhi_ii [nTotNodes]
 vector<double> nod_gPhi_ii;    
+
+/// @brief nodal values of hydrostatic stress [nTotNodes]
+vector<double> nod_sigma_h; 
 
 /// @brief Element concentration (temperature) dofs. In this case, it is identical to `elemNodeConn`.
 vector<vector<int>> elemConDof;    

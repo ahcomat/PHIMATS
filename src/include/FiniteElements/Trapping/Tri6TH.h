@@ -105,6 +105,8 @@ void getInPtCoords(T_nodStres& glIntPtCoords) override;
 //  */
 // void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi) override;
 
+void ReadNodalStress(H5IO &H5File_in, int iStep) override;
+
 /**
  * @brief Calculates the element stiffness and capacitance matrix for all elements.
  * 

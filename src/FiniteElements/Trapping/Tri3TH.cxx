@@ -332,6 +332,10 @@ void Tri3TH::getInPtCoords(T_nodStres& glIntPtCoords){
 //     }
 // }
 
+void Tri3TH::ReadNodalStress(H5IO &H5File_in, int iStep){
+
+}
+
 void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
     Matd2x2 DMat; 
@@ -384,6 +388,7 @@ void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
             elStiffMatx.at(iElem) = dt*elKDMatx.at(iElem) - dt*elKTMatx.at(iElem) + elCapMatx.at(iElem);
         } 
+
     } else if (Trapping=="2PhaseTrapping"){        // 2Phase
 
         ColVecd3 dummyElNod_phi_j, dummyElNod_gPhi_ij, dummyElNod_gPhi_ii,
