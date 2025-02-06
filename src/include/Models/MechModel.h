@@ -245,6 +245,9 @@ vector<double> nodStran_eq;
 /// @brief Nodal equivalent stress (Von Mises).
 vector<double> nodStres_eq;
 
+/// @brief Nodal hydrostatic stress.
+vector<double> nodStres_h;
+
 /// @brief Counter for integration points surrounding nodes.
 vector<int> nodCount;     
 

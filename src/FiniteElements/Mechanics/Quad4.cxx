@@ -336,7 +336,7 @@ void Quad4::CalcElStran(const double* globalBuffer){
     }
 }
 
-void Quad4::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<int>& nodCount){
+void Quad4::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<double>& nodStres_h, vector<int>& nodCount){
 
     try {
         if (elStran_e.data() == nullptr){
@@ -360,6 +360,7 @@ void Quad4::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres&
                 std::get<std::vector<ColVecd3>>(nodStres).at(*iNod2) += elStres.at(iElem).at(iGaus);
                 nodStran_eq.at(*iNod2) += elStran_eq.at(iElem).at(iGaus);
                 nodStres_eq.at(*iNod2) += elStres_eq.at(iElem).at(iGaus);
+                nodStres_h.at(*iNod2) += elStres_h.at(iElem).at(iGaus);
                 nodCount.at(*iNod2) += 1;
             }
         }
@@ -389,6 +390,7 @@ void Quad4::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, in
                                             elStran_p.at(iElem).at(iGaus),
                                             elStran_eq.at(iElem).at(iGaus), 
                                             elStres_eq.at(iElem).at(iGaus),
+                                            elStres_h.at(iElem).at(iGaus),
                                             elStran_e_old.at(iElem).at(iGaus),
                                             elStran_p_old.at(iElem).at(iGaus),
                                             elStran_eq_old.at(iElem).at(iGaus), iStep);
@@ -412,6 +414,7 @@ void Quad4::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, in
                                             elStran_p.at(iElem).at(iGaus),
                                             elStran_eq.at(iElem).at(iGaus), 
                                             elStres_eq.at(iElem).at(iGaus),
+                                            elStres_h.at(iElem).at(iGaus),
                                             elStran_e_old.at(iElem).at(iGaus),
                                             elStran_p_old.at(iElem).at(iGaus),
                                             elStran_eq_old.at(iElem).at(iGaus), iStep);

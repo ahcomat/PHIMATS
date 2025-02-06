@@ -242,7 +242,6 @@ class PreProcessing:
         elif self.SimulType == "MechTrapping":
             self.grp_Sim_Params.create_dataset("Trapping", data=np.bytes_("MechTrapping"))
         
-        
         self.grp_Sim_Params.create_dataset("nDim", data=self.nDim, dtype = np.int64)
         self.grp_Sim_Params.create_dataset("nTotNodes", data=self.nTotNodes, dtype = np.int64)
         self.grp_Sim_Params.create_dataset("nTotDofs", data=self.nTotDofs, dtype = np.int64)
@@ -537,6 +536,7 @@ class PreProcessing:
                         fh5.create_group('Strain_p')
                         fh5.create_group('Strain_eq')
                         fh5.create_group('Stress_eq')
+                        fh5.create_group('Stress_h')
                         
         except OSError as e:
             raise RuntimeError(f"Failed to create the HDF5 file '{FName}': {e}")

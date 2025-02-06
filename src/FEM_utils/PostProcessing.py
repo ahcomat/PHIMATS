@@ -189,6 +189,10 @@ class WriteXDMF:
         attribute = ET.SubElement(timestep_grid, "Attribute", Name="stress_eq", AttributeType="Scalar", Center="Node")
         ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(1)).text = self.FName+"_out.hdf5:/Stress_eq/Step_"+str(t)
         
+        # Add attribute element for hydrostatic stress
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="stress_h", AttributeType="Scalar", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(1)).text = self.FName+"_out.hdf5:/Stress_h/Step_"+str(t)
+        
     #-----------------------------------------------------------------------------#
     
     def WritePlastic3D(self, t):
@@ -235,6 +239,10 @@ class WriteXDMF:
         # Add attribute element for equivalent strain
         attribute = ET.SubElement(timestep_grid, "Attribute", Name="strain_eq", AttributeType="Scalar", Center="Node")
         ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)).text = self.FName+"_out.hdf5:/Strain_eq/Step_"+str(t)
+        
+        # Add attribute element for hydostatic stress
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="stress_h", AttributeType="Scalar", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(1)).text = self.FName+"_out.hdf5:/Stress_h/Step_"+str(t)
         
 #-----------------------------------------------------------------------------#
 
