@@ -5,7 +5,6 @@
 #include "Materials/Trapping/TrapGB.h"
 #include "Materials/Trapping/TrapPhase.h"
 
-
 #ifndef DEBUG
 #define at(x) operator[](x)
 #endif
@@ -212,7 +211,42 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
                 gaussPtCart.at(iElem) = dummyElemGauss;
                 intPtVol.at(iElem) = dummyIntVol;
             }
-        } 
+        } else if (Trapping=="MechTrapping") {         // Stresses and dislocations 
+
+            nod_sigma_h.resize(nNodes);
+
+            // Loop through elements.
+            for(int iElem=0; iElem<nElements; iElem++){
+
+                elFlux.at(iElem).resize(nElGauss);
+
+                gaussPtCart.at(iElem).resize(nElGauss);
+                BMat.at(iElem).resize(nElGauss);
+
+                // Loop through nodes to get coordinates.
+                for(int iNod=0; iNod<nElNodes; iNod++){
+
+                    dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
+                    dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
+
+                }
+
+                elemNodCoord.at(iElem) = dummyElNodCoord;
+
+                // Loop through integration points.
+                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                
+                    // Cart coord of iGauss point.
+                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Derivatives and int-pt volume
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+
+                }
+                gaussPtCart.at(iElem) = dummyElemGauss;
+                intPtVol.at(iElem) = dummyIntVol;
+        
+            }
+        }
     } catch (const std::runtime_error& e) {
         logger.log("\nException caught in Tri3TH::InitializeElements:\n", "", false);
         logger.log("    " + std::string(e.what()), "", false);
