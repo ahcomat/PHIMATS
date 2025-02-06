@@ -269,10 +269,10 @@ void Tri6TH::getInPtCoords(T_nodStres& glIntPtCoords){
     }
 }
 
-void Tri6TH::CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi){
+// void Tri6TH::CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi){
 
 
-}
+// }
 
 void Tri6TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
