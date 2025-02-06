@@ -112,6 +112,14 @@ virtual void getInPtCoords(T_nodStres& glIntPtCoords) override;
 void CalcElemStiffMatx(BaseTrapping* mat, const double T) override ;
 
 /**
+ * @brief Calculates the volume averaged concentration
+ * 
+ * @param globalBuffer Solution vector
+ * @return Volume averaged concentration
+ */
+double CalcAvCon(const double* globalBuffer) override;
+
+/**
  * @brief Evaluates the int-pt flux vector. Also evaluates the flux at the nodes.
  * 
  * @param KMatx 

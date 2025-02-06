@@ -262,6 +262,30 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
 }
 
+double Quad4TH::CalcAvCon(const double* globalBuffer){
+
+    double IntPtCon, AvCon = 0, TotVol = 0;
+    ColVecd4 dummyCon; 
+
+    // Integration point values.
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        // Get element nodal concentration from the solution vector. 
+        for(int iDof=0; iDof<nElConDofs; iDof++){
+            dummyCon[iDof] = globalBuffer[elemConDof.at(iElem).at(iDof)];
+        }
+
+        // Gauss points
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+            IntPtCon = shapeFunc.at(iGaus)*dummyCon;
+            TotVol += intPtVol.at(iElem).at(iGaus);
+            AvCon += IntPtCon*intPtVol.at(iElem).at(iGaus);
+        }
+    }
+
+    return AvCon/TotVol;
+}
+
 void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T){
 
     // ColVecd4 dummyCon; // for element nodal concentration.
