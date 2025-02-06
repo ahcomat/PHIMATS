@@ -159,5 +159,8 @@ vector<vector<double>> elStran_eq;
 /// @brief Int-pt equivalent stress (von Mises) [nElStres].
 vector<vector<double>> elStres_eq;
 
+/// @brief Int-pt hydrostatic stress [nElStres].
+vector<vector<double>> elStres_h;
+
 };
 #endif

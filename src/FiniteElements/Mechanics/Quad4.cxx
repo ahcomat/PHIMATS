@@ -103,8 +103,9 @@ void Quad4::InitializeElements(Nodes &Nodes){
     if (materialModel=="ElastoPlastic"){
         elStran_e.resize(nElements); elStran_e_old.resize(nElements);   // Elastic strain tensors
         elStran_p.resize(nElements); elStran_p_old.resize(nElements);   // Plastic strain tensors
-        elStran_eq.resize(nElements); elStran_eq_old.resize(nElements); // Equivalent platic strain
+        elStran_eq.resize(nElements); elStran_eq_old.resize(nElements); // Equivalent platsic strain
         elStres_eq.resize(nElements); // Equivalent (von Mises) stress
+        elStres_h.resize(nElements);  // Hydrostatic stress
     }     
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
@@ -139,6 +140,7 @@ void Quad4::InitializeElements(Nodes &Nodes){
             elStran_p.at(iElem).resize(nElGauss); 
             elStres_eq.at(iElem).resize(nElGauss);
             elStran_eq.at(iElem).resize(nElGauss);
+            elStres_h.at(iElem).resize(nElGauss);
 
             elStran_e_old.at(iElem).resize(nElGauss);
             elStran_p_old.at(iElem).resize(nElGauss); 
@@ -151,6 +153,7 @@ void Quad4::InitializeElements(Nodes &Nodes){
                 elStran_p.at(iElem).at(iGaus).setZero();
                 elStran_eq.at(iElem).at(iGaus) = 0;
                 elStres_eq.at(iElem).at(iGaus) = 0;
+                elStres_h.at(iElem).at(iGaus) = 0;
 
                 elStran_e_old.at(iElem).at(iGaus).setZero();
                 elStran_p_old.at(iElem).at(iGaus).setZero();
