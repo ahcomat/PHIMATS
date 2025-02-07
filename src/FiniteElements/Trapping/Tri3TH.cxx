@@ -332,7 +332,7 @@ void Tri3TH::getInPtCoords(T_nodStres& glIntPtCoords){
 //     }
 // }
 
-void Tri3TH::ReadNodalStress(H5IO &H5File_in, int iStep){
+void Tri3TH::ReadNodalStress(H5IO &H5File_stress, int iStep){
 
 }
 

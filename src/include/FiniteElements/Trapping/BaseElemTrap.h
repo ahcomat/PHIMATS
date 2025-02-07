@@ -91,7 +91,7 @@ const T_ElStiffMatx& getElCapMatx() const { return elCapMatxVariant; }
  */
 virtual void getInPtCoords(T_nodStres& glIntPtCoords) = 0;
 
-virtual void ReadNodalStress(H5IO &H5File_in, int iStep) = 0;
+virtual void ReadNodalStress(H5IO &H5File_stress, int iStep) = 0;
 
 /**
  * @brief Calculates the element stiffness and capacitances matrix.

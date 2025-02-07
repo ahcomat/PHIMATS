@@ -342,7 +342,9 @@ void Quad4TH::getInPtCoords(T_nodStres& glIntPtCoords){
 //     }
 // }
 
-void Quad4TH::ReadNodalStress(H5IO &H5File_in, int iStep){
+void Quad4TH::ReadNodalStress(H5IO &H5File_stress, int iStep){
+
+    H5File_stress.ReadField1D("Stress_h/Step_"+std::to_string(iStep), nod_sigma_h);
 
 }
 
