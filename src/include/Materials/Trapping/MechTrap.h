@@ -41,24 +41,7 @@ public:
  */
 MechTrap(string dimensions, H5IO& H5File, int iSet, Logger& logger);
 
-/**
- * @brief Calculates the diffusivity matrix.
- * 
- */
-T_DMatx CalcKMatx(const double T);
-
-/**
- * @brief Calculates the dislocation trapping matrix.
- * 
- */
-T_DMatx CalcTMatx(const double T);
-
-/**
- * @brief Get the diffusivity ratio `m`.
- * 
- * @return double
- */
-double getDiffRatio() const;
+T_DMatx CalcDMatx(const double phi, const double T) override;
 
 /**
  * @brief Get the trapping capacity `s`.

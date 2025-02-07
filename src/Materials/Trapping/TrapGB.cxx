@@ -42,7 +42,7 @@ TrapGB::TrapGB(string dimensions, H5IO& H5File, int iSet, Logger& logger)
     }
 }
 
-T_DMatx TrapGB::CalcDMatx(const double gPhi, const double T){
+T_DMatx TrapGB::CalcDMatx(const double phi, const double T){
 
     // Lattice phase
     double DLx = D0x1*exp(-DQx1/(T*R));
@@ -59,8 +59,8 @@ T_DMatx TrapGB::CalcDMatx(const double gPhi, const double T){
     Matd2x2 mat2 = Matd2x2::Zero();
     
     mat2.setZero();
-    mat2(0, 0) = DLx*pow(DTx/DLx, 4*gPhi);
-    mat2(1, 1) = DLy*pow(DTy/DLy, 4*gPhi);
+    mat2(0, 0) = DLx*pow(DTx/DLx, 4*phi);
+    mat2(1, 1) = DLy*pow(DTy/DLy, 4*phi);
 
     DMatx = mat2;
 

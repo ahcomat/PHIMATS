@@ -371,7 +371,7 @@ void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
                 gPhi = el_gPhi.at(iElem).at(iGauss);  // gPhi of the current int-pt
 
-                DMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcDMatx(gPhi, T));
+                DMat = std::get<Matd2x2>(mat->CalcDMatx(gPhi, T));
                 TMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcTMatx(gPhi, T));
 
                 const Matd2x3& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
@@ -429,7 +429,9 @@ void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
                 gPhi_ij = el_gPhi_ij.at(iElem).at(iGauss);
                 gPhi_jj = el_gPhi_jj.at(iElem).at(iGauss);
 
-                DMat = std::get<Matd2x2>(dynamic_cast<TrapPhase*>(mat)->CalcDMatx(phi_j, T));
+                // DMat = std::get<Matd2x2>(dynamic_cast<TrapPhase*>(mat)->CalcDMatx(phi_j, T));
+
+                DMat = std::get<Matd2x2>(mat->CalcDMatx(phi_j, T));
 
                 const Matd2x3& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
                 const RowVecd3& dummyShFunc = shapeFunc.at(iGauss);
@@ -512,7 +514,7 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
                 gPhi = el_gPhi.at(iElem).at(iGaus);
                 IntPtCon = shapeFunc.at(iGaus)*dummyCon;
 
-                DMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcDMatx(gPhi, T));
+                DMat = std::get<Matd2x2>(mat->CalcDMatx(gPhi, T));
                 TMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcTMatx(gPhi, T));
 
                 // Int pt flux
@@ -576,7 +578,7 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
                 gPhi_ij = el_gPhi_ij.at(iElem).at(iGaus);
                 gPhi_jj = el_gPhi_jj.at(iElem).at(iGaus);
 
-                DMat = std::get<Matd2x2>(dynamic_cast<TrapPhase*>(mat)->CalcDMatx(phi_j, T));
+                DMat = std::get<Matd2x2>(mat->CalcDMatx(phi_j, T));
 
                 // Int pt flux
                 elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon 

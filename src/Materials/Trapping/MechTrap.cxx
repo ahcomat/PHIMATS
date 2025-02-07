@@ -41,23 +41,23 @@ MechTrap::MechTrap(string dimensions, H5IO& H5File, int iSet, Logger& logger)
     }
 }
 
-T_DMatx MechTrap::CalcKMatx(const double T){
+T_DMatx MechTrap::CalcDMatx(const double phi, const double T){
 
     double DLx = D0x*exp(-DQx/(T*R));
     double DLy = D0y*exp(-DQy/(T*R));
 
     // Variant for storing the diffusivity matrix
-    T_DMatx KMatx;
+    T_DMatx DMatx;
 
     if (dims=="2D"){
 
         Matd2x2 mat2 = Matd2x2::Zero();
     
         mat2.setZero();
-        mat2(0, 0) = DLx;
-        mat2(1, 1) = DLy;
+        mat2(0, 0) = DLx*(1 + m*phi);
+        mat2(1, 1) = DLy*(1 + m*phi);
 
-        KMatx = mat2;
+        DMatx = mat2;
 
     } else if (dims=="3D"){
 
@@ -66,15 +66,15 @@ T_DMatx MechTrap::CalcKMatx(const double T){
         Matd3x3 mat3 = Matd3x3::Zero();
     
         mat3.setZero();
-        mat3(0, 0) = DLx;
-        mat3(1, 1) = DLy;
-        mat3(2, 2) = DLz;
+        mat3(0, 0) = DLx*(1 + m*phi);
+        mat3(1, 1) = DLy*(1 + m*phi);
+        mat3(2, 2) = DLz*(1 + m*phi);
 
-        KMatx = mat3;
+        DMatx = mat3;
 
     }
 
-    return KMatx;
+    return DMatx;
 }
 
 T_DMatx MechTrap::CalcTMatx(const double T){

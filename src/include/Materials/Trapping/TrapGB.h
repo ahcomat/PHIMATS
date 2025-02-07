@@ -39,11 +39,7 @@ public:
  */
 TrapGB(string dimensions, H5IO& H5File, int iSet, Logger& logger);
 
-/**
- * @brief Calculates the phase-field dependent diffusivity matrix.
- * 
- */
-T_DMatx CalcDMatx(const double gPhi, const double T);
+T_DMatx CalcDMatx(const double phi, const double T) override;
 
 /**
  * @brief Calculates the phase-field dependent trapping matrix.

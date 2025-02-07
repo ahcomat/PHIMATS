@@ -39,11 +39,7 @@ public:
  */
 TrapPhase(string dimensions, H5IO &H5File, int iSet, Logger& logger);
 
-/**
- * @brief Calculates the phase-field dependent diffusivity matrix.
- * 
- */
-T_DMatx CalcDMatx(const double phi, const double T);
+T_DMatx CalcDMatx(const double phi, const double T) override;
 
 double get_zeta_j() const {return zeta_j;};
 

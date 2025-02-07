@@ -34,6 +34,15 @@ public:
 BaseTrapping(string dimensions, Logger& logger): BaseMaterial(dimensions, logger) {};
 virtual ~BaseTrapping() override {};
 
+/**
+ * @brief Calculates the spatially varying diffusivity matrix.
+ * 
+ * @param phi Spatial field parameter.
+ * @param T Temperature [K].
+ * @return T_DMatx Diffusivity variant.
+ */
+virtual T_DMatx CalcDMatx(const double phi, const double T) = 0;
+
 protected:
 
 const double R = 8.31446261815324; /// @brief Universal gas constant [J/mol.K]
