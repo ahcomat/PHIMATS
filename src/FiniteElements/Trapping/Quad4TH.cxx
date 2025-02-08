@@ -385,7 +385,7 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
                     gPhi = el_gPhi.at(iElem).at(iGauss);  // gPhi of the current int-pt
 
-                    DMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcDMatx(gPhi, T));
+                    DMat = std::get<Matd2x2>(mat->CalcDMatx(gPhi, T));
                     TMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcTMatx(gPhi, T));
 
                     const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
@@ -443,7 +443,7 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
                     gPhi_ij = el_gPhi_ij.at(iElem).at(iGauss);
                     gPhi_jj = el_gPhi_jj.at(iElem).at(iGauss);
 
-                    DMat = std::get<Matd2x2>(dynamic_cast<TrapPhase*>(mat)->CalcDMatx(phi_j, T));
+                    DMat = std::get<Matd2x2>(mat->CalcDMatx(phi_j, T));
 
                     const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
                     const RowVecd4& dummyShFunc = shapeFunc.at(iGauss);
