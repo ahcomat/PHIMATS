@@ -48,7 +48,21 @@ T_DMatx CalcDMatx(const double phi, const double T) override;
  * 
  * @return double
  */
-double getTrappingCapacity() const;
+double getTrappingCapacity() const { return s; };
+
+/**
+ * @brief Get the partial molar volume `Vh`.
+ * 
+ * @return double
+ */
+    double getVh() const { return Vh; };
+
+// /**
+//  * @brief Get trapping parameter `zeta_rho`.
+//  * 
+//  * @return double
+//  */
+// double get_zeta_rho() const { return zeta_rho};
 
 private:
 
