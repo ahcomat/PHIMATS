@@ -106,10 +106,8 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
     VecDuplicate(vecF, &vecx);      
 
     VecSet(vecF, 0.0); // Set all values to zero.
-    VecAssemblyBegin(vecF); VecAssemblyEnd(vecF);
 
     VecSet(vecx, 0.0); // Set all values to zero.
-    VecAssemblyBegin(vecx); VecAssemblyEnd(vecx);
 
     // Initialize the coefficient matrices.
     MatCreateSeqAIJ(PETSC_COMM_WORLD, nTotDofs, nTotDofs, PETSC_DEFAULT, NULL, &matK); // Works better for HPC
