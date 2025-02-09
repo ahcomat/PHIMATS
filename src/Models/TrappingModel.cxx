@@ -367,6 +367,12 @@ void TrappingModel::ReadInitialCon(H5IO& H5File, const int iStep){
     VecAssemblyBegin(vecx);  VecAssemblyEnd(vecx);
 }
 
+void TrappingModel::setUniformCon(double uniformCon){
+
+    VecSet(vecx, uniformCon); // Set all values to zero.
+
+}
+
 void TrappingModel::InitializeDirichBC(H5IO& H5File_in){
 
     // Read Dirichlet BCs

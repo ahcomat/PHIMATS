@@ -125,12 +125,19 @@ void AssembleElementMatrix(const auto* elMatx_ptr,
 void Assemble(vector<BaseElemTrap*> elements, bool assembleM=true);
 
 /**
- * @brief Reads initial conditions from H5File.
+ * @brief Reads initial conditions from hdf5 file. Mainly for TDS.
  * 
  * @param H5File 
  * @param iStep 
  */
 void ReadInitialCon(H5IO& H5File, const int iStep);
+
+/**
+ * @brief Set initial uniform concntration. Mainly for mechanics. 
+ * 
+ * @param uniformCon Concentration value.
+ */
+void setUniformCon(double uniformCon);
 
 /**
  * @brief Reads and initializes Dirichlet BCs.
