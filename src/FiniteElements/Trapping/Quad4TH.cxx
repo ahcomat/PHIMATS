@@ -4,6 +4,7 @@
 #include "FiniteElements/Trapping/Quad4TH.h"
 #include "Materials/Trapping/TrapGB.h"
 #include "Materials/Trapping/TrapPhase.h"
+#include "Materials/Trapping/MechTrap.h"
 
 #ifndef DEBUG
 #define at(x) operator[](x)
@@ -464,7 +465,48 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
             }
         
         } else if (Trapping=="MechTrapping") {         // Stresses and dislocations 
-        
+
+            double s = dynamic_cast<MechTrap*>(mat)->get_s();
+            double Vh = dynamic_cast<MechTrap*>(mat)->get_Vh();
+            ColVecd4 dummyElNod_sigma_h, dummyElNod_rho;
+            double simga_h, rho;
+
+            vector<int> NodeConn;
+
+            // Loop through all elements.
+            for(int iElem=0; iElem<nElements; iElem++){
+
+                NodeConn = elemNodeConn.at(iElem);
+
+                // MUST BE POPULATED WITH ZEROS    
+                elStiffMatx.at(iElem).setZero();
+                elKDMatx.at(iElem).setZero();  
+                elKTMatx.at(iElem).setZero();  
+                elCapMatx.at(iElem).setZero();
+
+                // Loop through element nodes to get nodal values.
+                for(int iNod=0; iNod<nElNodes; iNod++){
+                    dummyElNod_sigma_h[iNod] = nod_sigma_h.at(NodeConn.at(iNod));
+                }              
+
+                // Integration over all Gauss points.
+                for (int iGauss=0; iGauss<nElGauss; iGauss++){
+
+                    DMat = std::get<Matd2x2>(mat->CalcDMatx(0, T));
+
+                    const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
+                    const RowVecd4& dummyShFunc = shapeFunc.at(iGauss);
+                    dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt
+
+                    // [B_ji]^T k_jj B_ji
+                    elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
+                    // [B_ji]^T k_jj B_ji
+                    elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*Vh/(R*T)*dummyBMat*dummyElNod_sigma_h*dummyShFunc*dummydVol;
+                    // [N_i]^T N_i
+                    elCapMatx.at(iElem).noalias() += s*(dummyShFunc.transpose()*dummyShFunc)*dummydVol;
+
+                }
+            }
         }
 
     } catch (const std::runtime_error& e) {
