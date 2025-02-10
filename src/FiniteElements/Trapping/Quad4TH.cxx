@@ -469,7 +469,7 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
             double s = dynamic_cast<MechTrap*>(mat)->get_s();
             double Vh = dynamic_cast<MechTrap*>(mat)->get_Vh();
             ColVecd4 dummyElNod_sigma_h, dummyElNod_rho;
-            double simga_h, rho;
+            double rho;
 
             vector<int> NodeConn;
 
