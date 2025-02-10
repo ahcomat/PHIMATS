@@ -106,9 +106,6 @@ class PreProcessing:
             self.exitNods = inputData["exitNods"]
             self.dt = inputData["dt"]
             self.T = inputData["T"]
-            
-            self.sigmaH = inputData["sigmaH"]
-            self.rho_norm = inputData["rho_norm"]
         
         #----------------------------------------------------------------------
         # Check for allowed elements and assign element data (number of nodes,
@@ -274,9 +271,7 @@ class PreProcessing:
         # Case MechTrapping 
         if self.SimulType == "MechTrapping":
             self.grp_Sim_Params.create_dataset("dt", data=self.dt)
-            self.grp_Sim_Params.create_dataset("T", data=self.T)
-            self.fh5.create_dataset('sigmaH', data=self.sigmaH, dtype = np.float64) 
-            self.fh5.create_dataset('rho_norm', data=self.rho_norm, dtype = np.float64)  
+            self.grp_Sim_Params.create_dataset("T", data=self.T)  
         
         #----------------------------------------------------------------------
         # Material data
