@@ -517,6 +517,15 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
         exit(EXIT_FAILURE);
 
     }
+
+    // // TODO: For debug!
+    // for (auto& iStifMat : elKDMatx)
+    //     cout << iStifMat << "\n\n";
+    // cout << elStiffMatx.at(0) << "\n\n";
+
+    // Pointer to the vector, not the vector itself.
+    elStiffMatxVariant = &elStiffMatx;
+    elCapMatxVariant = &elCapMatx;
 }
 
 double Quad4TH::CalcAvCon(const double* globalBuffer){
