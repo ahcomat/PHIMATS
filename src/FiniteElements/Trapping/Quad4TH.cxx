@@ -554,33 +554,57 @@ double Quad4TH::CalcAvCon(const double* globalBuffer){
 
 void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T){
 
-    // ColVecd4 dummyCon; // for element nodal concentration.
-    // int iNode;  // counter for the number of nodes.
+    Matd2x2 DMat; 
+    double IntPtCon;   // Integration point concnetration
+    ColVecd4 dummyCon; // for element nodal concentration.
+    int iNode;  // counter for the number of nodes.
 
-    // // Integration point values.
-    // for(int iElem=0; iElem<nElements; iElem++){
+    if (Trapping=="MechTrapping"){       // GB
 
-    //     // Get element nodal concentration from the solution vector. 
-    //     for(int iDof=0; iDof<nElConDofs; iDof++){
-    //         dummyCon(iDof) = globalBuffer[elemConDof.at(iElem).at(iDof)];
-    //     }
+        double Vh = dynamic_cast<MechTrap*>(mat)->get_Vh();
 
-    //     // Gauss points
-    //     for(int iGaus=0; iGaus<nElGauss; iGaus++){
+        ColVecd4 dummyElNod_sigma_h, dummyElNod_rho;
+        double rho;
 
-    //         // Int pt flux
-    //         elFlux.at(iElem).at(iGaus) = -(std::get<Matd2x2>(KMatx)*BMat.at(iElem).at(iGaus))*dummyCon;
+        // Integration point values.
+        for(int iElem=0; iElem<nElements; iElem++){
 
-    //         // Nodal values
-    //         iNode = 0;
-    //         for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
+            // Loop through element nodes to get nodal values.
+            for(int iDof=0; iDof<nElConDofs; iDof++){
+                dummyCon[iDof] = globalBuffer[elemConDof.at(iElem).at(iDof)];
+                dummyElNod_sigma_h[iDof] = nod_sigma_h.at(elemConDof.at(iElem).at(iDof));
 
-    //             std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
-    //             nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
-    //             iNode += 1;
-    //         }
-    //     }
-    // }
+            }
+
+            // Gauss points
+            for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+                IntPtCon = shapeFunc.at(iGaus)*dummyCon;
+
+                // phi_j = el_phi_j.at(iElem).at(iGaus);  // values of the current int-pt
+
+                DMat = std::get<Matd2x2>(mat->CalcDMatx(0, T));
+
+                // Int pt flux
+                elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon
+                                             + DMat*Vh/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_sigma_h;
+
+                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[0] =  elFlux.at(iElem).at(iGaus)[0];
+                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[1] =  elFlux.at(iElem).at(iGaus)[1];
+                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[2] =  0;
+
+                // Nodal values
+                iNode = 0;
+                for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
+
+                    std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                    nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
+                    iNode += 1;
+                }
+            }
+        }
+
+    }
 
     // // // TODO: For debug!
     // // cout << elFlux.at(0).at(0) << "\n\n";
