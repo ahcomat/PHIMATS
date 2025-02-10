@@ -328,8 +328,11 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool assembleM){
 
     // Finalize stiffness matrix assembly
     MatAssemblyBegin(matK, MAT_FINAL_ASSEMBLY); MatAssemblyEnd(matK, MAT_FINAL_ASSEMBLY);
-    MatZeroRows(matK, nPresDofs, presDofs, 1.0, NULL, NULL);
 
+    if (nPresDofs){ 
+        MatZeroRows(matK, nPresDofs, presDofs, 1.0, NULL, NULL);
+    }
+    
     if (assembleM) {
         // Finalize capacity matrix assembly
         MatAssemblyBegin(matM, MAT_FINAL_ASSEMBLY); MatAssemblyEnd(matM, MAT_FINAL_ASSEMBLY);
