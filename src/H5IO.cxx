@@ -126,7 +126,10 @@ string H5IO::ReadString(const string& dsetName) {
         result = string(buffer);
 
     } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+        logger.log("\nException caught in H5IO::ReadString:\n", "", false);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("\nCritical error encountered. Terminating!\n", "", false);
+        exit(EXIT_FAILURE);
     }
 
     // Cleanup resources
@@ -183,8 +186,10 @@ void H5IO::WriteArray1D(const string& dsetName, const int xSize, const double *A
         H5Fclose(file_id);
 
     } catch (const std::exception& e) {
-        std::cerr << "ERROR in WriteArray1D: " << e.what() << std::endl;
-        throw; // Rethrow for higher-level handling if needed
+        logger.log("\nException caught in H5IO::WriteArray1D:\n", "", false);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("\nCritical error encountered. Terminating!\n", "", false);
+        exit(EXIT_FAILURE);
     }
 }
 
