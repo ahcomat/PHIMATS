@@ -2,12 +2,13 @@
 
 ## [Unreleased]
 ### Added
-- `Tri6TH` second order elements to improve the accuracy of flux calculation.
 - `WriteOutputFile` in PreProcessing for centralized creation of _out.hdf5 output files.
+- `environment.yml` file for managing `phimats` conda environment dependencies. 
 
 ### Changed
 - Error handling in `OpenFileHDF5` and `CloseFileHDF5` in PreProcessing.
 - `mpi` handles COMM in `Logger` instead of `PETSC`.
+- `Logger` now controls all command-line interface messages.
 
 ## [v0.4.0]
 ### Added
