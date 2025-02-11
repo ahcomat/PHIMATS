@@ -329,11 +329,11 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool assembleM){
     // Finalize stiffness matrix assembly
     MatAssemblyBegin(matK, MAT_FINAL_ASSEMBLY); MatAssemblyEnd(matK, MAT_FINAL_ASSEMBLY);
 
-    if (nPresDofs){ 
+    if (nPresDofs){ // If Dirichlet BC
         MatZeroRows(matK, nPresDofs, presDofs, 1.0, NULL, NULL);
     }
     
-    if (assembleM) {
+    if (assembleM) { // Only on intitializaiton 
         // Finalize capacity matrix assembly
         MatAssemblyBegin(matM, MAT_FINAL_ASSEMBLY); MatAssemblyEnd(matM, MAT_FINAL_ASSEMBLY);
     }
@@ -374,7 +374,7 @@ void TrappingModel::setUniformCon(double uniformCon){
 
 }
 
-void TrappingModel::InitializeDirichBC(H5IO& H5File_in){
+void TrappingModel::InitializeBC(H5IO& H5File_in){
 
     // Read Dirichlet BCs
     string dsetName;
@@ -397,12 +397,14 @@ void TrappingModel::InitializeDirichBC(H5IO& H5File_in){
 
 }
 
-void TrappingModel::setDirichBC(){
+void TrappingModel::setBC(){
 
     Update_F();
     
-    VecSetValues(vecF, nPresDofs, presDofs, presVals, INSERT_VALUES); 
-    VecAssemblyBegin(vecF); VecAssemblyEnd(vecF);
+    if (nPresDofs){ // If Dirichlet BC
+        VecSetValues(vecF, nPresDofs, presDofs, presVals, INSERT_VALUES); 
+        VecAssemblyBegin(vecF); VecAssemblyEnd(vecF);
+    }
 
     // // TODO: For debug!
     // VecView(vecF, PETSC_VIEWER_STDOUT_WORLD);

@@ -140,17 +140,17 @@ void ReadInitialCon(H5IO& H5File, const int iStep);
 void setUniformCon(double uniformCon);
 
 /**
- * @brief Reads and initializes Dirichlet BCs.
+ * @brief Reads and initializes boundary conditions.
  * 
  * @param H5File_in 
  */
-void InitializeDirichBC(H5IO& H5File_in);
+void InitializeBC(H5IO& H5File_in);
 
 /**
  * @brief Set Dirichlet boundary conditions in the RHS `b` and global stiffness matrix `A`.
  * 
  */
-void setDirichBC();
+void setBC();
 
 /**
  * @brief Function for updating `F`.
