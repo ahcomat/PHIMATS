@@ -6,7 +6,7 @@ import xml.dom.minidom as minidom
 
 class WriteXDMF:
     
-    def __init__(self, fileName, elementName, nSteps, simulationType, START=0, FLUX=False, skip=1):
+    def __init__(self, fileName, elementName, nSteps, simulationType, START=0, FLUX=False, tOut=1):
         """
         A class to write XDMF files for ParaView visualization of results stored in _out.hdf5.
 
@@ -17,7 +17,7 @@ class WriteXDMF:
             simulationType (str): Type of simulation. Allowed: ["Transport2D", "Elastic2D", "Elastic3D", "Plastic2D", "Plastic3D"].
             START (int, optional): Initial step number. Defaults to 1.
             FLUX (bool, optional): Flag for flux field. Defaults to False.
-            skip (int, optional): Number of steps to skip when writing outputs. Defaults to 1.
+            tOut (int, optional): Number of steps to tOut when writing outputs. Defaults to 1.
         """
         self.FName = fileName  # Base file name
 
@@ -61,7 +61,7 @@ class WriteXDMF:
         self.time_series_grid = ET.SubElement(domain, "Grid", Name="TimeSeries", GridType="Collection", CollectionType="Temporal")
 
         # Write time steps
-        for t in range(START, self.nSteps, skip):
+        for t in range(START, self.nSteps, tOut):
             if self.simType == "Transport2D":
                 self.WriteCon2D(t, FLUX)
             elif self.simType == "Elastic2D":

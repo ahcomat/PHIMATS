@@ -65,7 +65,7 @@ void LinearTransport::UpdateKSP(Mat &A){
     KSPSetOperators(ksp, A, A);
 }
 
-void LinearTransport::SolveTransport(Vec &x, Vec &F){
+void LinearTransport::Solve(Vec &x, Vec &F){
 
     KSPSolve(ksp, F, x);
 }

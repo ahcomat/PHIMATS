@@ -48,7 +48,7 @@ void UpdateKSP(Mat &A);
  * @param x 
  * @param b 
  */
-void SolveTransport(Vec &x, Vec &F);
+void Solve(Vec &x, Vec &F);
 
 private:
 
