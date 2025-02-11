@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [v0.5.0]
 ### Added
 - `WriteOutputFile` in PreProcessing for centralized creation of _out.hdf5 output files.
 - `environment.yml` file for managing `phimats` conda environment dependencies. 
