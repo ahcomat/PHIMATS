@@ -61,12 +61,40 @@ void setZero_nodFlux();
 void InitializePETSc(vector<BaseElemTrap*> elements);
 
 /**
- * @brief Calculates the gradients of phi and writes them in `H5File_out` 
+ * @brief Reads initial conditions from hdf5 file. Mainly for TDS.
  * 
- * @param elements 
- * @param H5File_out 
+ * @param H5File 
+ * @param iStep 
  */
-void WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_out);
+void ReadInitialCon(H5IO& H5File, const int iStep);
+
+/**
+ * @brief Set initial uniform concntration. Mainly for mechanics. 
+ * 
+ * @param uniformCon Concentration value.
+ */
+void setUniformCon(double uniformCon);
+
+/**
+ * @brief Reads and initializes boundary conditions.
+ * 
+ * @param H5File_in 
+ */
+void InitializeBC(H5IO& H5File_in);
+
+/**
+ * @brief Set Dirichlet boundary conditions in the RHS `b` and global stiffness matrix `A`.
+ * 
+ */
+void setBC();
+
+// /**
+//  * @brief Calculates the gradients of phi and writes them in `H5File_out` 
+//  * 
+//  * @param elements 
+//  * @param H5File_out 
+//  */
+// void WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_out);
 
 /**
  * @brief Updates the temperature according the the heating rate HR.
@@ -123,34 +151,6 @@ void AssembleElementMatrix(const auto* elMatx_ptr,
  * @param assembleM Flag for updating the capacitance matrix, default=true.
  */
 void Assemble(vector<BaseElemTrap*> elements, bool assembleM=true);
-
-/**
- * @brief Reads initial conditions from hdf5 file. Mainly for TDS.
- * 
- * @param H5File 
- * @param iStep 
- */
-void ReadInitialCon(H5IO& H5File, const int iStep);
-
-/**
- * @brief Set initial uniform concntration. Mainly for mechanics. 
- * 
- * @param uniformCon Concentration value.
- */
-void setUniformCon(double uniformCon);
-
-/**
- * @brief Reads and initializes boundary conditions.
- * 
- * @param H5File_in 
- */
-void InitializeBC(H5IO& H5File_in);
-
-/**
- * @brief Set Dirichlet boundary conditions in the RHS `b` and global stiffness matrix `A`.
- * 
- */
-void setBC();
 
 /**
  * @brief Function for updating `F`.

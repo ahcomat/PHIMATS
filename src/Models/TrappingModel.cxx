@@ -171,6 +171,59 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
     PetscFree(nnz);
 }
 
+void TrappingModel::ReadInitialCon(H5IO& H5File, const int iStep){
+
+    vector<double> con_0(nTotDofs);
+    H5File.ReadField1D("Con/Step_"+to_string(iStep), con_0);
+
+    for(int iDof=0; iDof<nTotDofs; iDof++){
+        VecSetValue(vecx, iDof, con_0.at(iDof), INSERT_VALUES);
+    }
+    VecAssemblyBegin(vecx);  VecAssemblyEnd(vecx);
+}
+
+void TrappingModel::setUniformCon(double uniformCon){
+
+    VecSet(vecx, uniformCon); // Set all values to zero.
+
+}
+
+void TrappingModel::InitializeBC(H5IO& H5File_in){
+
+    // Read Dirichlet BCs
+    string dsetName;
+    dsetName = "SimulationParameters/nPresDofs";
+    nPresDofs = H5File_in.ReadScalar(dsetName);
+    PetscMalloc1(nPresDofs, &presDofs);
+    PetscMalloc1(nPresDofs, &presVals); 
+
+    vector<double> dummy(3);
+    for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
+        // Read values
+        dsetName = "PrescribedDOFs/Prescribed_"+to_string(iPresDof);
+        H5File_in.ReadField1D(dsetName, dummy);
+        // Assign values
+        presDofs[iPresDof] = dummy.at(0); // nDim*iNode+dof
+        presVals[iPresDof] = dummy.at(1);
+        // // TODO: For debug!
+        // cout << presDofs[iPresDof] << " --> " << presVals[iPresDof] << "\n";
+    }
+
+}
+
+void TrappingModel::setBC(){
+
+    Update_F();
+    
+    if (nPresDofs){ // If Dirichlet BC
+        VecSetValues(vecF, nPresDofs, presDofs, presVals, INSERT_VALUES); 
+        VecAssemblyBegin(vecF); VecAssemblyEnd(vecF);
+    }
+
+    // // TODO: For debug!
+    // VecView(vecF, PETSC_VIEWER_STDOUT_WORLD);
+}
+
 // void TrappingModel::WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_out){
 
 //     // Nodal laplacian of phi
@@ -355,59 +408,6 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool assembleM){
     // MatRestoreRow(matK, ROW, &NCOL, &COL, &VAL); 
 
     // MatView(matK, PETSC_VIEWER_STDOUT_WORLD);
-}
-
-void TrappingModel::ReadInitialCon(H5IO& H5File, const int iStep){
-
-    vector<double> con_0(nTotDofs);
-    H5File.ReadField1D("Con/Step_"+to_string(iStep), con_0);
-
-    for(int iDof=0; iDof<nTotDofs; iDof++){
-        VecSetValue(vecx, iDof, con_0.at(iDof), INSERT_VALUES);
-    }
-    VecAssemblyBegin(vecx);  VecAssemblyEnd(vecx);
-}
-
-void TrappingModel::setUniformCon(double uniformCon){
-
-    VecSet(vecx, uniformCon); // Set all values to zero.
-
-}
-
-void TrappingModel::InitializeBC(H5IO& H5File_in){
-
-    // Read Dirichlet BCs
-    string dsetName;
-    dsetName = "SimulationParameters/nPresDofs";
-    nPresDofs = H5File_in.ReadScalar(dsetName);
-    PetscMalloc1(nPresDofs, &presDofs);
-    PetscMalloc1(nPresDofs, &presVals); 
-
-    vector<double> dummy(3);
-    for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
-        // Read values
-        dsetName = "PrescribedDOFs/Prescribed_"+to_string(iPresDof);
-        H5File_in.ReadField1D(dsetName, dummy);
-        // Assign values
-        presDofs[iPresDof] = dummy.at(0); // nDim*iNode+dof
-        presVals[iPresDof] = dummy.at(1);
-        // // TODO: For debug!
-        // cout << presDofs[iPresDof] << " --> " << presVals[iPresDof] << "\n";
-    }
-
-}
-
-void TrappingModel::setBC(){
-
-    Update_F();
-    
-    if (nPresDofs){ // If Dirichlet BC
-        VecSetValues(vecF, nPresDofs, presDofs, presVals, INSERT_VALUES); 
-        VecAssemblyBegin(vecF); VecAssemblyEnd(vecF);
-    }
-
-    // // TODO: For debug!
-    // VecView(vecF, PETSC_VIEWER_STDOUT_WORLD);
 }
 
 void TrappingModel::Update_F(){
