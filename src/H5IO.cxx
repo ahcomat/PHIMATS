@@ -81,8 +81,11 @@ void H5IO::WriteScalar(const std::string& dsetName, double val) {
         if (H5Dwrite(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, &val) < 0)
             throw std::runtime_error("Failed to write data " + dsetName);
 
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+    } catch (const std::runtime_error& e) {
+        logger.log("\nException caught in H5IO::WriteScalar:\n", "", false);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("\nCritical error encountered. Terminating!\n", "", false);
+        exit(EXIT_FAILURE);
     }
 
     if (dataset_id >= 0) H5Dclose(dataset_id);
