@@ -6,7 +6,7 @@ import xml.dom.minidom as minidom
 
 class WriteXDMF:
     
-    def __init__(self, fileName, elementName, nSteps, simulationType, START=0, FLUX=False, tOut=1):
+    def __init__(self, fileName, elementName, nSteps, simulationType, START=0, FLUX=False, tOut=1, TDS=False):
         """
         A class to write XDMF files for ParaView visualization of results stored in _out.hdf5.
 
@@ -18,6 +18,7 @@ class WriteXDMF:
             START (int, optional): Initial step number. Defaults to 1.
             FLUX (bool, optional): Flag for flux field. Defaults to False.
             tOut (int, optional): Number of steps to tOut when writing outputs. Defaults to 1.
+            TDS (bool, optional): Flag for writing Temp in TDS. 
         """
         self.FName = fileName  # Base file name
 
@@ -63,7 +64,7 @@ class WriteXDMF:
         # Write time steps
         for t in range(START, self.nSteps, tOut):
             if self.simType == "Transport2D":
-                self.WriteCon2D(t, FLUX)
+                self.WriteCon2D(t, FLUX, TDS)
             elif self.simType == "Elastic2D":
                 self.WriteElastic2D(t)
             elif self.simType == "Plastic2D":
@@ -89,7 +90,7 @@ class WriteXDMF:
     
 #-----------------------------------------------------------------------------#
     
-    def WriteCon2D(self, t, FLUX):
+    def WriteCon2D(self, t, FLUX, TDS):
         
         timestep_grid = ET.SubElement(self.time_series_grid, "Grid", Name=f"TimeStep_{t:.1f}")
         ET.SubElement(timestep_grid, "Time", Value=f"{t:.1f}")
@@ -110,6 +111,12 @@ class WriteXDMF:
             # Add attribute element for flux
             attribute = ET.SubElement(timestep_grid, "Attribute", Name="flux", AttributeType="Vector", Center="Node")
             ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nDim)).text = self.FName+"_out.hdf5:/Flux/Step_"+str(t)
+            
+        if TDS: 
+            # Add attribute element for temperature
+            attribute = ET.SubElement(timestep_grid, "Attribute", Name="temp", AttributeType="Scalar", Center="Node")
+            ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)).text = self.FName+"_out.hdf5:/Temp/Step_"+str(t)
+            
             
 #-----------------------------------------------------------------------------#
 
