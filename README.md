@@ -1,98 +1,154 @@
-# `PhiMATS`
+# **PHIMATS**  
+<img src="PHIMATS.png" width="200">
 
-The `phase-FIEld MATerials Simulator` (pronounced Phi-MATS) is a finite element package for solid mechanics and phase transformations, primarily based on the phase-field method.
+### **Phase-field Multiphysics Materials Simulator**  
+
+**PHIMATS** (Phase-field Multiphysics Materials Simulator) is a finite element library in C++, originally designed for simulating mesoscale **hydrogen-material interactions** using phase-field based representative volume element (RVE). However, its modular design allows it to be applied to a **wide range of multiphysics problems**.
+
+---
 
 ## Applications
+- **Phase-field based RVE models** for **hydrogen-material interactions**  
+- **Solid mechanics**   
+- **Heat and mass transfer** modeling  
 
-- Mechanics (linear elasticity, J2 plasticity and crystal plasticity).
-- Transport (mainly for hydrogen diffusion and trapping).
-- Full-field mesoscale models (phase-field based RVEs).
-- Fracture and fatigue (phase-field based).
+---
 
 ## Features
+- **Pre/Post processing via Python interface** for flexible input/output handling  
+- **Object-oriented C++** with **inheritance & polymorphism** for modularity  
+- **HDF5-based data storage** for efficient data handling  
+- **XDMF format support** for visualization in **ParaView**  
 
-- Pre-processing using `Python` interface.
-- Modular design using object-oriented `C++` with `inheritance` and `polymorphism`.
-- Data storage in `HDF5` format.
-- `XDMF` for visualization in `Paraview`.
-
-## Summary
-
-- `H5IO` Wrapper for HDF5, for file IO.
-- `Nodes` Handles node coordinates.
-- `FiniteElements` For element development.
-- `Model` Assembles the global stiffness matrix and applies boundary conditions (nterfaces with `PETSc`). Handles output.
-- `Solver` Wrapper for `PETSc` solvers. 
+---
 
 ## Documentation
+- **Companion theory manual:** *Finite Element Theory for PHIMATS*  
+- **Publications & examples:** Available in the `CaseStudies` folder  
+- **Doxygen documentation:** [Online API Reference](https://ahcomat.github.io/doxygen-phimats/index.html)  
+ 
+---
 
-- Theory.
-- Publications in `EXAMPLES` folder.
-- More details about the functions by running
+## Installation Guide
 
-```bash
-doxygen Doxyfile
+### **1️⃣ System Requirements**
+✅ **Linux OS required** (Recommended: Ubuntu, Debian, Fedora)  
+✅ **Windows users:** Use **Windows Subsystem for Linux (WSL)** 
+⚠️ **macOS:** Potentially supported but untested 
+❌ **No support for Windows (native)**  
+
+---
+
+### **2️⃣ Required Dependencies**
+#### **🔹 Third-Party Libraries**
+- **[Eigen](http://eigen.tuxfamily.org)**
+- **[HDF5](https://www.hdfgroup.org/solutions/hdf5/)**
+- **[PETSc](https://www.mcs.anl.gov/petsc/)**  
+
+#### **🔹 Python Dependencies (via Conda)**
+ All required Python libraries are included in the **`phimats`** Conda environment.
+
+To create the environment, run:
+```sh
+conda env create -f environment.yml
 ```
 
-## Installation
+#### **🔹 C++ Compiler & Tools**
+✅ **C++20 compiler (GCC recommended)**  
+✅ **Install `mpich` for parallel computing** (In progress)  
+✅ **Install `hdf5` library**  
+✅ **ParaView v5.9.1 for visualization**  
 
-The following third party libraries are required
+---
 
-- [Eigen](http://eigen.tuxfamily.org)
-- [HDF5](https://www.hdfgroup.org/solutions/hdf5/)
-- [PETSc](https://www.mcs.anl.gov/petsc/)
+### **3️⃣ Installing PETSc**
+PETSc must be installed with an **optimized configuration** (`arch-opt`).  
+Make sure the PETSc folder is located at:
+```sh
+/home/your_user_name/petsc
+```
+where **`your_user_name`** is your system username.
 
-### For installation
+#### **🔹 PETSc Installation Command**
+Run the following command in your terminal:
+```sh
+./configure PETSC_ARCH=arch-opt --with-cc=gcc --with-cxx=g++ \
+--download-f2cblaslapack --download-cmake --download-scalapack \
+--download-mumps --download-mpich --with-debugging=0 \
+COPTFLAGS='-O3 -march=native -mtune=native' \
+CXXOPTFLAGS='-O3 -march=native -mtune=native' \
+FOPTFLAGS='-O3 -march=native -mtune=native'
+```
 
-- Instructions for PC
-- Instructions for HPC
+---
 
-## Usage
+### **4️⃣ Setting Up Environment Variables**
+Add the following lines **(after modifying the paths)** to your `~/.bashrc` file:
+```sh
+export PETSC_DIR=/home/your_user_name/petsc
+export PETSC_ARCH=arch-opt
 
-In order to combine simulation flexibility and high performance, `PhiMATS` is compiled as a library to be linked with a `driver code`. Examples for such work flow can be found in the folder `EXAMPLES`, which also acts as a tutorial.
+export PYTHONPATH=$PYTHONPATH:/path_to_PHIMATS/src/FEM_utils/
 
-## Element naming convention
+export EIGEN=/path_to_eigen/eigen/
+export PHIMATSINCLUDES=/path_to_PHIMATS/PHIMATS/src/include/
+export PHIMATSLIBDIR=/path_to_PHIMATS/PHIMATS/src/lib/
 
-The elements has naming convention as abbreviation of the geometrical shape, followed by number of nodes, i.e. `Quad4`. Elements formulated for displacement DOFs has no further specifications. for example
+# Detect HDF5 installation path automatically
+export H5LD=$(h5cc -show | awk '{for(i=1;i<=NF;i++) if($i ~ "-L") print substr($i,3)}')
+export H5ID=$(h5cc -show | awk '{for(i=1;i<=NF;i++) if($i ~ "-I") print substr($i,3)}')
+export HDF5_USE_FILE_LOCKING=FALSE
 
-- `Quad4`: 4-node quadrilateral.
-- `Tri3`: 3-node triangular.
-- `Hex8`: 8-node hexahedron.
+# Detect MPICH installation path automatically
+export MPICHID=$(mpicc -show | awk '{for(i=1;i<=NF;i++) if($i ~ "-I") print substr($i,3)}')
+export MPICHLD=$(mpicc -show | awk '{for(i=1;i<=NF;i++) if($i ~ "-L") print substr($i,3)}')
 
-For heat/mass transfer it will have the letter `T`.
+```
+After adding these, apply the changes by running:
+```sh
+source ~/.bashrc
+```
 
-- `Quad4T`: 4-node quadrilateral.
-- `Tri3T`: 3-node triangular.
-- `Hex8T`: 8-node hexahedron.
+---
 
-For heat/mass transfer coupled with mechanics it will have the letter `MT`. Note that the DOF numbering convention is to have all displacement DOFs first, then the transfer DOFs after. *(make numerical example?)*
+### Final Checklist Before Compiling PHIMATS
+- **Ensure all dependencies are installed correctly**  
+- **Check that PETSc is compiled with `arch-opt`**  
+- **Verify environment variables using:**  
+```sh
+echo $PETSC_DIR
+echo $PETSC_ARCH
+```
+- **Ensure Python dependencies are installed via Conda**  
+```sh
+conda activate phimats
+```
 
-- `Quad4MT`: 4-node quadrilateral.
-- `Tri3MT`: 3-node triangular.
-- `Hex8MT`: 8-node hexahedron.
+---
 
-For general phase-field (Allen-Cahn type) it will have the letter `P`. *(Shall all scalar elements have the same convention?)*
+### **5️⃣ Compiling PHIMATS**
+Once everything is installed, navigate to the **PHIMATS directory** and compile the code by running:
+```sh
+make
+```
+---
 
-- `Quad4P`: 4-node quadrilateral.
-- `Tri3P`: 3-node triangular.
-- `Hex8P`: 8-node hexahedron.
+### Usage
 
-For phase-field fracture, i.e. phase-field coupled with mechanics, it will have the letter `MP`.
+To balance **simulation flexibility** with **high performance**, `PHIMATS` is compiled as a **library (`libphimats.a`)**, which must be linked with a **custom driver code**.  
 
-- `Quad4MP`: 4-node quadrilateral.
-- `Tri3MP`: 3-node triangular.
-- `Hex8MP`: 8-node hexahedron.
+**Example driver codes** and **hands-on tutorials** can be found in the `CaseStudies` folder. The `makefile` in the subdirectories handles the compilation and linking automatically. These examples demonstrate how to use **PHIMATS** for various **hydrogen-material interaction simulations** and related applications.  
 
-For coupled deformation-fracture-diffusion, i.e. phase-field coupled with mechanics and mass transfer, it will have the letter `MTP`.
+---
 
-- `Quad4MTP`: 4-node quadrilateral.
-- `Tri3MTP`: 3-node triangular.
-- `Hex8MTP`: 8-node hexahedron.
+### Citation  
+If you use **PHIMATS**, please cite:  
+**A. Hussein**, *Finite Element Theory for PHIMATS*, arXiv [DOI/link]  
 
-## License
+Additionally, consider citing relevant references from the `CaseStudies` folder if applicable.  
 
-PhiMATS is available under the [GNU General Public License v3.0 or later](https://www.gnu.org/licenses/gpl-3.0.html).
+---
 
-## Releases
+### License
+**PHIMATS** is released under the **[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html)**, or later.  
 
-The releases of this project are are available [here](https://github.com/AbduKT/PhiMATSFEM).
