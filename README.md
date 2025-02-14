@@ -24,7 +24,7 @@
 
 ## Documentation
 - **Companion theory manual:** *Finite Element Theory for PHIMATS*  
-- **Publications & examples:** Available in the `CaseStudies` folder  
+- **Publications & examples:** Available in the `CaseStudies` directory  
 - **Doxygen documentation:** [Online API Reference](https://ahcomat.github.io/doxygen-phimats/index.html)  
  
 ---
@@ -32,8 +32,8 @@
 ## Installation Guide
 
 ### **1️⃣ System Requirements**
-✅ **Linux OS required** (Recommended: Ubuntu, Debian, Fedora)  
-✅ **Windows users:** Use **Windows Subsystem for Linux (WSL)** 
+✅ **Linux OS required** (Recommended: Ubuntu, Debian, Fedora)
+✅ **Windows users:** Use **Windows Subsystem for Linux (WSL)**
 ⚠️ **macOS:** Potentially supported but untested 
 ❌ **No support for Windows (native)**  
 
@@ -63,7 +63,7 @@ conda env create -f environment.yml
 
 ### **3️⃣ Installing PETSc**
 PETSc must be installed with an **optimized configuration** (`arch-opt`).  
-Make sure the PETSc folder is located at:
+Make sure the PETSc directory is located at:
 ```sh
 /home/your_user_name/petsc
 ```
@@ -137,7 +137,7 @@ make
 
 To balance **simulation flexibility** with **high performance**, `PHIMATS` is compiled as a **library (`libphimats.a`)**, which must be linked with a **custom driver code**.  
 
-**Example driver codes** and **hands-on tutorials** can be found in the `CaseStudies` folder. The `makefile` in the subdirectories handles the compilation and linking automatically. These examples demonstrate how to use **PHIMATS** for various **hydrogen-material interaction simulations** and related applications.  
+**Example driver codes** and **hands-on tutorials** can be found in the `CaseStudies` directory. The `makefile` in the subdirectories handles the compilation and linking automatically. These examples demonstrate how to use **PHIMATS** for various **hydrogen-material interaction simulations** and related applications.  
 
 ---
 
@@ -145,7 +145,7 @@ To balance **simulation flexibility** with **high performance**, `PHIMATS` is co
 If you use **PHIMATS**, please cite:  
 **A. Hussein**, *Finite Element Theory for PHIMATS*, arXiv [DOI/link]  
 
-Additionally, consider citing relevant references from the `CaseStudies` folder if applicable.  
+Additionally, consider citing relevant references from the `CaseStudies` directory if applicable.  
 
 ---
 
