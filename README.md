@@ -26,6 +26,28 @@
 - **Companion theory manual:** *Finite Element Theory for PHIMATS*  
 - **Publications & examples:** Available in the `CaseStudies` directory  
 - **Doxygen documentation:** [Online API Reference](https://ahcomat.github.io/doxygen-phimats/index.html)  
+Haha, no worries! 😆🔥 A **download and setup section** is definitely important for users who are new to GitHub. Here’s how you can **add it to your README**:
+
+---
+
+## Download 
+
+To download **PHIMATS**, clone the repository using **Git**:
+
+```sh
+git clone https://github.com/ahcomat/PHIMATS.git
+cd phimats
+```
+
+Alternatively, you can download the repository as a **ZIP file**:  
+1️⃣ Click the **"Code"** button on the GitHub repository page.  
+2️⃣ Select **"Download ZIP"** and extract the contents.  
+3️⃣ Open a terminal and navigate to the extracted folder:  
+   ```sh
+   cd phimats
+   ```
+
+Once downloaded, follow the **installation guide** below to set up dependencies and compile the code.
  
 ---
 
