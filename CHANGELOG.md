@@ -1,6 +1,11 @@
 # Changelog
 
-## [Unreleased]
+## [V1.0.0] - First Release 🚀
+
+This marks the **first stable** release of PHIMATS, featuring case studies and core functionality.
+
+### Added
+- `CaseStudies` directory.
 
 ## [v0.5.0]
 ### Added
