@@ -26,7 +26,6 @@
 - **Companion theory manual:** *Finite Element Theory for PHIMATS*  
 - **Publications & examples:** Available in the `CaseStudies` directory  
 - **Doxygen documentation:** [Online API Reference](https://ahcomat.github.io/doxygen-phimats/index.html)  
-Haha, no worries! 😆🔥 A **download and setup section** is definitely important for users who are new to GitHub. Here’s how you can **add it to your README**:
 
 ---
 
