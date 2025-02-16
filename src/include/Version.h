@@ -24,12 +24,12 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VERSION_MAJOR 0
-#define VERSION_MINOR 5
+#define VERSION_MAJOR 1
+#define VERSION_MINOR 0
 #define VERSION_PATCH 0
 
-#define VERSION_STRING "v0.5.0"
-#define VERSION_DATE "11-02-2025"  // Release date
+#define VERSION_STRING "v1.0.0"
+#define VERSION_DATE "16-02-2025"  // Release date
 #define PROJECT_WEBSITE "https://comp-mat.com/phimats"
 #define PROJECT_CITATION "Abdelrahman Hussein, PHIMATS, 2025, DOI:10.xxxx/phiMATS"
 
