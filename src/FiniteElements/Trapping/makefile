@@ -1,6 +1,9 @@
 # Objects dir
 OBJDIR := ../../obj
 
+# Include makefile definitions
+include ../../MakeFile.defs
+
 # Finds .cxx files in current folder
 SOURCES:=${wildcard *.cxx}
 

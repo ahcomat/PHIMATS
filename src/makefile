@@ -17,17 +17,18 @@ SUBDIRS :=$(sort $(dir $(wildcard */)))
 # Exlude entries from list above
 SUBDIRS := $(filter-out $(EXCLUDE), $(SUBDIRS))
 
+
 # Static library
 STATIC_LIB := $(LIBDIR)/libphimats.a
 
 all: $(SUBDIRS) ${OBJECTS} $(STATIC_LIB)
 
 obj/%.o: %.cxx
-	$(COMPILE.cc) ${$(SETTINGS)} $< -I${PETSC_DIR}/include/ -I$(EIGEN) -I$(PHIMATSINCLUDES) -L${PETSC_LIB} -I$(H5ID) $(LDFLAGS)
+	$(COMPILE.cc) $(CXXFLAGS) $< -I${PETSC_DIR}/include/ -I$(EIGEN) -I$(PHIMATSINCLUDES) -L${PETSC_LIB} -I$(H5ID) $(LDFLAGS)
 	mv *.o obj
 
 $(SUBDIRS):
-	$(MAKE) -C $@
+	make -C $@
 
 # Create static library
 $(STATIC_LIB): $(OBJECTS)

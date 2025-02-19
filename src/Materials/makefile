@@ -1,6 +1,9 @@
 # Objects dir
 OBJDIR := ../obj
 
+# Include makefile definitions
+include ../MakeFile.defs
+
 # Finds .cxx files in current folder
 SOURCES:=${wildcard *.cxx}
 
@@ -13,9 +16,9 @@ SUBDIRS :=$(sort $(dir $(wildcard */)))
 all: $(SUBDIRS) ${OBJECTS}
 
 $(SUBDIRS):
-	$(MAKE) -C $@
+	make -C $@
 
 ../obj/%.o: %.cxx
-	${CXX} $(CPPFLAGS) -c $< -o $@ -I$(PHIMATSINCLUDES) -I$(EIGEN) -I$(H5ID) $(LDFLAGS)
+	${CXX} $(CXXFLAGS) -c $< -o $@ -I$(PHIMATSINCLUDES) -I$(EIGEN) -I$(H5ID) $(LDFLAGS)
 
 .PHONY: all $(SUBDIRS)

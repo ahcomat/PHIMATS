@@ -45,7 +45,6 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
         }
 
         DMatx_ep = Matd6x6(Matd6x6::Zero());
-        double dummy;
 
     } else if (dims == "2D") {
 
