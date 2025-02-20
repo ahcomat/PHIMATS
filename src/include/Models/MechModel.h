@@ -52,13 +52,7 @@ public:
  * @param H5File_in Input hdf5 file. 
  * @param NR_update Frequency of updating the Jacobian and its predonditioner.
  */
-
-/**
- * @brief Construct a new Mech Model object
- * 
- * @param H5File_in 
- */
-MechModel(H5IO& H5File_in, const int NR_update = 3);
+MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in, Logger& logger, const int NR_update = 3);
 ~MechModel();
 
 /**
@@ -212,10 +206,16 @@ void WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const string iSt
 
 private:
 
+/**
+ * @brief Logger object for handeling interface messages.
+ * 
+ */
+Logger& logger;
+
 /// @brief Maximum number of iterations.
 const int max_iter = 10;  
 
-/// @brief Frequency of updating the stiffness matrix. 
+/// @brief Frequency of updating the stiffness matrix within Newton-Raphson iterations. 
 const int NR_freq;      
 
 /// @brief Counter for NR iterations.

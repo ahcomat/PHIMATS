@@ -7,8 +7,8 @@
 
 using namespace std;
 
-MechModel::MechModel(H5IO& H5File_in, const int NR_update)
-    : NR_freq(NR_update) {
+MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in, Logger& logger, const int NR_update)
+    : logger(logger), NR_freq(NR_update) {
 
     string dsetName;
     dsetName = "SimulationParameters/nSteps";
@@ -61,6 +61,8 @@ MechModel::MechModel(H5IO& H5File_in, const int NR_update)
     for (int iDof=0; iDof<nTotDofs; iDof++){
         indices[iDof] = iDof;
     }
+
+    InitializePETSc(elements);
 
 }
 
@@ -139,6 +141,11 @@ void MechModel::setDirichBC(){
 
     VecSetValues(vecFext, nPresDofs, presDofs, presVals, INSERT_VALUES); 
     VecAssemblyBegin(vecFext); VecAssemblyEnd(vecFext);
+}
+
+int MechModel::get_nSteps() const{
+    
+    return nSteps;
 }
 
 void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
