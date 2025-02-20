@@ -209,7 +209,7 @@ private:
 /// @brief Maximum number of iterations.
 const int max_iter = 10;  
 
-/// @brief Frequency of updating the stiffness matrix. 
+/// @brief Frequency of updating the stiffness matrix within Newton-Raphson iterations. 
 const int NR_freq;      
 
 /// @brief Counter for NR iterations.
