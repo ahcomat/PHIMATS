@@ -52,13 +52,7 @@ public:
  * @param H5File_in Input hdf5 file. 
  * @param NR_update Frequency of updating the Jacobian and its predonditioner.
  */
-
-/**
- * @brief Construct a new Mech Model object
- * 
- * @param H5File_in 
- */
-MechModel(H5IO& H5File_in, const int NR_update = 3);
+MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in, const int NR_update = 3);
 ~MechModel();
 
 /**

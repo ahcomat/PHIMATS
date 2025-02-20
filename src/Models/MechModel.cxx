@@ -7,7 +7,7 @@
 
 using namespace std;
 
-MechModel::MechModel(H5IO& H5File_in, const int NR_update)
+MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in, const int NR_update)
     : NR_freq(NR_update) {
 
     string dsetName;
@@ -61,6 +61,8 @@ MechModel::MechModel(H5IO& H5File_in, const int NR_update)
     for (int iDof=0; iDof<nTotDofs; iDof++){
         indices[iDof] = iDof;
     }
+
+    InitializePETSc(elements);
 
 }
 
