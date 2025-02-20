@@ -7,8 +7,8 @@
 
 using namespace std;
 
-MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in, const int NR_update)
-    : NR_freq(NR_update) {
+MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in, Logger& logger, const int NR_update)
+    : logger(logger), NR_freq(NR_update) {
 
     string dsetName;
     dsetName = "SimulationParameters/nSteps";
