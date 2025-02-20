@@ -143,6 +143,11 @@ void MechModel::setDirichBC(){
     VecAssemblyBegin(vecFext); VecAssemblyEnd(vecFext);
 }
 
+int MechModel::get_nSteps() const{
+    
+    return nSteps;
+}
+
 void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
 
     // TODO: For debug!
