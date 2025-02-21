@@ -407,7 +407,14 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool assembleM){
     // // Restore the row
     // MatRestoreRow(matK, ROW, &NCOL, &COL, &VAL); 
 
-    // MatView(matK, PETSC_VIEWER_STDOUT_WORLD);
+    // // Save the matrix to MatrixMarket format
+    // PetscViewer viewer;
+    // PetscViewerASCIIOpen(PETSC_COMM_WORLD, "matrix_output.mtx", &viewer);
+    // PetscViewerPushFormat(viewer,  PETSC_VIEWER_ASCII_MATRIXMARKET);
+    // PetscViewerPushFormat(viewer,  PETSC_VIEWER_ASCII_MATLAB);
+
+    // MatView(matK, viewer);
+    // PetscViewerDestroy(&viewer);
 }
 
 void TrappingModel::Update_F(){
