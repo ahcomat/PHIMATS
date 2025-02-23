@@ -1,0 +1,25 @@
+# Compiler
+CXX = g++
+
+DEBUG =-O0 -g -Wall -DDEBUG -std=c++20 
+OPTIM = -O3 -std=c++20 
+
+SETTINGS ?= OPTIM
+
+ifeq ($(SETTINGS), OPTIM)
+	CFLAGS = $(OPTIM)
+else ifeq ($(SETTINGS), DEBUG)
+	CFLAGS =  $(DEBUG)
+endif
+
+# Linker flags
+LDFLAGS := -L$(H5LD) -lhdf5 -lhdf5_cpp 
+
+# Collect all `.cxx` files in the current directory.
+SRC=$(wildcard *.cxx)
+
+# Convert `.cxx` files into `.o` files for compilation.
+OBJ:=${patsubst %.cxx,%.o,${SRC}}
+
+# Extract the base name of the source files to determine the program name.
+PROG=$(basename $(SRC))
