@@ -1,7 +1,6 @@
 .vscode
 dev
 private
-CaseStudies
 Doxygen/*
 src/FEM_utils/__pycache__
 src/obj
