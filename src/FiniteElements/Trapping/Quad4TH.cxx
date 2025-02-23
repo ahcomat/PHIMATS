@@ -506,6 +506,8 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
                     elCapMatx.at(iElem).noalias() += s*(dummyShFunc.transpose()*dummyShFunc)*dummydVol;
 
                 }
+
+                elStiffMatx.at(iElem) = dt*elKDMatx.at(iElem) - dt*elKTMatx.at(iElem) + elCapMatx.at(iElem);
             }
         }
 

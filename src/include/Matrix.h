@@ -46,12 +46,12 @@ typedef Eigen::RowVector<double, 4> RowVecd4;
 typedef Eigen::RowVector<double, 6> RowVecd6;
 typedef Eigen::RowVector<double, 8> RowVecd8; 
 
-typedef Eigen::Matrix<double, 2, 2> Matd2x2;
+typedef Eigen::Matrix<double, 2, 2, Eigen::RowMajor> Matd2x2;
 typedef Eigen::Matrix<double, 3, 3, Eigen::RowMajor> Matd3x3;  // `RowMajor` for non-symmetric element stiffness matrix.
-typedef Eigen::Matrix<double, 4, 4> Matd4x4; 
-typedef Eigen::Matrix<double, 6, 6> Matd6x6;
-typedef Eigen::Matrix<double, 8, 8> Matd8x8;
-typedef Eigen::Matrix<double, 24, 24> Matd24x24; 
+typedef Eigen::Matrix<double, 4, 4, Eigen::RowMajor> Matd4x4; 
+typedef Eigen::Matrix<double, 6, 6, Eigen::RowMajor> Matd6x6;
+typedef Eigen::Matrix<double, 8, 8, Eigen::RowMajor> Matd8x8;
+typedef Eigen::Matrix<double, 24, 24, Eigen::RowMajor> Matd24x24; 
 
 typedef Eigen::Matrix<double, 4, 2> Matd4x2;           
 typedef Eigen::Matrix<double, 2, 4> Matd2x4;
