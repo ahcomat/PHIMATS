@@ -1,9 +1,12 @@
 ### Summary
 This case study demonstrates how to model hydrogen charging and thermal desorption spectroscopy (TDS) in duplex stainless steels using **PHIMATS**.  
 
+<<<<<<< HEAD
 For theoretical details, please refer to:  
 **A. Hussein et al.**, *A full-field model for hydrogen diffusion and trapping in two-phase microstructures: Application to thermal desorption spectroscopy of duplex stainless steel*. **Acta Mater.**  
 
+=======
+>>>>>>> dev-PlasInter
 To make these simulations feasible for a standard PC, this setup reduces the domain size to one-third of the original RVE width.  
 - **PC version**: Requires ~3.2 GB of RAM.
 - **Full RVE version** (as in the paper): **Required ~15 GB RAM** and was run on the **Flemish Supercomputer Center (VSC)**. 
