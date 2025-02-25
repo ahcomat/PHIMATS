@@ -23,7 +23,7 @@
 ---
 
 ## Documentation
-- **Companion theory manual:** *Finite Element Theory for PHIMATS*  
+- **Companion theory manual:** *[Finite Element Theory for PHIMATS](https://arxiv.org/abs/2502.16283)*  
 - **Publications & examples:** Available in the `CaseStudies` directory  
 - **Doxygen documentation:** [Online API Reference](https://ahcomat.github.io/doxygen-phimats/index.html)  
 
@@ -163,8 +163,8 @@ To balance **simulation flexibility** with **high performance**, `PHIMATS` is co
 ---
 
 ### Citation  
-If you use **PHIMATS**, please cite:  
-**A. Hussein**, *Finite Element Theory for PHIMATS*, arXiv [DOI/link]  
+For citing **PHIMATS**, please use:  
+**A. Hussein**, *Finite Element Theory for PHIMATS*, 2025. doi: 10.48550/ARXIV. 2502.16283.
 
 Additionally, consider citing relevant references from the `CaseStudies` directory if applicable.  
 
