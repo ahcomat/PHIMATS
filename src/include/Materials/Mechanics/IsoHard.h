@@ -79,6 +79,7 @@ double Mises3D(const ColVecd6& sig3D);
  * @param eqp Equivalent plastic strain
  * @param sig_eq Equivalent stress.
  * @param sig_h Hydrostatic stress. 
+ * @param rho Normalized dislocation density. 
  * @param sig_old 
  * @param eps_e_old 
  * @param eps_p_old 
@@ -97,6 +98,7 @@ void ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& e
  * @param eps_eq Equivalent plastic strain
  * @param sig_eq Equivalent stress.
  * @param sig_h Hydrostatic stress.
+ * @param rho Normalized dislocation density.
  * @param eps_e_old 
  * @param eps_p_old 
  * @param eps_eq_old 
