@@ -146,9 +146,6 @@ vector<vector<ColVecd3>> elStran_e_old;
 /// @brief Int-pt plastic strain (last convergged increment) [nElStres].
 vector<vector<ColVecd3>> elStran_p_old;  
 
-/// @brief Int-pt equivalent plastic strain (last convergged increment) [nElStres].
-vector<vector<double>> elStran_eq_old;
-
 /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
 vector<vector<Matd2x4>> BMat;
 
