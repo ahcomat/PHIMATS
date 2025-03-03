@@ -189,7 +189,7 @@ class PreProcessing:
         Isotropy = ["Isotropic", "Cubic"]
         
         # Check plasticity type
-        HardeningLaws = ["Linear", "PowerLaw"]
+        HardeningLaws = ["Linear", "PowerLaw", "KME"]
                 
         for mat in self.Materials:
             if "Elastic" in self.Materials[mat]:
@@ -306,7 +306,16 @@ class PreProcessing:
                         self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/HardeningLaw", data=np.bytes_(self.Materials[mat]['Plastic']["HardeningLaw"]))
                         self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/sig_y0", data=self.Materials[mat]['Plastic']["sig_y0"])
                         self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/K_hard", data=self.Materials[mat]['Plastic']["K_hard"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/n_pow", data=self.Materials[mat]['Plastic']["n_pow"])                   
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/n_pow", data=self.Materials[mat]['Plastic']["n_pow"])      
+                    elif self.Materials[mat]['Plastic']["HardeningLaw"] == "KME":
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/HardeningLaw", data=np.bytes_(self.Materials[mat]['Plastic']["HardeningLaw"]))
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/sig_y0", data=self.Materials[mat]['Plastic']["sig_y0"])
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/rho_0", data=self.Materials[mat]['Plastic']["rho_0"])
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/M", data=self.Materials[mat]['Plastic']["M"])
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/alpha", data=self.Materials[mat]['Plastic']["alpha"])
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/b", data=self.Materials[mat]['Plastic']["b"])
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/k1", data=self.Materials[mat]['Plastic']["k1"])
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/k2", data=self.Materials[mat]['Plastic']["k2"])             
 
         elif self.SimulType == "Transport":
             
