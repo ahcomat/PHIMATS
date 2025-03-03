@@ -248,6 +248,9 @@ vector<double> nodStres_eq;
 /// @brief Nodal hydrostatic stress.
 vector<double> nodStres_h;
 
+/// @brief Nodal normalized dislocation density.
+vector<double> nodRho;
+
 /// @brief Counter for integration points surrounding nodes.
 vector<int> nodCount;     
 
