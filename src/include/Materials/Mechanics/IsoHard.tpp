@@ -17,6 +17,22 @@ inline void IsoHard::UHard<Voce>(const double& eqpl, double& syield, double& rho
     // hard = h * (sigmaS - sigma0) * std::exp(-h * eqpl);
 }
 
+template <>
+inline void IsoHard::UHard<KME>(const double& eqpl, double& syield, double& rho, double& hard){
+
+
+    /* 
+    Note that here calculate the dislocation density, use it in evaluating
+    equations then normalized it at the end
+    */
+    double param = (k1/k2) - C_prime*exp(-(M*k2/2)*eqpl);
+    rho = pow(param, 2);
+    syield = sig_y0 +  M*alpha*uo*b*sqrt(rho); 
+    double eps = std::max(eqpl, 1.0e-12); // make sure it is always a positive number
+    hard = pow(M, 2)*alpha*uo*b/2*(k1 - k2*sqrt(rho));
+    rho = rho/rho_s; // Normalizing
+}
+
 template <typename HardeningLaw>
 void IsoHard::RM3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep){
 
