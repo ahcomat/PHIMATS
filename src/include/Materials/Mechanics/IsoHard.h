@@ -34,6 +34,7 @@ struct PlaneStress {};
 
 struct PowerLaw {};
 struct Voce {};
+struct KME {};
 /// @endcond
 
 class IsoHard: public LinearElastic{
@@ -47,7 +48,8 @@ enum class AnalysisType{
 
 enum class HardeningLaw{
     PowerLaw,
-    Voce
+    Voce,
+    KME
 };
 
 /**
@@ -144,6 +146,24 @@ double K_hard = 0.0;
 /// @brief Strain hardening exponent.
 double n_pow = 0.0;  
 
+/// @brief Initial dislocation density
+double rho_0 = 0.0;
+
+/// @brief Taylor factor
+double M = 0.0;
+
+/// @brief Dislocation interaction constant
+double alpha = 0.0;
+
+/// @brief Burgers vector 
+double b = 2.5e-10;   
+
+/// @brief Dislocation multiplication coefficient
+double k1 = 0.0;
+
+/// @brief Dislocation recovery coefficient
+double k2 = 0.0;
+
 /// @brief Elastioplastic stiffness matrix in Voigt notation.
 T_DMatx DMatx_ep;
 
@@ -188,6 +208,8 @@ static RM3DFn selectRM3D(HardeningLaw hardening) {
             return &IsoHard::RM3D<PowerLaw>;
         case HardeningLaw::Voce:
             return &IsoHard::RM3D<Voce>;
+        case HardeningLaw::KME:
+            return &IsoHard::RM3D<KME>;
         default:
             throw std::runtime_error("Unsupported hardening law.");
     }
@@ -233,6 +255,8 @@ static RM2DFn selectRM2D(AnalysisType analysis2D, HardeningLaw hardening) {
                     return &IsoHard::RM2D<PlaneStrain, PowerLaw>;
                 case HardeningLaw::Voce:
                     return &IsoHard::RM2D<PlaneStrain, Voce>;
+                case HardeningLaw::KME:
+                    return &IsoHard::RM2D<PlaneStrain, Voce>;
                 default:
                     throw std::runtime_error("Unsupported hardening law.");
             }
@@ -243,6 +267,8 @@ static RM2DFn selectRM2D(AnalysisType analysis2D, HardeningLaw hardening) {
                     return &IsoHard::RM2D<PlaneStress, PowerLaw>;
                 case HardeningLaw::Voce:
                     return &IsoHard::RM2D<PlaneStress, Voce>;
+                case HardeningLaw::KME:
+                    return &IsoHard::RM2D<PlaneStress, KME>;
                 default:
                     throw std::runtime_error("Unsupported hardening law.");
             }
