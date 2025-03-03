@@ -24,6 +24,16 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
 
             hardening = HardeningLaw::Voce;
 
+        } else if (hardLaw == "KME") {
+
+            rho_0 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/rho_0");
+            M = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/M");
+            b = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/b");
+            alpha = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/alpha");
+            k1 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/k1");
+            k2 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/k2");
+            hardening = HardeningLaw::KME;
+
         } else {
 
             throw invalid_argument("Undefined hardening law < " + hardLaw + " >");
@@ -43,6 +53,8 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
             selectedRM3D = &IsoHard::RM3D<PowerLaw>;
         } else if (hardLaw == "Voce") {
             selectedRM3D = &IsoHard::RM3D<Voce>;
+        } else if(hardLaw == "KME") {
+            selectedRM3D = &IsoHard::RM3D<KME>;
         }
 
         DMatx_ep = Matd6x6(Matd6x6::Zero());
@@ -56,6 +68,8 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
                 selectedRM2D = &IsoHard::RM2D<PlaneStrain, PowerLaw>;
             } else if (hardLaw == "Voce") {
                 selectedRM2D = &IsoHard::RM2D<PlaneStrain, Voce>;
+            } else if (hardLaw == "KME") {
+                selectedRM2D = &IsoHard::RM2D<PlaneStrain, KME>;
             }
         } else if (analysisType == "PlaneStress") {
             analysis2D = AnalysisType::PlaneStress;
@@ -64,6 +78,8 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
                 selectedRM2D = &IsoHard::RM2D<PlaneStress, PowerLaw>;
             } else if (hardLaw == "Voce") {
                 selectedRM2D = &IsoHard::RM2D<PlaneStress, Voce>;
+            } else if (hardLaw == "KME") {
+                selectedRM2D = &IsoHard::RM2D<PlaneStress, KME>;
             }
         } else {
             throw std::invalid_argument("Invalid 2D analysis type: " + analysisType);
