@@ -588,7 +588,7 @@ void MechModel::CalcNodVals(vector<BaseElemMech*> elements){
 
     for (int iSet=0; iSet<nElementSets; iSet++){
         
-        elements[iSet]->CalcNodVals(nodStres, nodStran, nodStran_e, nodStran_p, nodStran_eq, nodStres_eq, nodStres_h, nodCount);
+        elements[iSet]->CalcNodVals(nodStres, nodStran, nodStran_e, nodStran_p, nodStran_eq, nodStres_eq, nodStres_h, nodRho, nodCount);
     }
 
     // Number averaging the nodal values
@@ -603,6 +603,7 @@ void MechModel::CalcNodVals(vector<BaseElemMech*> elements){
             nodStran_eq.at(iNod) = nodStran_eq.at(iNod)/nodCount.at(iNod);
             nodStres_eq.at(iNod) = nodStres_eq.at(iNod)/nodCount.at(iNod);
             nodStres_h.at(iNod) = nodStres_h.at(iNod)/nodCount.at(iNod);
+            nodRho.at(iNod) = nodRho.at(iNod)/nodCount.at(iNod);
         }
 
     } else if (nDim==3){
@@ -616,6 +617,7 @@ void MechModel::CalcNodVals(vector<BaseElemMech*> elements){
             nodStran_eq.at(iNod) = nodStran_eq.at(iNod)/nodCount.at(iNod);
             nodStres_eq.at(iNod) = nodStres_eq.at(iNod)/nodCount.at(iNod);
             nodStres_h.at(iNod) = nodStres_h.at(iNod)/nodCount.at(iNod);
+            nodRho.at(iNod) = nodRho.at(iNod)/nodCount.at(iNod);
         }
     }
 
