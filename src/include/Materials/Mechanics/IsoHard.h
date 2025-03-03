@@ -166,6 +166,9 @@ double k1 = 0.0;
 /// @brief Dislocation recovery coefficient
 double k2 = 0.0;
 
+/// @brief Saturation dislocation density
+double rho_s = 0.0;
+
 /// @brief Elastioplastic stiffness matrix in Voigt notation.
 T_DMatx DMatx_ep;
 
