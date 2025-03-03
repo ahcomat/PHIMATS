@@ -115,25 +115,25 @@ double IsoHard::Mises3D(const ColVecd6& sig3D){
     return sqrt(term);
 }
 
-void IsoHard::ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, double& sig_h, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep){
+void IsoHard::ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep){
 
     // Ensure selectedRM3D is valid
     if (!selectedRM3D) {
         throw std::runtime_error("ReturnMapping3D function pointer is not set.");
     }
 
-    (this->*selectedRM3D)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, eps_e_old, eps_p_old, eps_eq_old, iStep);
+    (this->*selectedRM3D)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, rho, eps_e_old, eps_p_old, eps_eq_old, iStep);
 }
 
 /// @brief Select appropriate template specialization 
-void IsoHard::ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep){
+void IsoHard::ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep){
 
         // Ensure selectedRM3D is valid
     if (!selectedRM2D) {
         throw std::runtime_error("ReturnMapping2D function pointer is not set.");
     }
 
-    (this->*selectedRM2D)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, eps_e_old, eps_p_old, eps_eq_old, iStep);
+    (this->*selectedRM2D)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, rho, eps_e_old, eps_p_old, eps_eq_old, iStep);
 }
 
 T_DMatx IsoHard::getDMatx() const{

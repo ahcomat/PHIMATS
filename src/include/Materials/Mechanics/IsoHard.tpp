@@ -18,7 +18,7 @@ inline void IsoHard::UHard<Voce>(const double& eqpl, double& syield, double& har
 }
 
 template <typename HardeningLaw>
-void IsoHard::RM3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, double& sig_h, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep){
+void IsoHard::RM3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep){
 
     double Ebulk3 = Emod/(1.0 - 2.0*nu);
 
@@ -171,7 +171,7 @@ inline double IsoHard::Shydro2D<PlaneStress>(const ColVecd3& sig2D){
 
 /// @brief Specialization 
 template <typename AnalysisType, typename HardeningLaw>
-void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep){
+void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep){
 
     double Ebulk3 = Emod/(1.0 - 2.0*nu);
 
