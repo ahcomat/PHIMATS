@@ -169,6 +169,9 @@ double k2 = 0.0;
 /// @brief Saturation dislocation density
 double rho_s = 0.0;
 
+/// @brief Constant for KME model
+double C_prime = 0.0;
+
 /// @brief Elastioplastic stiffness matrix in Voigt notation.
 T_DMatx DMatx_ep;
 

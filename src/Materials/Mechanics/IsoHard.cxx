@@ -33,6 +33,7 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
             k1 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/k1");
             k2 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/k2");
             rho_s = pow(k1/k2, 2.0);
+            C_prime = (k1/k2) - sqrt(rho_0);
             hardening = HardeningLaw::KME;
 
         } else {
