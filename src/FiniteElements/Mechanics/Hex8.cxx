@@ -133,7 +133,8 @@ void Hex8::InitializeElements(Nodes &Nodes){
         elStran_p.resize(nElements); elStran_p_old.resize(nElements);   // Plastic strain tensors
         elStran_eq.resize(nElements); elStran_eq_old.resize(nElements); // Equivalent plastic strain
         elStres_eq.resize(nElements); // Equivalent (von Mises) stress
-        elStres_h.resize(nElements); // Equivalent (von Mises) stress
+        elStres_h.resize(nElements);  // Equivalent (von Mises) stress
+        elRho.resize(nElements);      // Norm dislocation density
     }
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
@@ -169,6 +170,7 @@ void Hex8::InitializeElements(Nodes &Nodes){
             elStres_eq.at(iElem).resize(nElGauss);
             elStran_eq.at(iElem).resize(nElGauss);
             elStres_h.at(iElem).resize(nElGauss);
+            elRho.at(iElem).resize(nElGauss);
 
             elStran_e_old.at(iElem).resize(nElGauss);
             elStran_p_old.at(iElem).resize(nElGauss); 
@@ -182,6 +184,7 @@ void Hex8::InitializeElements(Nodes &Nodes){
                 elStres_eq.at(iElem).at(iGaus) = 0;
                 elStran_eq.at(iElem).at(iGaus) = 0;
                 elStres_h.at(iElem).at(iGaus) = 0;
+                elRho.at(iElem).at(iGaus) = 0;
 
                 elStran_e_old.at(iElem).at(iGaus).setZero();
                 elStran_p_old.at(iElem).at(iGaus).setZero();
