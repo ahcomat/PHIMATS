@@ -200,6 +200,10 @@ class WriteXDMF:
         attribute = ET.SubElement(timestep_grid, "Attribute", Name="stress_h", AttributeType="Scalar", Center="Node")
         ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(1)).text = self.FName+"_out.hdf5:/Stress_h/Step_"+str(t)
         
+        # Add attribute element for normalized dislocation density
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="rho", AttributeType="Scalar", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(1)).text = self.FName+"_out.hdf5:/Rho/Step_"+str(t)
+        
     #-----------------------------------------------------------------------------#
     
     def WritePlastic3D(self, t):
@@ -250,6 +254,10 @@ class WriteXDMF:
         # Add attribute element for hydostatic stress
         attribute = ET.SubElement(timestep_grid, "Attribute", Name="stress_h", AttributeType="Scalar", Center="Node")
         ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(1)).text = self.FName+"_out.hdf5:/Stress_h/Step_"+str(t)
+        
+        # Add attribute element for normalized dislocation density
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="rho", AttributeType="Scalar", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(1)).text = self.FName+"_out.hdf5:/Rho/Step_"+str(t)
         
 #-----------------------------------------------------------------------------#
 
