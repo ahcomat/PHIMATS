@@ -438,6 +438,7 @@ void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int
                                             elStran_eq.at(iElem).at(iGaus), 
                                             elStres_eq.at(iElem).at(iGaus),
                                             elStres_h.at(iElem).at(iGaus),
+                                            elRho.at(iElem).at(iGaus),
                                             elStran_e_old.at(iElem).at(iGaus),
                                             elStran_p_old.at(iElem).at(iGaus),
                                             elStran_eq_old.at(iElem).at(iGaus), iStep);
@@ -462,6 +463,7 @@ void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int
                                             elStran_eq.at(iElem).at(iGaus), 
                                             elStres_eq.at(iElem).at(iGaus),
                                             elStres_h.at(iElem).at(iGaus),
+                                            elRho.at(iElem).at(iGaus),
                                             elStran_e_old.at(iElem).at(iGaus),
                                             elStran_p_old.at(iElem).at(iGaus),
                                             elStran_eq_old.at(iElem).at(iGaus), iStep);
