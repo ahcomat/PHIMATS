@@ -166,5 +166,8 @@ vector<vector<double>> elStres_eq;
 /// @brief Int-pt hydrostatic stress [nElStres].
 vector<vector<double>> elStres_h;
 
+/// @brief Int-pt normalized dislocation density [nElStres].
+vector<vector<double>> elRho;
+
 };
 #endif
