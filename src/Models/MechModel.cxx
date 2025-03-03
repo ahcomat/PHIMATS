@@ -640,6 +640,8 @@ void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const
     H5File_out.WriteArray1D("Stress_eq/Step_"+iStep, nTotNodes, nodStres_eq.data());
     H5File_out.WriteArray1D("Strain_eq/Step_"+iStep, nTotNodes, nodStran_eq.data());
     H5File_out.WriteArray1D("Stress_h/Step_"+iStep, nTotNodes, nodStres_h.data());
+    
+    H5File_out.WriteArray1D("Rho/Step_"+iStep, nTotNodes, nodRho.data()); // Will write it as output anyways for now
 
 
     // Stresses and strains
