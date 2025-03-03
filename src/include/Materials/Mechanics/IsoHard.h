@@ -85,7 +85,7 @@ double Mises3D(const ColVecd6& sig3D);
  * @param eqp_old 
  * @param iStep Step number.
  */
-void ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, double& sig_h, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep);
+void ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep);
 
 /**
  * @brief Return mapping algorithm for 2D isotropic hardening plasticity. 
@@ -102,7 +102,7 @@ void ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& e
  * @param eps_eq_old 
  * @param iStep 
  */
-void ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep);
+void ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep);
 
 /**
  * @brief Returns the stiffness matrix in Voigt notation.
@@ -194,9 +194,9 @@ void UHard(const double& eqpl, double& syield, double& hard);
  * @param iStep 
  */
 template <typename HardeningLaw>
-void RM3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, double& sig_h, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep);
+void RM3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep);
 
-using RM3DFn = void (IsoHard::*)(ColVecd6&, ColVecd6&, ColVecd6&, ColVecd6&, double&, double&, double&, const ColVecd6&, const ColVecd6&, const double&, const int);
+using RM3DFn = void (IsoHard::*)(ColVecd6&, ColVecd6&, ColVecd6&, ColVecd6&, double&, double&, double&, double&, const ColVecd6&, const ColVecd6&, const double&, const int);
 
 // Function pointer for the selected ReturnMapping variant
 RM3DFn selectedRM3D;
@@ -237,9 +237,9 @@ double Shydro2D(const ColVecd3& sig2D);
 
 // 2D Return-mapping to handle different hardening laws and stress state.
 template <typename AnalysisType, typename HardeningLaw>
-void RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep);
+void RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep);
 
-using RM2DFn = void (IsoHard::*)(ColVecd3&, ColVecd3&, ColVecd3&, ColVecd3&, double&, double&, double&, const ColVecd3&, const ColVecd3&, const double&, const int);
+using RM2DFn = void (IsoHard::*)(ColVecd3&, ColVecd3&, ColVecd3&, ColVecd3&, double&, double&, double&, double&, const ColVecd3&, const ColVecd3&, const double&, const int);
 
 // Function pointer for the selected ReturnMapping variant
 RM2DFn selectedRM2D;
