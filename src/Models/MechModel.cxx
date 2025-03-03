@@ -29,6 +29,7 @@ MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in, Logger& lo
     nodStran_eq.resize(nTotNodes);
     nodStres_eq.resize(nTotNodes);
     nodStres_h.resize(nTotNodes);
+    nodRho.resize(nTotNodes);
     if (nDim == 2){ // Case 2D model
 
         nodStres = vector<ColVecd3>(nTotNodes);
@@ -92,6 +93,7 @@ void MechModel::setZeroNodVals(){
             nodStran_eq.at(iNod) = 0;
             nodStres_eq.at(iNod) = 0;
             nodStres_h.at(iNod) = 0;
+            nodRho.at(iNod) = 0;
             nodCount.at(iNod) = 0;
             
         }
@@ -107,6 +109,7 @@ void MechModel::setZeroNodVals(){
             nodStran_eq.at(iNod) = 0;
             nodStres_eq.at(iNod) = 0;
             nodStres_h.at(iNod) = 0;
+            nodRho.at(iNod) = 0;
             nodCount.at(iNod) = 0;
 
         }
