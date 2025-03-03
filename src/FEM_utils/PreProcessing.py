@@ -541,6 +541,7 @@ class PreProcessing:
                         fh5.create_group('Strain_eq')
                         fh5.create_group('Stress_eq')
                         fh5.create_group('Stress_h')
+                        fh5.create_group('Rho')
                         
         except OSError as e:
             raise RuntimeError(f"Failed to create the HDF5 file '{FName}': {e}")
