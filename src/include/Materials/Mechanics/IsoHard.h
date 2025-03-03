@@ -181,10 +181,11 @@ T_DMatx DMatx_ep;
  * @tparam HardeningLaw type of hardening law
  * @param eqpl Equivalent plastic strain
  * @param syield Current yield stress
+ * @param rho Current dislocaiton density
  * @param hard Hardening modulus
  */
 template <typename HardeningLaw>
-void UHard(const double& eqpl, double& syield, double& hard);
+void UHard(const double& eqpl, double& syield, double& rho, double& hard);
 
 /**
  * @brief 3D Return-mapping to handle different hardening laws

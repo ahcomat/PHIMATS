@@ -1,6 +1,6 @@
 
 template <>
-inline void IsoHard::UHard<PowerLaw>(const double& eqpl, double& syield, double& hard){
+inline void IsoHard::UHard<PowerLaw>(const double& eqpl, double& syield, double& rho, double& hard){
 
     syield = sig_y0 +  K_hard * std::pow(eqpl, n_pow);
     double eps = std::max(eqpl, 1.0e-12);
@@ -8,7 +8,7 @@ inline void IsoHard::UHard<PowerLaw>(const double& eqpl, double& syield, double&
 }
 
 template <>
-inline void IsoHard::UHard<Voce>(const double& eqpl, double& syield, double& hard){
+inline void IsoHard::UHard<Voce>(const double& eqpl, double& syield, double& rho, double& hard){
 
     // double sigma0 = 200.0;
     // double sigmaS = 300.0;
@@ -37,7 +37,7 @@ void IsoHard::RM3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps
 
     // Current yield stress and hardening modulus
     double sYield0, sYield, hard; 
-    UHard<HardeningLaw>(p, sYield0, hard); 
+    UHard<HardeningLaw>(p, sYield0, rho, hard); 
     sYield = sYield0;
 
     // Yield function 
@@ -69,7 +69,7 @@ void IsoHard::RM3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps
             // Update plastic strain increment 
             deqpl += f_yield/(3*uo + hard);
             p = eps_eq_old + deqpl;
-            UHard<HardeningLaw>(p, sYield, hard);
+            UHard<HardeningLaw>(p, sYield, rho, hard);
             f_yield = sig_trial_eq - 3*uo*deqpl - sYield;
 
             if(nIter_RM > max_iter){
@@ -190,7 +190,7 @@ void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps
 
     // Current yield stress and hardening modulus
     double sYield0, sYield, hard; 
-    UHard<HardeningLaw>(p, sYield0, hard); 
+    UHard<HardeningLaw>(p, sYield0, rho, hard); 
     sYield = sYield0;
 
     // Yield function 
@@ -223,7 +223,7 @@ void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps
             // Update plastic strain increment 
             deqpl += f_yield/(3*uo + hard);
             p = eps_eq_old + deqpl;
-            UHard<HardeningLaw>(p, sYield, hard);
+            UHard<HardeningLaw>(p, sYield, rho, hard);
             f_yield = sig_trial_eq - 3*uo*deqpl - sYield;
 
             if(nIter_RM > max_iter){
