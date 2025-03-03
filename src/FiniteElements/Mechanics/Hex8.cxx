@@ -349,7 +349,7 @@ void Hex8::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_
     // cout << elStran.at(0).at(0) << "\n\n";
 }
 
-void Hex8::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<double>& nodStres_h, vector<int>& nodCount){
+void Hex8::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<double>& nodStres_h, vector<double>& nodRho, vector<int>& nodCount){
 
     try {
         if (elStran_e.data() == nullptr){
@@ -374,6 +374,7 @@ void Hex8::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& 
                 nodStran_eq.at(*iNod2) += elStran_eq.at(iElem).at(iGaus);
                 nodStres_eq.at(*iNod2) += elStres_eq.at(iElem).at(iGaus);
                 nodStres_h.at(*iNod2) += elStres_h.at(iElem).at(iGaus);
+                nodRho.at(*iNod2) += elRho.at(iElem).at(iGaus);
                 nodCount.at(*iNod2) += 1;
             }
         }
