@@ -29,9 +29,10 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
             throw invalid_argument("Undefined hardening law < " + hardLaw + " >");
 
         }
-    } catch (const exception& e) {
-        cerr << "ERROR: " << e.what() << endl;
-        cerr << "Terminating!" << endl;
+    } catch (const std::runtime_error& e) {
+        logger.log("\nException caught in IsoHard\n", "", false);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("\nCritical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
     }
 
