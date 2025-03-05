@@ -259,7 +259,9 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     // Initialize the `SNES` solver.
     SNESCreate(PETSC_COMM_WORLD, &snes);
 
-    // SNESSetTolerances(snes, 1e-6, 1e-8, 1e-8, 50, 1000);
+    // Parameters for SNES convergence. Details can be found in 
+    // https://petsc.org/main/manualpages/SNES/SNESSetTolerances/
+    SNESSetTolerances(snes, 1e-50, 1e-8, 1e-8, 100, 1000);
 
     // Get KSP from SNES
     SNESGetKSP(snes, &ksp);
