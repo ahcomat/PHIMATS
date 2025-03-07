@@ -171,6 +171,9 @@ vector<double> nod_gPhi_ii;
 /// @brief nodal values of hydrostatic stress [nTotNodes]
 vector<double> nod_sigma_h; 
 
+/// @brief nodal values of normalized dislocation density [nTotNodes]
+vector<double> nod_rho; 
+
 /// @brief Element concentration (temperature) dofs. In this case, it is identical to `elemNodeConn`.
 vector<vector<int>> elemConDof;    
 
