@@ -375,6 +375,7 @@ PetscErrorCode MechModel::Assemble(std::vector<BaseElemMech*> elements) {
     // Apply Dirichlet boundary conditions (requires MAT_FINAL_ASSEMBLY)
     MatZeroRows(matA, nPresDofs, presDofs, 1.0, NULL, NULL);
 
+    // TODO: For debugging
     // Save the matrix to MatrixMarket format
     // PetscViewer viewer;
     // PetscViewerASCIIOpen(PETSC_COMM_WORLD, "matrix_output.mtx", &viewer);
