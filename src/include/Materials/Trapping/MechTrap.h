@@ -57,12 +57,12 @@ double get_s() const { return s; };
  */
     double get_Vh() const { return Vh; };
 
-// /**
-//  * @brief Get trapping parameter `zeta_rho`.
-//  * 
-//  * @return double
-//  */
-// double get_zeta_rho() const { return zeta_rho};
+/**
+ * @brief Get trapping parameter `zeta_rho`.
+ * 
+ * @return double
+ */
+double get_zeta_rho() const { return zeta_rho; };
 
 private:
 
@@ -77,6 +77,9 @@ double m;
 
 /// @brief Trapping capacity  
 double s;
+
+/// @brief Dislocation trapping parameter 
+double zeta_rho;
 
 };
 #endif
