@@ -395,7 +395,6 @@ void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     // Set to zero.
     VecSet(vecDeltaDisp, 0.0); 
 
-    KSPCreate(PETSC_COMM_WORLD, &ksp);
     KSPSetOperators(ksp, matA, matA);
     KSPSolve(ksp, vecFext, vecDeltaDisp);
 
