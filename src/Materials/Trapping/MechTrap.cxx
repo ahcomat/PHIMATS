@@ -30,6 +30,9 @@ MechTrap::MechTrap(string dimensions, H5IO& H5File, int iSet, Logger& logger)
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/s";
     s = H5File.ReadScalar(dsetName);
 
+    dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_rho";
+    zeta_rho = H5File.ReadScalar(dsetName);
+
     if (dims=="3D"){
 
         dsetName = "Materials/Material_"+ std::to_string(iSet)+"/D0z";
