@@ -484,6 +484,7 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
                 // Loop through element nodes to get nodal values.
                 for(int iNod=0; iNod<nElNodes; iNod++){
                     dummyElNod_sigma_h[iNod] = nod_sigma_h.at(NodeConn.at(iNod));
+                    dummyElNod_rho[iNod] = nod_rho.at(NodeConn.at(iNod));
                 }              
 
                 // Integration over all Gauss points.
