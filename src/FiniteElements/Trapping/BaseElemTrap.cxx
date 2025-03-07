@@ -51,3 +51,10 @@ void BaseElemTrap::ReadElementsData(H5IO &H5File_in, int iSet){
     // for (auto& s : elemNodeConn[0])
     //     cout << s << "\n"; 
 }
+
+void BaseElemTrap::ReadNodalStress(H5IO &H5File_stress, int iStep){
+
+    H5File_stress.ReadField1D("Stress_h/Step_"+std::to_string(iStep), nod_sigma_h);
+    H5File_stress.ReadField1D("Rho/Step_"+std::to_string(iStep), nod_rho);
+
+}

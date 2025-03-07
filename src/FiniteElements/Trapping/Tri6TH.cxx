@@ -274,10 +274,6 @@ void Tri6TH::getInPtCoords(T_nodStres& glIntPtCoords){
 
 // }
 
-void Tri6TH::ReadNodalStress(H5IO &H5File_in, int iStep){
-
-}
-
 void Tri6TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
     Matd2x2 DMat; 
