@@ -77,6 +77,8 @@ const vector<vector<int>>& get_elemConDof() const { return elemConDof; };
  */
 void ReadElementsData(H5IO &H5File_in, int iSet);
 
+void ReadNodalStress(H5IO &H5File_stress, int iStep);
+
 /**
  * @brief Return const reference to the vector of element capacitance matrix c_ii.
  * 
@@ -90,8 +92,6 @@ const T_ElStiffMatx& getElCapMatx() const { return elCapMatxVariant; }
  * @param glIntPtCoords 
  */
 virtual void getInPtCoords(T_nodStres& glIntPtCoords) = 0;
-
-virtual void ReadNodalStress(H5IO &H5File_stress, int iStep) = 0;
 
 /**
  * @brief Calculates the element stiffness and capacitances matrix.

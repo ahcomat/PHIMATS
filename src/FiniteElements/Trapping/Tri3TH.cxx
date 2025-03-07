@@ -332,12 +332,6 @@ void Tri3TH::getInPtCoords(T_nodStres& glIntPtCoords){
 //     }
 // }
 
-void Tri3TH::ReadNodalStress(H5IO &H5File_stress, int iStep){
-
-    H5File_stress.ReadField1D("Stress_h/Step_"+std::to_string(iStep), nod_sigma_h);
-
-}
-
 void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
     Matd2x2 DMat; 

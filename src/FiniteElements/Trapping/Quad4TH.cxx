@@ -226,6 +226,7 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
         } else if (Trapping=="MechTrapping") {         // Stresses and dislocations 
             
             nod_sigma_h.resize(nNodes);
+            nod_rho.resize(nNodes);
 
             // Loop through elements.
             for(int iElem=0; iElem<nElements; iElem++){
@@ -342,12 +343,6 @@ void Quad4TH::getInPtCoords(T_nodStres& glIntPtCoords){
 //         }
 //     }
 // }
-
-void Quad4TH::ReadNodalStress(H5IO &H5File_stress, int iStep){
-
-    H5File_stress.ReadField1D("Stress_h/Step_"+std::to_string(iStep), nod_sigma_h);
-
-}
 
 void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
@@ -468,6 +463,8 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
 
             double s = dynamic_cast<MechTrap*>(mat)->get_s();
             double Vh = dynamic_cast<MechTrap*>(mat)->get_Vh();
+            double zeta_rho = dynamic_cast<MechTrap*>(mat)->get_zeta_rho();
+
             ColVecd4 dummyElNod_sigma_h, dummyElNod_rho;
             double rho;
 

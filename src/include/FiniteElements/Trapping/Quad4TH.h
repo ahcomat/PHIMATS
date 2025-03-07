@@ -104,8 +104,6 @@ void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double& wt, d
  */
 virtual void getInPtCoords(T_nodStres& glIntPtCoords) override;
 
-void ReadNodalStress(H5IO &H5File_stress, int iStep) override;
-
 /**
  * @brief Calculates the element stiffness matrix for all elements.
  * 
