@@ -499,7 +499,8 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
                     // [B_ji]^T k_jj B_ji
                     elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
                     // [B_ji]^T k_jj B_ji
-                    elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*Vh/(R*T)*dummyBMat*dummyElNod_sigma_h*dummyShFunc*dummydVol;
+                    elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*Vh/(R*T)*dummyBMat*dummyElNod_sigma_h*dummyShFunc*dummydVol +
+                    dummyBMat.transpose()*DMat*zeta_rho/(R*T)*dummyBMat*dummyElNod_rho*dummyShFunc*dummydVol;
                     // [N_i]^T N_i
                     elCapMatx.at(iElem).noalias() += s*(dummyShFunc.transpose()*dummyShFunc)*dummydVol;
 
