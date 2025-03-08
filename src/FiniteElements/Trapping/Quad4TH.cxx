@@ -485,12 +485,13 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
                 for(int iNod=0; iNod<nElNodes; iNod++){
                     dummyElNod_sigma_h[iNod] = nod_sigma_h.at(NodeConn.at(iNod));
                     dummyElNod_rho[iNod] = nod_rho.at(NodeConn.at(iNod));
-                }              
-
+                }       
+                
                 // Integration over all Gauss points.
                 for (int iGauss=0; iGauss<nElGauss; iGauss++){
 
-                    DMat = std::get<Matd2x2>(mat->CalcDMatx(0, T));
+                    rho = shapeFunc.at(iGauss)*dummyElNod_rho;
+                    DMat = std::get<Matd2x2>(mat->CalcDMatx(rho, T));
 
                     const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
                     const RowVecd4& dummyShFunc = shapeFunc.at(iGauss);
