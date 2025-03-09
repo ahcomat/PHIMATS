@@ -62,8 +62,9 @@ void IntroMessage();
 void LoopMessage();
 
 /**
- * @brief Show message for step increment. 
+ * @brief Show message for step increment.
  * 
+ * @param iStep Step number. ks
  */
 void StepIncrement(const int& iStep);
 
