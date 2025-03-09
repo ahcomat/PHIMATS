@@ -83,7 +83,7 @@ void setUniformCon(double uniformCon);
 void InitializeBC(H5IO& H5File_in);
 
 /**
- * @brief Set Dirichlet boundary conditions in the RHS `b` and global stiffness matrix `A`.
+ * @brief Set Dirichlet boundary conditions in the RHS `vecF` and global stiffness matrix `matA`.
  * 
  */
 void setBC();
