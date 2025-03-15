@@ -77,6 +77,12 @@ const vector<vector<int>>& get_elemConDof() const { return elemConDof; };
  */
 void ReadElementsData(H5IO &H5File_in, int iSet);
 
+/**
+ * @brief Function to read the nodal stresses and normalized dislocation density.
+ * 
+ * @param H5File_stress Output HDF5 file from mechanical simulation.
+ * @param iStep Time step to read. 
+ */
 void ReadNodalStress(H5IO &H5File_stress, int iStep);
 
 /**
