@@ -1,19 +1,22 @@
 # Changelog
 
-## [V1.1.0] - Hydrogen-mechanics interactions
+## [V1.1.0] - Hydrogen-mechanics interactions (date)
 
 Including the hydrogen-mechanics interactions, i.e. hydrostatic stresses and dislocations.
+
+### Backward Incompatibilities
+- The `SimulationData` preprocessing dict now should include a constant concentration value `conB` for trapping simulations. 
 
 ### Added
 - `CaseStudies/CrackTip` directory for hydrogen interactions using boundary layer model. 
 - `Materials/Trapping/MechTrap` for modeling hydrogen interactions with hydrostatic stresses and dislocations. 
 
 ### Changed
-- `Materials/Mechanics/IsoHard` added the `Kocka-Mecking-Estrin` hardening model based on dislocation density.
+- `Materials/Mechanics/IsoHard` added the `Kocks-Mecking-Estrin` hardening model based on dislocation density.
 - `FiniteElements/Trapping/Quad4HT` hydrogen-mechanics interactions.
 - `Models/TrappingModel` equilibrium boundary concentrations for mechanics interactions. 
 
-## [V1.0.0] - First Release 🚀
+## [V1.0.0] - First Release 🚀 (16-02-2025)
 
 This marks the **first stable** release of PHIMATS, featuring case studies and core functionality.
 
