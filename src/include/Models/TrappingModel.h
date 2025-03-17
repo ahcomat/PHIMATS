@@ -252,6 +252,9 @@ double T0;
 /// @brief Current temperature.
 double T;
 
+/// @brief Boundary concentration.
+double conB = 0;
+
 /// @brief Total time.
 double TotTime = 0;     
 
