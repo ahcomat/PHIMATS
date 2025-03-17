@@ -1,4 +1,7 @@
 #include "FiniteElements/Trapping/BaseElemTrap.h"
+#include "Materials/Trapping/TrapGB.h"
+#include "Materials/Trapping/TrapPhase.h"
+#include "Materials/Trapping/MechTrap.h"
 
 #ifndef DEBUG
 #define at(x) operator[](x)
@@ -57,4 +60,30 @@ void BaseElemTrap::ReadNodalStress(H5IO &H5File_stress, int iStep){
     H5File_stress.ReadField1D("Stress_h/Step_"+std::to_string(iStep), nod_sigma_h);
     H5File_stress.ReadField1D("Rho/Step_"+std::to_string(iStep), nod_rho);
 
+}
+
+void BaseElemTrap::setEquilibriumBC(BaseTrapping* mat, double* presVals, int* presDofs, const int nPresDofs, const double conB, const double T){
+
+    try{
+
+        if (Trapping=="MechTrapping"){                   // Stresses and dislocations
+
+            double Vh = dynamic_cast<MechTrap*>(mat)->get_Vh();
+            double zeta_rho = dynamic_cast<MechTrap*>(mat)->get_zeta_rho();
+
+            for (int iPresDof=0; iPresDof<nPresDofs; iPresDof++){
+                presVals[iPresDof] = conB*exp((nod_sigma_h[presDofs[iPresDof]]*Vh +
+                                               nod_rho[presDofs[iPresDof]]*zeta_rho)/(R*T));
+            }
+
+        }
+
+    } catch (const std::runtime_error& e) {
+
+            logger.log("\nException caught in BaseElemTrap::setEquilibriumBC:\n", "", false);
+            logger.log("    " + std::string(e.what()), "", false);
+            logger.log("\nCritical error encountered. Terminating!\n", "", false);
+            exit(EXIT_FAILURE);
+    
+        }
 }

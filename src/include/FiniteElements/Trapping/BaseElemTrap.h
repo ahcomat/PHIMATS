@@ -86,6 +86,19 @@ void ReadElementsData(H5IO &H5File_in, int iSet);
 void ReadNodalStress(H5IO &H5File_stress, int iStep);
 
 /**
+ * @brief Set equilibrium concentration at boundary nodes. 
+ * 
+ * @param mat Trapping material pointer.
+ * @param presVals double* prescribed nodal values.
+ * @param presDofs int* container for the degrees of freedom of the boundary nodes. 
+ * @param nPresDofs int total number of degrees of freedom.
+ * @param conB double constant boundary concentration. 
+ * @param T double temperature. 
+ */
+void setEquilibriumBC(BaseTrapping* mat, double* presVals, int* presDofs, const int nPresDofs, const double conB, const double T);
+
+
+/**
  * @brief Return const reference to the vector of element capacitance matrix c_ii.
  * 
  * @return const vector<T_ElStiffMatx>& 
