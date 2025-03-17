@@ -60,6 +60,7 @@ class PreProcessing:
         self.nElementSets = inputData["nElementSets"]
         self.presBCs = inputData["presBCs"]
         self.nPresDofs = len(self.presBCs)
+        self.conB = inputData["conB"]
         self.nSteps = inputData["nSteps"]
         
         #----------------------------------------------------------------------
@@ -257,12 +258,14 @@ class PreProcessing:
         if self.SimulType == "GBTrapping":
             self.grp_Sim_Params.create_dataset("dt", data=self.dt)
             self.grp_Sim_Params.create_dataset("T", data=self.T)
+            self.grp_Sim_Params.create_dataset("conB", data=self.conB)
             self.fh5.create_dataset('gPhi', data=self.gPhi, dtype = np.float64)
             
         # Case Trapping 
         if self.SimulType == "2PhaseTrapping":
             self.grp_Sim_Params.create_dataset("dt", data=self.dt)
             self.grp_Sim_Params.create_dataset("T", data=self.T)
+            self.grp_Sim_Params.create_dataset("conB", data=self.conB)
             self.fh5.create_dataset('gPhi_jj', data=self.gPhi_jj, dtype = np.float64) 
             self.fh5.create_dataset('gPhi_ij', data=self.gPhi_ij, dtype = np.float64) 
             self.fh5.create_dataset('gPhi_ii', data=self.gPhi_ii, dtype = np.float64) 
@@ -272,6 +275,7 @@ class PreProcessing:
         if self.SimulType == "MechTrapping":
             self.grp_Sim_Params.create_dataset("dt", data=self.dt)
             self.grp_Sim_Params.create_dataset("T", data=self.T)  
+            self.grp_Sim_Params.create_dataset("conB", data=self.conB)
         
         #----------------------------------------------------------------------
         # Material data
