@@ -27,6 +27,8 @@ TrappingModel::TrappingModel(vector<BaseElemTrap*> elements, H5IO& H5File_in, Lo
     dsetName = "SimulationParameters/T";
     T = H5File_in.ReadScalar(dsetName);
     T0 = H5File_in.ReadScalar(dsetName);
+    dsetName = "SimulationParameters/conB";
+    conB= H5File_in.ReadScalar(dsetName);
     dsetName = "SimulationParameters/nExitNodes";
     nExitNodes = H5File_in.ReadScalar(dsetName);
 
