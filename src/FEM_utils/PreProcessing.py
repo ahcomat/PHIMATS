@@ -60,7 +60,6 @@ class PreProcessing:
         self.nElementSets = inputData["nElementSets"]
         self.presBCs = inputData["presBCs"]
         self.nPresDofs = len(self.presBCs)
-        self.conB = inputData["conB"]
         self.nSteps = inputData["nSteps"]
         
         #----------------------------------------------------------------------
@@ -90,12 +89,14 @@ class PreProcessing:
             self.dt = inputData["dt"]
             self.T = inputData["T"]
             self.gPhi = inputData["gPhi"]
+            self.conB = inputData["conB"]
             
         elif self.SimulType=="2PhaseTrapping":
             
             self.exitNods = inputData["exitNods"]
             self.dt = inputData["dt"]
             self.T = inputData["T"]
+            self.conB = inputData["conB"]
             
             self.phi_j = inputData["phi_j"]
             self.gPhi_jj = inputData["gPhi_jj"]
@@ -107,6 +108,7 @@ class PreProcessing:
             self.exitNods = inputData["exitNods"]
             self.dt = inputData["dt"]
             self.T = inputData["T"]
+            self.conB = inputData["conB"]
         
         #----------------------------------------------------------------------
         # Check for allowed elements and assign element data (number of nodes,
