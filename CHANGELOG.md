@@ -1,6 +1,6 @@
 # Changelog
 
-## [V1.1.0] - Hydrogen-mechanics interactions (date)
+## [V1.1.0] - Hydrogen-mechanics interactions (01-05-2025)
 
 Including the hydrogen-mechanics interactions, i.e. hydrostatic stresses and dislocations.
 
