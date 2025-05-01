@@ -24,7 +24,9 @@ int main(int argc, char **argv){
 
 	// Logger object for handling terminal user interface
 	Logger logger(PETSC_COMM_WORLD, modelName+".log");
+	// Start timer
 	logger.StartTimer();
+	// Print intro message
 	logger.IntroMessage();
 
 	// Initialize I/O hdf5 files
@@ -46,7 +48,7 @@ int main(int argc, char **argv){
 	vector<BaseElemTrap*> Tri3THElemVec;
 	Tri3THElemVec.push_back(new Tri3TH(H5File_in, Nodes, 1, logger));
 
-	// Initialize the sytem -----------
+	// Initialize the system -----------
 
 	// Model
 	TrappingModel model(Tri3THElemVec, H5File_in, logger);
@@ -64,13 +66,14 @@ int main(int argc, char **argv){
 	LinearTransport linearSolver(model.getK(), logger, "DIRECT");
 
 	// Write initial conditions
-	model.WriteAvCon(Tri3THElemVec, H5File_out, 0);    // Average concentration 
-	model.WriteOut(H5File_out, to_string(0));	// Concentration field 
+	model.WriteAvCon(Tri3THElemVec, H5File_out, 0);    // Volume average concentration 
+	model.WriteOut(H5File_out, to_string(0));		   // Concentration field 
 
 	// Solver loop -----------
 
 	logger.LoopMessage();
 
+	// Sets BC and updates the RHS. Required even for zero flux BCs
 	model.setBC();
 
 	// Number of steps
@@ -81,6 +84,7 @@ int main(int argc, char **argv){
 
 	for (int iStep=1; iStep<nSteps+1; iStep++){
 
+		// Print step increment
 		logger.StepIncrement(iStep);
 
 		// Apply BCs
@@ -92,7 +96,7 @@ int main(int argc, char **argv){
 		// Write average concetration (every step)
 		model.WriteAvCon(Tri3THElemVec, H5File_out, iStep);
 
-		// Write field output
+		// Write field output (in this case, every step)
 		if (!(iStep%tOut)){
 			
 			// Full field output
