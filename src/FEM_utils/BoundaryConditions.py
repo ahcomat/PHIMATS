@@ -222,7 +222,7 @@ def WriteDispBCs(Simul, elementName, mesh, presBCs, dispDofs=2):
     # Append and write to vtk
     BCmesh.point_data.update({"disp": sdisp})
     BCmesh.point_data.update({"FlagBC": fdisp})
-    BCmesh.write(Simul+"_BC.vtk")
+    BCmesh.write(Simul+"_BC.vtu")
     
     return BCmesh
 
