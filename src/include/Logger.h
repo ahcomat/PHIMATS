@@ -50,32 +50,40 @@ string stripAnsiCodes(const std::string& input);
 void log(const std::string& message, const std::string& level = "INFO", bool includeTimestamp=true);
 
 /**
- * @brief Show PhiMATS intro message. 
+ * @brief Print PHIMATS intro message to terminal. 
  * 
  */
 void IntroMessage();
 
 /**
- * @brief Show entering loop message
+ * @brief Print entering loop message to terminal.
  * 
  */
 void LoopMessage();
 
 /**
- * @brief Show message for step increment.
+ * @brief Print message for step increment to terminal.
  * 
  * @param iStep Step number. ks
  */
 void StepIncrement(const int& iStep);
 
 /**
- * @brief Show message for step increment. 
+ * @brief Print message for full field increment to terminal. 
  * 
  */
 void FieldOutput(const int& iStep);
 
+/**
+ * @brief Start timer for simulations. 
+ * 
+ */
 void StartTimer();
 
+/**
+ * @brief Print simulation completion message and total execution time to terminal. 
+ * 
+ */
 void ExitMessage();
 
 private:
