@@ -15,7 +15,7 @@ class WriteXDMF:
             elementName (str): Mesh element type (meshio convention).
             nSteps (int): Number of time steps.
             simulationType (str): Type of simulation. Allowed: ["Transport2D", "Elastic2D", "Elastic3D", "Plastic2D", "Plastic3D"].
-            START (int, optional): Initial step number. Defaults to 1.
+            START (int, optional): Initial step number. Defaults to 0.
             FLUX (bool, optional): Flag for flux field. Defaults to False.
             tOut (int, optional): Number of steps to tOut when writing outputs. Defaults to 1.
             TDS (bool, optional): Flag for writing Temp in TDS. 
