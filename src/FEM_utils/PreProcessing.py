@@ -361,7 +361,7 @@ class PreProcessing:
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y2", data=self.Materials[mat]["D0y2"])
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx2", data=self.Materials[mat]["DQx2"])
                 self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy2", data=self.Materials[mat]["DQy2"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/kappa_GB", data=self.Materials[mat]["kappa_GB"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_GB", data=self.Materials[mat]["zeta_GB"])
 
                 if self.nDim == 3:
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
