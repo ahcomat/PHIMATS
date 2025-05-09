@@ -485,17 +485,17 @@ double Tri3TH::CalcAvCon(const double* globalBuffer){
 void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T){
 
     Matd2x2 DMat; 
-    double IntPtCon;   // Integration point concnetration
-    ColVecd3 dummyCon; // for element nodal concentration.
+    double IntPtCon;   // Integration point concnetration.
+    ColVecd3 dummyCon; // For element nodal concentration.
     int iNode=0;
 
     if (Trapping=="GBTrapping"){       // GB
         
         Matd2x2 TMat; 
-        double gPhi;
-        ColVecd3 dummyElNod_gPhi; // for element nodal concentration.
+        double gPhi; // gPhi for the current integraition point.
+        ColVecd3 dummyElNod_gPhi; // vector of element nodal gPhi.
 
-        // Integration point values.
+        // Loop through all elements
         for(int iElem=0; iElem<nElements; iElem++){
 
             // Get element nodal concentration and gPhi from the solution vector. 
@@ -552,7 +552,7 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
         double zeta_jj = dynamic_cast<TrapPhase*>(mat)->get_zeta_jj();
         double zeta_ii = dynamic_cast<TrapPhase*>(mat)->get_zeta_ii();
 
-        // Integration point values.
+        // Loop through all elements
         for(int iElem=0; iElem<nElements; iElem++){
 
             // Loop through element nodes to get nodal values.
