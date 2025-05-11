@@ -93,10 +93,14 @@ make
 
 ```sh
 <<<<<<< HEAD
+<<<<<<< HEAD
 ./HLGB
 =======
 ./FluxGB
 >>>>>>> d4871c2 (Case study for HLGB)
+=======
+./HLGB
+>>>>>>> 1d59a93 (Correct the executable name)
 ```
 
 ---
