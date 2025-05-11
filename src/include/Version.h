@@ -28,11 +28,11 @@
 #define VERSION_MINOR 1
 #define VERSION_PATCH 0
 
-#define VERSION_STRING "v1.1.0"
-#define VERSION_DATE "01-05-2025"  // Release date
+#define VERSION_STRING "v1.1.1"
+#define VERSION_DATE "11-05-2025"  // Release date
 #define PROJECT_WEBSITE  "https://comp-mat.com/phimats"
 #define PROJECT_CITATION "Abdelrahman Hussein \n\
                           Finite Element Theory for PHIMATS, 2025 \n\
-                          DOI:10.48550/ARXIV. 2502.16283"
+                          DOI:10.48550/ARXIV.2502.16283"
 
 #endif // VERSION_H
