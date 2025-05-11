@@ -92,7 +92,7 @@ make
 **Step 2: Run the simulation**
 
 ```sh
-./FluxGB
+./HLGB
 ```
 
 ---
