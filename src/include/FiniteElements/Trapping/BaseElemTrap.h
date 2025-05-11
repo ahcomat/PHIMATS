@@ -158,7 +158,13 @@ double dt;
 string Trapping;      
 
 /// @brief Int-pt phi [nElGauss]. 
-vector<vector<double>> el_gPhi;          
+vector<vector<double>> el_gPhi;   
+
+/// @brief Int-pt phi [nElGauss]. 
+vector<vector<double>> el_gPhi_HAGB; 
+
+/// @brief Int-pt phi [nElGauss]. 
+vector<vector<double>> el_gPhi_LAGB; 
 
 /// @brief Int-pt phi_j [nElGauss]. 
 vector<vector<double>> el_phi_j;    
@@ -173,7 +179,13 @@ vector<vector<double>> el_gPhi_ij;
 vector<vector<double>> el_gPhi_ii;         
 
 /// @brief nodal values of phi [nTotNodes]
-vector<double> nod_gPhi;        
+vector<double> nod_gPhi;
+
+/// @brief nodal values of phi [nTotNodes]
+vector<double> nod_gPhi_HAGB;
+
+/// @brief nodal values of phi [nTotNodes]
+vector<double> nod_gPhi_LAGB;
 
 /// @brief nodal values of phi_j [nTotNodes]
 vector<double> nod_phi_j;  
