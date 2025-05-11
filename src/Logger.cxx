@@ -96,7 +96,7 @@ void Logger::IntroMessage() {
         log("*       Website: " + std::string(PROJECT_WEBSITE)+ "                              *", "", false);
         log("*       For citation, please use:                                          *", "", false);
         log("*       Abdelrahman Hussein, Finite Element Theory for PHIMATS, 2025       *","", false);
-        log("*       DOI: 10.48550/ARXIV. 2502.16283                                    *","", false);
+        log("*       DOI: 10.48550/ARXIV.2502.16283                                     *","", false);
         log("*                                                                          *", "", false);
         log("****************************************************************************", "", false);
         log("", "", false);

@@ -34,8 +34,8 @@ TrapGB::TrapGB(string dimensions, H5IO& H5File, int iSet, Logger& logger)
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/DQy2";
     DQy2 = H5File.ReadScalar(dsetName);
 
-    dsetName = "Materials/Material_"+ std::to_string(iSet)+"/kappa_GB";
-    kappa_GB = H5File.ReadScalar(dsetName);
+    dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_GB";
+    zeta_GB = H5File.ReadScalar(dsetName);
 
     if (dims=="3D"){
 
@@ -88,8 +88,8 @@ T_DMatx TrapGB::CalcTMatx(const double gPhi, const double T){
     Matd2x2 mat2 = Matd2x2::Zero();
     
     mat2.setZero();
-    mat2(0, 0) = DLx*pow(DTx/DLx, 4*gPhi)*kappa_GB/(R*T);
-    mat2(1, 1) = DLy*pow(DTy/DLy, 4*gPhi)*kappa_GB/(R*T);
+    mat2(0, 0) = DLx*pow(DTx/DLx, 4*gPhi)*zeta_GB/(R*T);
+    mat2(1, 1) = DLy*pow(DTy/DLy, 4*gPhi)*zeta_GB/(R*T);
 
     TMatx = mat2;
 

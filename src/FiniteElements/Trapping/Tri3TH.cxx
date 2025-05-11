@@ -485,17 +485,18 @@ double Tri3TH::CalcAvCon(const double* globalBuffer){
 void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T){
 
     Matd2x2 DMat; 
-    double IntPtCon;   // Integration point concnetration
-    ColVecd3 dummyCon; // for element nodal concentration.
+    double IntPtCon;   // Integration point concnetration.
+    ColVecd3 dummyCon; // For element nodal concentration.
     int iNode=0;
 
     if (Trapping=="GBTrapping"){       // GB
         
         Matd2x2 TMat; 
-        double gPhi;
-        ColVecd3 dummyElNod_gPhi; // for element nodal concentration.
+        double gPhi; // gPhi for the current integraition point.
+        double dummydVol;
+        ColVecd3 dummyElNod_gPhi; // vector of element nodal gPhi.
 
-        // Integration point values.
+        // Loop through all elements
         for(int iElem=0; iElem<nElements; iElem++){
 
             // Get element nodal concentration and gPhi from the solution vector. 
@@ -509,6 +510,7 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
 
                 gPhi = el_gPhi.at(iElem).at(iGaus);
                 IntPtCon = shapeFunc.at(iGaus)*dummyCon;
+                dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current int-pt 
 
                 DMat = std::get<Matd2x2>(mat->CalcDMatx(gPhi, T));
                 TMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcTMatx(gPhi, T));
@@ -517,17 +519,14 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
                 elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon 
                                             + TMat*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi;
 
-                // elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon;
-                // elFlux.at(iElem).at(iGaus) = TMat*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi;
-
                 std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[0] =  elFlux.at(iElem).at(iGaus)[0];
                 std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[1] =  elFlux.at(iElem).at(iGaus)[1];
                 std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[2] =  0;
 
-                // // Nodal values
+                // // Nodal values with shape function approximation
                 // for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
-                //     std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus);
-                //     nodCount.at(*iNod2) += 1;
+                //     std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus)*dummydVol;
+                //     nodCount.at(*iNod2) += dummydVol;
                 // }
 
                 // Nodal values
@@ -552,7 +551,7 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
         double zeta_jj = dynamic_cast<TrapPhase*>(mat)->get_zeta_jj();
         double zeta_ii = dynamic_cast<TrapPhase*>(mat)->get_zeta_ii();
 
-        // Integration point values.
+        // Loop through all elements
         for(int iElem=0; iElem<nElements; iElem++){
 
             // Loop through element nodes to get nodal values.

@@ -53,7 +53,7 @@ private:
 double D0x1, D0y1, DQx1, DQy1, D0x2, D0y2, DQx2, DQy2;  
 
 /// @brief GB trapping parameter  
-double kappa_GB;      
+double zeta_GB;      
 
 };
 #endif
