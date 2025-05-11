@@ -92,7 +92,11 @@ make
 **Step 2: Run the simulation**
 
 ```sh
+<<<<<<< HEAD
 ./HLGB
+=======
+./FluxGB
+>>>>>>> d4871c2 (Case study for HLGB)
 ```
 
 ---
