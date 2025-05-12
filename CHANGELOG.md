@@ -1,5 +1,12 @@
 # Changelog
 
+## [V1.1.1] - Hydrogen-GB interactions (11-05-2025)
+
+### Added
+- `CaseStudies/FluxGB` directory for hydrogen-GB interactions for phase-field based RVEs. 
+- `TrapHLGB` for modeling the effect of GB character on hydrogen flux.
+- `CaseStudies/HLGB` directory for the effect of GB character (high/low angle GB) on hydrogen permeation. 
+
 ## [V1.1.0] - Hydrogen-mechanics interactions (01-05-2025)
 
 Including the hydrogen-mechanics interactions, i.e. hydrostatic stresses and dislocations.
