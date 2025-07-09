@@ -1,6 +1,18 @@
 # Changelog
 
-## [V1.1.0] - Hydrogen-mechanics interactions (01-05-2025)
+## [v1.1.1] - Hydrogen-GB interactions (11-05-2025)
+
+Implementing hydrogen interactions with high- and low-angle grain boundaries. Note that this is only for `Tri3TH` elements. 
+
+### Changed
+- `FiniteElements/Trapping/Tri3TH` implementing HLGB hydrogen interaction.
+
+### Added
+- `Materials/Trapping/TrapHLGB` material model for hydrogen interactions with high- and low-angle grain boundaries. 
+- `CaseStudies/FluxGB` case study for hydrogen accumulation and flux at grain boundaries. 
+- `CaseStudies/HLGB` case study for the effect of GB misorientation on hydrogen flux. 
+
+## [v1.1.0] - Hydrogen-mechanics interactions (01-05-2025)
 
 Including the hydrogen-mechanics interactions, i.e. hydrostatic stresses and dislocations.
 
@@ -13,10 +25,10 @@ Including the hydrogen-mechanics interactions, i.e. hydrostatic stresses and dis
 
 ### Changed
 - `Materials/Mechanics/IsoHard` added the `Kocks-Mecking-Estrin` hardening model based on dislocation density.
-- `FiniteElements/Trapping/Quad4HT` hydrogen-mechanics interactions.
+- `FiniteElements/Trapping/Quad4TH` hydrogen-mechanics interactions.
 - `Models/TrappingModel` equilibrium boundary concentrations for mechanics interactions. 
 
-## [V1.0.0] - First Release 🚀 (16-02-2025)
+## [v1.0.0] - First Release 🚀 (16-02-2025)
 
 This marks the **first stable** release of PHIMATS, featuring case studies and core functionality.
 
