@@ -19,3 +19,6 @@ Because of the one-way coupling in this case study, i.e. mechanical loading infl
 3️⃣ **`EquilBC`** → Simulates hydrogen diffusion in initially uncharged sample with prescribed concentration at the crack face. 
 
 ⚠️ **Important:** `Loading` must be run first before the other two simulations. 
+
+
+The results were generated using PHIMATS v1.1.1. 
