@@ -269,7 +269,7 @@ void Hex8::CalcCartDeriv(Matd8x3& elNodCoord, Matd3x8& sFuncDeriv, const double&
     }
 }
 
-void Hex8::CalcElemStiffMatx(T_DMatx DMatx){
+void Hex8::CalcElemStiffMatx(T_DMatx CMatx){
 
     // Matd6x24 dummyBu;   // dummy for strain matrix.
     double dummydVol;   // dummy for int-pt volume.
@@ -286,7 +286,7 @@ void Hex8::CalcElemStiffMatx(T_DMatx DMatx){
             dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current integration point 
 
             // [B_kl]^T D_kk B_kl
-            elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*std::get<Matd6x6>(DMatx)*dummyBu*dummydVol;
+            elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*std::get<Matd6x6>(CMatx)*dummyBu*dummydVol;
         }
     }
 
@@ -308,7 +308,7 @@ void Hex8::CalcElemStiffMatx(T_DMatx DMatx){
 
 }
 
-void Hex8::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount){
+void Hex8::CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount){
 
     ColVecd24 dummyDisp; // for element nodal displacement.
     ColVecd24 dummyForc; // for element nodal internal force.
@@ -326,7 +326,7 @@ void Hex8::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_
 
             // Int pt values
             elStran.at(iElem).at(iGaus) = BuMat.at(iElem).at(iGaus)*dummyDisp;
-            elStres.at(iElem).at(iGaus) = std::get<Matd6x6>(DMatx)*elStran.at(iElem).at(iGaus);
+            elStres.at(iElem).at(iGaus) = std::get<Matd6x6>(CMatx)*elStran.at(iElem).at(iGaus);
 
             dummyForc = BuMat.at(iElem).at(iGaus).transpose()*elStres.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
 
@@ -473,7 +473,7 @@ void Hex8::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int
                 dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current integration point 
 
                 // [B_kl]^T D_kk B_kl
-                elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*std::get<Matd6x6>(plasticMat->getDMatx())*dummyBu*dummydVol;
+                elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*std::get<Matd6x6>(plasticMat->getCMatx())*dummyBu*dummydVol;
             }
         }
     }

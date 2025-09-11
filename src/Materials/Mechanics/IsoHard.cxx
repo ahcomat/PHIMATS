@@ -59,7 +59,7 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
             selectedRM3D = &IsoHard::RM3D<KME>;
         }
 
-        DMatx_ep = Matd6x6(Matd6x6::Zero());
+        CMatx_ep = Matd6x6(Matd6x6::Zero());
 
     } else if (dims == "2D") {
 
@@ -87,7 +87,7 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
             throw std::invalid_argument("Invalid 2D analysis type: " + analysisType);
         }
 
-         DMatx_ep =  Matd3x3(Matd3x3::Zero());
+         CMatx_ep =  Matd3x3(Matd3x3::Zero());
 
     } else {
 
@@ -96,7 +96,7 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
     }
 
     // Initalize to elastic values for initial stiffness matrix.
-    DMatx_ep = DMatx_e;
+    CMatx_ep = CMatx_e;
 }
 
 double IsoHard::Mises3D(const ColVecd6& sig3D){
@@ -138,9 +138,9 @@ void IsoHard::ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, Co
     (this->*selectedRM2D)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, rho, eps_e_old, eps_p_old, eps_eq_old, iStep);
 }
 
-T_DMatx IsoHard::getDMatx() const{
+T_DMatx IsoHard::getCMatx() const{
 
-    return DMatx_ep;
+    return CMatx_ep;
 }
 
 

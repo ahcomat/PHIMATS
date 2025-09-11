@@ -89,9 +89,9 @@ RowVecd2 getGaussCart(RowVecd3& sFunc, Matd3x2& elCoord);
  */
 void CalcCartDeriv(Matd3x2& elNodCoord, Matd2x3& sFuncDeriv, const double& wt, double& intVol, Matd2x3& cartDeriv, Matd3x6& strainMat);
 
-void CalcElemStiffMatx(T_DMatx DMatx) override ;
+void CalcElemStiffMatx(T_DMatx CMatx) override ;
 
-void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) override;
+void CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) override;
 
 void CalcNodVals(T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<double>& nodStres_h, vector<double>& nodRho, vector<int>& nodCount) override;
 

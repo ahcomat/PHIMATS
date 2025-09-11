@@ -75,7 +75,7 @@ void InitializeCubicElasticityMatrix(const string& elasticity, double C11, doubl
  * 
  * @return T_DMatx 
  */
-T_DMatx getDMatx() const override;
+T_DMatx getCMatx() const override;
 
 private:      
 
@@ -96,7 +96,7 @@ double C12 = 0.0;
 double C44 = 0.0;
 
 /// @brief Elastic stiffness matrix in Voigt notation.
-T_DMatx DMatx_e;
+T_DMatx CMatx_e;
 
 };
 #endif

@@ -292,12 +292,12 @@ void MechModel::CalcElemStiffMatx(vector<BaseElemMech*> elements, vector<BaseMec
             if (typeid(*mats[iSet]) == typeid(LinearElastic)){ // Becuase some material models inherit from `Elastic`
 
                 LinearElastic* elasticMat = dynamic_cast<LinearElastic*>(mats[iSet]);
-                elements[iSet]->CalcElemStiffMatx(elasticMat->getDMatx());
+                elements[iSet]->CalcElemStiffMatx(elasticMat->getCMatx());
     
             } else if (typeid(*mats[iSet]) == typeid(IsoHard)){
 
                 IsoHard*plasticMat = dynamic_cast<IsoHard*>(mats[iSet]);
-                elements[iSet]->CalcElemStiffMatx(plasticMat->getDMatx());
+                elements[iSet]->CalcElemStiffMatx(plasticMat->getCMatx());
 
             } else {
 
@@ -558,7 +558,7 @@ void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*>
 
     for (int iSet=0; iSet<nElementSets; iSet++){
         
-        elements[iSet]->CalcStres(mats[iSet]->getDMatx(), globalBuffer, Fint, nodStres, nodStran, nodCount);
+        elements[iSet]->CalcStres(mats[iSet]->getCMatx(), globalBuffer, Fint, nodStres, nodStran, nodCount);
     }
 
     VecRestoreArrayRead(vecDisp, &globalBuffer);

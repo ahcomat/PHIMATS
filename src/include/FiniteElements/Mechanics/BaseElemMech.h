@@ -74,18 +74,18 @@ void CalcElemDispDof(int iElem, vector<int>& dispDof);
 /**
  * @brief Calculates the element stiffness matrix.
  */
-virtual void CalcElemStiffMatx(T_DMatx DMatx) = 0;
+virtual void CalcElemStiffMatx(T_DMatx CMatx) = 0;
 
 /**
  * @brief Calculates the `Fint`, strains and stresses. Also evaluates the stress nodal values.
  * 
- * @param DMatx 
+ * @param CMatx 
  * @param x 
  * @param globalBuffer 
  * @param nodStresFlag 
  * 
  */
-virtual void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) = 0;
+virtual void CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) = 0;
 
 /**
  * @brief Function for mapping int-point values to nodal points.

@@ -49,8 +49,8 @@ void LinearElastic::InitializeIsoElasticityMatrix(const string& analysisType, do
                 throw std::invalid_argument("Invalid dimension: < " + dims + " > for < " + analysisType + " > analysis.");
                 }
                 
-            DMatx_e = Matd6x6(Matd6x6::Zero());
-            auto& mat = std::get<Matd6x6>(DMatx_e);
+            CMatx_e = Matd6x6(Matd6x6::Zero());
+            auto& mat = std::get<Matd6x6>(CMatx_e);
 
             mat << ho + 2 * uo, ho, ho, 0, 0, 0,
                    ho, ho + 2 * uo, ho, 0, 0, 0,
@@ -64,8 +64,8 @@ void LinearElastic::InitializeIsoElasticityMatrix(const string& analysisType, do
             if (dims != "2D")
                 throw std::invalid_argument("Invalid dimension: < " + dims + " > for < " + analysisType + " > analysis.");
 
-            DMatx_e = Matd3x3(Matd3x3::Zero());
-            auto& mat = std::get<Matd3x3>(DMatx_e);
+            CMatx_e = Matd3x3(Matd3x3::Zero());
+            auto& mat = std::get<Matd3x3>(CMatx_e);
 
             double param = Emod * (1 - nu) / ((1 + nu) * (1 - 2 * nu));
 
@@ -93,8 +93,8 @@ void LinearElastic::InitializeIsoElasticityMatrix(const string& analysisType, do
 void LinearElastic::InitializeCubicElasticityMatrix(const string& analysisType, double C11, double C12, double C44) {
     try {
         if (analysisType == "3D") {
-            DMatx_e = Matd6x6(Matd6x6::Zero());
-            auto& mat = std::get<Matd6x6>(DMatx_e);
+            CMatx_e = Matd6x6(Matd6x6::Zero());
+            auto& mat = std::get<Matd6x6>(CMatx_e);
 
             mat << C11, C12, C12, 0, 0, 0,
                    C12, C11, C12, 0, 0, 0,
@@ -104,8 +104,8 @@ void LinearElastic::InitializeCubicElasticityMatrix(const string& analysisType, 
                    0, 0, 0, 0, 0, C44;
 
         } else if (analysisType == "PlaneStrain" || analysisType == "PlaneStress") {
-            DMatx_e = Matd3x3(Matd3x3::Zero());
-            auto& mat = std::get<Matd3x3>(DMatx_e);
+            CMatx_e = Matd3x3(Matd3x3::Zero());
+            auto& mat = std::get<Matd3x3>(CMatx_e);
 
             double param = C11 - C12;
             mat << C11, C12, 0,
@@ -121,7 +121,7 @@ void LinearElastic::InitializeCubicElasticityMatrix(const string& analysisType, 
     }
 }
 
-T_DMatx LinearElastic::getDMatx() const{
+T_DMatx LinearElastic::getCMatx() const{
 
-    return DMatx_e;
+    return CMatx_e;
 }

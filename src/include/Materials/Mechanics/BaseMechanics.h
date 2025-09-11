@@ -38,7 +38,7 @@ BaseMechanics(string dimensions, Logger& logger): BaseMaterial(dimensions, logge
  * 
  * @return T_DMatx 
  */
-virtual T_DMatx getDMatx() const = 0;
+virtual T_DMatx getCMatx() const = 0;
 
 };
 #endif

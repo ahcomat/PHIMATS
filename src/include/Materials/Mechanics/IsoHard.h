@@ -111,7 +111,7 @@ void ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& e
  * 
  * @return T_DMatx 
  */
-T_DMatx getDMatx() const override;
+T_DMatx getCMatx() const override;
 
 private:
 
@@ -173,7 +173,7 @@ double rho_s = 0.0;
 double C_prime = 0.0;
 
 /// @brief Elastioplastic stiffness matrix in Voigt notation.
-T_DMatx DMatx_ep;
+T_DMatx CMatx_ep;
 
 /**
  * @brief Function to calculate update in plastic stress and hardening modulus

@@ -90,11 +90,11 @@ void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double& wt, d
 /**
  * @brief Calculates the element stiffness matrix for all elements.
  * 
- * @param DMatx 
+ * @param CMatx 
  */
-void CalcElemStiffMatx(T_DMatx DMatx) override ;
+void CalcElemStiffMatx(T_DMatx CMatx) override ;
 
-void CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) override;
+void CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) override;
 
 void CalcNodVals(T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<double>& nodStres_h, vector<double>& nodRho, vector<int>& nodCount) override;
 

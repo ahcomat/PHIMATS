@@ -167,9 +167,9 @@ void Tri3::CalcCartDeriv(Matd3x2& elNodCoord, Matd2x3& sFuncDeriv, const double&
     }
 }
 
-void Tri3::CalcElemStiffMatx(T_DMatx DMatx){
+void Tri3::CalcElemStiffMatx(T_DMatx CMatx){
 
-    Matd3x3 DMat = std::get<Matd3x3>(DMatx);
+    Matd3x3 DMat = std::get<Matd3x3>(CMatx);
 
     elStiffMatx.resize(nElements); // Initialize the vector containing each element stiffness matrix.
 
@@ -199,7 +199,7 @@ void Tri3::CalcElemStiffMatx(T_DMatx DMatx){
     elStiffMatxVariant = &elStiffMatx;
 }
 
-void Tri3::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount){
+void Tri3::CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount){
 
     ColVecd6 dummyDisp; // for element nodal displacement.
     ColVecd6 dummyForc; // for element nodal internal force.
@@ -217,7 +217,7 @@ void Tri3::CalcStres(T_DMatx DMatx, const double* globalBuffer, double* Fint, T_
 
             // Int pt values
             elStran.at(iElem).at(iGaus) = BuMat.at(iElem).at(iGaus)*dummyDisp;
-            elStres.at(iElem).at(iGaus) = std::get<Matd3x3>(DMatx)*elStran.at(iElem).at(iGaus);
+            elStres.at(iElem).at(iGaus) = std::get<Matd3x3>(CMatx)*elStran.at(iElem).at(iGaus);
 
             dummyForc = BuMat.at(iElem).at(iGaus).transpose()*elStres.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
 
