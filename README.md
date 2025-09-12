@@ -75,6 +75,7 @@ conda env create -f environment.yml
 ✅ **C++20 compiler (GCC recommended)**  
 ✅ **Install `mpich` for parallel computing** (MPI support is under development—current builds compile with MPI but run in serial mode.)  
 ✅ **Install `hdf5` library**  
+✅ **Install `Eigen` library**  
 ✅ **ParaView v5.9.1 for visualization**  
 
 ---
