@@ -1,7 +1,4 @@
-# **PHIMATS**  
-<img src="PHIMATS.png" width="200">
-
-### **Phase-field Multiphysics Materials Simulator**  
+<img src="PHIMATS.png" width="200"> 
 
 **PHIMATS** (Phase-field Multiphysics Materials Simulator) is a finite element library in C++, originally designed for simulating mesoscale **hydrogen-material interactions** using phase-field based representative volume element (RVE). However, its modular design allows it to be applied to a **wide range of multiphysics problems**.
 
