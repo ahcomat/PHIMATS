@@ -76,27 +76,28 @@ void CalcElemDispDof(int iElem, vector<int>& dispDof);
  */
 virtual void CalcElemStiffMatx(T_DMatx CMatx) = 0;
 
-/**
- * @brief Calculates the `Fint`, strains and stresses. Also evaluates the stress nodal values.
- * 
- * @param CMatx 
- * @param x 
- * @param globalBuffer 
- * @param nodStresFlag 
- * 
- */
+ /**
+  * @brief Calculates strains, stresses and internal force for linear elastic material. Maps strain/stress to nodal values.
+  * 
+  * @param CMatx Stiffness matrix
+  * @param globalBuffer Displacement solution vector
+  * @param Fint Internal force vector
+  * @param nodStres Stresse mapped to the nodes
+  * @param nodStran Strains mapped to the nodes
+  * @param nodCount 
+  */
 virtual void CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) = 0;
 
 /**
- * @brief Function for mapping int-point values to nodal points.
+ * @brief Maps int-point values to nodes for output (plasticity).
  * 
- * @param nodStres 
- * @param nodStran 
- * @param nodStran_e 
- * @param nodStran_p 
- * @param nodStran_eq 
- * @param nodStres_eq
- * @param nodStres_h  
+ * @param nodStres Stress
+ * @param nodStran Total strain
+ * @param nodStran_e Elastic strain
+ * @param nodStran_p Plastic strain
+ * @param nodStran_eq Equivalent plastic strain
+ * @param nodStres_eq Equivalent (Von Mises) stress
+ * @param nodStres_h  Hydrostatic stress
  * @param nodCount 
  */
 virtual void CalcNodVals(T_nodStres& nodStres, T_nodStres& nodStran,T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<double>& nodStres_h, vector<double>& nodRho, vector<int>& nodCount) = 0;
