@@ -267,20 +267,12 @@ void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps
 
         // Tangent stiffness matrix
 
-        double effg = uo * sYield/sig_trial_eq;
-        double efflam = (Ebulk3 - 2.0*effg)/3.0;
-        double effhard = 3.0*uo * hard/(3.0*uo + hard) - (3*effg);
+        Matd3x3& Ce = std::get<Matd3x3>(CMatx_e);
 
-        std::get<Matd3x3>(CMatx_ep).setZero();
-
-        std::get<Matd3x3>(CMatx_ep).topLeftCorner<2, 2>().setConstant(efflam);
-
-        for (int i = 0; i < 2; ++i) {
-            std::get<Matd3x3>(CMatx_ep)(i, i) += 2.0*effg;
-            std::get<Matd3x3>(CMatx_ep)(i+1, i+1) += effg;
-        }
-
-        std::get<Matd3x3>(CMatx_ep) += effhard*(2.0/3.0)*N_tr*(2.0/3.0)*N_tr.transpose();
+        RowVecd3 Ce_N = Ce*N_tr;
+        double N_Ce_N = N_tr.dot(Ce_N);
+        double denom = (2.0 / 3.0) * hard + N_Ce_N;
+        std::get<Matd3x3>(CMatx_ep) = Ce - (Ce_N.transpose() * Ce_N)/denom;
 
     }
 }
