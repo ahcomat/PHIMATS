@@ -261,7 +261,24 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
 
     // Parameters for SNES convergence. Details can be found in 
     // https://petsc.org/main/manualpages/SNES/SNESSetTolerances/
-    SNESSetTolerances(snes, 1e-50, 1e-8, 1e-8, 100, 1000);
+    // SNESSetTolerances(snes, abstol=1e-8, rtol=1e-6, stol=1e-5, max_it=50, max_func=1000);
+    //
+    //   - abstol  : Absolute residual norm tolerance (force imbalance)
+    //               Solver stops if ||F(u)|| < abstol
+    //               (Typical for very small residuals; e.g., force imbalance < 1e-8 N)
+    //
+    //   - rtol    : Relative residual norm tolerance
+    //               Solver stops if ||F(u_n)|| / ||F(u_0)|| < rtol
+    //               (Preferred for general convergence; 1e-6 is a safe default)
+    //
+    //   - stol    : Step tolerance (norm of Newton update)
+    //               Solver stops if Step norm ||dU|| / ||deltaU|| < stol
+    //
+    //   - max_it  : Maximum number of Newton iterations per load step
+    //
+    //   - max_funcs : Maximum number of function evaluations allowed (for Jacobian reuse)
+    //
+    SNESSetTolerances(snes, 1e-8, 1e-6, 1e-5, 50, 1000);
 
     // Get KSP from SNES
     SNESGetKSP(snes, &ksp);
