@@ -258,7 +258,7 @@ void Quad4::CalcElemStiffMatx(T_DMatx CMatx){
     // cout << elStiffMatx.at(0) << "\n";
 }
 
-void Quad4::CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount){
+void Quad4::CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<double>& nodCount){
 
     ColVecd8 dummyDisp; // for element nodal displacement.
     ColVecd8 dummyForc; // for element nodal internal force.
@@ -339,7 +339,7 @@ void Quad4::CalcElStran(const double* globalBuffer){
     }
 }
 
-void Quad4::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<double>& nodStres_h, vector<double>& nodRho, vector<int>& nodCount){
+void Quad4::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<double>& nodStres_h, vector<double>& nodRho, vector<double>& nodCount){
 
     try {
         if (elStran_e.data() == nullptr){
@@ -357,15 +357,15 @@ void Quad4::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres&
             // Nodal values
             for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
 
-                std::get<std::vector<ColVecd3>>(nodStran).at(*iNod2) += elStran.at(iElem).at(iGaus);
-                std::get<std::vector<ColVecd3>>(nodStran_e).at(*iNod2) += elStran_e.at(iElem).at(iGaus);
-                std::get<std::vector<ColVecd3>>(nodStran_p).at(*iNod2) += elStran_p.at(iElem).at(iGaus);
-                std::get<std::vector<ColVecd3>>(nodStres).at(*iNod2) += elStres.at(iElem).at(iGaus);
-                nodStran_eq.at(*iNod2) += elStran_eq.at(iElem).at(iGaus);
-                nodStres_eq.at(*iNod2) += elStres_eq.at(iElem).at(iGaus);
-                nodStres_h.at(*iNod2) += elStres_h.at(iElem).at(iGaus);
-                nodRho.at(*iNod2) += elRho.at(iElem).at(iGaus);
-                nodCount.at(*iNod2) += 1;
+                std::get<std::vector<ColVecd3>>(nodStran).at(*iNod2) += elStran.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+                std::get<std::vector<ColVecd3>>(nodStran_e).at(*iNod2) += elStran_e.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+                std::get<std::vector<ColVecd3>>(nodStran_p).at(*iNod2) += elStran_p.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+                std::get<std::vector<ColVecd3>>(nodStres).at(*iNod2) += elStres.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+                nodStran_eq.at(*iNod2) += elStran_eq.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+                nodStres_eq.at(*iNod2) += elStres_eq.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+                nodStres_h.at(*iNod2) += elStres_h.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+                nodRho.at(*iNod2) += elRho.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+                nodCount.at(*iNod2) += intPtVol.at(iElem).at(iGaus);
             }
         }
     }

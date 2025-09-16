@@ -199,7 +199,7 @@ void Tri3::CalcElemStiffMatx(T_DMatx CMatx){
     elStiffMatxVariant = &elStiffMatx;
 }
 
-void Tri3::CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount){
+void Tri3::CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<double>& nodCount){
 
     ColVecd6 dummyDisp; // for element nodal displacement.
     ColVecd6 dummyForc; // for element nodal internal force.
@@ -228,9 +228,9 @@ void Tri3::CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_
             // Nodal values
             for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
 
-                std::get<std::vector<ColVecd3>>(nodStran).at(*iNod2) += elStran.at(iElem).at(iGaus);
-                std::get<std::vector<ColVecd3>>(nodStres).at(*iNod2) += elStres.at(iElem).at(iGaus);
-                nodCount.at(*iNod2) += 1;
+                std::get<std::vector<ColVecd3>>(nodStran).at(*iNod2) += elStran.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+                std::get<std::vector<ColVecd3>>(nodStres).at(*iNod2) += elStres.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
+                nodCount.at(*iNod2) += intPtVol.at(iElem).at(iGaus);
             }
         }
     }
@@ -243,7 +243,7 @@ void Tri3::CalcElStran(const double* globalBuffer){
     
 }
 
-void Tri3::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<double>& nodStres_h, vector<double>& nodRho, vector<int>& nodCount){
+void Tri3::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<double>& nodStres_h, vector<double>& nodRho, vector<double>& nodCount){
 }
 
 void Tri3::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep){

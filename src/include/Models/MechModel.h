@@ -264,7 +264,7 @@ vector<double> nodStres_h;
 vector<double> nodRho;
 
 /// @brief Counter for integration points surrounding nodes.
-vector<int> nodCount;     
+vector<double> nodCount;     
 
 // PETSc ------------------------
 

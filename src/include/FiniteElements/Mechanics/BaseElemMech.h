@@ -86,7 +86,7 @@ virtual void CalcElemStiffMatx(T_DMatx CMatx) = 0;
   * @param nodStran Strains mapped to the nodes
   * @param nodCount 
   */
-virtual void CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount) = 0;
+virtual void CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<double>& nodCount) = 0;
 
 /**
  * @brief Maps int-point values to nodes for output (plasticity).
@@ -100,7 +100,7 @@ virtual void CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, 
  * @param nodStres_h  Hydrostatic stress
  * @param nodCount 
  */
-virtual void CalcNodVals(T_nodStres& nodStres, T_nodStres& nodStran,T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<double>& nodStres_h, vector<double>& nodRho, vector<int>& nodCount) = 0;
+virtual void CalcNodVals(T_nodStres& nodStres, T_nodStres& nodStran,T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<double>& nodStres_h, vector<double>& nodRho, vector<double>& nodCount) = 0;
 
 /**
  * @brief Calculates the int-pt strain increment.
