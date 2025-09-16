@@ -214,6 +214,11 @@ class PreProcessing:
                     for i in HardeningLaws:
                         ErrString += i + "\n"
                     raise ValueError(ErrString)
+                
+                # Only 3D and plane strain plasticity are implemented so far.
+                if self.Materials[mat]["Elastic"]["AnalysisType"] == "PlaneStress":
+                    ErrString = "ERROR! plane stress is not yet implemented for plasticity — coming soon. \n"
+                    raise ValueError(ErrString)
 
         pass
     
