@@ -44,6 +44,8 @@ string Logger::applyColor(const std::string& level) {
         return "\033[33m" + level  + "\033[0m"; // Yellow
     } else if (level == "ERROR" || level == "CRITICAL") {
         return "\033[31m" + level  + "\033[0m"; // Red
+    } else if (level == "DEBUG") {
+        return "\033[34m" + level + "\033[0m"; // Blue
     }
     return level ; // Default: No color
     
