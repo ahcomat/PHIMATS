@@ -425,6 +425,9 @@ void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     // Set the Jacobian
     SNESSetJacobian(snes, matA, matA, JacobianCallback, user); 
 
+	// Monitor convergence and log it to the console
+	SNESMonitorSet(snes, SNESMonitorLogger, &logger, NULL);
+
     // Update Jacobian and preconditioner every `NR_freq` iterations
     SNESSetLagJacobian(snes, NR_freq); 
     SNESSetLagPreconditioner(snes, NR_freq); 
@@ -432,11 +435,19 @@ void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     // Solve
     SNESSolve(snes, NULL, vecDeltaDisp);
 
-    // Check convergence
-    ierr = SNESGetConvergedReason(snes, &reason);
-    if (reason < 0) { // Convergence failure
-        PetscPrintf(PETSC_COMM_WORLD, "SNES failed to converge: reason %d\n", reason);
+    // Monitoring the convergence reason and log it to the console
+    const char* reason_str = nullptr;
+    ierr = SNESGetConvergedReason(snes, &reason); CHKERRABORT(PETSC_COMM_WORLD, ierr);
+    ierr = SNESGetConvergedReasonString(snes, &reason_str); CHKERRABORT(PETSC_COMM_WORLD, ierr);
+    std::stringstream ss;
+
+    if (reason < 0) {
+        ss << "\n   SNES failed to converge ❌ Reason: " << reason_str << " (code " << reason << ")\n";
+        logger.log(ss.str(), "", "ERROR");
         throw std::runtime_error("SNES failed to converge");
+    } else {
+        ss << "\n   SNES converged ✅ Reason: " << reason_str << " (code " << reason << ")\n";
+        logger.log(ss.str(), "", false);
     }
 
     // Update total displacement
@@ -451,8 +462,18 @@ void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
 
     // Assign values to old
     for (int iSet=0; iSet<nElementSets; iSet++){
-        elements[iSet]->getNew();
+        elements[iSet]->getNew();	
     }
+}
+
+PetscErrorCode MechModel::SNESMonitorLogger(SNES snes, PetscInt it, PetscReal norm, void *ctx) {
+    Logger* logger = static_cast<Logger*>(ctx);
+
+    std::stringstream ss;
+    ss << "	🔁 SNES iter " << it << "  ||F|| = " << norm;
+    logger->log(ss.str(), "", false);
+
+    return 0;
 }
 
 PetscErrorCode MechModel::ResidualCallback(SNES snes, Vec deltaU, Vec R, void *ctx){

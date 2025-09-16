@@ -128,6 +128,17 @@ PetscErrorCode Assemble(vector<BaseElemMech*> elements);
 void SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
 
 /**
+ * @brief  Monitor the convergence of the SNES nonlinear solver and log iteration info to the console.
+ * 
+ * @param snes SNES solver.
+ * @param it Current SNES iteration number. 
+ * @param norm L2 norm of the residual function.
+ * @param ctx Pointer to user-defined application context (e.g., logger).
+ * @return PetscErrorCode 
+ */
+static PetscErrorCode SNESMonitorLogger(SNES snes, PetscInt it, PetscReal norm, void *ctx);
+
+/**
  * @brief Casts `CalcResidual` to static to pass the residual to the SNES solver. 
  * 
  * @param snes SNES solver.

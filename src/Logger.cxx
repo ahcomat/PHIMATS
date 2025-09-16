@@ -49,13 +49,11 @@ string Logger::applyColor(const std::string& level) {
     
 }
 
-
 std::string Logger::stripAnsiCodes(const std::string& input) {
     // Regex to match ANSI escape sequences
     static const std::regex ansiRegex(R"(\x1B\[[0-9;]*m)");
     return std::regex_replace(input, ansiRegex, "");
 }
-
 
 void Logger::log(const std::string& message, const std::string& level, bool includeTimestamp) {
     
@@ -80,7 +78,6 @@ void Logger::log(const std::string& message, const std::string& level, bool incl
         }
     }
 }
-
 
 void Logger::IntroMessage() {
     if (rank == 0) {
