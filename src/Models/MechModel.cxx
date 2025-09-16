@@ -286,9 +286,13 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     // Get PC from KSP
     KSPGetPC(ksp, &pc);
 
+	// Direct KSP
     // PCSetType(pc, PCLU);
     // PCFactorSetMatSolverType(pc, MATSOLVERMUMPS);
 
+	/* Iterative based on GMRES. Results in a couple of iterations in the elastic regime, but
+	   has better performance for plasticity.
+	*/
     KSPSetType(ksp, KSPGMRES);
     KSPGMRESSetRestart(ksp, 50); // Optional: Set GMRES restart value
     KSPSetTolerances(ksp, 1e-12, 1e-12, PETSC_DEFAULT, 1000);
