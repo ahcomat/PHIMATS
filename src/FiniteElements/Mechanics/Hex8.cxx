@@ -308,7 +308,7 @@ void Hex8::CalcElemStiffMatx(T_DMatx CMatx){
 
 }
 
-void Hex8::CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<int>& nodCount){
+void Hex8::CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_nodStres& nodStres, T_nodStres& nodStran, vector<double>& nodCount){
 
     ColVecd24 dummyDisp; // for element nodal displacement.
     ColVecd24 dummyForc; // for element nodal internal force.
@@ -349,7 +349,7 @@ void Hex8::CalcStres(T_DMatx CMatx, const double* globalBuffer, double* Fint, T_
     // cout << elStran.at(0).at(0) << "\n\n";
 }
 
-void Hex8::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<double>& nodStres_h, vector<double>& nodRho, vector<int>& nodCount){
+void Hex8::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres& nodStran_e, T_nodStres& nodStran_p, vector<double>& nodStran_eq, vector<double>& nodStres_eq, vector<double>& nodStres_h, vector<double>& nodRho, vector<double>& nodCount){
 
     try {
         if (elStran_e.data() == nullptr){
