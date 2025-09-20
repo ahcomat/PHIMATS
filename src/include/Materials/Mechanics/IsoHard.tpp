@@ -46,6 +46,9 @@ void IsoHard::RM3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps
     // Elastic strain
     eps_e = eps_e_old + deps;
 
+    // Plastic strain
+    eps_p = eps_p_old;
+
     // Trial stress
     ColVecd6 sig_trial = std::get<Matd6x6>(CMatx_e)*eps_e;
 
@@ -198,6 +201,9 @@ void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps
 
     // Elastic strain
     eps_e = eps_e_old + deps;
+
+    // Plastic strain
+    eps_p = eps_p_old;
 
     // Trial stress
     ColVecd3 sig_trial = std::get<Matd3x3>(CMatx_e)*eps_e;
