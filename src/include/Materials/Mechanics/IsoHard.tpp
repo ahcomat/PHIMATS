@@ -5,6 +5,11 @@ inline void IsoHard::UHard<PowerLaw>(const double& eqpl, double& syield, double&
     syield = sig_y0 +  K_hard * std::pow(eqpl, n_pow);
     double eps = std::max(eqpl, 1.0e-12);
     hard = K_hard*n_pow*pow(eps, n_pow-1);
+
+    // Passive evolution of dislocation density, i.e. does not affect hardening
+    double param = (k1/k2) - C_prime*exp(-(M*k2/2)*eqpl);
+    rho = pow(param, 2);
+    rho = rho/rho_s; // Normalizing
 }
 
 template <>

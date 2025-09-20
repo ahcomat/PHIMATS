@@ -20,6 +20,15 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
             n_pow = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/n_pow");
             hardening = HardeningLaw::PowerLaw;
 
+            rho_0 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/rho_0");
+            M = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/M");
+            b = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/b");
+            alpha = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/alpha");
+            k1 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/k1");
+            k2 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/k2");
+            rho_s = pow(k1/k2, 2.0);
+            C_prime = (k1/k2) - sqrt(rho_0);
+
         } else if (hardLaw == "Voce") {
 
             hardening = HardeningLaw::Voce;
