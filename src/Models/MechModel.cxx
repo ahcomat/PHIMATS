@@ -294,10 +294,11 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
 	   has better performance for plasticity.
 	*/
     KSPSetType(ksp, KSPGMRES);
-    KSPGMRESSetRestart(ksp, 50); // Optional: Set GMRES restart value
+    KSPGMRESSetRestart(ksp, 50); 
     KSPSetTolerances(ksp, 1e-12, 1e-12, PETSC_DEFAULT, 1000);
     PCSetType(pc, PCILU);
-    PCFactorSetLevels(pc, 2); // ILU with limited fill
+    PCFactorSetLevels(pc, 4); 
+    PCFactorSetShiftType(pc, MAT_SHIFT_NONZERO);       // prevent zero pivots
 
     KSPSetFromOptions(ksp);
     PCSetFromOptions(pc);
