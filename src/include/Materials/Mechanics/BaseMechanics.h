@@ -34,11 +34,38 @@ public:
 BaseMechanics(string dimensions, Logger& logger): BaseMaterial(dimensions, logger) {};
 
 /**
+ * @brief Get the Lambda constant.
+ * 
+ * @return double 
+ */
+double getLambda() const { return ho; }
+
+/**
+ * @brief Get the Gmod constant.
+ * 
+ * @return double 
+ */
+double getGmod() const { return uo; }
+
+/**
  * @brief Returns a stiffness matrix variant.
  * 
  * @return T_DMatx 
  */
 virtual T_DMatx getCMatx() const = 0;
+
+protected:
+
+/// @brief Isotropic elasticity parameters.
+double uo = 0.0;
+double ho = 0.0;
+double Emod = 0.0;
+double nu = 0.0;
+
+/// @brief Cubic elasticity parameters.
+double C11 = 0.0;
+double C12 = 0.0;
+double C44 = 0.0;
 
 };
 #endif
