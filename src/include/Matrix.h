@@ -36,7 +36,6 @@ typedef Eigen::Vector<double, 2> ColVecd2;
 typedef Eigen::Vector<double, 3> ColVecd3;
 typedef Eigen::Vector<double, 4> ColVecd4;    
 typedef Eigen::Vector<double, 6> ColVecd6;                 
-typedef Eigen::Vector<double, 3> ColVecd3;                  
 typedef Eigen::Vector<double, 8> ColVecd8;        
 typedef Eigen::Vector<double, 24> ColVecd24;        
 
@@ -97,3 +96,9 @@ using T_ElStiffMatx = std::variant<vector<Matd3x3>*, vector<Matd4x4>*, vector<Ma
  * 
  */
 using T_nodStres = std::variant<vector<ColVecd2>, vector<ColVecd3>, vector<ColVecd4>, vector<ColVecd6>>;
+
+/**
+ * @brief Variants for element stress/strain (tensor in Voigt notation) quantities.
+ * 
+ */
+using T_elStres = std::variant<vector<vector<ColVecd3>>*, vector<vector<ColVecd6>>*>;

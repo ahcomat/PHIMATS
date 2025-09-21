@@ -100,6 +100,9 @@ void Quad4::InitializeElements(Nodes &Nodes){
     // Initialize the storages for int-pt stresses/strains
     elStres.resize(nElements); elStran.resize(nElements); elDStran.resize(nElements);
 
+    // For elastitcy total strain is elastic strain!
+    elStrain_e_Variant = &elStran;
+
     if (materialModel=="ElastoPlastic"){
         elStran_e.resize(nElements); elStran_e_old.resize(nElements);   // Elastic strain tensors
         elStran_p.resize(nElements); elStran_p_old.resize(nElements);   // Plastic strain tensors
@@ -107,6 +110,8 @@ void Quad4::InitializeElements(Nodes &Nodes){
         elStres_eq.resize(nElements); // Equivalent (von Mises) stress
         elStres_h.resize(nElements);  // Hydrostatic stress
         elRho.resize(nElements);      // Norm dislocation density
+
+        elStrain_e_Variant = &elStran_e;
     }     
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.

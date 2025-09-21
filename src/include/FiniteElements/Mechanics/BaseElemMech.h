@@ -72,6 +72,13 @@ void ReadElementsData(H5IO &H5File_in, int iSet);
 void CalcElemDispDof(int iElem, vector<int>& dispDof);
 
 /**
+ * @brief Returns const reference to the vector of element elastic strain. 
+ * 
+ * @return const T_elStres& 
+ */
+const T_elStres& getElStrain_e() const { return elStrain_e_Variant; }
+
+/**
  * @brief Calculates the element stiffness matrix.
  */
 virtual void CalcElemStiffMatx(T_DMatx CMatx) = 0;
@@ -169,6 +176,9 @@ vector<vector<double>> elStres_h;
 
 /// @brief Int-pt normalized dislocation density [nElStres].
 vector<vector<double>> elRho;
+
+/// @brief Variant for passing elastic strain to phase-field fracture.
+T_elStres elStrain_e_Variant; 
 
 };
 #endif
