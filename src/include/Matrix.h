@@ -28,6 +28,9 @@
 #include<variant>
 #include<vector>
 
+#ifndef MATRIX_H
+#define MATRIX_H
+
 using namespace std;
 
 // Type aliases for `Eigen` vectors and matrices
