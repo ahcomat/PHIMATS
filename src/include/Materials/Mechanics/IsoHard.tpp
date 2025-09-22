@@ -272,7 +272,7 @@ void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps
         
         sig = std::get<Matd3x3>(CMatx_e)*eps_e;  // Stress tensor
         sig_eq = Mises2D<AnalysisType>(sig);  // Von Mises stress
-        sig_h = Shydro2D<AnalysisType>(sig_trial); // Hydostatic stress
+        sig_h = Shydro2D<AnalysisType>(sig); // Hydostatic stress
 
         // Tangent stiffness matrix
 
