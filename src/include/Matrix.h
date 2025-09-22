@@ -105,3 +105,42 @@ using T_nodStres = std::variant<vector<ColVecd2>, vector<ColVecd3>, vector<ColVe
  * 
  */
 using T_elStres = std::variant<vector<vector<ColVecd3>>*, vector<vector<ColVecd6>>*>;
+
+
+template <typename T>
+inline T& accessVec(std::vector<T>& vec, size_t i) {
+#ifdef DEBUG
+    return vec.at(i);
+#else
+    return vec[i];
+#endif
+}
+
+template <typename T>
+inline const T& accessVec(const std::vector<T>& vec, size_t i) {
+#ifdef DEBUG
+    return vec.at(i);
+#else
+    return vec[i];
+#endif
+}
+
+template <typename T>
+inline T& accessVec(std::vector<std::vector<T>>& mat, size_t i, size_t j) {
+#ifdef DEBUG
+    return mat.at(i).at(j);
+#else
+    return mat[i][j];
+#endif
+}
+
+template <typename T>
+inline const T& accessVec(const std::vector<std::vector<T>>& mat, size_t i, size_t j) {
+#ifdef DEBUG
+    return mat.at(i).at(j);
+#else
+    return mat[i][j];
+#endif
+}
+
+#endif
