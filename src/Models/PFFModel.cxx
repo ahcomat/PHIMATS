@@ -175,6 +175,28 @@ void PFFModel::CalcDrivFrocElas(vector<BaseElemPFF*> pffElem){
     }  
 }
 
+void PFFModel::CalcDrivFrocEP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem){
+
+    for (int iSet=0; iSet<nElementSets; iSet++){
+
+        const std::vector<std::vector<double>>& el_wp = mechElem[iSet]->getEl_wp();
+
+        pffElem[iSet]->CalcDrivForcEP(&el_wp);
+
+    } 
+}
+
+void PFFModel::CalcDrivFrocEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem){
+
+    for (int iSet=0; iSet<nElementSets; iSet++){
+
+        const std::vector<std::vector<double>>& el_wp = mechElem[iSet]->getEl_wp();
+
+        pffElem[iSet]->CalcDrivForcEP_TH(&el_wp);
+
+    } 
+}
+
 void PFFModel::CalcElemStiffMatx(vector<BaseElemPFF*> elements){
 
         for (int iSet=0; iSet<nElementSets; iSet++){

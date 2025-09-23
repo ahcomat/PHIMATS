@@ -82,6 +82,24 @@ void CalcPsiSpectral(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechEle
 void CalcDrivFrocElas(vector<BaseElemPFF*> pffElem);
 
 /**
+ * @brief Calculates elastoplastic crack driving force based on `psi_plus` and `el_wp`.
+ *        For details, see Miehe et al. CMAME (2016) PI and PII.
+ * 
+ * @param pffElem 
+ * @param mechElem 
+ */
+void CalcDrivFrocEP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem);
+
+/**
+ * @brief Calculates elastoplastic crack driving force with a threshold based on `psi_plus` and `el_wp`.
+ *        For details, see Miehe et al. CMAME (2016) PI and PII.
+ * 
+ * @param pffElem 
+ * @param mechElem 
+ */
+void CalcDrivFrocEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem);
+
+/**
  * @brief Calculates the element stiffness matrix.
  * 
  * @param pffElem PFF elements vector

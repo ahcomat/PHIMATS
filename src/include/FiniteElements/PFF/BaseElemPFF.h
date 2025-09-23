@@ -126,6 +126,52 @@ inline void CalcDrivForcElas() {
 }
 
 /**
+ * @brief Calculates elastoplastic crack driving force with a threshold based on `psi_plus` and `el_wp`.
+ *        For details, see Miehe et al. CMAME (2016) PI and PII.
+ * 
+ * @param el_wp_ptr 
+ */
+inline void CalcDrivForcEP(const std::vector<std::vector<double>>* el_wp_ptr) {
+    for (size_t iElem = 0; iElem < elemH.size(); ++iElem) {
+        for (size_t iGauss = 0; iGauss < elemH[iElem].size(); ++iGauss) {
+
+            double psiElastic = accessVec(psi_plus, iElem, iGauss);
+            double wpPlastic  = accessVec(*el_wp_ptr, iElem, iGauss);
+            double wcLocal    = accessVec(elem_wc, iElem, iGauss);
+
+            double drivForce = (psiElastic + wpPlastic) / wcLocal;
+
+            accessVec(elemH, iElem, iGauss) = std::max(drivForce, accessVec(elemH, iElem, iGauss));
+        }
+    }
+}
+
+/**
+ * @brief Calculates elastoplastic crack driving force with a threshold based on `psi_plus` and `el_wp`.
+ *        For details, see Miehe et al. CMAME (2016) PI and PII.
+ * 
+ * @param el_wp_ptr 
+ */
+inline void CalcDrivForcEP_TH(const std::vector<std::vector<double>>* el_wp_ptr) {
+    for (size_t iElem = 0; iElem < elemH.size(); ++iElem) {
+        for (size_t iGauss = 0; iGauss < elemH[iElem].size(); ++iGauss) {
+
+            double psiElastic = accessVec(psi_plus, iElem, iGauss);
+            double wpPlastic  = accessVec(*el_wp_ptr, iElem, iGauss);
+            double wcLocal    = accessVec(elem_wc, iElem, iGauss);
+
+            // Raw driving force
+            double rawForce = (psiElastic + wpPlastic) / wcLocal;
+
+            // Apply thresholding (subtract 1, clamp to zero)
+            double drivForce = std::max(rawForce - 1.0, 0.0);
+
+            accessVec(elemH, iElem, iGauss) = std::max(drivForce, accessVec(elemH, iElem, iGauss));
+        }
+    }
+}
+
+/**
  * @brief Get a constant reference to `el_gPhi_d`.
  * 
  * @return const std::vector<std::vector<double>>& 
