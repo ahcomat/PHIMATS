@@ -44,7 +44,7 @@ int nSteps;         /// @brief Number of steps to apply the load.
 const double* globalBuffer;  /// @brief buffer array for PETSc data
 
 // Boundary conditions
-PetscInt nPresDofs;            /// @brief number of prescribed dofs.
+PetscInt nPresDofs = 0;            /// @brief number of prescribed dofs.
 PetscInt* presDofs = NULL;     /// @brief Array to hold the prescribed dofs.
 PetscScalar* presVals = NULL;  /// @brief Array to hold the prescribed values.
 
