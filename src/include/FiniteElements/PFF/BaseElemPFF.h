@@ -133,7 +133,7 @@ inline void CalcDrivForcElas() {
 const std::vector<std::vector<double>>& getEl_gPhi_d() const ;
 
 /**
- * @brief Get a constatn reference to `elPhi_ptr`.
+ * @brief Get a constant reference to `elPhi_ptr`.
  * 
  * @return const std::vector<std::vector<double>>& 
  */
