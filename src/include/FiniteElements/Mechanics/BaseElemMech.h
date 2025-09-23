@@ -164,19 +164,19 @@ const string materialModel;
 /// @brief Element displacement dofs.
 vector<vector<int>> elemDispDof;    
 
-/// @brief Int-pt equivalent plastic strain [nElStres].
+/// @brief Int-pt equivalent plastic strain.
 vector<vector<double>> elStran_eq;
 
-/// @brief Int-pt equivalent plastic strain (last convergged increment) [nElStres].
+/// @brief Int-pt equivalent plastic strain (last convergged increment).
 vector<vector<double>> elStran_eq_old;
     
-/// @brief Int-pt equivalent stress (von Mises) [nElStres].
+/// @brief Int-pt equivalent stress (von Mises).
 vector<vector<double>> elStres_eq;
 
-/// @brief Int-pt hydrostatic stress [nElStres].
+/// @brief Int-pt hydrostatic stress.
 vector<vector<double>> elStres_h;
 
-/// @brief Int-pt normalized dislocation density [nElStres].
+/// @brief Int-pt normalized dislocation density.
 vector<vector<double>> elRho;
 
 /// @brief Variant for passing elastic strain to phase-field fracture.
