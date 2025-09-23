@@ -410,7 +410,8 @@ PetscErrorCode MechModel::Assemble(std::vector<BaseElemMech*> elements) {
     return 0;
 }
 
-void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep){
+void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep,
+                        std::optional<std::vector<BaseElemPFF*>> pffElemsOpt){
 
     // Set counter to zero.
     iterCounter = 0; 
@@ -422,7 +423,7 @@ void MechModel::SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     KSPSolve(ksp, vecFext, vecDeltaDisp);
 
     // Create a context for PETSc
-    AppCtx *user = new AppCtx{elements, mats, iStep, this};
+    AppCtx *user = new AppCtx{elements, mats, iStep, this, pffElemsOpt};
 
     // Set the residual function and context
     SNESSetFunction(snes, vecR, ResidualCallback, user); 
@@ -487,7 +488,7 @@ PetscErrorCode MechModel::ResidualCallback(SNES snes, Vec deltaU, Vec R, void *c
     AppCtx *user = static_cast<AppCtx*>(ctx);
 
     // Compute the internal forces using your existing CalcResidual method
-    PetscErrorCode ierr = user->mechModel->CalcResidual(deltaU, R, user->elements, user->mats, user->iStep);
+    PetscErrorCode ierr = user->mechModel->CalcResidual(deltaU, R, user->elements, user->mats, user->iStep, user->pffElemsOpt);
     CHKERRQ(ierr);
 
     // // TODO: For debugging !
@@ -511,7 +512,7 @@ PetscErrorCode MechModel::JacobianCallback(SNES snes, Vec deltaU, Mat J, Mat P, 
     return 0;
 }
 
-PetscErrorCode MechModel::CalcResidual(Vec deltaU, Vec R, vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep){
+PetscErrorCode MechModel::CalcResidual(Vec deltaU, Vec R, vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep, std::optional<std::vector<BaseElemPFF*>> pffElemsOpt){
 
         try{
         for (int iSet=0; iSet<nElementSets; iSet++){
@@ -531,8 +532,18 @@ PetscErrorCode MechModel::CalcResidual(Vec deltaU, Vec R, vector<BaseElemMech*> 
                 elements[iSet]->CalcElDStran(globalBuffer);
                 VecRestoreArrayRead(deltaU, &globalBuffer);
 
-                // Retrun mapping
-                elements[iSet]->CalcRetrunMapping(mats[iSet], updateStiffMat, iStep);
+                // Check if PFF simulation
+                if (pffElemsOpt.has_value()) {
+
+                    // Extract gPhi_d pointer 
+                    const auto& pffElems = pffElemsOpt.value();
+                    const std::vector<std::vector<double>>& gPhi_d_ptr = pffElems[iSet]->getEl_gPhi_d();
+                    elements[iSet]->CalcRetrunMapping_PFF(mats[iSet], updateStiffMat, iStep, &gPhi_d_ptr);  
+
+                } else {
+                    // Retrun mapping
+                    elements[iSet]->CalcRetrunMapping(mats[iSet], updateStiffMat, iStep);
+                }
 
                 // Has to be set to zero before any calculation, otherwise it accumulates.
                 for (int iDof=0; iDof<nTotDofs; iDof++){

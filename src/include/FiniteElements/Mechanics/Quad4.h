@@ -104,6 +104,8 @@ void CalcElStran(const double* globalBuffer) override;
 
 void CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep) override;
 
+void CalcRetrunMapping_PFF(BaseMechanics* mat, const bool& updateStiffMat, int iStep, const std::vector<std::vector<double>>* gPhi_d_ptr) override;
+
 void CalcFint(double* Fint) override;
 
 void getNew() override;

@@ -40,7 +40,9 @@
 #include "BaseModel.h"
 #include "H5IO.h"
 #include "FiniteElements/Mechanics/BaseElemMech.h"
+#include "FiniteElements/PFF/BaseElemPFF.h"
 #include "Materials/Mechanics/BaseMechanics.h"
+#include <optional>
 
 class MechModel: public BaseModel{
 
@@ -125,7 +127,7 @@ PetscErrorCode Assemble(vector<BaseElemMech*> elements);
  * @param mats Materials vector. 
  * @param iStep Current step. 
  */
-void SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
+void SolveSNES(vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep,std::optional<std::vector<BaseElemPFF*>> pffElemsOpt = std::nullopt);
 
 /**
  * @brief  Monitor the convergence of the SNES nonlinear solver and log iteration info to the console.
@@ -170,7 +172,7 @@ static PetscErrorCode JacobianCallback(SNES snes, Vec deltaU, Mat J, Mat P, void
  * @param iStep Current step.
  * @return PetscErrorCode 
  */
-PetscErrorCode CalcResidual(Vec deltaU, Vec R, vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep);
+PetscErrorCode CalcResidual(Vec deltaU, Vec R, vector<BaseElemMech*> elements, vector<BaseMechanics*> mats, int iStep, std::optional<std::vector<BaseElemPFF*>> pffElemsOpt = std::nullopt);
 
 /**
  * @brief Pass reference of RHS (to solver).
@@ -316,6 +318,7 @@ struct AppCtx {
     vector<BaseMechanics*> mats;     // Material vector
     int iStep;                       // Current step 
     MechModel *mechModel;            // Pointer to <this>
+    std::optional<std::vector<BaseElemPFF*>> pffElemsOpt = std::nullopt;  // Optional PFF elements
 };
 
 };

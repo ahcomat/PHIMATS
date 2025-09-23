@@ -82,6 +82,16 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
             } else if (hardLaw == "KME") {
                 selectedRM2D = &IsoHard::RM2D<PlaneStrain, KME>;
             }
+        } else if (analysisType == "PlaneStrainPFF") {
+            analysis2D = AnalysisType::PlaneStress;
+            if (hardLaw == "PowerLaw") {
+                // Initialize the function pointer
+                selectedRM2DPFF = &IsoHard::RM2DPFF<PlaneStrain, PowerLaw>;
+            } else if (hardLaw == "Voce") {
+                selectedRM2DPFF = &IsoHard::RM2DPFF<PlaneStrain, Voce>;
+            } else if (hardLaw == "KME") {
+                selectedRM2DPFF = &IsoHard::RM2DPFF<PlaneStrain, KME>;
+            }
         } else if (analysisType == "PlaneStress") {
             analysis2D = AnalysisType::PlaneStress;
             if (hardLaw == "PowerLaw") {
@@ -139,12 +149,23 @@ void IsoHard::ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, Co
 /// @brief Select appropriate template specialization 
 void IsoHard::ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep){
 
-        // Ensure selectedRM3D is valid
+    // Ensure selectedRM3D is valid
     if (!selectedRM2D) {
-        throw std::runtime_error("ReturnMapping2D function pointer is not set.");
+        throw std::runtime_error("RturnMapping2D function pointer is not set.");
     }
 
     (this->*selectedRM2D)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, rho, eps_e_old, eps_p_old, eps_eq_old, iStep);
+}
+
+/// @brief Select appropriate template specialization 
+void IsoHard::ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d){
+
+    // Ensure selectedRM3D is valid
+    if (!selectedRM2DPFF) {
+        throw std::runtime_error("RernMapping2DPFF function pointer is not set.");
+    }
+
+    (this->*selectedRM2DPFF)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, rho, eps_e_old, eps_p_old, eps_eq_old, iStep, gPhi_d);
 }
 
 T_DMatx IsoHard::getCMatx() const{

@@ -132,6 +132,8 @@ virtual void CalcElStran(const double* globalBuffer) = 0;
  */
 virtual void CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep) = 0;
 
+virtual void CalcRetrunMapping_PFF(BaseMechanics* mat, const bool& updateStiffMat, int iStep, const std::vector<std::vector<double>>* gPhi_d_ptr) = 0;
+
 /**
  * @brief Updated _old values.
  * 

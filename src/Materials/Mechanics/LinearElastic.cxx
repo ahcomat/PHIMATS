@@ -59,7 +59,7 @@ void LinearElastic::InitializeIsoElasticityMatrix(const string& analysisType, do
                    0, 0, 0, 0, uo, 0,
                    0, 0, 0, 0, 0, uo;
 
-        } else if (analysisType == "PlaneStrain" || analysisType == "PlaneStress") {
+        } else if (analysisType == "PlaneStrain" || analysisType == "PlaneStress" || analysisType == "PlaneStrainPFF") {
 
             if (dims != "2D")
                 throw std::invalid_argument("Invalid dimension: < " + dims + " > for < " + analysisType + " > analysis.");
@@ -69,7 +69,7 @@ void LinearElastic::InitializeIsoElasticityMatrix(const string& analysisType, do
 
             double param = Emod * (1 - nu) / ((1 + nu) * (1 - 2 * nu));
 
-            if (analysisType == "PlaneStrain") {
+            if (analysisType == "PlaneStrain" || analysisType == "PlaneStrainPFF") {
                 mat << param, param * nu / (1.0 - nu), 0,
                        param * nu / (1.0 - nu), param, 0,
                        0, 0, param * (1.0 - 2.0 * nu) / (2.0 * (1.0 - nu));
