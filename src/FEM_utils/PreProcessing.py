@@ -67,7 +67,7 @@ class PreProcessing:
         #----------------------------------------------------------------------
         
         # Allowed simulation types
-        allowedSimulTypes = ["Mechanical", "Transport", "2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping"]
+        allowedSimulTypes = ["Mechanical", "Transport", "2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping", "PFF"]
         
         self.TransportSimulTypes = ["Transport", "2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping"]
                 
@@ -172,7 +172,7 @@ class PreProcessing:
         # Total number of Dofs
         if self.SimulType == "Mechanical":
             self.nTotDofs = self.nTotNodes*self.nDim
-        elif self.SimulType in self.TransportSimulTypes:
+        elif self.SimulType in [self.TransportSimulTypes, "PFF"]:
             self.nTotDofs = self.nTotNodes
 
         
@@ -346,7 +346,16 @@ class PreProcessing:
                         self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/alpha", data=self.Materials[mat]['Plastic']["alpha"])
                         self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/b", data=self.Materials[mat]['Plastic']["b"])
                         self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/k1", data=self.Materials[mat]['Plastic']["k1"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/k2", data=self.Materials[mat]['Plastic']["k2"])             
+                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/k2", data=self.Materials[mat]['Plastic']["k2"])    
+                        
+        elif self.SimulType == "PFF":
+        
+            counter = 0
+            for mat in self.Materials:
+                counter+=1
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/PFF/wc", data=self.Materials[mat]['PFF']["wc"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/PFF/const_ell", data=self.Materials[mat]['PFF']["const_ell"])
+        
 
         elif self.SimulType == "Transport":
             
@@ -587,6 +596,9 @@ class PreProcessing:
                         fh5.create_group('Stress_eq')
                         fh5.create_group('Stress_h')
                         fh5.create_group('Rho')
+                        
+                elif self.SimulType == "PFF":
+                    fh5.create_group('Phi')
                         
         except OSError as e:
             raise RuntimeError(f"Failed to create the HDF5 file '{FName}': {e}")

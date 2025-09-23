@@ -50,7 +50,7 @@ class WriteXDMF:
         self.nElStres = self.element_config[elementName].get("nElStres")
 
         # Validate simulation type
-        allowedSimTypes = ["Transport2D", "Elastic2D", "Elastic3D", "Plastic2D", "Plastic3D"]
+        allowedSimTypes = ["Transport2D", "Elastic2D", "Elastic3D", "Plastic2D", "Plastic3D", "PFF2D"]
         if simulationType not in allowedSimTypes:
             raise ValueError(f"Unknown simulation type '{simulationType}'. Allowed: {', '.join(allowedSimTypes)}")
         
@@ -71,6 +71,8 @@ class WriteXDMF:
                 self.WritePlastic2D(t)
             elif self.simType == "Plastic3D":
                 self.WritePlastic2D(t)
+            elif self.simType == "PFF2D":
+                self.WritePFF2D(t)
                 
         # ---------------------------------------- #   
                 
@@ -261,3 +263,21 @@ class WriteXDMF:
         
 #-----------------------------------------------------------------------------#
 
+    def WritePFF2D(self, t):
+        
+        timestep_grid = ET.SubElement(self.time_series_grid, "Grid", Name=f"TimeStep_{t:.1f}")
+        ET.SubElement(timestep_grid, "Time", Value=f"{t:.1f}")
+
+        # Add topology element
+        topology = ET.SubElement(timestep_grid, "Topology", TopologyType=self.ElTopology, NumberOfElements=str(self.nTotElements))
+        ET.SubElement(topology, "DataItem", Format="HDF", DataType="Int", Dimensions=str(self.nTotElements)+" "+str(self.nElNodes)).text = self.FName+"_in.hdf5:/NodeConnectivity"
+
+        # Add geometry element
+        geometry = ET.SubElement(timestep_grid, "Geometry", GeometryType="XY")
+        ET.SubElement(geometry, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nDim)).text = self.FName+"_in.hdf5:/NodeCoordinates"
+
+        # Add attribute element for concentration
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="phi", AttributeType="Scalar", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)).text = self.FName+"_out.hdf5:/Phi/Step_"+str(t)         
+            
+#-----------------------------------------------------------------------------#
