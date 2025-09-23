@@ -179,6 +179,12 @@ vector<vector<double>> elStres_h;
 /// @brief Int-pt normalized dislocation density.
 vector<vector<double>> elRho;
 
+/// @brief Int-pt plastic work density.
+vector<vector<double>> el_wp;
+
+/// @brief Int-pt plastic work density.
+vector<vector<double>> el_wp_old;
+
 /// @brief Variant for passing elastic strain to phase-field fracture.
 T_elStres elStrain_e_Variant; 
 

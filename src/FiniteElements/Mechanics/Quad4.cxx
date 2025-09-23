@@ -110,6 +110,8 @@ void Quad4::InitializeElements(Nodes &Nodes){
         elStres_eq.resize(nElements); // Equivalent (von Mises) stress
         elStres_h.resize(nElements);  // Hydrostatic stress
         elRho.resize(nElements);      // Norm dislocation density
+        el_wp.resize(nElements); el_wp_old.resize(nElements);     // Plastic work density
+        
 
         elStrain_e_Variant = &elStran_e;
     }     
@@ -148,10 +150,12 @@ void Quad4::InitializeElements(Nodes &Nodes){
             elStran_eq.at(iElem).resize(nElGauss);
             elStres_h.at(iElem).resize(nElGauss);
             elRho.at(iElem).resize(nElGauss);
+            accessVec(el_wp, iElem).resize(nElGauss);
 
             elStran_e_old.at(iElem).resize(nElGauss);
             elStran_p_old.at(iElem).resize(nElGauss); 
             elStran_eq_old.at(iElem).resize(nElGauss);
+            accessVec(el_wp_old, iElem).resize(nElGauss);
 
             // Initilize to zeros.
             for (int iGaus=0; iGaus<nElGauss; iGaus++){
@@ -162,6 +166,7 @@ void Quad4::InitializeElements(Nodes &Nodes){
                 elStres_eq.at(iElem).at(iGaus) = 0;
                 elStres_h.at(iElem).at(iGaus) = 0;
                 elRho.at(iElem).at(iGaus) = 0;
+                accessVec(el_wp, iElem, iGaus) = 0;
 
                 elStran_e_old.at(iElem).at(iGaus).setZero();
                 elStran_p_old.at(iElem).at(iGaus).setZero();
@@ -460,7 +465,9 @@ void Quad4::CalcRetrunMapping_PFF(BaseMechanics* mat, const bool& updateStiffMat
                                         accessVec(elStran_e_old, iElem, iGaus),
                                         accessVec(elStran_p_old, iElem, iGaus),
                                         accessVec(elStran_eq_old, iElem, iGaus), iStep,
-                                        accessVec(*gPhi_d_ptr, iElem, iGaus));
+                                        accessVec(*gPhi_d_ptr, iElem, iGaus),
+                                        accessVec(el_wp_old, iElem, iGaus),
+                                        accessVec(el_wp, iElem, iGaus));
 
         }
     }
@@ -486,7 +493,9 @@ void Quad4::CalcRetrunMapping_PFF(BaseMechanics* mat, const bool& updateStiffMat
                                             accessVec(elStran_e_old, iElem, iGaus),
                                             accessVec(elStran_p_old, iElem, iGaus),
                                             accessVec(elStran_eq_old, iElem, iGaus), iStep,
-                                            accessVec(*gPhi_d_ptr, iElem, iGaus));
+                                            accessVec(*gPhi_d_ptr, iElem, iGaus),
+                                            accessVec(el_wp_old, iElem, iGaus),
+                                            accessVec(el_wp, iElem, iGaus));
 
                 const Matd3x8& dummyBu = BuMat.at(iElem).at(iGaus); // Strain matrix for the given gauss point.
                 dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current integration point 
@@ -520,6 +529,7 @@ void Quad4::getNew(){
     elStran_e_old = elStran_e;
     elStran_p_old = elStran_p;
     elStran_eq_old = elStran_eq;
+    el_wp_old = el_wp;
 
 }
 
