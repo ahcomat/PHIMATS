@@ -79,6 +79,13 @@ void CalcElemDispDof(int iElem, vector<int>& dispDof);
 const T_elStres& getElStrain_e() const { return elStrain_e_Variant; }
 
 /**
+ * @brief Get a constant reference to `el_wp_ptr`.
+ * 
+ * @return const std::vector<std::vector<double>>& 
+ */
+const std::vector<std::vector<double>>& getEl_wp() const ;
+
+/**
  * @brief Calculates the element stiffness matrix.
  */
 virtual void CalcElemStiffMatx(T_DMatx CMatx) = 0;
@@ -187,6 +194,8 @@ vector<vector<double>> el_wp_old;
 
 /// @brief Variant for passing elastic strain to phase-field fracture.
 T_elStres elStrain_e_Variant; 
+
+vector<vector<double>>* el_wp_ptr;
 
 };
 #endif

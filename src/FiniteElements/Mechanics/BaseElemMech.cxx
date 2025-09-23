@@ -70,3 +70,8 @@ void BaseElemMech::CalcElemDispDof(int iElem, vector<int>& dispDof){
         }
     }
 }
+
+const std::vector<std::vector<double>>& BaseElemMech::getEl_wp() const {
+    assert(el_wp_ptr != nullptr && "el_wp_ptr is null!");
+    return *el_wp_ptr;
+}

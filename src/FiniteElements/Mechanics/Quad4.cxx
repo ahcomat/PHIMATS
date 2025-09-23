@@ -114,6 +114,7 @@ void Quad4::InitializeElements(Nodes &Nodes){
         
 
         elStrain_e_Variant = &elStran_e;
+        el_wp_ptr = &el_wp;
     }     
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
