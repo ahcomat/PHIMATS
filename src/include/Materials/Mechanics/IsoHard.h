@@ -106,7 +106,7 @@ void ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& e
  */
 void ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep);
 
-void ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d);
+void ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double wp_old, double wp);
 
 /**
  * @brief Returns the stiffness matrix in Voigt notation.
@@ -292,9 +292,9 @@ static RM2DFn selectRM2D(AnalysisType analysis2D, HardeningLaw hardening) {
 
 // 2D Return-mapping to handle different hardening laws and stress state for PFF.
 template <typename AnalysisType, typename HardeningLaw>
-void RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d);
+void RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double wp_old, double wp);
 
-using RM2DFnPFF = void (IsoHard::*)(ColVecd3&, ColVecd3&, ColVecd3&, ColVecd3&, double&, double&, double&, double&, const ColVecd3&, const ColVecd3&, const double&, const int, const double gPhi_d);
+using RM2DFnPFF = void (IsoHard::*)(ColVecd3&, ColVecd3&, ColVecd3&, ColVecd3&, double&, double&, double&, double&, const ColVecd3&, const ColVecd3&, const double&, const int, const double gPhi_d, const double wp_old, double wp);
 
 // Function pointer for the selected ReturnMapping variant
 RM2DFnPFF selectedRM2DPFF;

@@ -288,13 +288,14 @@ void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps
 
 /// @brief Specialization 
 template <typename AnalysisType, typename HardeningLaw>
-void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d){
+void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double wp_old, double wp){
 
     // Elastic strain
     eps_e = eps_e_old + deps;
 
     // Plastic strain
     eps_p = eps_p_old;
+    wp = wp_old;
 
     // Trial stress
     ColVecd3 sig_trial = std::get<Matd3x3>(CMatx_e)*eps_e*gPhi_d;
@@ -359,11 +360,15 @@ void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& 
 
         // --------- CONVERGED ---> Update variables
 
-        eps_eq = p;             // Equivalent plastic strain
-        eps_p += deqpl*N_tr;    // Plastic strain tensor
-        eps_e -= deqpl*N_tr;    // Elastic strain tensor
+        eps_eq = p;                // Equivalent plastic strain
+        ColVecd3 dep = deqpl*N_tr; // Increment plastic strain tensor
+        eps_p += dep;    // Plastic strain tensor
+        eps_e -= dep;    // Elastic strain tensor
         
-        sig = std::get<Matd3x3>(CMatx_e)*eps_e*gPhi_d;  // Stress tensor
+        sig = std::get<Matd3x3>(CMatx_e)*eps_e;  // Undamaged stress tensor
+        double szz = nu*(sig(0) + sig(1));
+        wp = wp_old + ( (sig(0) - szz)*dep(0) + (sig(1) - szz)*dep(1) + 2*sig(2)*dep(2) ); // Plastic work density
+        sig = sig*gPhi_d;   // Damaged stress tensor
         sig_eq = Mises2D<AnalysisType>(sig);  // Von Mises stress
         sig_h = Shydro2D<AnalysisType>(sig); // Hydostatic stress
 
