@@ -341,8 +341,8 @@ void TrappingModel::AssembleElementMatrix(const auto* elMatx_ptr,
     }
 
     // Free memory
-    PetscFree(i1);
-    PetscFree(j1);
+    (void)PetscFree(i1);
+    (void)PetscFree(j1);
 }
 
 void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool assembleM){
