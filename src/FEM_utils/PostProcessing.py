@@ -20,15 +20,31 @@ class WriteXDMF:
             tOut (int, optional): Number of steps to tOut when writing outputs. Defaults to 1.
             TDS (bool, optional): Flag for writing Temp in TDS. 
         """
+        # Validate simulation type
+        allowedSimTypes = ["Transport2D", "Elastic2D", "Elastic3D", "Plastic2D", "Plastic3D", "PFF2D"]
+        if simulationType not in allowedSimTypes:
+            raise ValueError(f"Unknown simulation type '{simulationType}'. Allowed: {', '.join(allowedSimTypes)}")
+        
+        self.simType = simulationType
+        
         self.FName = fileName  # Base file name
+        
 
         # Read mesh parameters from HDF5
         try:
-            with h5py.File(f"{fileName}_in.hdf5", "r") as fh5:
-                self.nTotNodes = fh5["SimulationParameters"]["nTotNodes"][()]
-                self.nTotDofs = fh5["SimulationParameters"]["nTotDofs"][()]
-                self.nDim = fh5["SimulationParameters"]["nDim"][()]
-                self.nTotElements = fh5["SimulationParameters"]["nTotElements"][()]
+            if not self.simType=="PFF2D":
+                with h5py.File(f"{fileName}_in.hdf5", "r") as fh5:
+                    self.nTotNodes = fh5["SimulationParameters"]["nTotNodes"][()]
+                    self.nTotDofs = fh5["SimulationParameters"]["nTotDofs"][()]
+                    self.nDim = fh5["SimulationParameters"]["nDim"][()]
+                    self.nTotElements = fh5["SimulationParameters"]["nTotElements"][()]
+            else:
+                with h5py.File(f"PFF_{fileName}_in.hdf5", "r") as fh5:
+                    self.nTotNodes = fh5["SimulationParameters"]["nTotNodes"][()]
+                    self.nTotDofs = fh5["SimulationParameters"]["nTotDofs"][()]
+                    self.nDim = fh5["SimulationParameters"]["nDim"][()]
+                    self.nTotElements = fh5["SimulationParameters"]["nTotElements"][()]
+                
         except OSError as e:
             raise OSError(f"Error opening file '{fileName}_in.hdf5': {e}")
         
@@ -48,13 +64,6 @@ class WriteXDMF:
         self.ElTopology = self.element_config[elementName]["ElTopology"]
         self.nElNodes = self.element_config[elementName]["nElNodes"]
         self.nElStres = self.element_config[elementName].get("nElStres")
-
-        # Validate simulation type
-        allowedSimTypes = ["Transport2D", "Elastic2D", "Elastic3D", "Plastic2D", "Plastic3D", "PFF2D"]
-        if simulationType not in allowedSimTypes:
-            raise ValueError(f"Unknown simulation type '{simulationType}'. Allowed: {', '.join(allowedSimTypes)}")
-        
-        self.simType = simulationType
 
         # Initialize XDMF structure
         root = ET.Element("Xdmf", Version="3.0", xmlns="http://www.w3.org/2001/XInclude")
@@ -270,14 +279,54 @@ class WriteXDMF:
 
         # Add topology element
         topology = ET.SubElement(timestep_grid, "Topology", TopologyType=self.ElTopology, NumberOfElements=str(self.nTotElements))
-        ET.SubElement(topology, "DataItem", Format="HDF", DataType="Int", Dimensions=str(self.nTotElements)+" "+str(self.nElNodes)).text = self.FName+"_in.hdf5:/NodeConnectivity"
+        ET.SubElement(topology, "DataItem", Format="HDF", DataType="Int", Dimensions=str(self.nTotElements)+" "+str(self.nElNodes)).text = "PFF_"+self.FName+"_in.hdf5:/NodeConnectivity"
 
         # Add geometry element
         geometry = ET.SubElement(timestep_grid, "Geometry", GeometryType="XY")
-        ET.SubElement(geometry, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nDim)).text = self.FName+"_in.hdf5:/NodeCoordinates"
+        ET.SubElement(geometry, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nDim)).text = "PFF_"+self.FName+"_in.hdf5:/NodeCoordinates"
 
         # Add attribute element for concentration
         attribute = ET.SubElement(timestep_grid, "Attribute", Name="phi", AttributeType="Scalar", Center="Node")
-        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)).text = self.FName+"_out.hdf5:/Phi/Step_"+str(t)         
-            
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)).text = "PFF_"+self.FName+"_out.hdf5:/Phi/Step_"+str(t)         
+        
+                # Add attribute element for displacement
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="disp", AttributeType="Vector", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nDim)).text = "Mech_"+self.FName+"_out.hdf5:/Disp/Step_"+str(t)
+        
+        # Add attribute element for force
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="force", AttributeType="Vector", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nDim)).text = "Mech_"+self.FName+"_out.hdf5:/Force/Step_"+str(t)
+        
+        # Add attribute element for strain
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="strain", AttributeType="Tensor", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nElStres)).text = "Mech_"+self.FName+"_out.hdf5:/Strain/Step_"+str(t)
+        
+        # Add attribute element for stress
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="stress", AttributeType="Tensor", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nElStres)).text = "Mech_"+self.FName+"_out.hdf5:/Stress/Step_"+str(t)
+        
+        # Add attribute element for Strain_p
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="strain_p", AttributeType="Tensor", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nElStres)).text = "Mech_"+self.FName+"_out.hdf5:/Strain_p/Step_"+str(t)
+        
+        # Add attribute element for Strain_e
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="strain_e", AttributeType="Tensor", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(self.nElStres)).text = "Mech_"+self.FName+"_out.hdf5:/Strain_e/Step_"+str(t)
+        
+        # Add attribute element for Strain_eq
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="strain_eq", AttributeType="Scalar", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(1)).text = "Mech_"+self.FName+"_out.hdf5:/Strain_eq/Step_"+str(t)
+        
+        # Add attribute element for Stress_eq
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="stress_eq", AttributeType="Scalar", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(1)).text = "Mech_"+self.FName+"_out.hdf5:/Stress_eq/Step_"+str(t)
+        
+        # Add attribute element for hydrostatic stress
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="stress_h", AttributeType="Scalar", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(1)).text = "Mech_"+self.FName+"_out.hdf5:/Stress_h/Step_"+str(t)
+        
+        # Add attribute element for normalized dislocation density
+        attribute = ET.SubElement(timestep_grid, "Attribute", Name="rho", AttributeType="Scalar", Center="Node")
+        ET.SubElement(attribute, "DataItem", Format="HDF", DataType="Float", Dimensions=str(self.nTotNodes)+" "+str(1)).text = "Mech_"+self.FName+"_out.hdf5:/Rho/Step_"+str(t)
+        
 #-----------------------------------------------------------------------------#
