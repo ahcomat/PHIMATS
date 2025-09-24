@@ -127,7 +127,7 @@ HardeningLaw hardening;
 const double tol = 1e-6;    
 
 /// @brief Maximum number of iterations.
-const int max_iter = 10;
+const int max_iter = 20;
 
 /// @brief 3D Identity tensor in Voigt notation.
 const ColVecd6 I6 = (ColVecd6() << 1.0, 1.0, 1.0, 0.0, 0.0, 0.0).finished();
