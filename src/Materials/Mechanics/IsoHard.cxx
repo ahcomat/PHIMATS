@@ -162,7 +162,7 @@ void IsoHard::ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e
 
     // Ensure selectedRM3D is valid
     if (!selectedRM2DPFF) {
-        throw std::runtime_error("RernMapping2DPFF function pointer is not set.");
+        throw std::runtime_error("ReturnMapping2DPFF function pointer is not set.");
     }
 
     (this->*selectedRM2DPFF)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, rho, eps_e_old, eps_p_old, eps_eq_old, iStep, gPhi_d, wp_old, wp);
