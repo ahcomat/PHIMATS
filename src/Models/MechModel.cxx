@@ -7,8 +7,8 @@
 
 using namespace std;
 
-MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in, Logger& logger, const int NR_update)
-    : logger(logger), NR_freq(NR_update) {
+MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in, Logger& logger,const string kspType, const int NR_update)
+    : logger(logger), kspType(kspType), NR_freq(NR_update) {
 
     string dsetName;
     dsetName = "SimulationParameters/nSteps";
@@ -286,20 +286,49 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     // Get PC from KSP
     KSPGetPC(ksp, &pc);
 
-	// Direct KSP
-    // PCSetType(pc, PCLU);
-    // PCFactorSetMatSolverType(pc, MATSOLVERMUMPS);
+    try{
+            if (kspType=="DIRECT"){
 
-	/* Iterative based on GMRES. Results in a couple of iterations in the elastic regime, but
-	   has better performance for plasticity.
-	*/
-    KSPSetType(ksp, KSPGMRES);
-    KSPGMRESSetRestart(ksp, 50); 
-    KSPSetTolerances(ksp, 1e-12, 1e-12, PETSC_DEFAULT, 1000);
-    PCSetType(pc, PCILU);
-    PCFactorSetLevels(pc, 4); 
-    PCFactorSetShiftType(pc, MAT_SHIFT_NONZERO);       // prevent zero pivots
+                // Direct solver
+                KSPSetType(ksp, KSPPREONLY); 
+                KSPSetFromOptions(ksp);
 
+                // Set preconditioner
+                PCSetType(pc, PCLU); // LU preconditioner for direct solver
+                PCFactorSetMatSolverType(pc, MATSOLVERMUMPS);
+
+                logger.log("    Using < "+kspType+" > solver" , "INFO");
+                logger.log("", "", false);
+
+            } else if (kspType=="GMRES"){              
+
+                // Iterative based on GMRES. Results in a couple of iterations in the elastic regime.
+                KSPSetType(ksp, KSPGMRES);
+                KSPGMRESSetRestart(ksp, 50); 
+                KSPSetTolerances(ksp, 1e-12, 1e-12, PETSC_DEFAULT, 1000);
+                PCSetType(pc, PCILU);
+                PCFactorSetLevels(pc, 4); 
+                PCFactorSetShiftType(pc, MAT_SHIFT_NONZERO);       // prevent zero pivots
+
+                logger.log("    Using solver < "+kspType+" >" , "INFO");
+                logger.log("", "", false);
+
+            } else {
+
+                logger.log("Undefined solver type < " + kspType + " >", "ERROR");
+                throw std::runtime_error("Undefined solver type < " + kspType + " >. Supported options are < DIRECT, GMRES >");
+
+            }
+
+        } catch (const std::runtime_error& e) {
+            logger.log("\nException caught in LinearTransport::LinearTransport:\n", "", false);
+            logger.log("    " + std::string(e.what()), "", false);
+            logger.log("\nCritical error encountered. Terminating!\n", "", false);
+            exit(EXIT_FAILURE);
+        }
+
+    // Allow CLI modification
+    KSPSetOptionsPrefix(ksp, "snes_");
     KSPSetFromOptions(ksp);
     PCSetFromOptions(pc);
     SNESSetFromOptions(snes);

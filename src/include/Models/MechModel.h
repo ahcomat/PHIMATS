@@ -54,7 +54,7 @@ public:
  * @param H5File_in Input hdf5 file. 
  * @param NR_update Frequency of updating the Jacobian and its predonditioner.
  */
-MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in, Logger& logger, const int NR_update = 3);
+MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in, Logger& logger, const string kspType="DIRECT", const int NR_update = 3);
 ~MechModel();
 
 /**
@@ -229,13 +229,16 @@ Logger& logger;
 /// @brief Maximum number of iterations.
 const int max_iter = 10;  
 
-/// @brief Frequency of updating the stiffness matrix within Newton-Raphson iterations. 
+/// @brief Frequency of updating the stiffness matrix within Newton-Raphson iterations. Default = 3. 
 const int NR_freq;      
+
+/// @brief Type of the KSP solver. Options: `DIRECT` and `GMRES`. Default `DIRECT`.
+const string kspType;
 
 /// @brief Counter for NR iterations.
 int iterCounter = 0;  
 
-///@brief Flag for updating stiffness matrix
+/// @brief Flag for updating stiffness matrix
 bool updateStiffMat = true;
 
 /// @brief Number of element displacement dofs.
