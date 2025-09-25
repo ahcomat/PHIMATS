@@ -186,13 +186,13 @@ void PFFModel::CalcDrivFrocEP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*
     } 
 }
 
-void PFFModel::CalcDrivFrocEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem){
+void PFFModel::CalcDrivFrocEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta){
 
     for (int iSet=0; iSet<nElementSets; iSet++){
 
         const std::vector<std::vector<double>>& el_wp = mechElem[iSet]->getEl_wp();
 
-        pffElem[iSet]->CalcDrivForcEP_TH(&el_wp);
+        pffElem[iSet]->CalcDrivForcEP_TH(&el_wp, zeta);
 
     } 
 }

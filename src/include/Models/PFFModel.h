@@ -96,8 +96,9 @@ void CalcDrivFrocEP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem
  * 
  * @param pffElem 
  * @param mechElem 
+ * @param zeta Parameter the controls the post initiation behavoir. Default = 1. 
  */
-void CalcDrivFrocEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem);
+void CalcDrivFrocEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta = 1.0);
 
 /**
  * @brief Calculates the element stiffness matrix.

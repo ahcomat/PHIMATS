@@ -151,8 +151,9 @@ inline void CalcDrivForcEP(const std::vector<std::vector<double>>* el_wp_ptr) {
  *        For details, see Miehe et al. CMAME (2016) PI and PII.
  * 
  * @param el_wp_ptr 
+ * @param zeta Parameter the controls the post initiation behavoir. Default = 1. 
  */
-inline void CalcDrivForcEP_TH(const std::vector<std::vector<double>>* el_wp_ptr) {
+inline void CalcDrivForcEP_TH(const std::vector<std::vector<double>>* el_wp_ptr, const double zeta) {
     for (size_t iElem = 0; iElem < elemH.size(); ++iElem) {
         for (size_t iGauss = 0; iGauss < elemH[iElem].size(); ++iGauss) {
 
@@ -164,7 +165,7 @@ inline void CalcDrivForcEP_TH(const std::vector<std::vector<double>>* el_wp_ptr)
             double rawForce = (psiElastic + wpPlastic) / wcLocal;
 
             // Apply thresholding (subtract 1, clamp to zero)
-            double drivForce = std::max(rawForce - 1.0, 0.0);
+            double drivForce = zeta*std::max(rawForce - 1.0, 0.0);
 
             accessVec(elemH, iElem, iGauss) = std::max(drivForce, accessVec(elemH, iElem, iGauss));
         }
