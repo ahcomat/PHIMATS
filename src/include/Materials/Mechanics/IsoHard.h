@@ -126,6 +126,9 @@ HardeningLaw hardening;
 /// @brief Tolerance for return mapping algorithm.
 const double tol = 1e-6;    
 
+/// @brief Tolerance for return mapping algorithm with phase-field fracture.
+const double tol_PFF = 1e-5; 
+
 /// @brief Maximum number of iterations.
 const int max_iter = 20;
 

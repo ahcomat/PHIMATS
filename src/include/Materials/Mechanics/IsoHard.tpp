@@ -334,7 +334,7 @@ void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& 
         ColVecd3 sig_trial_dev = sig_trial - Shydro2D<AnalysisType>(sig_trial)*I3; 
         ColVecd3 N_tr = (3.0/2.0)*sig_trial_dev/sig_trial_eq; // Plastic flow direction
 
-        while(abs(f_yield > tol)){
+        while(abs(f_yield > tol_PFF)){
 
             // Update Iteration counter
             nIter_RM++;
