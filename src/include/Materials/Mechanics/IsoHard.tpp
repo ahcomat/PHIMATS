@@ -33,7 +33,6 @@ inline void IsoHard::UHard<KME>(const double& eqpl, double& syield, double& rho,
     double param = (k1/k2) - C_prime*exp(-(M*k2/2)*eqpl);
     rho = pow(param, 2);
     syield = sig_y0 +  M*alpha*uo*b*sqrt(rho); 
-    double eps = std::max(eqpl, 1.0e-12); // make sure it is always a positive number
     hard = pow(M, 2)*alpha*uo*b/2*(k1 - k2*sqrt(rho));
     rho = rho/rho_s; // Normalizing
 }
