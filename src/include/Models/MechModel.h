@@ -8,9 +8,7 @@
  * - Initializes and applies boundary conditions.
  * - Manages non-linear solvers through `SNES`.
  * - Manages the output by writing to H5file_out.
- * 
- * @todo - Consider inheritance.
- * 
+ *  
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
  * @date 2024-05-24
  * 
