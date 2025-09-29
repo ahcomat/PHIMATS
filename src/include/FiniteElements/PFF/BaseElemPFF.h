@@ -227,7 +227,7 @@ virtual void CalcElemStiffMatx() = 0;
  * 
  * @param Fint Buffer for vecFp.
  */
-virtual void CalcFp(double* Fp) = 0;
+virtual void CalcFH(double* FH) = 0;
 
 virtual void Calc_gPhi_d(const double* globalBuffer) = 0;
 

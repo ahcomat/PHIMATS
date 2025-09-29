@@ -24,12 +24,12 @@ PFFModel::PFFModel(vector<BaseElemPFF*> elements, H5IO& H5File_in, Logger& logge
     nTotNodes = H5File_in.ReadScalar(dsetName);
 
     // Allocate memory for `Fint` and `indices`.
-    PetscMalloc1(nTotDofs, &Fp);
+    PetscMalloc1(nTotDofs, &FH);
     PetscMalloc1(nTotDofs, &indices);
 
     // Initialize to zero.
     for (int iDof=0; iDof<nTotDofs; iDof++){
-        Fp[iDof] = 0;
+        FH[iDof] = 0;
     }
 
     // Set indices
@@ -43,7 +43,7 @@ PFFModel::PFFModel(vector<BaseElemPFF*> elements, H5IO& H5File_in, Logger& logge
 PFFModel::~PFFModel(){
 
     // Deallocate memory
-    PetscFree(Fp); PetscFree(indices);
+    PetscFree(FH); PetscFree(indices);
     VecDestroy(&vecFp); VecDestroy(&vecx); MatDestroy(&matK);
     // Exit message
     cout << "PFFModel model exited correctly" << "\n";
@@ -307,19 +307,19 @@ void PFFModel::Assemble(vector<BaseElemPFF*> pffElem){
     // PetscViewerDestroy(&viewer);
 }
 
-void PFFModel::CalcFp(vector<BaseElemPFF*> pffElem){
+void PFFModel::CalcFH(vector<BaseElemPFF*> pffElem){
 
 
     // Has to be set to zero before any calculation, otherwise it accumulates.
     for (int iDof=0; iDof<nTotDofs; iDof++){
-        Fp[iDof] = 0;
+        FH[iDof] = 0;
     }
 
     for (int iSet=0; iSet<nElementSets; iSet++){
     
         // Calculate internal force
-        pffElem[iSet]->CalcFp(Fp);
-        VecSetValues(vecFp, nTotDofs, indices, Fp, INSERT_VALUES); 
+        pffElem[iSet]->CalcFH(FH);
+        VecSetValues(vecFp, nTotDofs, indices, FH, INSERT_VALUES); 
         VecAssemblyBegin(vecFp); VecAssemblyEnd(vecFp);
     }
 

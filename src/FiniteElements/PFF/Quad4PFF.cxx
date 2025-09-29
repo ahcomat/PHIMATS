@@ -275,7 +275,7 @@ void Quad4PFF::CalcElemStiffMatx(){
 
 }
 
-void Quad4PFF::CalcFp(double* Fp){
+void Quad4PFF::CalcFH(double* FH){
 
     ColVecd4 dummyFp; // for element nodal RHS.
 
@@ -285,7 +285,7 @@ void Quad4PFF::CalcFp(double* Fp){
             dummyFp = accessVec(shapeFunc, iGauss).transpose()*accessVec(elemH, iElem, iGauss)*accessVec(intPtVol, iElem, iGauss);
 
             for(int pom=0; pom<nElPhiDofs; pom++){
-                Fp[accessVec(elemPhiDof, iElem, pom)] += dummyFp(pom);
+                FH[accessVec(elemPhiDof, iElem, pom)] += dummyFp(pom);
             }
         }
     }

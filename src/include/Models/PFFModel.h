@@ -138,7 +138,7 @@ void AssembleElementMatrix(const auto* elMatx_ptr,
  */
 void Assemble(vector<BaseElemPFF*> pffElem);
 
-void CalcFp(vector<BaseElemPFF*> pffElem);
+void CalcFH(vector<BaseElemPFF*> pffElem);
 
 void Calc_gPhi_d(vector<BaseElemPFF*> pffElem);
 
@@ -195,7 +195,7 @@ int  nTotGuasPts = 0;
 // PETSc ------------------------
 
 /// @brief Buffer for calculating the RHS vector.
-PetscReal* Fp = NULL;  
+PetscReal* FH = NULL;  
 
 /// @brief Indices for `VecSetValues`.
 PetscInt* indices = NULL;   

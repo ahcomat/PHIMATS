@@ -91,7 +91,7 @@ void CalcPsiSpectral(double lam, double Gmod, const T_elStres& elStrain_e) overr
 
 void CalcElemStiffMatx() override;
 
-void CalcFp(double* Fp) override;
+void CalcFH(double* FH) override;
 
 void Calc_gPhi_d(const double* globalBuffer) override;
 
