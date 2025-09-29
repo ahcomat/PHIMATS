@@ -280,7 +280,7 @@ void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps
         RowVecd3 Ce_N = Ce*N_tr;
         double N_Ce_N = N_tr.dot(Ce_N);
         double denom = (2.0 / 3.0) * hard + N_Ce_N;
-        std::get<Matd3x3>(CMatx_ep) = Ce - (Ce_N.transpose() * Ce_N/denom);
+        std::get<Matd3x3>(CMatx_ep) = Ce - (Ce_N.transpose() * Ce_N)/denom;
 
     }
 }
@@ -378,7 +378,7 @@ void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& 
         RowVecd3 Ce_N = Ce*N_tr;
         double N_Ce_N = N_tr.dot(Ce_N);
         double denom = (2.0 / 3.0) * hard + N_Ce_N;
-        std::get<Matd3x3>(CMatx_ep) = (Ce - (Ce_N.transpose() * Ce_N/denom))*gPhi_d;
+        std::get<Matd3x3>(CMatx_ep) = (Ce - (Ce_N.transpose() * Ce_N)/denom)*gPhi_d;
 
     }
 }
