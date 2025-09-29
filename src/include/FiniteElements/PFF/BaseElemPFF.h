@@ -116,7 +116,7 @@ inline void set_wc_const(double const_wc){
  * @brief Calculates the elastic crack driving force using `psi_plus` and updates the history parameter `elemH`.
  * 
  */
-inline void CalcDrivForcElas() {
+inline void CalcDrivForcB() {
     for (size_t iElem = 0; iElem < elemH.size(); ++iElem) {
         for (size_t iGauss = 0; iGauss < elemH[iElem].size(); ++iGauss) {
             double drivForce = accessVec(psi_plus, iElem, iGauss) / accessVec(elem_wc, iElem, iGauss);
