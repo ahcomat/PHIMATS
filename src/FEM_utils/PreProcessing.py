@@ -172,8 +172,13 @@ class PreProcessing:
         # Total number of Dofs
         if self.SimulType == "Mechanical":
             self.nTotDofs = self.nTotNodes*self.nDim
-        elif self.SimulType in [self.TransportSimulTypes, "PFF"]:
+        elif self.SimulType in self.TransportSimulTypes:
             self.nTotDofs = self.nTotNodes
+        elif self.SimulType == "PFF":
+            self.nTotDofs = self.nTotNodes
+        else:
+            ErrString = "ERROR! nTotDofs is not defined. \n"
+            raise ValueError(ErrString)
 
         
         #----------------------------------------------------------------------
