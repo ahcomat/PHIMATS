@@ -347,6 +347,10 @@ void TrappingModel::AssembleElementMatrix(const auto* elMatx_ptr,
 
 void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool assembleM){
 
+    // Has to be zeroed for iterative solver. 
+    MatZeroEntries(matK);
+    MatZeroEntries(matM);
+
     for (auto* elem : elements) {
 
         const vector<vector<int>>& elemConDof_ptr = elem->get_elemConDof();
