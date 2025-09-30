@@ -461,9 +461,10 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
         
         } else if (Trapping=="MechTrapping") {         // Stresses and dislocations 
 
-            double s = dynamic_cast<MechTrap*>(mat)->get_s();
-            double Vh = dynamic_cast<MechTrap*>(mat)->get_Vh();
-            double zeta_rho = dynamic_cast<MechTrap*>(mat)->get_zeta_rho();
+            MechTrap* mechTrapMat = dynamic_cast<MechTrap*>(mat);
+            double s = mechTrapMat->get_s();
+            double Vh = mechTrapMat->get_Vh();
+            double zeta_rho = mechTrapMat->get_zeta_rho();
 
             ColVecd4 dummyElNod_sigma_h, dummyElNod_rho;
             double rho;
@@ -491,7 +492,7 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
                 for (int iGauss=0; iGauss<nElGauss; iGauss++){
 
                     rho = shapeFunc.at(iGauss)*dummyElNod_rho;
-                    DMat = std::get<Matd2x2>(mat->CalcDMatx(rho, T));
+                    DMat = std::get<Matd2x2>(mechTrapMat->CalcDMatx(rho, T));
 
                     const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
                     const RowVecd4& dummyShFunc = shapeFunc.at(iGauss);
