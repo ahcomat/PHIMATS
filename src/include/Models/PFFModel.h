@@ -88,7 +88,7 @@ void CalcDrivForcB(vector<BaseElemPFF*> pffElem);
  * @param pffElem 
  * @param mechElem 
  */
-void CalcDrivFrocEP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem);
+void CalcDrivForcEP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem);
 
 /**
  * @brief Calculates elastoplastic crack driving force with a threshold based on `psi_plus` and `el_wp`.
@@ -98,7 +98,7 @@ void CalcDrivFrocEP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem
  * @param mechElem 
  * @param zeta Parameter the controls the post initiation behavoir. Default = 1. 
  */
-void CalcDrivFrocEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta = 1.0);
+void CalcDrivForcEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta = 1.0);
 
 /**
  * @brief Calculates elastoplastic crack driving force based only on `el_wp`.
