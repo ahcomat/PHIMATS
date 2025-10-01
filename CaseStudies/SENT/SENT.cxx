@@ -134,11 +134,11 @@ int main(int argc, char **argv){
     // // Brittle crack driving force
     // modelPFF.CalcDrivForcB(pffElemVec);   
 
-    // // Elastoplastic crack driving force
-    // modelPFF.CalcDrivForcEP(pffElemVec, mechElemVec);
+    // Elastoplastic crack driving force
+    modelPFF.CalcDrivForcEP(pffElemVec, mechElemVec);
 
-    // Elastoplastic crack driving force with a threshold
-    modelPFF.CalcDrivForcEP_TH(pffElemVec, mechElemVec, 0.25);       
+    // // Elastoplastic crack driving force with a threshold
+    // modelPFF.CalcDrivForcEP_TH(pffElemVec, mechElemVec, 0.25);       
 
     // *******************
     
