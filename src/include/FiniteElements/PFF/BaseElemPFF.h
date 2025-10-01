@@ -207,7 +207,7 @@ const std::vector<std::vector<double>>& getEl_gPhi_d() const ;
 const std::vector<std::vector<double>>& getElphi() const ;
 
 /**
- * @brief Performs spectran decomposition of the elastic strain tensor and calculates the positive
+ * @brief Performs spectral decomposition of the elastic strain tensor and calculates the positive
  * and negative parts of the elastic strain energy density.
  * 
  * @param lam Lame constant lambda.
