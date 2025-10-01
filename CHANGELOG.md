@@ -1,5 +1,26 @@
 # Changelog
 
+## [v1.2.0] - Phase-field fracture (01-10-2025)
+
+Implementing the geometric phase-field fracture for modeling damage evolution.  
+
+### Backward Incompatibilities
+- The `MechModel` constructor now takes an additional optional argument `const string kspType` to specify the KSP solver type used internally (e.g., `KSPPREONLY`, `KSPGMRES`). 
+
+### Changed
+- `PreProcessing` 
+  - Takes new `SimulType`: `PFF`, to manage phase-field fracture simulations.
+  - Plane stress is no longer accepted for plasticity models (not yet supported).
+- `Models/MechModel` monitors the convergence of `SNES` solver via `Logger` class and saves it to the simulation log file.
+- `Materials/Mechanics/IsoHard` 
+  - Power-law hardening can calculate the passive dislocation density evolution based on KME model. As a result, KME parameters are now required in preprocessing. If dislocation evolution is not needed, set the KME parameters to zero.
+  - Include new function `ReturnMapping2D_PFF` for return mapping algorithm including damage effects from PFF. 
+
+### Added
+- `Materials/PFF/PFF` phase-field fracture material. 
+- `FiniteElements/PFF/Quad4PFF` quad4 element to manage phase-field fracture models. 
+- `Models/PFFModel` model class to manage phase-field fracture simulations. 
+
 ## [v1.1.1] - Hydrogen-GB interactions (11-05-2025)
 
 Implementing hydrogen interactions with high- and low-angle grain boundaries. Note that this is only for `Tri3TH` elements. 
