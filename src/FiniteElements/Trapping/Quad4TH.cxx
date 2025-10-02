@@ -351,6 +351,8 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
     vector<Matd4x4> elKDMatx(nElements); 
     vector<Matd4x4> elKTMatx(nElements);
 
+    Matd4x4 BDB;
+
     double dummydVol;       // dummy for int-pt volume.
 
     try{
@@ -477,10 +479,11 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
                 NodeConn = elemNodeConn.at(iElem);
 
                 // MUST BE POPULATED WITH ZEROS    
-                elStiffMatx.at(iElem).setZero();
-                elKDMatx.at(iElem).setZero();  
-                elKTMatx.at(iElem).setZero();  
-                elCapMatx.at(iElem).setZero();
+                accessVec(elStiffMatx, iElem).setZero();
+                accessVec(elKDMatx, iElem).setZero();
+                accessVec(elKTMatx, iElem).setZero();
+                accessVec(elCapMatx, iElem).setZero();
+                BDB.setZero();
 
                 // Loop through element nodes to get nodal values.
                 for(int iNod=0; iNod<nElNodes; iNod++){
@@ -491,24 +494,26 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
                 // Integration over all Gauss points.
                 for (int iGauss=0; iGauss<nElGauss; iGauss++){
 
-                    rho = shapeFunc.at(iGauss)*dummyElNod_rho;
-                    DMat = std::get<Matd2x2>(mechTrapMat->CalcDMatx(rho, T));
+                    rho = accessVec(shapeFunc, iGauss)*dummyElNod_rho;
+                    DMat = std::get<Matd2x2>(mechTrapMat->CalcDMatx(rho, T)); 
 
-                    const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
-                    const RowVecd4& dummyShFunc = shapeFunc.at(iGauss);
-                    dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt
+                    const Matd2x4& dummyBMat = accessVec(BMat, iElem, iGauss); // derivative matrix for the given gauss point.
+                    const RowVecd4& dummyShFunc = accessVec(shapeFunc, iGauss);
+                    dummydVol = accessVec(intPtVol, iElem, iGauss);  // Volume of the current int-pt
+
+                     BDB = dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
 
                     // [B_ji]^T k_jj B_ji
-                    elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
+                    accessVec(elKDMatx, iElem).noalias() += BDB;
                     // [B_ji]^T k_jj B_ji
-                    elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*Vh/(R*T)*dummyBMat*dummyElNod_sigma_h*dummyShFunc*dummydVol +
-                    dummyBMat.transpose()*DMat*zeta_rho/(R*T)*dummyBMat*dummyElNod_rho*dummyShFunc*dummydVol;
+                    accessVec(elKTMatx, iElem).noalias() += BDB*Vh/(R*T)*dummyElNod_sigma_h*dummyShFunc
+                                                         +  BDB*zeta_rho/(R*T)*dummyElNod_rho*dummyShFunc;
                     // [N_i]^T N_i
                     elCapMatx.at(iElem).noalias() += s*(dummyShFunc.transpose()*dummyShFunc)*dummydVol;
 
                 }
 
-                elStiffMatx.at(iElem) = dt*elKDMatx.at(iElem) - dt*elKTMatx.at(iElem) + elCapMatx.at(iElem);
+                accessVec(elStiffMatx, iElem) = dt*accessVec(elKDMatx, iElem) - dt*accessVec(elKTMatx, iElem) + accessVec(elCapMatx, iElem);
             }
         }
 
