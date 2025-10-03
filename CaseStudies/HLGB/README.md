@@ -103,3 +103,13 @@ Run the **`PostProcessing`** notebook to:
 
 * Plot **averaged** quantities, such as hydrogen concentration profiles and exit flux.
 * Visualize **full-field** results, including the hydrogen flux vector field.
+  
+---
+
+PHIMATS is under continuous development and newer versions might function differently. The results shown in this study were generated using **PHIMATS v1.1.1**. To activate this specific version, run:
+
+```bash
+git checkout v1.1.1
+```
+
+And recompile.

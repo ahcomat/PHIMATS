@@ -58,3 +58,4 @@ The results shown in this study were generated using **PHIMATS v1.2.0**. To acti
 ```bash
 git checkout v1.2.0
 ```
+And recompile.

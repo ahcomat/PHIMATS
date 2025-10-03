@@ -50,3 +50,12 @@ Each directory contains a **`PreProcessing` notebook** that:
 - The **`PostProcessing` notebook** includes Python scripts for:
   - **Plotting homogenized data**.
   - **Analyzing results** from the output files.
+
+--- 
+
+PHIMATS is under continuous development and newer versions might function differently. The results shown in this study were generated using **PHIMATS v1.0.0**. To activate this specific version, run:
+
+```bash
+git checkout v1.0.0
+```
+And recompile.

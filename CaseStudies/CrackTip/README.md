@@ -21,8 +21,9 @@ Because of the one-way coupling in this case study, i.e. mechanical loading infl
 ⚠️ **Important:** `Loading` must be run first before the other two simulations. 
 
 
-The results shown in this study were generated using **PHIMATS v1.1.1**. To activate this specific version, run:
+The results shown in this study were generated using **PHIMATS v1.1.0**. To activate this specific version, run:
 
 ```bash
-git checkout v1.1.1
+git checkout v1.1.0
 ```
+And recompile.
