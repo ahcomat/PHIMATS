@@ -234,6 +234,14 @@ void TrappingModel::setBC(){
     // VecView(vecF, PETSC_VIEWER_STDOUT_WORLD);
 }
 
+void TrappingModel::ReadNodalStress(vector<BaseElemTrap*> elements, H5IO &H5File_stress, int iStep){
+
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        elements[iSet]->ReadNodalStress(H5File_stress, iStep);
+    }
+
+}
+
 // void TrappingModel::WriteGradPhi(vector<BaseElemTrap*> elements, H5IO& H5File_out){
 
 //     // Nodal laplacian of phi

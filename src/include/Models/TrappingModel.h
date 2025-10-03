@@ -96,6 +96,15 @@ void setEquilibriumBC(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats
  */
 void setBC();
 
+/**
+ * @brief Read hydrostatic stress values at the nodes from the mechanics _out.hdf5 file. 
+ * 
+ * @param elements 
+ * @param H5File_stress 
+ * @param iStep 
+ */
+void ReadNodalStress(vector<BaseElemTrap*> elements, H5IO &H5File_stress, int iStep);
+
 // /**
 //  * @brief Calculates the gradients of phi and writes them in `H5File_out` 
 //  * 
