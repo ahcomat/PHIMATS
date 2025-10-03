@@ -83,12 +83,12 @@ void setUniformCon(double uniformCon);
 void InitializeBC(H5IO& H5File_in);
 
 /**
- * @brief Set equilibrium concentration boundary conditions. 
+ * @brief Calculates equilibrium concentration boundary conditions. 
  * 
  * @param elements Vector of element pointers
  * @param mats Vector of material pointers
  */
-void setEquilibriumBC(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
+void CalcEquilibriumBC(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
 
 /**
  * @brief Set Dirichlet boundary conditions in the RHS `vecF` and global stiffness matrix `matA`.

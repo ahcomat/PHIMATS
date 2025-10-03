@@ -213,10 +213,10 @@ void TrappingModel::InitializeBC(H5IO& H5File_in){
 
 }
 
-void TrappingModel::setEquilibriumBC(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
+void TrappingModel::CalcEquilibriumBC(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
 
     for (int iSet=0; iSet<nElementSets; iSet++){
-        elements[iSet]->setEquilibriumBC(mats[iSet], presVals, presDofs, nPresDofs, conB, T);
+        elements[iSet]->CalcEquilibriumBC(mats[iSet], presVals, presDofs, nPresDofs, conB, T);
     }
 
 }

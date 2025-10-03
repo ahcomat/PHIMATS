@@ -62,7 +62,7 @@ void BaseElemTrap::ReadNodalStress(H5IO &H5File_stress, int iStep){
 
 }
 
-void BaseElemTrap::setEquilibriumBC(BaseTrapping* mat, double* presVals, int* presDofs, const int nPresDofs, const double conB, const double T){
+void BaseElemTrap::CalcEquilibriumBC(BaseTrapping* mat, double* presVals, int* presDofs, const int nPresDofs, const double conB, const double T){
 
     try{
 
