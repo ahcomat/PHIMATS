@@ -1,7 +1,7 @@
-#include "Solvers/LinearTransport.h"
+#include "Solvers/LinearSolver.h"
 #include<iostream>
 
-LinearTransport::LinearTransport(Mat &A, Logger& logger, string solverType)
+LinearSolver::LinearSolver(Mat &A, Logger& logger, string solverType)
                 :logger(logger) {
 
     // Initialize the solver.
@@ -47,25 +47,25 @@ LinearTransport::LinearTransport(Mat &A, Logger& logger, string solverType)
 
         }
     } catch (const std::runtime_error& e) {
-        logger.log("\nException caught in LinearTransport::LinearTransport:\n", "", false);
+        logger.log("\nException caught in LinearSolver::LinearSolver:\n", "", false);
         logger.log("    " + std::string(e.what()), "", false);
         logger.log("\nCritical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
     }
 }
 
-LinearTransport::~LinearTransport(){
+LinearSolver::~LinearSolver(){
 
     // Exit message
-    std::cout << "LinearTransport solver exited correctly" << "\n";
+    std::cout << "LinearSolver solver exited correctly" << "\n";
 }
 
-void LinearTransport::UpdateKSP(Mat &A){
+void LinearSolver::UpdateKSP(Mat &A){
 
     KSPSetOperators(ksp, A, A);
 }
 
-void LinearTransport::Solve(Vec &x, Vec &F){
+void LinearSolver::Solve(Vec &x, Vec &F){
 
     KSPSolve(ksp, F, x);
 }

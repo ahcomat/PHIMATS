@@ -1,8 +1,8 @@
 /**
- * @file LinearMech.h
+ * @file LinearSolver.h
  * @author Abdelrahman Hussein (a.h.a.hussein@outlook.com)
- * @brief A wrapper for PETSc linear solver `ksp` for linear elasticity.
- * @date 2024-05-28
+ * @brief A wrapper for PETSc linear solver `KSP`.
+ * @date 2024-06-18
  * 
  * @copyright Copyright (C) 2025 Abdelrahman Hussein
  * 
@@ -21,18 +21,28 @@
  *  
  */
 
-#ifndef LINEARMECH_H
-#define LINEARMECH_H
+#ifndef LINEARTRANSPORT_H
+#define LINEARTRANSPORT_H
 
-#include "BaseSolver.h"
+#include <petscsys.h>
+#include <petscvec.h>
+#include <petscmat.h>
+#include <petscksp.h>
+#include "Logger.h"
 
-class LinearMech: public BaseSolver{
+#include <string>
+
+using namespace std;
+
+class LinearSolver{
 
 public:
 
-LinearMech(Mat &A);
+LinearSolver(Mat &A, Logger& logger, string solverType="DIRECT");
 
-~LinearMech() override;
+~LinearSolver();
+
+void UpdateKSP(Mat &A);
 
 /**
  * @brief Solve the linear system `Ax=b`.
@@ -41,7 +51,19 @@ LinearMech(Mat &A);
  * @param x 
  * @param b 
  */
-void Solve(Vec &x, Vec &b);
+void Solve(Vec &x, Vec &F);
+
+private:
+
+/**
+ * @brief Logger object for handeling interface messages.
+ * 
+ */
+Logger& logger;
+
+KSP ksp;        /// @brief `KSP` object.
+PC pc;          /// @brief Pre-conditioner.
+
 
 };
 #endif
