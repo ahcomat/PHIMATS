@@ -67,9 +67,9 @@ class PreProcessing:
         #----------------------------------------------------------------------
         
         # Allowed simulation types
-        allowedSimulTypes = ["Mechanical", "Transport", "2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping", "PFF"]
+        allowedSimulTypes = ["Mechanical", "Transport", "2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping", "PFF", "MechTrappingPFF"]
         
-        self.TransportSimulTypes = ["Transport", "2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping"]
+        self.TransportSimulTypes = ["Transport", "2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping", "MechTrappingPFF"]
                 
         if not self.SimulType in allowedSimulTypes:
             ErrString = "ERROR! Unknown simulation type < " + self.SimulType + " >\n"
@@ -112,13 +112,13 @@ class PreProcessing:
             self.gPhi_ii = inputData["gPhi_ii"]
             self.gPhi_ij = inputData["gPhi_ij"]
             
-        elif self.SimulType=="MechTrapping":
+        elif self.SimulType=="MechTrapping" or self.SimulType == "MechTrappingPFF":
             
             self.exitNods = inputData["exitNods"]
             self.dt = inputData["dt"]
             self.T = inputData["T"]
             self.conB = inputData["conB"]
-        
+           
         #----------------------------------------------------------------------
         # Check for allowed elements and assign element data (number of nodes,
         # dimension and order) 
@@ -257,6 +257,8 @@ class PreProcessing:
             self.grp_Sim_Params.create_dataset("Trapping", data=np.bytes_("2PhaseTrapping"))
         elif self.SimulType == "MechTrapping":
             self.grp_Sim_Params.create_dataset("Trapping", data=np.bytes_("MechTrapping"))
+        elif self.SimulType == "MechTrappingPFF":
+            self.grp_Sim_Params.create_dataset("Trapping", data=np.bytes_("MechTrappingPFF"))
         
         self.grp_Sim_Params.create_dataset("nDim", data=self.nDim, dtype = np.int64)
         self.grp_Sim_Params.create_dataset("nTotNodes", data=self.nTotNodes, dtype = np.int64)
@@ -298,7 +300,7 @@ class PreProcessing:
             self.fh5.create_dataset('phi_j', data=self.phi_j, dtype = np.float64) 
             
         # Case MechTrapping 
-        if self.SimulType == "MechTrapping":
+        if self.SimulType == "MechTrapping" or self.SimulType == "MechTrappingPFF":
             self.grp_Sim_Params.create_dataset("dt", data=self.dt)
             self.grp_Sim_Params.create_dataset("T", data=self.T)  
             self.grp_Sim_Params.create_dataset("conB", data=self.conB)
@@ -373,6 +375,23 @@ class PreProcessing:
 
                 if self.nDim == 3:
                     self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dy", data=self.Materials[mat]["Dz"])
+                    
+        elif self.SimulType == "MechTrappingPFF":
+            for mat in self.Materials:
+                counter = 1
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x", data=self.Materials[mat]["D0x"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y", data=self.Materials[mat]["D0y"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx", data=self.Materials[mat]["DQx"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy", data=self.Materials[mat]["DQy"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/m", data=self.Materials[mat]["m"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/Vh", data=self.Materials[mat]["Vh"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/s", data=self.Materials[mat]["s"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_rho", data=self.Materials[mat]["zeta_rho"])
+                self.grp_Materials.create_dataset("Material_"+str(counter)+"/Zd", data=self.Materials[mat]["Zd"])                   
+
+                if self.nDim == 3:
+                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
+                    
                     
         elif self.SimulType == "MechTrapping":
             for mat in self.Materials:
