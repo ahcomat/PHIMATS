@@ -36,8 +36,10 @@
 #include "BaseModel.h"
 #include "Logger.h"
 #include "FiniteElements/Trapping/BaseElemTrap.h"
+#include "FiniteElements/PFF/BaseElemPFF.h"
 #include "Materials/Trapping/BaseTrapping.h"
 #include "H5IO.h"
+#include <optional>
 
 class TrappingModel: public BaseModel{
 
@@ -137,14 +139,14 @@ void Update_dt(vector<BaseElemTrap*> elements, double dtNew);
  */
 void WriteTemp(H5IO &H5File_out, const int iStep);
 
-/**
- * @brief Calculates the element stiffness matrix.
- * 
- * @param elements 
- * @param mats 
- * @param updateTemp 
- */
-void CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
+ /**
+  * @brief Calculates the element stiffness matrix.
+  * 
+  * @param elements 
+  * @param mats 
+  * @param pffElemsOpt 
+  */
+void CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, std::optional<std::vector<BaseElemPFF*>> pffElemsOpt = std::nullopt);
 
 /**
  * @brief Helper function for `Assemble`.

@@ -385,7 +385,7 @@ void Tri3TH::getInPtCoords(T_nodStres& glIntPtCoords){
 //     }
 // }
 
-void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
+void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vector<std::vector<double>>* elPhi_d_pt){
 
     Matd2x2 DMat; 
 

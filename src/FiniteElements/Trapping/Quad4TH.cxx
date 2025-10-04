@@ -344,7 +344,7 @@ void Quad4TH::getInPtCoords(T_nodStres& glIntPtCoords){
 //     }
 // }
 
-void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T){
+void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr){
 
     Matd2x2 DMat; 
 

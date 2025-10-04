@@ -111,7 +111,7 @@ void getInPtCoords(T_nodStres& glIntPtCoords) override;
  * @param mat Material
  * @param T Current temperature
  */
-void CalcElemStiffMatx(BaseTrapping* mat, const double T) override;
+void CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr = nullptr) override;
 
 /**
  * @brief Calculates the volume averaged concentration

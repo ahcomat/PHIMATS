@@ -118,7 +118,7 @@ virtual void getInPtCoords(T_nodStres& glIntPtCoords) = 0;
  * @param mat 
  * @param T 
  */
-virtual void CalcElemStiffMatx(BaseTrapping* mat, const double T) = 0;
+virtual void CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr = nullptr) = 0;
 
 /**
  * @brief Calculates the volume averaged concentration

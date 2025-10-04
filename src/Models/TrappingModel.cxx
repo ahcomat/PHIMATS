@@ -318,11 +318,22 @@ void TrappingModel::WriteTemp(H5IO &H5File_out, const int iStep){
     H5File_out.WriteScalar("Temp/Step_"+to_string(iStep), T);
 }
 
-void TrappingModel::CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
+void TrappingModel::CalcElemStiffMatx(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, std::optional<std::vector<BaseElemPFF*>> pffElemsOpt){
 
-        for (int iSet=0; iSet<nElementSets; iSet++){
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        // Check if PFF simulation
+        if (pffElemsOpt.has_value()){
+
+            const auto& pffElems = pffElemsOpt.value();
+            const std::vector<std::vector<double>>& elPhi_ptr = pffElems[iSet]->getElphi();
+            elements[iSet]->CalcElemStiffMatx(mats[iSet], T, &elPhi_ptr);
+            
+        } else {
+
             elements[iSet]->CalcElemStiffMatx(mats[iSet], T);
+
         }
+    }
 }
 
 void TrappingModel::AssembleElementMatrix(const auto* elMatx_ptr,
