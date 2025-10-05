@@ -596,7 +596,7 @@ class PreProcessing:
             
             with h5py.File(FName, mode) as fh5:
                 # Handle groups based on SimulType
-                if self.SimulType in ["Transport", "2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping"]:
+                if self.SimulType in ["Transport", "2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping", "MechTrappingPFF"]:
                     fh5.create_group('Con')
                     if AVCON:
                         fh5.create_group('AvCon')
