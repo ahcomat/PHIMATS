@@ -64,22 +64,32 @@ double get_s() const { return s; };
  */
 double get_zeta_rho() const { return zeta_rho; };
 
+/**
+ * @brief Crack source/sink term.
+ * 
+ * @return double
+ */
+double get_Zd() const { return Zd; };
+
 private:
 
 /// @brief Anisotropic diffusivity parameters
 double D0x, D0y, D0z, DQx, DQy, DQz; 
 
 /// @brief Partial molar volume for hydrogen [m]
-double Vh;       
+double Vh = 0;       
 
 /// @brief Dislocation to lattice diffusivity ratio  
-double m;
+double m = 0;
 
 /// @brief Trapping capacity  
-double s;
+double s = 0;
 
 /// @brief Dislocation trapping parameter 
-double zeta_rho;
+double zeta_rho = 0;
+
+/// @brief Source/sink term at the damaged region  
+double Zd = 0;
 
 };
 #endif
