@@ -259,6 +259,9 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
                 intPtVol.at(iElem) = dummyIntVol;
         
             }
+
+        } else {
+            throw std::runtime_error("Undefined trapping type < " + Trapping + " >");
         }
 
     } catch (const std::runtime_error& e) {
@@ -613,7 +616,7 @@ void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres
             }
 
         }
-    
+
     } catch (const std::runtime_error& e) {
 
         logger.log("\nException caught in Quad4TH::CalcFlux:\n", "ERROR", false);
