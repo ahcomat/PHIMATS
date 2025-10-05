@@ -66,7 +66,7 @@ void BaseElemTrap::CalcEquilibriumBC(BaseTrapping* mat, double* presVals, int* p
 
     try{
 
-        if (Trapping=="MechTrapping"){                   // Stresses and dislocations
+        if (Trapping=="MechTrapping" || Trapping=="MechTrappingPFF"){                   // Stresses and dislocations
 
             double Vh = dynamic_cast<MechTrap*>(mat)->get_Vh();
             double zeta_rho = dynamic_cast<MechTrap*>(mat)->get_zeta_rho();
@@ -76,6 +76,8 @@ void BaseElemTrap::CalcEquilibriumBC(BaseTrapping* mat, double* presVals, int* p
                                                nod_rho[presDofs[iPresDof]]*zeta_rho)/(R*T));
             }
 
+        } else {
+            throw std::runtime_error("unsupported trapping type < " + Trapping + " >");
         }
 
     } catch (const std::runtime_error& e) {
@@ -87,3 +89,4 @@ void BaseElemTrap::CalcEquilibriumBC(BaseTrapping* mat, double* presVals, int* p
     
         }
 }
+
