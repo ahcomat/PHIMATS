@@ -99,7 +99,7 @@ void CalcEquilibriumBC(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mat
 void setBC();
 
 /**
- * @brief Read hydrostatic stress values at the nodes from the mechanics _out.hdf5 file. 
+ * @brief Read nodal hydrostatic stress and dislocation density from the mechanics _out.hdf5 file. 
  * 
  * @param elements 
  * @param H5File_stress 
@@ -208,9 +208,20 @@ Mat& getK();
 void WriteInPtCoords(vector<BaseElemTrap*> elements, H5IO &H5File_out);
 
 /**
- * @brief Calculates the flux. Also Calculates the maps the flux to nodal values.
+* @brief Calculates the flux and maps it to the nodes.
+* 
+* @param elements Trapping elements vector
+* @param mats Trapping materials vector
+* @param pffElemsOpt Optional PFF elements vector
+*/
+void CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, std::optional<std::vector<BaseElemPFF*>> pffElemsOpt = std::nullopt);
+
+/**
+ * @brief Calculates the RHS source term when a crack is active. 
  * 
  * @param elements 
+ * @param mats 
+ * @param pffElemsOpt 
  */
 void CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
 

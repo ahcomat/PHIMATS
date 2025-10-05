@@ -421,7 +421,7 @@ double Tri6TH::CalcAvCon(const double* globalBuffer){
     return AvCon/TotVol;
 }
 
-void Tri6TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T){
+void Tri6TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr){
 
     Matd2x2 DMat; 
     double IntPtCon;   // Integration point concnetration

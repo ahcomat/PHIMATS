@@ -487,7 +487,7 @@ void TrappingModel::WriteInPtCoords(vector<BaseElemTrap*> elements, H5IO &H5File
     H5File_out.WriteTensor("IntPtCoords", nTotGuasPts, 3, glIntPtCoords);
 }
 
-void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
+void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, std::optional<std::vector<BaseElemPFF*>> pffElemsOpt){
 
     // set zeros
     setZero_nodFlux();
@@ -495,7 +495,17 @@ void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping
     VecGetArrayRead(vecx, &globalBuffer);
 
     for (int iSet=0; iSet<nElementSets; iSet++){
-        elements[iSet]->CalcFlux(mats[iSet], globalBuffer, nodFlux, intPtFlux, nodCount, T);
+        // Check if PFF simulation
+        if (pffElemsOpt.has_value()){
+
+            const auto& pffElems = pffElemsOpt.value();
+
+            elements[iSet]->CalcFlux(mats[iSet], globalBuffer, nodFlux, intPtFlux, nodCount, T,  &pffElems[iSet]->getEl_gPhi_d());
+            
+        } else {
+
+            elements[iSet]->CalcFlux(mats[iSet], globalBuffer, nodFlux, intPtFlux, nodCount, T);
+        }
     }
     
     // Number averaging the nodal values

@@ -223,7 +223,7 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
                 intPtVol.at(iElem) = dummyIntVol;
             }
 
-        } else if (Trapping=="MechTrapping") {         // Stresses and dislocations 
+        } else if (Trapping=="MechTrapping" || Trapping=="MechTrappingPFF") {         // Stresses and dislocations 
             
             nod_sigma_h.resize(nNodes);
             nod_rho.resize(nNodes);
@@ -353,6 +353,7 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::ve
 
     vector<Matd4x4> elKDMatx(nElements); 
     vector<Matd4x4> elKTMatx(nElements);
+    vector<Matd4x4> elKZMatx(nElements);
 
     Matd4x4 BDB;
 
@@ -518,6 +519,70 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::ve
 
                 accessVec(elStiffMatx, iElem) = dt*accessVec(elKDMatx, iElem) - dt*accessVec(elKTMatx, iElem) + accessVec(elCapMatx, iElem);
             }
+
+        } else if (Trapping=="MechTrappingPFF") {         // PFF 
+
+            MechTrap* mechTrapMat = dynamic_cast<MechTrap*>(mat);
+            double s = mechTrapMat->get_s();
+            double Vh = mechTrapMat->get_Vh();
+            double zeta_rho = mechTrapMat->get_zeta_rho();
+            double Zd = mechTrapMat->get_Zd();
+
+            ColVecd4 dummyElNod_sigma_h, dummyElNod_rho;
+            double intPtRho;
+            double phi2;
+
+            vector<int> NodeConn;
+
+            // Loop through all elements.
+            for(int iElem=0; iElem<nElements; iElem++){
+
+                NodeConn = elemNodeConn.at(iElem);
+
+                // MUST BE POPULATED WITH ZEROS    
+                accessVec(elStiffMatx, iElem).setZero();
+                accessVec(elKDMatx, iElem).setZero();
+                accessVec(elKTMatx, iElem).setZero();
+                accessVec(elKZMatx, iElem).setZero();
+                accessVec(elCapMatx, iElem).setZero();
+                BDB.setZero();
+
+                // Loop through element nodes to get nodal values.
+                for(int iNod=0; iNod<nElNodes; iNod++){
+                    dummyElNod_sigma_h[iNod] = nod_sigma_h.at(NodeConn.at(iNod));
+                    dummyElNod_rho[iNod] = nod_rho.at(NodeConn.at(iNod));
+                }       
+                
+                // Integration over all Gauss points.
+                for (int iGauss=0; iGauss<nElGauss; iGauss++){
+
+                    const Matd2x4& dummyBMat = accessVec(BMat, iElem, iGauss); // derivative matrix for the given gauss point.
+                    const RowVecd4& dummyShFunc = accessVec(shapeFunc, iGauss);
+                    dummydVol = accessVec(intPtVol, iElem, iGauss);  // Volume of the current int-pt
+
+                    intPtRho = dummyShFunc*dummyElNod_rho;
+                    phi2 = accessVec(*elPhi_d_ptr, iElem, iGauss)*accessVec(*elPhi_d_ptr, iElem, iGauss);
+                    DMat = std::get<Matd2x2>(mechTrapMat->CalcDMatx(intPtRho, T))*(1 - 0.99*phi2); 
+                    BDB = dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
+
+                    // [B_ji]^T k_jj B_ji
+                    accessVec(elKDMatx, iElem).noalias() += BDB;
+                    // [B_ji]^T k_jj B_ji
+                    accessVec(elKTMatx, iElem).noalias() += BDB*(Vh/(R*T)*dummyElNod_sigma_h*dummyShFunc
+                                                                 + zeta_rho/(R*T)*dummyElNod_rho*dummyShFunc);
+
+                    accessVec(elKZMatx, iElem).noalias() += Zd*phi2*(dummyShFunc.transpose()*dummyShFunc)*dummydVol;
+
+                    // [N_i]^T N_i
+                    elCapMatx.at(iElem).noalias() += s*(dummyShFunc.transpose()*dummyShFunc)*dummydVol;
+
+                }
+
+                accessVec(elStiffMatx, iElem) = dt*accessVec(elKDMatx, iElem) - dt*accessVec(elKTMatx, iElem)
+                                              + dt*accessVec(elKZMatx, iElem) + accessVec(elCapMatx, iElem);
+            }
+        } else {
+            throw std::runtime_error("Undefined trapping type < " + Trapping + " >");
         }
 
     } catch (const std::runtime_error& e) {
@@ -563,7 +628,7 @@ double Quad4TH::CalcAvCon(const double* globalBuffer){
     return AvCon/TotVol;
 }
 
-void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T){
+void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr){
 
     Matd2x2 DMat; 
     double IntPtCon;   // Integration point concnetration
@@ -575,46 +640,103 @@ void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres
         if (Trapping=="MechTrapping"){       // hydrostatic stresses an dislocations
 
             MechTrap* mechTrapMat = dynamic_cast<MechTrap*>(mat);
-
             double Vh = mechTrapMat->get_Vh();
-
+            double zeta_rho = mechTrapMat->get_zeta_rho();
             ColVecd4 dummyElNod_sigma_h, dummyElNod_rho;
-            double rho;
+            double intPtRho;
 
             // Integration point values.
             for(int iElem=0; iElem<nElements; iElem++){
 
                 // Loop through element nodes to get nodal values.
                 for(int iDof=0; iDof<nElConDofs; iDof++){
-                    dummyCon[iDof] = globalBuffer[elemConDof.at(iElem).at(iDof)];
-                    dummyElNod_sigma_h[iDof] = nod_sigma_h.at(elemConDof.at(iElem).at(iDof));
+                    dummyCon[iDof] = globalBuffer[accessVec(elemConDof, iElem, iDof)];
+                    dummyElNod_sigma_h[iDof] = accessVec(nod_sigma_h, accessVec(elemConDof, iElem, iDof));
+                    dummyElNod_rho[iDof] = accessVec(nod_rho, accessVec(elemConDof, iElem, iDof));
                 }
 
                 // Gauss points
-                for(int iGaus=0; iGaus<nElGauss; iGaus++){
+                for(int iGauss=0; iGauss<nElGauss; iGauss++){
 
-                    IntPtCon = accessVec(shapeFunc, iGaus)*dummyCon;
-                    DMat = std::get<Matd2x2>(mechTrapMat->CalcDMatx(0, T));
-                    DB = DMat*accessVec(BMat, iElem, iGaus);
+                    const RowVecd4& dummyShFunc = accessVec(shapeFunc, iGauss);
+
+                    IntPtCon = dummyShFunc*dummyCon;
+                    intPtRho = dummyShFunc*dummyElNod_rho;
+                    double phi2 = accessVec(*elPhi_d_ptr, iElem, iGauss)*accessVec(*elPhi_d_ptr, iElem, iGauss);
+                    DMat = std::get<Matd2x2>(mechTrapMat->CalcDMatx(intPtRho, T));
+                    DB = DMat*accessVec(BMat, iElem, iGauss);
 
                     // Int pt flux
-                    accessVec(elFlux, iElem, iGaus) = DB*( -dummyCon + Vh/(R*T)*IntPtCon*dummyElNod_sigma_h);
+                    accessVec(elFlux, iElem, iGauss) = DB*(- dummyCon + Vh/(R*T)*IntPtCon*dummyElNod_sigma_h
+                                                                      + zeta_rho/(R*T)*dummyElNod_rho);
 
-                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGaus)[0] =  accessVec(elFlux, iElem, iGaus)[0];
-                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGaus)[1] =  accessVec(elFlux, iElem, iGaus)[1];
-                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGaus)[2] =  0;
+                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGauss)[0] =  accessVec(elFlux, iElem, iGauss)[0];
+                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGauss)[1] =  accessVec(elFlux, iElem, iGauss)[1];
+                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGauss)[2] =  0;
 
                     // Nodal values
                     iNode = 0;
                     for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
 
-                        std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += accessVec(elFlux, iElem, iGaus)*accessVec(shapeFunc, iGaus)[iNode]*accessVec(wts, iGaus);
-                        accessVec(nodCount, *iNod2) += accessVec(shapeFunc, iGaus)[iNode]*accessVec(wts, iGaus);
+                        std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += accessVec(elFlux, iElem, iGauss)*dummyShFunc[iNode]*accessVec(wts, iGauss);
+                        accessVec(nodCount, *iNod2) += dummyShFunc[iNode]*accessVec(wts, iGauss);
                         iNode += 1;
                     }
                 }
             }
 
+        } else if (Trapping == "MechTrappingPFF"){       // PFF
+
+            MechTrap* mechTrapMat = dynamic_cast<MechTrap*>(mat);
+
+            double Vh = mechTrapMat->get_Vh();
+            double zeta_rho = mechTrapMat->get_zeta_rho();
+
+            ColVecd4 dummyElNod_sigma_h, dummyElNod_rho;
+            double intPtRho;
+
+            // Integration point values.
+            for(int iElem=0; iElem<nElements; iElem++){
+
+                // Loop through element nodes to get nodal values.
+                for(int iDof=0; iDof<nElConDofs; iDof++){
+                    dummyCon[iDof] = globalBuffer[accessVec(elemConDof, iElem, iDof)];
+                    dummyElNod_sigma_h[iDof] = accessVec( nod_sigma_h, accessVec(elemConDof, iElem, iDof));
+                    dummyElNod_rho[iDof] = accessVec( nod_rho, accessVec(elemConDof, iElem, iDof));
+                }
+
+                // Gauss points
+                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+
+                    const RowVecd4& dummyShFunc = accessVec(shapeFunc, iGauss);
+
+                    IntPtCon = dummyShFunc*dummyCon;
+                    double phi2 = accessVec(*elPhi_d_ptr, iElem, iGauss)*accessVec(*elPhi_d_ptr, iElem, iGauss);
+                    intPtRho = dummyShFunc*dummyElNod_rho;
+                    DMat = std::get<Matd2x2>(mechTrapMat->CalcDMatx(intPtRho, T))*(1 - 0.99*phi2);
+                    DB = DMat*accessVec(BMat, iElem, iGauss);
+
+                    // Int pt flux
+                    accessVec(elFlux, iElem, iGauss) = DB*( -dummyCon + Vh/(R*T)*IntPtCon*dummyElNod_sigma_h 
+                                                                      + zeta_rho/(R*T)*dummyElNod_rho);
+
+                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGauss)[0] =  accessVec(elFlux, iElem, iGauss)[0];
+                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGauss)[1] =  accessVec(elFlux, iElem, iGauss)[1];
+                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGauss)[2] =  0;
+
+                    // Nodal values
+                    iNode = 0;
+                    for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
+
+                        std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += accessVec(elFlux, iElem, iGauss)*accessVec(shapeFunc, iGauss)[iNode]*accessVec(wts, iGauss);
+                        accessVec(nodCount, *iNod2) += accessVec(shapeFunc, iGauss)[iNode]*accessVec(wts, iGauss);
+                        iNode += 1;
+                    }
+                }
+            }
+
+        } else {
+            throw std::runtime_error("Undefined trapping type < " + Trapping + " >");
         }
 
     } catch (const std::runtime_error& e) {
