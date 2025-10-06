@@ -777,11 +777,11 @@ void Quad4TH::CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer,
             // Equilibrium conentration
             Ceq = conB * ((dummyElNod_sigma_h * Vh + dummyElNod_rho * zeta_rho ) / (R * T)).array().exp().matrix();
 
-            const RowVecd4& dummyShFunc = accessVec(shapeFunc, iGaus);
+            const RowVecd4& N_i = accessVec(shapeFunc, iGaus);
             const double& dummydVol = accessVec(intPtVol, iElem, iGaus);  
 
             double phi2 = accessVec(*elPhi_d_ptr, iElem, iGaus)*accessVec(*elPhi_d_ptr, iElem, iGaus);
-            Matd4x4 NTN = dummyShFunc.transpose() * dummyShFunc;
+            Matd4x4 NTN = N_i.transpose() * N_i;
             dummyFsrc = dt*Zd*phi2*NTN*Ceq*dummydVol;
 
             for(int iNod2 = 0; iNod2 < nElConDofs; ++iNod2) {
