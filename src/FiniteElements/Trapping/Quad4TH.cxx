@@ -662,7 +662,6 @@ void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres
 
                     IntPtCon = dummyShFunc*dummyCon;
                     intPtRho = dummyShFunc*dummyElNod_rho;
-                    double phi2 = accessVec(*elPhi_d_ptr, iElem, iGauss)*accessVec(*elPhi_d_ptr, iElem, iGauss);
                     DMat = std::get<Matd2x2>(mechTrapMat->CalcDMatx(intPtRho, T));
                     DB = DMat*accessVec(BMat, iElem, iGauss);
 
