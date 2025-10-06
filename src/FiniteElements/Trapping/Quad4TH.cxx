@@ -707,13 +707,15 @@ void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres
                 // Gauss points
                 for(int iGauss=0; iGauss<nElGauss; iGauss++){
 
-                    const RowVecd4& dummyShFunc = accessVec(shapeFunc, iGauss);
+                    const RowVecd4& N_i = accessVec(shapeFunc, iGauss);
 
-                    IntPtCon = dummyShFunc*dummyCon;
+                    IntPtCon = N_i*dummyCon;
                     double phi2 = accessVec(*elPhi_d_ptr, iElem, iGauss)*accessVec(*elPhi_d_ptr, iElem, iGauss);
-                    intPtRho = dummyShFunc*dummyElNod_rho;
+                    intPtRho = N_i*dummyElNod_rho;
                     DMat = std::get<Matd2x2>(mechTrapMat->CalcDMatx(intPtRho, T))*(1 - 0.99*phi2);
                     DB = DMat*accessVec(BMat, iElem, iGauss);
+
+                    double dummydVol = accessVec(intPtVol, iElem, iGauss);
 
                     // Int pt flux
                     accessVec(elFlux, iElem, iGauss) = DB*( -dummyCon + Vh/(R*T)*IntPtCon*dummyElNod_sigma_h 
@@ -727,8 +729,8 @@ void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres
                     iNode = 0;
                     for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
 
-                        std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += accessVec(elFlux, iElem, iGauss)*accessVec(shapeFunc, iGauss)[iNode]*accessVec(wts, iGauss);
-                        accessVec(nodCount, *iNod2) += accessVec(shapeFunc, iGauss)[iNode]*accessVec(wts, iGauss);
+                        std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += accessVec(elFlux, iElem, iGauss)*N_i[iNode]*dummydVol;
+                        accessVec(nodCount, *iNod2) += N_i[iNode]*dummydVol;
                         iNode += 1;
                     }
                 }
