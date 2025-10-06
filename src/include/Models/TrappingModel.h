@@ -223,7 +223,7 @@ void CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, std::o
  * @param mats 
  * @param pffElemsOpt 
  */
-void CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
+void CalcFsrc(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, std::vector<BaseElemPFF*> pffElems);
 
 /**
  * @brief Write nodal flux field values.
@@ -307,6 +307,9 @@ vector<int> ExitNodeIDs;
 
 /// @brief RHS vector.
 Vec vecF;  
+
+/// @brief RHS source vector.
+Vec vecFsrc; 
 
 /// @brief solution vector.
 Vec vecx;    

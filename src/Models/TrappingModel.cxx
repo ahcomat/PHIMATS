@@ -105,11 +105,12 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
     VecSetSizes(vecF, PETSC_DECIDE, nTotDofs);
 
     VecSetType(vecF, VECSEQ);
-    VecDuplicate(vecF, &vecx);      
+    VecDuplicate(vecF, &vecx);   
+    VecDuplicate(vecF, &vecFsrc);      
 
-    VecSet(vecF, 0.0); // Set all values to zero.
-
-    VecSet(vecx, 0.0); // Set all values to zero.
+    VecSet(vecF, 0.0);    // Set all values to zero.
+    VecSet(vecFsrc, 0.0); // Set all values to zero.
+    VecSet(vecx, 0.0);    // Set all values to zero.
 
     // Initialize the coefficient matrices.
     MatCreateSeqAIJ(PETSC_COMM_WORLD, nTotDofs, nTotDofs, PETSC_DEFAULT, NULL, &matK); // Works better for HPC
@@ -529,6 +530,21 @@ void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping
 
     VecRestoreArrayRead(vecx, &globalBuffer);
 }
+
+void TrappingModel::CalcFsrc(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, std::vector<BaseElemPFF*> pffElems){
+
+    PetscScalar* FsrcBuffer;  
+    VecSet(vecFsrc, 0.0);
+    VecGetArray(vecFsrc, &FsrcBuffer);
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        elements[iSet]->CalcFsrc(conB, mats[iSet], FsrcBuffer, T, &pffElems[iSet]->getElphi());
+    }
+    VecRestoreArray(vecFsrc, &FsrcBuffer);  
+
+    VecAXPY(vecF, 1.0, vecFsrc);
+
+}
+
 
 void TrappingModel::WriteFlux(H5IO &H5File_out, const string iStep){
 

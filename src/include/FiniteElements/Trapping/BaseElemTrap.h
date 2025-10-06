@@ -144,7 +144,9 @@ virtual double CalcAvCon(const double* globalBuffer) = 0;
  * @param nodFlux 
  * @param nodCount 
  */
-virtual void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T) = 0;
+virtual void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr = nullptr) = 0;
+
+virtual void CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr) = 0;
 
 protected:      
 

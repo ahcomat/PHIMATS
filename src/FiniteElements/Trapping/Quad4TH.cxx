@@ -750,3 +750,45 @@ void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres
     // // // TODO: For debug!
     // // cout << elFlux.at(0).at(0) << "\n\n";
 }
+
+void Quad4TH::CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr){
+
+    MechTrap* mechTrapMat = dynamic_cast<MechTrap*>(mat);
+
+    double Vh = mechTrapMat->get_Vh();
+    double Zd = mechTrapMat->get_Zd();
+    double zeta_rho = mechTrapMat->get_zeta_rho();
+    ColVecd4 dummyElNod_sigma_h, dummyElNod_rho, Ceq, dummyFsrc;
+
+    // Integration point values.
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        // Loop through element nodes to get nodal values.
+        for(int iDof=0; iDof<nElConDofs; iDof++){
+            dummyElNod_sigma_h[iDof] = accessVec( nod_sigma_h, accessVec(elemConDof, iElem, iDof));
+            dummyElNod_rho[iDof] = accessVec( nod_rho, accessVec(elemConDof, iElem, iDof));
+        }
+
+        // Gauss points
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            // Equilibrium conentration
+            Ceq = conB * ((dummyElNod_sigma_h * Vh ) / (R * T)).array().exp().matrix();
+
+            // + dummyElNod_rho * zeta_rho
+
+            const RowVecd4& dummyShFunc = accessVec(shapeFunc, iGaus);
+            const double& dummydVol = accessVec(intPtVol, iElem, iGaus);  
+
+            double phi2 = accessVec(*elPhi_d_ptr, iElem, iGaus)*accessVec(*elPhi_d_ptr, iElem, iGaus);
+            Matd4x4 NTN = dummyShFunc.transpose() * dummyShFunc;
+            dummyFsrc = dt*Zd*phi2*NTN*Ceq*dummydVol;
+
+            for(int iNod2 = 0; iNod2 < nElConDofs; ++iNod2) {
+                int gNod = elemNodeConn[iElem][iNod2];
+                FsrcBuffer[gNod] += dummyFsrc[iNod2];
+            }
+        }
+    }
+
+}

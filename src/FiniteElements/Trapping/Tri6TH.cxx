@@ -541,3 +541,7 @@ void Tri6TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
     // // TODO: For debug!
     // cout << elFlux.at(0).at(0) << "\n\n";
 }
+
+void Tri6TH::CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr){
+    
+}
