@@ -773,9 +773,7 @@ void Quad4TH::CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer,
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
             // Equilibrium conentration
-            Ceq = conB * ((dummyElNod_sigma_h * Vh ) / (R * T)).array().exp().matrix();
-
-            // + dummyElNod_rho * zeta_rho
+            Ceq = conB * ((dummyElNod_sigma_h * Vh + dummyElNod_rho * zeta_rho ) / (R * T)).array().exp().matrix();
 
             const RowVecd4& dummyShFunc = accessVec(shapeFunc, iGaus);
             const double& dummydVol = accessVec(intPtVol, iElem, iGaus);  
