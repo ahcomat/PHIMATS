@@ -297,7 +297,7 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
                 PCSetType(pc, PCLU); // LU preconditioner for direct solver
                 PCFactorSetMatSolverType(pc, MATSOLVERMUMPS);
 
-                logger.log("    Using < "+kspType+" > solver" , "INFO");
+                logger.log("    Using < "+kspType+" > solver for MechModel" , "INFO");
                 logger.log("", "", false);
 
             } else if (kspType=="GMRES"){              
