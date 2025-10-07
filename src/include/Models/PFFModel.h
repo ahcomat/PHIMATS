@@ -138,8 +138,18 @@ void AssembleElementMatrix(const auto* elMatx_ptr,
  */
 void Assemble(vector<BaseElemPFF*> pffElem);
 
+/**
+ * @brief Calculates the RHS vector.
+ * 
+ * @param pffElem 
+ */
 void CalcFH(vector<BaseElemPFF*> pffElem);
 
+/**
+ * @brief Calculates the integration point phi
+ * 
+ * @param pffElem 
+ */
 void Calc_gPhi_d(vector<BaseElemPFF*> pffElem);
 
 /**

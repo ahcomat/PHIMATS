@@ -229,6 +229,11 @@ virtual void CalcElemStiffMatx() = 0;
  */
 virtual void CalcFH(double* FH) = 0;
 
+/**
+ * @brief Calculated the integration point phi. 
+ * 
+ * @param globalBuffer 
+ */
 virtual void Calc_gPhi_d(const double* globalBuffer) = 0;
 
 protected:      
