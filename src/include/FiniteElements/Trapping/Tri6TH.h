@@ -133,6 +133,7 @@ void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux
 
 void CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr) override;
 
+void CalcElCon(const double* globalBuffer) override;
 
 private:
 

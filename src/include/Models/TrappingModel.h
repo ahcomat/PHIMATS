@@ -131,6 +131,15 @@ void UpdateTemp(const int iStep, double HR);
  */
 void Update_dt(vector<BaseElemTrap*> elements, double dtNew);
 
+void CalcElCon(vector<BaseElemTrap*> elements){
+
+    VecGetArrayRead(vecx, &globalBuffer);
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        elements[iSet]->CalcElCon(globalBuffer);
+    }
+    VecRestoreArrayRead(vecx, &globalBuffer);
+}
+
 /**
  * @brief Write the current temperature.
  * 

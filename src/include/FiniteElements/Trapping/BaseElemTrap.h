@@ -106,6 +106,13 @@ void CalcEquilibriumBC(BaseTrapping* mat, double* presVals, int* presDofs, const
 const T_ElStiffMatx& getElCapMatx() const { return elCapMatxVariant; }
 
 /**
+ * @brief Get a constant reference to `elCon`.
+ * 
+ * @return const std::vector<std::vector<double>>& 
+ */
+const std::vector<std::vector<double>>& getElCon() const ;
+
+/**
  * @brief Get the int-pt coordinates
  * 
  * @param glIntPtCoords 
@@ -157,7 +164,12 @@ virtual void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
  */
 virtual void CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr) = 0;
 
-virtual void CalcElCon(const double conB, BaseTrapping* mat, double* FsrcBuffer, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr) = 0;
+/**
+ * @brief Calculated the integration point concentration. 
+ * 
+ * @param globalBuffer 
+ */
+virtual void CalcElCon(const double* globalBuffer) = 0;
 
 protected:      
 
@@ -189,7 +201,13 @@ vector<vector<double>> el_gPhi_jj;
 vector<vector<double>> el_gPhi_ij;  
 
 /// @brief Int-pt gPhi_ii [nElGauss].
-vector<vector<double>> el_gPhi_ii;         
+vector<vector<double>> el_gPhi_ii;       
+
+/// @brief Int-pt concentration [nElGauss].
+vector<vector<double>> elCon; 
+
+/// @brief Pointer of int-pt concentraiton [nElGauss]. 
+vector<vector<double>>* elCon_ptr;
 
 /// @brief nodal values of phi [nTotNodes]
 vector<double> nod_gPhi;

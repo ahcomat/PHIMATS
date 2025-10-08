@@ -90,3 +90,7 @@ void BaseElemTrap::CalcEquilibriumBC(BaseTrapping* mat, double* presVals, int* p
         }
 }
 
+const std::vector<std::vector<double>>& BaseElemTrap::getElCon() const {
+    assert(elCon_ptr != nullptr && "elCon is null!");
+    return *elCon_ptr;
+}

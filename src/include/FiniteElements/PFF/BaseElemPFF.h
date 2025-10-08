@@ -175,7 +175,6 @@ inline void CalcDrivForcEP_TH(const std::vector<std::vector<double>>* el_wp_ptr,
 /**
  * @brief Calculates elastoplastic crack driving force based only on `el_wp`.
  *        
- * 
  * @param el_wp_ptr 
  */
 inline void CalcDrivForcP(const std::vector<std::vector<double>>* el_wp_ptr) {

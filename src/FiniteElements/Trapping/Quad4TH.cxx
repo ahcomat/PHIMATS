@@ -92,6 +92,9 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
     elFlux.resize(nElements);
     elStiffMatx.resize(nElements);
     elCapMatx.resize(nElements);     
+    
+    elCon.resize(nElements);
+    elCon_ptr = &elCon;
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd4x2 dummyElNodCoord; // For node coordinates.
@@ -790,5 +793,24 @@ void Quad4TH::CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer,
             }
         }
     }
+}
 
+void Quad4TH::CalcElCon(const double* globalBuffer){
+
+    ColVecd4 nodCon;
+
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        // Get element nodal displacements from the solution vector. 
+        for(int iDof=0; iDof<nElConDofs; iDof++){
+            nodCon(iDof) = globalBuffer[accessVec(elemConDof, iElem, iDof)];
+        }
+
+        for(int iGauss=0; iGauss<nElGauss; iGauss++){
+
+            const RowVecd4& N_i = accessVec(shapeFunc, iGauss);
+            accessVec(elCon, iElem, iGauss) = N_i*nodCon;
+
+        }
+    }
 }
