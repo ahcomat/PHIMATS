@@ -545,6 +545,15 @@ void TrappingModel::CalcFsrc(vector<BaseElemTrap*> elements, vector<BaseTrapping
 
 }
 
+void TrappingModel::CalcElCon(vector<BaseElemTrap*> elements){
+
+    VecGetArrayRead(vecx, &globalBuffer);
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        elements[iSet]->CalcElCon(globalBuffer);
+    }
+    VecRestoreArrayRead(vecx, &globalBuffer);
+
+}
 
 void TrappingModel::WriteFlux(H5IO &H5File_out, const string iStep){
 
