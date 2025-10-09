@@ -123,7 +123,8 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             // Loop through elements.
             for(int iElem=0; iElem<nElements; iElem++){
 
-                elFlux.at(iElem).resize(nElGauss);
+                accessVec(elFlux, iElem).resize(nElGauss);
+                accessVec(elCon, iElem).resize(nElGauss);
 
                 el_gPhi.at(iElem).resize(nElGauss);
 
@@ -184,7 +185,8 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             // Loop through elements.
             for(int iElem=0; iElem<nElements; iElem++){
 
-                elFlux.at(iElem).resize(nElGauss);
+                accessVec(elFlux, iElem).resize(nElGauss);
+                accessVec(elCon, iElem).resize(nElGauss);
 
                 el_phi_j.at(iElem).resize(nElGauss);
                 el_gPhi_ii.at(iElem).resize(nElGauss);
@@ -234,7 +236,8 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             // Loop through elements.
             for(int iElem=0; iElem<nElements; iElem++){
 
-                elFlux.at(iElem).resize(nElGauss);
+                accessVec(elFlux, iElem).resize(nElGauss);
+                accessVec(elCon, iElem).resize(nElGauss);
 
                 gaussPtCart.at(iElem).resize(nElGauss);
                 BMat.at(iElem).resize(nElGauss);
