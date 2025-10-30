@@ -177,7 +177,7 @@ inline void CalcDrivForcEP_TH(const std::vector<std::vector<double>>* el_wp_ptr,
  *        
  * @param el_wp_ptr 
  */
-inline void CalcDrivForcP(const std::vector<std::vector<double>>* el_wp_ptr) {
+inline void CalcDrivForcP(const std::vector<std::vector<double>>* el_wp_ptr, const double zeta) {
     for (size_t iElem = 0; iElem < elemH.size(); ++iElem) {
         for (size_t iGauss = 0; iGauss < elemH[iElem].size(); ++iGauss) {
 
@@ -186,7 +186,7 @@ inline void CalcDrivForcP(const std::vector<std::vector<double>>* el_wp_ptr) {
 
             double drivForce = (wpPlastic) / wcLocal;
 
-            accessVec(elemH, iElem, iGauss) = std::max(drivForce, accessVec(elemH, iElem, iGauss));
+            accessVec(elemH, iElem, iGauss) = zeta*std::max(drivForce, accessVec(elemH, iElem, iGauss));
         }
     }
 }
