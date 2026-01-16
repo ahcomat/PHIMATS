@@ -125,6 +125,9 @@ class MeshManager:
 			print(f"  [Index {i}] -> Physical Group: '{name}'")
 		print("="*50 + "\n")
   
+	def getMaterialNames(self):
+		return self.materialNames
+  
 	def PrintMeshSummary(self):
 		"""
 		Prints a concise summary of the mesh metadata to the console.
