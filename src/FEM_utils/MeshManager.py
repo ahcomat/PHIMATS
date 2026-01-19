@@ -274,10 +274,10 @@ class MeshManager:
 
 	def WriteMesh(self, outputName: str):
 		"""
-		Writes `_mesh.hdf5`.
+		Writes `.mesh.hdf5`.
 		"""
 					
-		with h5py.File(outputName+"_mesh.hdf5", "w") as f:
+		with h5py.File(outputName+".mesh.hdf5", "w") as f:
 			# Node coordinates
 			f.create_dataset("NodeCoordinates", data=self.mesh.points, dtype=np.float64)
 			
