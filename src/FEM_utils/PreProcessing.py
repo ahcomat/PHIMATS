@@ -1,590 +1,193 @@
 import numpy as np
-import meshio
-from pathlib import Path
 import h5py
-import os
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Any
+
+@dataclass
+class PhysicsConfig:
+    """Schema for Simulation Parameters."""
+    SimulName: str
+    PhysicsType: str      # Mechanical, Transport, PFF
+    PhysicsCategory: str  # Elastic, Plastic, MechTrappingPFF, 2PhaseTrapping, etc.
+    nSteps: int
+    dt: Optional[float] = None
+    Temperature: Optional[float] = 293.15   # Default Room Temp
+    R: Optional[float] = 8.31               # Default to SI units
+    conB: Optional[float] = None            # Boundary Concentration
+    presBCs: List[Any] = field(default_factory=list)
+    exitNodes: List[int] = field(default_factory=list)
+
+@dataclass
+class MeshConfig:
+    """Metadata passed from MeshManager."""
+    nTotNodes: int
+    nTotElements: int
+    nDim: int
+    materialNames: List[str]
 
 class PreProcessing:
-    
-    def __init__(self, inputData):
-        """
-        A class for converting user inputs to `_inp.hdf5` for PHIMATS.
+    def __init__(self, config: PhysicsConfig, mesh: MeshConfig, materials: Dict):
+        self.config = config
+        self.mesh = mesh
+        self.materials = materials
+        
+        # Configuration 
+        self.ext_map = {"Mechanical": "mech", "Transport": "diff", "PFF": "pff"}
+        self.physicsRegistry = {
+            "Mechanical": ["Elastic", "Plastic"],
+            "Transport": ["Transport", "2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping", "MechTrappingPFF"],
+            "PFF": ["PFF", "ChemoMech"]
+        }
+        self._allowed_Analysis = ["3D", "PlaneStrain", "PlaneStress", "PlaneStrainPFF"]
+        self._allowed_Isotropy = ["Isotropic", "Cubic"]
+        
+        # Mapping requirements for dictionary validation
+        self._req_map = {
+            "Elastic": {"Elastic": ["AnalysisType", "Isotropy"]},
+            "Plastic": {"Elastic": ["AnalysisType", "Isotropy"], "Plastic": ["Plasticity", "HardeningLaw", "sig_y0"]},
+            "Transport": ["Dx", "Dy", "s"],
+            "MechTrappingPFF": ["D0x", "D0y", "DQx", "DQy", "m", "s", "Vh", "zeta_rho", "Zd"],
+            "2PhaseTrapping": ["D0x1", "D0y1", "DQx1", "DQy1", "D0x2", "D0y2", "zeta_j", "zeta_jj"]
+        }
 
-        Args:
-            inputData (dict): Dictionary containing input data.
+        # Logic initialization
+        self.tag = self.ext_map[self.config.PhysicsType]
+        self.nElementSets = len(self.mesh.materialNames)
+        self.is_insulated = False
+        
+        self._validate_inputs()
+        self._setup_physics_stats()
+        self._print_summary()
 
-        """
+    def _validate_inputs(self):
+        """Unified validation for Physics, Categories, and Materials."""
+        # Check Physics & Category
+        if self.config.PhysicsType not in self.physicsRegistry:
+            raise ValueError(f"Unknown PhysicsType: {self.config.PhysicsType}")
         
-        self.Simul = inputData["Simul"]
-        self.SimulType = inputData["SimulType"]
-        self.mesh = inputData["mesh"]
-        self.elementName = inputData["elementName"]
-        self.nElementSets = inputData["nElementSets"]
-        self.presBCs = inputData["presBCs"]
-        self.nPresDofs = len(self.presBCs)
-        self.nSteps = inputData["nSteps"]
-        
-        #----------------------------------------------------------------------
-        # Check for simulation type and assign relevant data
-        #----------------------------------------------------------------------
-        
-        # Allowed simulation types
-        allowedSimulTypes = ["Mechanical", "Transport", "2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping", "PFF", "MechTrappingPFF"]
-        
-        self.TransportSimulTypes = ["Transport", "2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping", "MechTrappingPFF"]
+        if self.config.PhysicsCategory not in self.physicsRegistry[self.config.PhysicsType]:
+            raise ValueError(f"Category {self.config.PhysicsCategory} invalid for {self.config.PhysicsType}")
+
+        # Check Materials against req_map
+        required_data = self._req_map.get(self.config.PhysicsCategory)
+        if not required_data:
+            return # Skip if no requirement defined for this category yet
+
+        for mat_name in self.mesh.materialNames:
+            props = self.materials.get(mat_name)
+            if not props:
+                raise KeyError(f"Material {mat_name} not found in input dictionary.")
+            
+            # Mechanical Nested Check
+            if isinstance(required_data, dict):
+                for group, keys in required_data.items():
+                    if group not in props:
+                        raise KeyError(f"Material '{mat_name}' missing sub-group: '{group}'")
+                    for k in keys:
+                        if k not in props[group]:
+                            raise KeyError(f"Material '{mat_name}' -> '{group}' missing field: '{k}'")
                 
-        if not self.SimulType in allowedSimulTypes:
-            ErrString = "ERROR! Unknown simulation type < " + self.SimulType + " >\n"
-            ErrString += "Allowed elements are: \n"
-            for simulType in allowedSimulTypes:
-                ErrString += simulType + "\n"
-            raise ValueError(ErrString)
-        
-        if self.SimulType=="Transport":
-            
-            self.exitNods = inputData["exitNods"]
-            self.dt = inputData["dt"]
-            
-        elif self.SimulType=="GBTrapping":
-            
-            self.exitNods = inputData["exitNods"]
-            self.dt = inputData["dt"]
-            self.T = inputData["T"]
-            self.gPhi = inputData["gPhi"]
-            self.conB = inputData["conB"]
-            
-        elif self.SimulType=="HLGBTrapping":
-            
-            self.exitNods = inputData["exitNods"]
-            self.dt = inputData["dt"]
-            self.T = inputData["T"]
-            self.gPhi_HAGB = inputData["gPhi_HAGB"]
-            self.gPhi_LAGB = inputData["gPhi_LAGB"]
-            self.conB = inputData["conB"]
-            
-        elif self.SimulType=="2PhaseTrapping":
-            
-            self.exitNods = inputData["exitNods"]
-            self.dt = inputData["dt"]
-            self.T = inputData["T"]
-            self.conB = inputData["conB"]
-            
-            self.phi_j = inputData["phi_j"]
-            self.gPhi_jj = inputData["gPhi_jj"]
-            self.gPhi_ii = inputData["gPhi_ii"]
-            self.gPhi_ij = inputData["gPhi_ij"]
-            
-        elif self.SimulType=="MechTrapping" or self.SimulType == "MechTrappingPFF":
-            
-            self.exitNods = inputData["exitNods"]
-            self.dt = inputData["dt"]
-            self.T = inputData["T"]
-            self.conB = inputData["conB"]
-           
-        #----------------------------------------------------------------------
-        # Check for allowed elements and assign element data (number of nodes,
-        # dimension and order) 
-        #----------------------------------------------------------------------
-
-        # Allowed elements (naming should match with meshio)
-        allowedElements = ["quad", "quad8", "triangle", "triangle6", "hexahedron"]
-        # 2D elements
-        elements2D = ["quad", "quad8", "triangle", "triangle6"]
-        # 3D elements
-        elements3D = ["hexahedron"]
-        # First order
-        elementsOrder1 = ["quad", "triangle", "hexahedron"]
-        # Second order
-        elementsOrder2 = ["quad8", "triangle6"]
-        
-        if not self.elementName in allowedElements:
-            ErrString = "ERROR! Unknown element name < " + self.elementName + " >\n"
-            ErrString += "Allowed elements are: \n"
-            for elem in allowedElements:
-                ErrString += elem + "\n"
-            raise ValueError(ErrString)
-        
-        # 2D or 3D
-        if self.elementName in elements2D:
-            self.nDim = 2
-        if self.elementName in elements3D:
-            self.nDim = 3
-        
-        # First or second order
-        if self.elementName in elementsOrder1:
-            self.nOrder = 1
-        if self.elementName in elementsOrder2:
-            self.nOrder = 2
-            
-        #----------------------------------------------------------------------
-        # Read nodes  
-        #----------------------------------------------------------------------
-        
-        # Total number of nodes
-        self.nTotNodes = self.mesh.points.shape[0]  
-        # Node connectivity
-        self.nodeConnectivity = self.mesh.cells_dict[self.elementName] 
-        
-        # Node coordinates
-        if self.nDim == 2:
-            self.nodeCoord = self.mesh.points[:,0:2]
-        elif self.nDim == 3:    
-            self.nodeCoord = self.mesh.points
-                    
-        # Total number of Dofs
-        if self.SimulType == "Mechanical":
-            self.nTotDofs = self.nTotNodes*self.nDim
-        elif self.SimulType in self.TransportSimulTypes:
-            self.nTotDofs = self.nTotNodes
-        elif self.SimulType == "PFF":
-            self.nTotDofs = self.nTotNodes
-        else:
-            ErrString = "ERROR! nTotDofs is not defined. \n"
-            raise ValueError(ErrString)
-
-        
-        #----------------------------------------------------------------------
-        # Read number of elements  
-        #----------------------------------------------------------------------
-        
-        # Total number of elements
-        self.nTotElements = self.mesh.cells_dict[self.elementName].data.shape[0]  
-
-        #----------------------------------------------------------------------
-        # Read material data
-        #----------------------------------------------------------------------
-        
-        # Read materials dict
-        self.Materials = inputData["Materials"]
-        
-        # For mechanical simulations ----------
-        
-        # Check isotropy
-        Isotropy = ["Isotropic", "Cubic"]
-        
-        # Check plasticity type
-        HardeningLaws = ["Linear", "PowerLaw", "KME"]
-                
-        for mat in self.Materials:
-            if "Elastic" in self.Materials[mat]:
-                if not self.Materials[mat]["Elastic"]["Isotropy"] in Isotropy:
-                    ErrString = "ERROR! undefined hardening law < " + self.Materials[mat]["Elastic"]["Isotropy"] + " >\n"
-                    ErrString += "Allowed hardening laws are: \n"
-                    for i in HardeningLaws:
-                        ErrString += i + "\n"
-                    raise ValueError(ErrString)
-                
-            if "Plastic" in self.Materials[mat]:
-                if not self.Materials[mat]["Plastic"]["HardeningLaw"] in HardeningLaws:
-                    ErrString = "ERROR! undefined hardening law < " + self.Materials[mat]["Plastic"]["HardeningLaw"] + " >\n"
-                    ErrString += "Allowed hardening laws are: \n"
-                    for i in HardeningLaws:
-                        ErrString += i + "\n"
-                    raise ValueError(ErrString)
-                
-                # Only 3D and plane strain plasticity are implemented so far.
-                if self.Materials[mat]["Elastic"]["AnalysisType"] == "PlaneStress":
-                    ErrString = "ERROR! plane stress is not yet implemented for plasticity — coming soon. \n"
-                    raise ValueError(ErrString)
-
-        pass
-    
-#-----------------------------------------------------------------------------#
-    
-    def WriteInputFile(self):
-        """
-        Creates the _in.hdf5 input file.
-        """
-        
-        # Open hdf5 file 
-        self.OpenFileHDF5()
-                
-        #----------------------------------------------------------------------
-        # Write simulation parameters to hdf5  
-        #----------------------------------------------------------------------
-            
-        self.fh5.attrs["Simulation"] =  self.Simul
-                    
-        #----------------------------------------------------------------------
-        # Nodes/Elements data 
-        #----------------------------------------------------------------------
-        
-        self.grp_Sim_Params = self.fh5.create_group('SimulationParameters')
-        
-        if self.SimulType == "GBTrapping":
-            self.grp_Sim_Params.create_dataset("Trapping", data=np.bytes_("GBTrapping"))
-        elif self.SimulType == "HLGBTrapping":
-            self.grp_Sim_Params.create_dataset("Trapping", data=np.bytes_("HLGBTrapping"))
-        elif self.SimulType == "2PhaseTrapping":
-            self.grp_Sim_Params.create_dataset("Trapping", data=np.bytes_("2PhaseTrapping"))
-        elif self.SimulType == "MechTrapping":
-            self.grp_Sim_Params.create_dataset("Trapping", data=np.bytes_("MechTrapping"))
-        elif self.SimulType == "MechTrappingPFF":
-            self.grp_Sim_Params.create_dataset("Trapping", data=np.bytes_("MechTrappingPFF"))
-        
-        self.grp_Sim_Params.create_dataset("nDim", data=self.nDim, dtype = np.int64)
-        self.grp_Sim_Params.create_dataset("nTotNodes", data=self.nTotNodes, dtype = np.int64)
-        self.grp_Sim_Params.create_dataset("nTotDofs", data=self.nTotDofs, dtype = np.int64)
-        self.grp_Sim_Params.create_dataset("nTotElements", data=self.nTotElements, dtype = np.int64)
-        self.grp_Sim_Params.create_dataset("nPresDofs", data=self.nPresDofs, dtype = np.int64)
-        self.grp_Sim_Params.create_dataset("nElementSets", data=self.nElementSets, dtype = np.int64)
-        self.grp_Sim_Params.create_dataset("nSteps", data=self.nSteps, dtype = np.int64)
-        
-        if self.SimulType == "Transport":
-            self.grp_Sim_Params.create_dataset("dt", data=self.dt)
-            
-        if self.SimulType in self.TransportSimulTypes:
-            self.grp_Sim_Params.create_dataset("nExitNodes", data=len(self.exitNods))
-        
-        # Case Trapping 
-        if self.SimulType == "GBTrapping":
-            self.grp_Sim_Params.create_dataset("dt", data=self.dt)
-            self.grp_Sim_Params.create_dataset("T", data=self.T)
-            self.grp_Sim_Params.create_dataset("conB", data=self.conB)
-            self.fh5.create_dataset('gPhi', data=self.gPhi, dtype = np.float64)
-            
-        # Case Trapping 
-        if self.SimulType == "HLGBTrapping":
-            self.grp_Sim_Params.create_dataset("dt", data=self.dt)
-            self.grp_Sim_Params.create_dataset("T", data=self.T)
-            self.grp_Sim_Params.create_dataset("conB", data=self.conB)
-            self.fh5.create_dataset('gPhi_HAGB', data=self.gPhi_HAGB, dtype = np.float64)
-            self.fh5.create_dataset('gPhi_LAGB', data=self.gPhi_LAGB, dtype = np.float64)
-            
-        # Case 2PhaseTrapping 
-        if self.SimulType == "2PhaseTrapping":
-            self.grp_Sim_Params.create_dataset("dt", data=self.dt)
-            self.grp_Sim_Params.create_dataset("T", data=self.T)
-            self.grp_Sim_Params.create_dataset("conB", data=self.conB)
-            self.fh5.create_dataset('gPhi_jj', data=self.gPhi_jj, dtype = np.float64) 
-            self.fh5.create_dataset('gPhi_ij', data=self.gPhi_ij, dtype = np.float64) 
-            self.fh5.create_dataset('gPhi_ii', data=self.gPhi_ii, dtype = np.float64) 
-            self.fh5.create_dataset('phi_j', data=self.phi_j, dtype = np.float64) 
-            
-        # Case MechTrapping 
-        if self.SimulType == "MechTrapping" or self.SimulType == "MechTrappingPFF":
-            self.grp_Sim_Params.create_dataset("dt", data=self.dt)
-            self.grp_Sim_Params.create_dataset("T", data=self.T)  
-            self.grp_Sim_Params.create_dataset("conB", data=self.conB)
-        
-        #----------------------------------------------------------------------
-        # Material data
-        #----------------------------------------------------------------------
-        
-        self.grp_Materials = self.fh5.create_group('Materials')
-        
-        if self.SimulType == "Mechanical":
-        
-            counter = 0
-            for mat in self.Materials:
-                counter+=1
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/AnalysisType", data=np.bytes_(self.Materials[mat]['Elastic']["AnalysisType"]))
-                if self.Materials[mat]['Elastic']['Isotropy'] == "Isotropic":
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/Isotropy", data=np.bytes_(self.Materials[mat]['Elastic']["Isotropy"]))
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/Emod", data=self.Materials[mat]['Elastic']["Emod"])
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/nu", data=self.Materials[mat]['Elastic']["nu"])
-                elif self.Materials[mat]['Elastic']['Isotropy'] == "Cubic":
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/Isotropy", data=np.bytes_(self.Materials[mat]['Elastic']["Isotropy"]))
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/C11", data=self.Materials[mat]['Elastic']["C11"])
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/C12", data=self.Materials[mat]['Elastic']["C12"])
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Elastic/C44", data=self.Materials[mat]['Elastic']["C44"])
-
-                # Check plasticity
-                if "Plastic" in self.Materials[mat]:
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/Plasticity", data=np.bytes_(self.Materials[mat]['Plastic']["Plasticity"]))
-                    if self.Materials[mat]['Plastic']["HardeningLaw"] == "Linear":
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/HardeningLaw", data=np.bytes_(self.Materials[mat]['Plastic']["HardeningLaw"]))
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/sig_y0", data=self.Materials[mat]['Plastic']["sig_y0"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/K_hard", data=self.Materials[mat]['Plastic']["K_hard"])
-                    elif self.Materials[mat]['Plastic']["HardeningLaw"] == "PowerLaw":
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/HardeningLaw", data=np.bytes_(self.Materials[mat]['Plastic']["HardeningLaw"]))
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/sig_y0", data=self.Materials[mat]['Plastic']["sig_y0"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/K_hard", data=self.Materials[mat]['Plastic']["K_hard"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/n_pow", data=self.Materials[mat]['Plastic']["n_pow"])  
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/rho_0", data=self.Materials[mat]['Plastic']["rho_0"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/M", data=self.Materials[mat]['Plastic']["M"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/alpha", data=self.Materials[mat]['Plastic']["alpha"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/b", data=self.Materials[mat]['Plastic']["b"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/k1", data=self.Materials[mat]['Plastic']["k1"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/k2", data=self.Materials[mat]['Plastic']["k2"])            
-                    elif self.Materials[mat]['Plastic']["HardeningLaw"] == "KME":
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/HardeningLaw", data=np.bytes_(self.Materials[mat]['Plastic']["HardeningLaw"]))
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/sig_y0", data=self.Materials[mat]['Plastic']["sig_y0"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/rho_0", data=self.Materials[mat]['Plastic']["rho_0"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/M", data=self.Materials[mat]['Plastic']["M"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/alpha", data=self.Materials[mat]['Plastic']["alpha"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/b", data=self.Materials[mat]['Plastic']["b"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/k1", data=self.Materials[mat]['Plastic']["k1"])
-                        self.grp_Materials.create_dataset("Material_"+str(counter)+"/Plastic/k2", data=self.Materials[mat]['Plastic']["k2"])    
-                        
-        elif self.SimulType == "PFF":
-        
-            counter = 0
-            for mat in self.Materials:
-                counter+=1
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/PFF/wc", data=self.Materials[mat]['PFF']["wc"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/PFF/const_ell", data=self.Materials[mat]['PFF']["const_ell"])
-        
-
-        elif self.SimulType == "Transport":
-            
-            counter = 0
-            for mat in self.Materials:
-                counter+=1
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dx", data=self.Materials[mat]["Dx"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dy", data=self.Materials[mat]["Dy"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/s", data=self.Materials[mat]["s"])
-
-                if self.nDim == 3:
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dy", data=self.Materials[mat]["Dz"])
-                    
-        elif self.SimulType == "MechTrappingPFF":
-            for mat in self.Materials:
-                counter = 1
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x", data=self.Materials[mat]["D0x"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y", data=self.Materials[mat]["D0y"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx", data=self.Materials[mat]["DQx"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy", data=self.Materials[mat]["DQy"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/m", data=self.Materials[mat]["m"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/Vh", data=self.Materials[mat]["Vh"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/s", data=self.Materials[mat]["s"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_rho", data=self.Materials[mat]["zeta_rho"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/Zd", data=self.Materials[mat]["Zd"])                   
-
-                if self.nDim == 3:
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
-                    
-                    
-        elif self.SimulType == "MechTrapping":
-            for mat in self.Materials:
-                counter = 1
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x", data=self.Materials[mat]["D0x"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y", data=self.Materials[mat]["D0y"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx", data=self.Materials[mat]["DQx"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy", data=self.Materials[mat]["DQy"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/m", data=self.Materials[mat]["m"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/Vh", data=self.Materials[mat]["Vh"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/s", data=self.Materials[mat]["s"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_rho", data=self.Materials[mat]["zeta_rho"])
-
-                if self.nDim == 3:
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
-                    
-        elif self.SimulType == "HLGBTrapping":
-            for mat in self.Materials:
-                counter = 1
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x1", data=self.Materials[mat]["D0x1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y1", data=self.Materials[mat]["D0y1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx1", data=self.Materials[mat]["DQx1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy1", data=self.Materials[mat]["DQy1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_HAGB", data=self.Materials[mat]["zeta_HAGB"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_LAGB", data=self.Materials[mat]["zeta_LAGB"])
-
-                if self.nDim == 3:
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
-                    
-        elif self.SimulType == "GBTrapping":
-            for mat in self.Materials:
-                counter = 1
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x1", data=self.Materials[mat]["D0x1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y1", data=self.Materials[mat]["D0y1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx1", data=self.Materials[mat]["DQx1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy1", data=self.Materials[mat]["DQy1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x2", data=self.Materials[mat]["D0x2"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y2", data=self.Materials[mat]["D0y2"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx2", data=self.Materials[mat]["DQx2"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy2", data=self.Materials[mat]["DQy2"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_GB", data=self.Materials[mat]["zeta_GB"])
-
-                if self.nDim == 3:
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
-                    
-        elif self.SimulType == "2PhaseTrapping":
-            for mat in self.Materials:
-                counter = 1
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x1", data=self.Materials[mat]["D0x1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y1", data=self.Materials[mat]["D0y1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx1", data=self.Materials[mat]["DQx1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy1", data=self.Materials[mat]["DQy1"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0x2", data=self.Materials[mat]["D0x2"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/D0y2", data=self.Materials[mat]["D0y2"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQx2", data=self.Materials[mat]["DQx2"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/DQy2", data=self.Materials[mat]["DQy2"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_jj", data=self.Materials[mat]["zeta_jj"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_j", data=self.Materials[mat]["zeta_j"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_ij", data=self.Materials[mat]["zeta_ij"])
-                self.grp_Materials.create_dataset("Material_"+str(counter)+"/zeta_ii", data=self.Materials[mat]["zeta_ii"])
-
-                if self.nDim == 3:
-                    self.grp_Materials.create_dataset("Material_"+str(counter)+"/Dz", data=self.Materials[mat]["Dz"])
-                
-        #----------------------------------------------------------------------
-        # Write node coordinates 
-        #----------------------------------------------------------------------
-            
-        self.fh5.create_dataset("NodeCoordinates", data=self.nodeCoord, dtype = np.float64)
-                    
-        #----------------------------------------------------------------------
-        # Write element node connectivity
-        #----------------------------------------------------------------------
-        
-        # All elements
-        self.fh5.create_dataset("NodeConnectivity", data=self.nodeConnectivity, dtype = np.int64)
-
-        # Data per element set
-        # element connectivity
-        counter = 0
-        for elSet in self.mesh.cell_sets_dict.values():
-            counter+=1
-            self.grp_elemSet = self.fh5.create_group('Elements/ElementSet_'+str(counter))
-            elemIDs = list(elSet.values())[0]
-            nElems = elemIDs.shape[0]
-            self.grp_elemSet.create_dataset("nElements", data=nElems, dtype = np.int64)
-            self.grp_elemSet.create_dataset("ElementSetIDs", data=elemIDs, dtype = np.int64)  
-        
-        # Nodes
-        counter = 0
-        for pSet in self.mesh.point_sets:
-            counter+=1
-            elNodes = self.mesh.point_sets[pSet]
-            nElTotNodes = len(elNodes)
-            self.fh5.create_dataset('Elements/ElementSet_'+str(counter)+'/nNodes', data=nElTotNodes, dtype = np.int64)
-            self.fh5.create_dataset('Elements/ElementSet_'+str(counter)+'/NodeSetIDs', data=elNodes, dtype = np.int64)  
-        
-        #----------------------------------------------------------------------
-        # Write prescribed dofs
-        #----------------------------------------------------------------------
-        
-        self.grp_prescribedDOFs = self.fh5.create_group('PrescribedDOFs')
-        
-        for iPreDof in range(self.nPresDofs):
-            self.grp_prescribedDOFs.create_dataset("Prescribed_"+str(iPreDof), data=self.presBCs[iPreDof]) 
-            
-        if self.SimulType in self.TransportSimulTypes:
-            self.fh5.create_dataset("ExitNodes", data=self.exitNods, dtype = np.int64)
-
-        #----------------------------------------------------------------------
-        # Close hdf5 file
-        #----------------------------------------------------------------------
-        
-        self.CloseFileHDF5()
-            
-        pass
-
-#-----------------------------------------------------------------------------#
-
-    def OpenFileHDF5(self, overwrite=True):
-        """
-        Creates _in.hdf5 input file. If the file exists, behavior depends on `overwrite`.
-
-        Args:
-            overwrite (bool): Overwrite the file if it exists. Defaults to True.
-
-        Raises:
-            OSError: If the file exists and overwrite is set to False.
-        """
-        file_path = self.Simul + "_in.hdf5"
-
-        if not overwrite and os.path.exists(file_path):
-            raise OSError(f"File '{file_path}' already exists and overwrite is set to False.")
-
-        try:
-            self.fh5 = h5py.File(file_path, "w")
-            print(f"HDF5 file '{file_path}' opened successfully in write mode.")
-        except OSError as e:
-            raise RuntimeError(f"Failed to open HDF5 file '{file_path}' in write mode: {e}")
-        
-#-----------------------------------------------------------------------------#
-
-    def CloseFileHDF5(self):
-        """
-        Closes the currently open _in.hdf5 input file.
-
-        Raises:
-            RuntimeError: If no file is open or an error occurs during closing.
-        """
-        try:
-            if hasattr(self, "fh5") and self.fh5:
-                self.fh5.close()
-                print("HDF5 file closed successfully.")
+                # Nested Logical Checks for Elasticity
+                el = props["Elastic"]
+                if el["AnalysisType"] not in self._allowed_Analysis:
+                    raise ValueError(f"Invalid AnalysisType in {mat_name}")
+                if el["Isotropy"] == "Isotropic" and not all(k in el for k in ["Emod", "nu"]):
+                    raise KeyError(f"Isotropic material '{mat_name}' missing Emod/nu")
+                if el["Isotropy"] == "Cubic" and not all(k in el for k in ["C11", "C12", "C44"]):
+                    raise KeyError(f"Cubic material '{mat_name}' missing C11/C12/C44")
             else:
-                print("No HDF5 file is currently open.")
-        except Exception as e:
-            raise RuntimeError(f"Error occurred while closing the HDF5 file: {e}")
-    
-#-----------------------------------------------------------------------------#
-    
-    def WriteOutputFile(self, FName=None, OVERWRITE=False, AVCON=True, FLUX=False, AVFLUX=False, TDS=False, Plasticity=True):
-        """
-        Creates the _out.hdf5 file.
+                # Flat check for Transport/PFF
+                for key in required_data:
+                    if key not in props:
+                        raise KeyError(f"Material '{mat_name}' missing: {key}")
 
-        Args:
-            FName (str, optional): The base name of the output file. Defaults to `self.Simul`.
-            OVERWRITE (bool, optional): Flag for overwriting the file. Defaults to False.
-            AVCON (bool, optional): Average concentration flag. Defaults to True.
-            FLUX (bool, optional): Flux field flag. Defaults to False.
-            AVFLUX (bool, optional): Average flux flag. Defaults to False.
-            TDS (bool, optional): TDS simulation flag. Defaults to False.
-            Plasticity (bool, optional): Plasticity parameters flag. Defaults to True.
-
-        Raises:
-            OSError: If file exists and OVERWRITE==False
-            
-        """
-               
-        # Set FName to self.Simul if not provided
-        if FName is None:
-            FName = self.Simul
-            
-        FName = FName+"_out.hdf5"
+    def _setup_physics_stats(self):
+        """Calculate DOFs and check simulation-wide constraints."""
+        dof_map = {'Mechanical': self.mesh.nDim, 'Transport': 1, 'PFF': 1}
+        self.nDofsPerNode = dof_map[self.config.PhysicsType]
+        self.nTotDofs = self.mesh.nTotNodes * self.nDofsPerNode
         
-        if OVERWRITE:
-            mode = "w"  # Overwrite the file if it exists
-        else:
-            if os.path.exists(FName):
-                raise OSError(f"File '{FName}' already exists and overwrite is set to False.")
-            mode = "x"  
-            
-        if os.path.exists(FName):
-            try:
-                with h5py.File(FName, "r") as test:
-                    pass  # File can be opened for reading, so it's not locked
-            except OSError as e:
-                print(f"File '{FName}' appears to be locked or already open: {e}")
-                raise
-            
-        # Create the file and its groups
-        try:
-            
-            with h5py.File(FName, mode) as fh5:
-                # Handle groups based on SimulType
-                if self.SimulType in ["Transport", "2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping", "MechTrappingPFF"]:
-                    fh5.create_group('Con')
-                    if AVCON:
-                        fh5.create_group('AvCon')
-                        fh5.create_group('Time')
-                    if FLUX:
-                        fh5.create_group('Flux')
-                    if AVFLUX:
-                        fh5.create_group('AvFlux')
-                    if TDS:
-                        fh5.create_group('Temp')
+        if self.config.PhysicsType == "Transport":
+            if not self.config.dt or self.config.dt <= 0:
+                raise ValueError("Transport requires a positive 'dt'.")
+            self.is_insulated = len(self.config.presBCs) == 0
 
-                elif self.SimulType == "Mechanical":
-                    fh5.create_group('Disp')
-                    fh5.create_group('Force')
-                    fh5.create_group('Stress')
-                    fh5.create_group('Strain')
-                    if Plasticity:
-                        fh5.create_group('Strain_e')
-                        fh5.create_group('Strain_p')
-                        fh5.create_group('Strain_eq')
-                        fh5.create_group('Stress_eq')
-                        fh5.create_group('Stress_h')
-                        fh5.create_group('Rho')
-                        
-                elif self.SimulType == "PFF":
-                    fh5.create_group('Phi')
-                        
-        except OSError as e:
-            raise RuntimeError(f"Failed to create the HDF5 file '{FName}': {e}")
+        if self.config.PhysicsType == "Mechanical" and not self.config.presBCs:
+            raise ValueError("Mechanical simulation requires prescribed BCs (Supports).")
+
+    def WriteInputFile(self, overwrite=True):
+        filename = f"{self.config.SimulName}.{self.tag}.in.hdf5"
+        mode = "w" if overwrite else "x"
+        
+        with h5py.File(filename, mode) as f:
+            params = f.create_group("SimulationParameters")
+            params.create_dataset("PhysicsType", data=np.bytes_(self.config.PhysicsType))
+            params.create_dataset("Category", data=np.bytes_(self.config.PhysicsCategory))
+            params.create_dataset("nDim", data=self.mesh.nDim, dtype=np.int64)
+            params.create_dataset("nTotNodes", data=self.mesh.nTotNodes, dtype=np.int64)
+            params.create_dataset("nTotDofs", data=self.nTotDofs, dtype=np.int64)
+            params.create_dataset("nTotElements", data=self.mesh.nTotElements, dtype=np.int64)
+            params.create_dataset("nPresDofs", data=len(self.config.presBCs), dtype=np.int64)
+            params.create_dataset("nElementSets", data=self.nElementSets, dtype=np.int64)
+            params.create_dataset("nSteps", data=self.config.nSteps, dtype=np.int64)
+            if self.config.dt: params.create_dataset("dt", data=self.config.dt)
+
+            # --- BC Logic ---
+            if self.config.presBCs:
+                paramsBC = f.create_group("PrescribedDOFs")
+                for i, bc_val in enumerate(self.config.presBCs):
+                    paramsBC.create_dataset(f"Prescribed_{i}", data=np.array(bc_val, dtype=np.float64))
+            
+            if self.config.exitNodes:
+                f.create_dataset("ExitNodes", data=np.array(self.config.exitNodes, dtype=np.int64))
+
+            # Materials
+            mat_grp = f.create_group("Materials")
+            for i, name in enumerate(self.mesh.materialNames, start=1):
+                m_sub = mat_grp.create_group(f"Material_{i}")
+                self._write_dict_to_hdf5(m_sub, self.materials[name])
+                
+        print(f"  Input file initialized: {filename}")
+
+    def _write_dict_to_hdf5(self, h5_group, data_dict):
+        for key, val in data_dict.items():
+            if isinstance(val, dict):
+                self._write_dict_to_hdf5(h5_group.create_group(key), val)
+            else:
+                data = np.bytes_(val) if isinstance(val, str) else val
+                h5_group.create_dataset(key, data=data)
+
+    def WriteOutputFile(self, overwrite=True, **kwargs):
+        """Initializes groups for the .out.hdf5 file."""
+        filename = f"{self.config.SimulName}.{self.tag}.out.hdf5"
+        mode = "w" if overwrite else "x"
+        
+        with h5py.File(filename, mode) as f:
+            
+            if self.config.PhysicsType == "Mechanical":
+                for grp in ['Disp', 'Force', 'Stress', 'Strain']: f.create_group(grp)
+                if self.config.PhysicsCategory == "Plastic":
+                    for grp in ['Strain_e', 'Strain_p', 'Strain_eq', 'Stress_eq', 'Stress_h', 'Rho']: 
+                        f.create_group(grp)
+            
+            elif self.config.PhysicsType == "PFF":
+                f.create_group("Phi")
+            
+            elif self.config.PhysicsType == "Transport":
+                f.create_group("Con")
+                f.create_group("Time")
+                if kwargs.get('AVCON'): f.create_group('AvCon')
+                if kwargs.get('FLUX'): f.create_group('Flux')
+                if kwargs.get('TDS'):   f.create_group('Temp')
+        
+        print(f"  Output file initialized: {filename}")
+
+    def _print_summary(self):
+        print("\n" + "="*50)
+        print(f"PHIMATS: {self.config.SimulName} | {self.config.PhysicsType} ({self.config.PhysicsCategory})")
+        print("="*50)
+        if self.is_insulated: print("  !! WARNING: INSULATED (No concentration BCs) !!")
+        print(f"  Nodes/Elems : {self.mesh.nTotNodes} / {self.mesh.nTotElements}")
+        print(f"  Total DOFs  : {self.nTotDofs}")
+        print(f"  BCs Count   : {len(self.config.presBCs)}")
+        print("="*50 + "\n")
