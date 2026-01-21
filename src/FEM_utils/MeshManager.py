@@ -279,7 +279,7 @@ class MeshManager:
 					
 		with h5py.File(outputName+".mesh.hdf5", "w") as f:
 			# Node coordinates
-			f.create_dataset("NodeCoordinates", data=self.mesh.points, dtype=np.float64)
+			f.create_dataset("NodeCoordinates", data=self.mesh.points[:, :self.nDim], dtype=np.float64)
 			
 			# Node connectivity
 			main_conn = self.mesh.cells_dict[self.elementName]
