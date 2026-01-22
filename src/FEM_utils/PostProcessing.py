@@ -64,28 +64,28 @@ class WriteXDMF:
             # --- TRANSPORT COMPONENTS ---
             if "diff" in self.components:
                 f_out = self.file_map["diff"]
-                self._add_attr(grid, t, "con", "Scalar", f_out)
-                if FLUX: self._add_attr(grid, t, "flux", "Vector", f_out)
-                if TDS:  self._add_attr(grid, t, "temp", "Scalar", f_out)
+                self._add_attr(grid, t, "Con", "Scalar", f_out)
+                if FLUX: self._add_attr(grid, t, "Flux", "Vector", f_out)
+                if TDS:  self._add_attr(grid, t, "Temp", "Scalar", f_out)
             
             # --- PHASE FIELD FRACTURE COMPONENTS ---
             if "pff" in self.components:
-                self._add_attr(grid, t, "phi", "Scalar", self.file_map["pff"])
+                self._add_attr(grid, t, "Phi", "Scalar", self.file_map["pff"])
             
             # --- MECHANICAL COMPONENTS ---
             if "mech" in self.components:
                 f_out = self.file_map["mech"]
-                self._add_attr(grid, t, "disp", "Vector", f_out)
-                self._add_attr(grid, t, "force", "Vector", f_out)
-                self._add_attr(grid, t, "stress", "Tensor", f_out)
-                self._add_attr(grid, t, "strain", "Tensor", f_out)
+                self._add_attr(grid, t, "Disp", "Vector", f_out)
+                self._add_attr(grid, t, "Force", "Vector", f_out)
+                self._add_attr(grid, t, "Stress", "Tensor", f_out)
+                self._add_attr(grid, t, "Strain", "Tensor", f_out)
                 
                 # Add plasticity specifics
                 if self.mechModel in ["Plastic", "J2", "CP"]:
-                    self._add_attr(grid, t, "strain_e", "Tensor", f_out)
-                    self._add_attr(grid, t, "strain_p", "Tensor", f_out)
-                    self._add_attr(grid, t, "strain_eq", "Scalar", f_out)
-                    self._add_attr(grid, t, "stress_eq", "Scalar", f_out)
+                    self._add_attr(grid, t, "Strain_e", "Tensor", f_out)
+                    self._add_attr(grid, t, "Strain_p", "Tensor", f_out)
+                    self._add_attr(grid, t, "Strain_eq", "Scalar", f_out)
+                    self._add_attr(grid, t, "Stress_eq", "Scalar", f_out)
 
         # Write output
         with open(f"{fileName}.xdmf", "w") as f:
