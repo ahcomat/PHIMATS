@@ -131,6 +131,7 @@ class PreProcessing:
             params.create_dataset("nElementSets", data=self.nElementSets, dtype=np.int64)
             params.create_dataset("nSteps", data=self.config.nSteps, dtype=np.int64)
             params.create_dataset("R", data=self.config.R, dtype=np.float64)
+            params.create_dataset("T", data=self.config.Temperature, dtype=np.float64)
             if self.config.dt: params.create_dataset("dt", data=self.config.dt, dtype=np.float64)
 
             # --- BC Logic ---
