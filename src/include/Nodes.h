@@ -41,7 +41,7 @@ Nodes(){};
  * 
  * @param H5File 
  */
-void ReadNodes(H5IO &H5File);
+void ReadNodes(H5IO &H5File_in, H5IO &H5File_mesh);
 
 /**
  * @brief get the coordinates of node "nod".

@@ -18,12 +18,12 @@
  l -> total displacement dofs.
 */
 
-Tri3TH::Tri3TH(H5IO &H5File_in, Nodes &Nodes, int iSet, Logger& logger)
+Tri3TH::Tri3TH(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, Logger& logger,  H5IO* H5File_rve)
     : BaseElemTrap(2, 3, 3, 3, logger){ // nElDim, nElNodes, nElGauss, nElConDofs
 
     InitShapeFunc();
-    ReadElementsData(H5File_in, iSet);
-    InitializeElements(Nodes, H5File_in);
+    ReadElementsData(H5File_in, H5File_mesh, iSet);
+    InitializeElements(Nodes, H5File_in, H5File_rve);
 }   
 
 Tri3TH::~Tri3TH(){
@@ -77,7 +77,7 @@ Matd2x3 Tri3TH::CalcShapeFuncDeriv(double xi, double eta){
     return shapeDeriv;
 }
 
-void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
+void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in, H5IO* H5File_rve){
 
     // Initialize the storages
     elFlux.resize(nElements);
@@ -95,6 +95,15 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
     intPtVol.resize(nElements);   
     vector<double> dummyIntVol(nElGauss);  // For integration point volume.
 
+    if (Trapping != "MechTrapping" && H5File_rve == nullptr) {
+    logger.log("Error in Tri3TH::InitializeElements\n", "ERROR", true);
+    logger.log("    Physics Category '" + Trapping + "' requires external RVE data,", "", false);
+    logger.log("    but the RVE HDF5 file pointer is null.", "", false);
+    logger.log("    Check if the RVE file exists and is correctly passed.", "", false);
+    logger.log("    Critical error encountered. Terminating!\n", "", false);
+    exit(EXIT_FAILURE);
+    }
+
     try{
 
         if (Trapping=="GBTrapping"){    // GB
@@ -106,7 +115,7 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             // Read nodal values of gPhi
             nod_gPhi.resize(nNodes);
             string dsetName = "gPhi";
-            H5File_in.ReadField1D(dsetName, nod_gPhi);
+            H5File_rve->ReadField1D(dsetName, nod_gPhi);
 
             // Loop through elements.
             for(int iElem=0; iElem<nElements; iElem++){
@@ -153,9 +162,9 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
 
             // Read gPhis
             string dsetName = "gPhi_HAGB";
-            H5File_in.ReadField1D(dsetName, nod_gPhi_HAGB);
+            H5File_rve->ReadField1D(dsetName, nod_gPhi_HAGB);
             dsetName = "gPhi_LAGB";
-            H5File_in.ReadField1D(dsetName, nod_gPhi_LAGB);
+            H5File_rve->ReadField1D(dsetName, nod_gPhi_LAGB);
 
             // Loop through elements.
             for(int iElem=0; iElem<nElements; iElem++){
@@ -206,19 +215,19 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             // Read nodal values of traps
             nod_phi_j.resize(nNodes);
             string dsetName = "phi_j";
-            H5File_in.ReadField1D(dsetName, nod_phi_j);
+            H5File_rve->ReadField1D(dsetName, nod_phi_j);
 
             nod_gPhi_ii.resize(nNodes);
             dsetName = "gPhi_ii";
-            H5File_in.ReadField1D(dsetName, nod_gPhi_ii);
+            H5File_rve->ReadField1D(dsetName, nod_gPhi_ii);
 
             nod_gPhi_ij.resize(nNodes);
             dsetName = "gPhi_ij";
-            H5File_in.ReadField1D(dsetName, nod_gPhi_ij);
+            H5File_rve->ReadField1D(dsetName, nod_gPhi_ij);
 
             nod_gPhi_jj.resize(nNodes);
             dsetName = "gPhi_jj";
-            H5File_in.ReadField1D(dsetName, nod_gPhi_jj);
+            H5File_rve->ReadField1D(dsetName, nod_gPhi_jj);
 
             // Loop through elements.
             for(int iElem=0; iElem<nElements; iElem++){
