@@ -11,19 +11,19 @@ Nodes::~Nodes(){
     cout << "Nodes exited correctly" << "\n";
 }
 
-void Nodes::ReadNodes(H5IO &H5File){
+void Nodes::ReadNodes(H5IO &H5File_in, H5IO &H5File_mesh){
 
     string dsetName;
     dsetName = "SimulationParameters/nTotNodes";
-    nTotNodes = H5File.ReadScalar(dsetName);
+    nTotNodes = H5File_in.ReadScalar(dsetName);
 
     dsetName = "SimulationParameters/nDim";
-    nDim = H5File.ReadScalar(dsetName);
+    nDim = H5File_in.ReadScalar(dsetName);
 
     nodeCoordinates.resize(nTotNodes);
 
     dsetName = "NodeCoordinates";
-    H5File.ReadField2D(dsetName, nTotNodes, nDim, nodeCoordinates);
+    H5File_mesh.ReadField2D(dsetName, nTotNodes, nDim, nodeCoordinates);
 }
 
 vector<double> Nodes::getNodCoord(int nod){
