@@ -135,15 +135,14 @@ class PreProcessing:
             if self.config.dt: params.create_dataset("dt", data=self.config.dt, dtype=np.float64)
             if self.config.PhysicsCategory in ["2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping", "MechTrappingPFF"]:
                 params.create_dataset("conB", data=self.config.conB, dtype=np.float64)
+                params.create_dataset("nExitNodes", data=len(self.config.exitNodes), dtype=np.int64)
+                f.create_dataset("ExitNodes", data=np.array(self.config.exitNodes, dtype=np.int64))
                 
             # --- BC Logic ---
             if self.config.presBCs:
                 paramsBC = f.create_group("PrescribedDOFs")
                 for i, bc_val in enumerate(self.config.presBCs):
                     paramsBC.create_dataset(f"Prescribed_{i}", data=np.array(bc_val, dtype=np.float64))
-            
-            if self.config.exitNodes:
-                f.create_dataset("ExitNodes", data=np.array(self.config.exitNodes, dtype=np.int64))
 
             # Materials
             mat_grp = f.create_group("Materials")
