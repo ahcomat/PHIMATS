@@ -12,7 +12,7 @@ class PhysicsConfig:
     nSteps: int
     dt: Optional[float] = None
     Temperature: Optional[float] = 293.15   # Default Room Temp
-    R: Optional[float] = 8.31               # Default to SI units
+    R: Optional[float] =8.31446261815324    # Default to SI units
     conB: Optional[float] = None            # Boundary Concentration
     presBCs: List[Any] = field(default_factory=list)
     exitNodes: List[int] = field(default_factory=list)
@@ -130,7 +130,8 @@ class PreProcessing:
             params.create_dataset("nPresDofs", data=len(self.config.presBCs), dtype=np.int64)
             params.create_dataset("nElementSets", data=self.nElementSets, dtype=np.int64)
             params.create_dataset("nSteps", data=self.config.nSteps, dtype=np.int64)
-            if self.config.dt: params.create_dataset("dt", data=self.config.dt)
+            params.create_dataset("R", data=self.config.R, dtype=np.float64)
+            if self.config.dt: params.create_dataset("dt", data=self.config.dt, dtype=np.float64)
 
             # --- BC Logic ---
             if self.config.presBCs:
