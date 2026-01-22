@@ -45,7 +45,7 @@ double H5IO::ReadScalar(const string& dsetName){
             throw std::runtime_error("Failed to read dataset " + dsetName);
 
     } catch (const std::runtime_error& e) {
-        logger.log("\nException caught in H5IO::ReadScalar:\n", "", false);
+        logger.log("Exception caught in H5IO::ReadScalar:\n", "ERROR", true);
         logger.log("    " + std::string(e.what()), "", false);
         logger.log("\nCritical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
@@ -82,7 +82,7 @@ void H5IO::WriteScalar(const std::string& dsetName, double val) {
             throw std::runtime_error("Failed to write data " + dsetName);
 
     } catch (const std::runtime_error& e) {
-        logger.log("\nException caught in H5IO::WriteScalar:\n", "", false);
+        logger.log("Exception caught in H5IO::WriteScalar:\n", "ERROR", true);
         logger.log("    " + std::string(e.what()), "", false);
         logger.log("\nCritical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
@@ -129,7 +129,7 @@ string H5IO::ReadString(const string& dsetName) {
         result = string(buffer);
 
     } catch (const std::exception& e) {
-        logger.log("\nException caught in H5IO::ReadString:\n", "", false);
+        logger.log("Exception caught in H5IO::ReadString:\n", "ERROR", true);
         logger.log("    " + std::string(e.what()), "", false);
         logger.log("\nCritical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
@@ -189,7 +189,7 @@ void H5IO::WriteArray1D(const string& dsetName, const int xSize, const double *A
         H5Fclose(file_id);
 
     } catch (const std::exception& e) {
-        logger.log("\nException caught in H5IO::WriteArray1D:\n", "", false);
+        logger.log("Exception caught in H5IO::WriteArray1D:\n", "ERROR", true);
         logger.log("    " + std::string(e.what()), "", false);
         logger.log("\nCritical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
@@ -268,7 +268,7 @@ void H5IO::WriteTensor(const string& dsetName, const int nNodes, const int nStre
         H5Fclose(file_id);
 
     } catch (const std::runtime_error& e) {
-        logger.log("\nException caught in H5IO::WriteTensor:\n", "", false);
+        logger.log("\nException caught in H5IO::WriteTensor:\n", "ERROR", true);
         logger.log("    " + std::string(e.what()), "", false);
         logger.log("\nCritical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
