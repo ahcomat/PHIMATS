@@ -15,7 +15,7 @@
  l -> total displacement dofs.
 */
 
-Tri3::Tri3(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel, Logger& logger)
+Tri3::Tri3(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, string matModel, Logger& logger)
     : BaseElemMech(2, 3, 1, 2, 3, 6,  matModel, logger){ // nElDim, nElNodes, nElGauss, dispDofs, nElStres, nElDispDofs
 
     if (materialModel != "Elastic" && materialModel != "ElastoPlastic") {
@@ -24,7 +24,7 @@ Tri3::Tri3(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel, Logger& log
     }
 
     InitShapeFunc();
-    ReadElementsData(H5File_in, iSet);
+    ReadElementsData(H5File_in, H5File_mesh, iSet);
     InitializeElements(Nodes);
 }
 

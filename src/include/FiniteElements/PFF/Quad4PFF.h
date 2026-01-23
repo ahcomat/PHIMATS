@@ -31,7 +31,7 @@ class Quad4PFF: public BaseElemPFF{
 
 public:
 
-Quad4PFF(H5IO &H5File_in, Nodes &Nodes, int iSet, Logger& logger);   
+Quad4PFF(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, Logger& logger);   
 
 ~Quad4PFF() override ;
 

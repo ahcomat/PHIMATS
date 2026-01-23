@@ -17,11 +17,11 @@
  l -> total displacement dofs.
 */
 
-Tri6TH::Tri6TH(H5IO &H5File_in, Nodes &Nodes, int iSet, Logger& logger)
+Tri6TH::Tri6TH(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, Logger& logger)
     : BaseElemTrap(2, 6, 6, 3, logger){ // nElDim, nElNodes, nElConDofs, nElGauss 
 
     InitShapeFunc();
-    ReadElementsData(H5File_in, iSet);
+    ReadElementsData(H5File_in, H5File_in, iSet);
     InitializeElements(Nodes, H5File_in);
 }   
 

@@ -31,7 +31,7 @@ class Quad4: public BaseElemMech{
 
 public:
 
-Quad4(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel, Logger& logger);   
+Quad4(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, string matModel, Logger& logger);   
 
 ~Quad4() override ;
 

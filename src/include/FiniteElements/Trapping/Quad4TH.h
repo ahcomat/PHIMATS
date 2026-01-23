@@ -31,7 +31,7 @@ class Quad4TH: public BaseElemTrap{
 
 public:
 
-Quad4TH(H5IO &H5File_in, Nodes &Nodes, int iSet, Logger& logger);   
+Quad4TH(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, Logger& logger, H5IO* H5File_rve = nullptr);   
 
 ~Quad4TH() override ;
 
@@ -65,7 +65,7 @@ Matd2x4 CalcShapeFuncDeriv(double xi, double eta);
  * 
  * @param Nodes 
  */
-void InitializeElements(Nodes& Nodes, H5IO &H5File_in);
+void InitializeElements(Nodes& Nodes, H5IO* H5File_rve = nullptr);
 
 /**
  * @brief Get the cartesian coordinates of gauss points `N_i x_ij`.

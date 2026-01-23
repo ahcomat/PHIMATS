@@ -41,7 +41,7 @@ public:
  * @param iSet Element set number.
  * @param matModel material model for the element set. Options [`Elastic`, `ElasoPlastic`]. Default `Elastic`.
  */
-Hex8(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel, Logger& logger);   
+Hex8(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, string matModel, Logger& logger);   
 ~Hex8() override;
 
 /**

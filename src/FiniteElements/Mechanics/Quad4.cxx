@@ -16,7 +16,7 @@
  l -> total displacement dofs.
 */
 
-Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel, Logger& logger)
+Quad4::Quad4(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, string matModel, Logger& logger)
     : BaseElemMech(2, 4, 4, 2, 3, 8, matModel, logger){ // nElDim, nElNodes, nElGauss, dispDofs, nElStres, nElDispDofs
 
     if (materialModel != "Elastic" && materialModel != "ElastoPlastic") {
@@ -25,7 +25,7 @@ Quad4::Quad4(H5IO &H5File_in, Nodes &Nodes, int iSet, string matModel, Logger& l
     }
 
     InitShapeFunc();
-    ReadElementsData(H5File_in, iSet);
+    ReadElementsData(H5File_in, H5File_mesh, iSet);
     InitializeElements(Nodes);
 }   
 

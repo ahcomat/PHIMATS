@@ -61,7 +61,7 @@ const vector<vector<int>>& get_elemDispDof() const { return elemDispDof; };
  * 
  * @param H5File_in  
  */
-void ReadElementsData(H5IO &H5File_in, int iSet);
+void ReadElementsData(H5IO &H5File_in, H5IO &H5File_mesh, int iSet);
 
 /**
  * @brief Returns the displacement dofs associated with element `iElem`.

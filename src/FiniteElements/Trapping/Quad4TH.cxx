@@ -18,12 +18,12 @@
  l -> total displacement dofs.
 */
 
-Quad4TH::Quad4TH(H5IO &H5File_in, Nodes &Nodes, int iSet, Logger& logger)
+Quad4TH::Quad4TH(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, Logger& logger, H5IO* H5File_rve)
     : BaseElemTrap(2, 4, 4, 4, logger){ // nElDim, nElNodes, nElGauss, nElConDofs 
 
     InitShapeFunc();
-    ReadElementsData(H5File_in, iSet);
-    InitializeElements(Nodes, H5File_in);
+    ReadElementsData(H5File_in, H5File_mesh, iSet);
+    InitializeElements(Nodes, H5File_rve);
 }   
 
 Quad4TH::~Quad4TH(){
@@ -86,7 +86,7 @@ Matd2x4 Quad4TH::CalcShapeFuncDeriv(double xi, double eta){
     return shapeDeriv;
 }
 
-void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
+void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
 
     // Initialize the storages for int-pt flux and phi
     elFlux.resize(nElements);
@@ -107,6 +107,15 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
     intPtVol.resize(nElements);   
     vector<double> dummyIntVol(nElGauss);  // For integration point volume.
 
+    if (Trapping != "MechTrapping" && Trapping != "MechTrappingPFF" && H5File_rve == nullptr) {
+    logger.log("Error in Quad4TH::InitializeElements\n", "ERROR", true);
+    logger.log("    Physics Category '" + Trapping + "' requires external RVE data,", "", false);
+    logger.log("    but the RVE HDF5 file pointer is null.", "", false);
+    logger.log("    Check if the RVE file exists and is correctly passed.", "", false);
+    logger.log("    Critical error encountered. Terminating!\n", "", false);
+    exit(EXIT_FAILURE);
+    }
+
     try{
 
         if (Trapping=="GBTrapping"){    // GB
@@ -118,7 +127,7 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             // Read nodal values of gPhi
             nod_gPhi.resize(nNodes);
             string dsetName = "gPhi";
-            H5File_in.ReadField1D(dsetName, nod_gPhi);
+            H5File_rve->ReadField1D(dsetName, nod_gPhi);
 
             // Loop through elements.
             for(int iElem=0; iElem<nElements; iElem++){
@@ -168,19 +177,19 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
             // Read nodal values of traps
             nod_phi_j.resize(nNodes);
             string dsetName = "phi_j";
-            H5File_in.ReadField1D(dsetName, nod_phi_j);
+            H5File_rve->ReadField1D(dsetName, nod_phi_j);
 
             nod_gPhi_ii.resize(nNodes);
             dsetName = "gPhi_ii";
-            H5File_in.ReadField1D(dsetName, nod_gPhi_ii);
+            H5File_rve->ReadField1D(dsetName, nod_gPhi_ii);
 
             nod_gPhi_ij.resize(nNodes);
             dsetName = "gPhi_ij";
-            H5File_in.ReadField1D(dsetName, nod_gPhi_ij);
+            H5File_rve->ReadField1D(dsetName, nod_gPhi_ij);
 
             nod_gPhi_jj.resize(nNodes);
             dsetName = "gPhi_jj";
-            H5File_in.ReadField1D(dsetName, nod_gPhi_jj);
+            H5File_rve->ReadField1D(dsetName, nod_gPhi_jj);
 
             // Loop through elements.
             for(int iElem=0; iElem<nElements; iElem++){

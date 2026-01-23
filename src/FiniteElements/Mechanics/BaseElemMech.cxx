@@ -12,13 +12,13 @@
  l -> total displacement dofs.
 */
 
-void BaseElemMech::ReadElementsData(H5IO &H5File_in, int iSet){
+void BaseElemMech::ReadElementsData(H5IO &H5File_in, H5IO &H5File_mesh, int iSet){
 
     string dsetName;
     dsetName = "Elements/ElementSet_"+std::to_string(iSet)+"/nElements";
-    nElements = H5File_in.ReadScalar(dsetName);
+    nElements = H5File_mesh.ReadScalar(dsetName);
     dsetName = "Elements/ElementSet_"+std::to_string(iSet)+"/nNodes";
-    nNodes = H5File_in.ReadScalar(dsetName);
+    nNodes = H5File_mesh.ReadScalar(dsetName);
 
     // Initialize the size.
     elemNodeConn.resize(nElements);  
@@ -27,14 +27,14 @@ void BaseElemMech::ReadElementsData(H5IO &H5File_in, int iSet){
 
     // Read global element IDs.
     dsetName = "Elements/ElementSet_"+std::to_string(iSet)+"/ElementSetIDs";
-    H5File_in.ReadField1D(dsetName, elemIDs);
+    H5File_mesh.ReadField1D(dsetName, elemIDs);
 
     // Read node connectivity
     dsetName = "SimulationParameters/nTotElements";
     int totElements = H5File_in.ReadScalar(dsetName);  // Total number of elements
     vector<vector<int>> totElNodConnectivity(totElements);  // Node connectivity for all elements
     dsetName = "NodeConnectivity";
-    H5File_in.ReadField2D(dsetName, totElements, nElNodes, totElNodConnectivity);
+    H5File_mesh.ReadField2D(dsetName, totElements, nElNodes, totElNodConnectivity);
 
     // Node connectivity for the element set
     for (int iElem=0; iElem<nElements; iElem++){

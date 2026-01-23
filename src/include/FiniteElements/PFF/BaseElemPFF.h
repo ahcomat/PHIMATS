@@ -69,7 +69,7 @@ const vector<vector<int>>& get_elemPhiDof() const { return elemPhiDof; };
  * 
  * @param H5File_in  
  */
-void ReadElementsData(H5IO &H5File_in, int iSet);
+void ReadElementsData(H5IO &H5File_in, H5IO &H5File_mesh, int iSet);
 
 /**
  * @brief Converts a 2D vector in Voigt notation to tensor notation.
