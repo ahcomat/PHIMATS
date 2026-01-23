@@ -47,7 +47,7 @@ double H5IO::ReadScalar(const string& dsetName){
     } catch (const std::runtime_error& e) {
         logger.log("Exception caught in H5IO::ReadScalar:\n", "ERROR", true);
         logger.log("    " + std::string(e.what()), "", false);
-        logger.log("\nCritical error encountered. Terminating!\n", "", false);
+        logger.log("    Critical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
     }
 
