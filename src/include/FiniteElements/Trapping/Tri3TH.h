@@ -65,7 +65,7 @@ Matd2x3 CalcShapeFuncDeriv(double xi, double eta);
  * 
  * @param Nodes 
  */
-void InitializeElements(Nodes& Nodes, H5IO &H5File_in,  H5IO* H5File_rve = nullptr);
+void InitializeElements(Nodes& Nodes, H5IO* H5File_rve = nullptr);
 
 /**
  * @brief Get the cartesian coordinates of gauss points `N_i x_ij`.

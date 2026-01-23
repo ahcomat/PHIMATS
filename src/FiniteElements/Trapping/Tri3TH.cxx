@@ -23,7 +23,7 @@ Tri3TH::Tri3TH(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, Logge
 
     InitShapeFunc();
     ReadElementsData(H5File_in, H5File_mesh, iSet);
-    InitializeElements(Nodes, H5File_in, H5File_rve);
+    InitializeElements(Nodes, H5File_rve);
 }   
 
 Tri3TH::~Tri3TH(){
@@ -77,7 +77,7 @@ Matd2x3 Tri3TH::CalcShapeFuncDeriv(double xi, double eta){
     return shapeDeriv;
 }
 
-void Tri3TH::InitializeElements(Nodes &Nodes, H5IO &H5File_in, H5IO* H5File_rve){
+void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
 
     // Initialize the storages
     elFlux.resize(nElements);
