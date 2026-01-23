@@ -4,8 +4,8 @@
 # Compiler
 export CXX = mpic++
 
-OPTIM = -O3 -std=c++20 
-DEBUG = -O0 -g -Wall -DDEBUG -std=c++20 
+OPTIM = -O3 -std=c++20 -fPIC
+DEBUG = -O0 -g -Wall -DDEBUG -std=c++20 -fPIC
 
 SETTINGS ?= OPTIM
 

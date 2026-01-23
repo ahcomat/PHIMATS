@@ -2,8 +2,8 @@
 # Flags
 LDFLAGS := -L$(H5LD) -lhdf5 -lhdf5_cpp -L$(MPICHLD)
 
-OPTIM = -O3 -std=c++20 
-DEBUG = -O0 -g -Wall -DDEBUG -std=c++20 
+OPTIM = -O3 -std=c++20 -fPIC
+DEBUG = -O0 -g -Wall -DDEBUG -std=c++20 -fPIC
 
 SETTINGS ?= OPTIM
 
