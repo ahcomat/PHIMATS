@@ -1,7 +1,7 @@
 .vscode
 dev
 private
+build/
 Doxygen/*
 src/FEM_utils/__pycache__
-src/obj
-src/lib
+src/lib/*.so
