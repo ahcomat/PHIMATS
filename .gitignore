@@ -1,7 +1,16 @@
-.vscode
-dev
-private
+# --- IDE Settings ---
+.vscode/*
+!.vscode/c_cpp_properties.json
+
+# --- Build & Compiled Objects ---
 build/
+*.so
+*.o
+*.a
+*.pyc
+**/__pycache__/
+
+# --- Documentation & Private ---
 Doxygen/*
-src/FEM_utils/__pycache__
-src/lib/*.so
+private/
+dev/
