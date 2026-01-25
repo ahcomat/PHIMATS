@@ -1,5 +1,35 @@
 # Changelog
 
+## [v1.3.0] - Code Management - PFF/hydrogen chemo-mechanical coupling (Unreleased)
+
+Major architectural refactor of pre-/post-processing and PFF/hydrogen chemo-mechanical coupling.
+
+### Backward Incompatibilities
+- Deprecate support for `.inp` mesh on favor of Gmsh `.msh` format.
+- Dedicated `MeshManager` class to manage the mesh. 
+- Separated mesh and RVE data from the input file:
+  - `.mesh.hdf5`: Stores global nodal coordinates and connectivity.
+  - `.rve.hdf5`: Dedicated file for phase-field RVE microstructures.
+- A physics-based extension naming convention (`mech`, `diff` and `pff`) for all `.in` and `.out` files to support modular staggered multiphysics coupling. 
+- `CaseStudies` update: All examples are modified for compatibility with v1.3.0.
+  
+### Added
+- `Dockerfile` providing a pre-configured, high-performance environment with optimized `PETSc`, `Eigen`, and `HDF5`.
+- `FEM_utils/MeshManager` a dedicated class to manage the mesh. 
+- `INSTALL.md` new installation instructions guide.
+- `WSL_QuickStart.md` WSL environment setup guide for Windows users.
+- `configure_env.sh` to automate setting up environment variables for **Manual Installation**, eliminating the need for manual `.bashrc` edits.
+
+### Changed
+- `PreProcessing`
+  - Deprecate geometry-based functions (`TensileDisp2D`, `TensileDisp3D`, `PermeationX`, `WriteConBCs`, `WriteDispBCs`)
+  - Implemented `AssignDirichletBC` and `WriteBCVTK` as general-purpose functions leveraging Gmsh's `Physical groups`.
+
+### Build System & Infrastructure
+- Shared library `.so` build support compared to the previous static library `.a` for reduced driver code binary size.
+- Shifted to a modular `CMake` architecture for the core library, enabling cleaner dependency management and faster compilation.
+- Introduced **Docker-based** workflows for consistent, platform-independent simulation environments.
+
 ## [v1.2.0] - Phase-field fracture (01-10-2025)
 
 Implementing the geometric phase-field fracture for modeling damage evolution.  
