@@ -44,7 +44,7 @@ Download and install these apps like any other Windows software:
 3. Search for and install: **"WSL"** and **"Dev Containers"**.
 4. In the bottom-left corner, click the **"><" icon** and select **"Connect to WSL"**.
 
-**Optional** install the [`C/C++` extension pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack)
+**Optional** install the [`C/C++` extension pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack) and [H5Web extension](https://marketplace.visualstudio.com/items?itemName=h5web.vscode-h5web) of inspecting `.hdf5` files.
 
 ---
 
