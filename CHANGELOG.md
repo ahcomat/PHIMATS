@@ -19,6 +19,7 @@ Major architectural refactor of pre-/post-processing and PFF/hydrogen chemo-mech
 - `INSTALL.md` new installation instructions guide.
 - `WSL_QuickStart.md` WSL environment setup guide for Windows users.
 - `configure_env.sh` to automate setting up environment variables for **Manual Installation**, eliminating the need for manual `.bashrc` edits.
+- `LinearMech` and `LinearTransport` are merged into a unified `LinearSolver` class.
 
 ### Changed
 - `PreProcessing`
