@@ -1,0 +1,3710 @@
+
+****************************************************************************
+*                                                                          *
+*       Phase-field Multiphysics Materials Simulator (φMATS)               *
+*       Version: v1.2.1                                                    *
+*       Release date: 01-10-2025                                           *
+*       Website: https://comp-mat.com/phimats                              *
+*       For citation, please use:                                          *
+*       Abdelrahman Hussein, Finite Element Theory for PHIMATS, 2025       *
+*       DOI: 10.48550/ARXIV.2502.16283                                     *
+*                                                                          *
+****************************************************************************
+
+[2026-01-25 16:34:30] [INFO]     Using < DIRECT > solver for MechModel
+
+[2026-01-25 16:34:30] [INFO]     Using < DIRECT > solver
+
+[2026-01-25 16:34:30] [INFO]    >>> Entering the solver loop <<<
+
+[2026-01-25 16:34:30] [INFO]    Increment 1
+
+	🔁 SNES iter 0  ||F|| = 1.34409e-08
+	🔁 SNES iter 1  ||F|| = 3.51474e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:34:31] [INFO]    Field output for Step_1
+
+[2026-01-25 16:34:31] [INFO]    Increment 2
+
+	🔁 SNES iter 0  ||F|| = 1.39099e-08
+	🔁 SNES iter 1  ||F|| = 3.52115e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:34:31] [INFO]    Field output for Step_2
+
+[2026-01-25 16:34:31] [INFO]    Increment 3
+
+	🔁 SNES iter 0  ||F|| = 1.37398e-08
+	🔁 SNES iter 1  ||F|| = 3.52413e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:34:32] [INFO]    Field output for Step_3
+
+[2026-01-25 16:34:32] [INFO]    Increment 4
+
+	🔁 SNES iter 0  ||F|| = 1.37364e-08
+	🔁 SNES iter 1  ||F|| = 3.51804e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:34:32] [INFO]    Field output for Step_4
+
+[2026-01-25 16:34:32] [INFO]    Increment 5
+
+	🔁 SNES iter 0  ||F|| = 1.37536e-08
+	🔁 SNES iter 1  ||F|| = 3.50911e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:34:33] [INFO]    Field output for Step_5
+
+[2026-01-25 16:34:33] [INFO]    Increment 6
+
+	🔁 SNES iter 0  ||F|| = 1.37399e-08
+	🔁 SNES iter 1  ||F|| = 3.56525e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:34:33] [INFO]    Field output for Step_6
+
+[2026-01-25 16:34:33] [INFO]    Increment 7
+
+	🔁 SNES iter 0  ||F|| = 1.37302e-08
+	🔁 SNES iter 1  ||F|| = 3.51709e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:34:34] [INFO]    Field output for Step_7
+
+[2026-01-25 16:34:34] [INFO]    Increment 8
+
+	🔁 SNES iter 0  ||F|| = 1.37214e-08
+	🔁 SNES iter 1  ||F|| = 3.50205e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:34:35] [INFO]    Field output for Step_8
+
+[2026-01-25 16:34:35] [INFO]    Increment 9
+
+	🔁 SNES iter 0  ||F|| = 1.37486e-08
+	🔁 SNES iter 1  ||F|| = 3.51902e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:34:35] [INFO]    Field output for Step_9
+
+[2026-01-25 16:34:35] [INFO]    Increment 10
+
+	🔁 SNES iter 0  ||F|| = 1.37439e-08
+	🔁 SNES iter 1  ||F|| = 3.50841e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:34:36] [INFO]    Field output for Step_10
+
+[2026-01-25 16:34:36] [INFO]    Increment 11
+
+	🔁 SNES iter 0  ||F|| = 1.37232e-08
+	🔁 SNES iter 1  ||F|| = 3.53735e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:34:36] [INFO]    Field output for Step_11
+
+[2026-01-25 16:34:36] [INFO]    Increment 12
+
+	🔁 SNES iter 0  ||F|| = 1.16174e-05
+	🔁 SNES iter 1  ||F|| = 3.52611e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:34:37] [INFO]    Field output for Step_12
+
+[2026-01-25 16:34:37] [INFO]    Increment 13
+
+	🔁 SNES iter 0  ||F|| = 0.00011255
+	🔁 SNES iter 1  ||F|| = 3.52966e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:34:37] [INFO]    Field output for Step_13
+
+[2026-01-25 16:34:37] [INFO]    Increment 14
+
+	🔁 SNES iter 0  ||F|| = 0.00200064
+	🔁 SNES iter 1  ||F|| = 6.98637e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:34:38] [INFO]    Field output for Step_14
+
+[2026-01-25 16:34:38] [INFO]    Increment 15
+
+	🔁 SNES iter 0  ||F|| = 0.0423282
+	🔁 SNES iter 1  ||F|| = 1.98721e-06
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:38] [INFO]    Field output for Step_15
+
+[2026-01-25 16:34:38] [INFO]    Increment 16
+
+	🔁 SNES iter 0  ||F|| = 0.385902
+	🔁 SNES iter 1  ||F|| = 0.000147628
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:39] [INFO]    Field output for Step_16
+
+[2026-01-25 16:34:39] [INFO]    Increment 17
+
+	🔁 SNES iter 0  ||F|| = 2.05055
+	🔁 SNES iter 1  ||F|| = 0.00402281
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:39] [INFO]    Field output for Step_17
+
+[2026-01-25 16:34:39] [INFO]    Increment 18
+
+	🔁 SNES iter 0  ||F|| = 6.93104
+	🔁 SNES iter 1  ||F|| = 0.0433033
+	🔁 SNES iter 2  ||F|| = 0.000539084
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:40] [INFO]    Field output for Step_18
+
+[2026-01-25 16:34:40] [INFO]    Increment 19
+
+	🔁 SNES iter 0  ||F|| = 13.5798
+	🔁 SNES iter 1  ||F|| = 0.152007
+	🔁 SNES iter 2  ||F|| = 0.00315635
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:41] [INFO]    Field output for Step_19
+
+[2026-01-25 16:34:41] [INFO]    Increment 20
+
+	🔁 SNES iter 0  ||F|| = 14.4191
+	🔁 SNES iter 1  ||F|| = 0.497038
+	🔁 SNES iter 2  ||F|| = 0.0363094
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:42] [INFO]    Field output for Step_20
+
+[2026-01-25 16:34:42] [INFO]    Increment 21
+
+	🔁 SNES iter 0  ||F|| = 25.6748
+	🔁 SNES iter 1  ||F|| = 1.26002
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:42] [INFO]    Field output for Step_21
+
+[2026-01-25 16:34:42] [INFO]    Increment 22
+
+	🔁 SNES iter 0  ||F|| = 48.7908
+	🔁 SNES iter 1  ||F|| = 2.17186
+	🔁 SNES iter 2  ||F|| = 0.258332
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:43] [INFO]    Field output for Step_22
+
+[2026-01-25 16:34:43] [INFO]    Increment 23
+
+	🔁 SNES iter 0  ||F|| = 58.2927
+	🔁 SNES iter 1  ||F|| = 3.13984
+	🔁 SNES iter 2  ||F|| = 0.428685
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:44] [INFO]    Field output for Step_23
+
+[2026-01-25 16:34:44] [INFO]    Increment 24
+
+	🔁 SNES iter 0  ||F|| = 63.7862
+	🔁 SNES iter 1  ||F|| = 4.16586
+	🔁 SNES iter 2  ||F|| = 0.69675
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:45] [INFO]    Field output for Step_24
+
+[2026-01-25 16:34:45] [INFO]    Increment 25
+
+	🔁 SNES iter 0  ||F|| = 67.7783
+	🔁 SNES iter 1  ||F|| = 5.5435
+	🔁 SNES iter 2  ||F|| = 1.10576
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:46] [INFO]    Field output for Step_25
+
+[2026-01-25 16:34:46] [INFO]    Increment 26
+
+	🔁 SNES iter 0  ||F|| = 68.6294
+	🔁 SNES iter 1  ||F|| = 7.00431
+	🔁 SNES iter 2  ||F|| = 1.66452
+	🔁 SNES iter 3  ||F|| = 0.511995
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:47] [INFO]    Field output for Step_26
+
+[2026-01-25 16:34:47] [INFO]    Increment 27
+
+	🔁 SNES iter 0  ||F|| = 70.0647
+	🔁 SNES iter 1  ||F|| = 8.52127
+	🔁 SNES iter 2  ||F|| = 2.38391
+	🔁 SNES iter 3  ||F|| = 0.860789
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:48] [INFO]    Field output for Step_27
+
+[2026-01-25 16:34:48] [INFO]    Increment 28
+
+	🔁 SNES iter 0  ||F|| = 70.6624
+	🔁 SNES iter 1  ||F|| = 10.4098
+	🔁 SNES iter 2  ||F|| = 3.4582
+	🔁 SNES iter 3  ||F|| = 1.45949
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:50] [INFO]    Field output for Step_28
+
+[2026-01-25 16:34:50] [INFO]    Increment 29
+
+	🔁 SNES iter 0  ||F|| = 72.2138
+	🔁 SNES iter 1  ||F|| = 12.1292
+	🔁 SNES iter 2  ||F|| = 4.69673
+	🔁 SNES iter 3  ||F|| = 2.27985
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:51] [INFO]    Field output for Step_29
+
+[2026-01-25 16:34:51] [INFO]    Increment 30
+
+	🔁 SNES iter 0  ||F|| = 72.5499
+	🔁 SNES iter 1  ||F|| = 13.6844
+	🔁 SNES iter 2  ||F|| = 5.89842
+	🔁 SNES iter 3  ||F|| = 3.26581
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:53] [INFO]    Field output for Step_30
+
+[2026-01-25 16:34:53] [INFO]    Increment 31
+
+	🔁 SNES iter 0  ||F|| = 71.7142
+	🔁 SNES iter 1  ||F|| = 15.6525
+	🔁 SNES iter 2  ||F|| = 7.35406
+	🔁 SNES iter 3  ||F|| = 4.60157
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:54] [INFO]    Field output for Step_31
+
+[2026-01-25 16:34:54] [INFO]    Increment 32
+
+	🔁 SNES iter 0  ||F|| = 74.1895
+	🔁 SNES iter 1  ||F|| = 17.8691
+	🔁 SNES iter 2  ||F|| = 9.07394
+	🔁 SNES iter 3  ||F|| = 6.14692
+	🔁 SNES iter 4  ||F|| = 4.68717
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:57] [INFO]    Field output for Step_32
+
+[2026-01-25 16:34:57] [INFO]    Increment 33
+
+	🔁 SNES iter 0  ||F|| = 74.3566
+	🔁 SNES iter 1  ||F|| = 21.3176
+	🔁 SNES iter 2  ||F|| = 13.4834
+	🔁 SNES iter 3  ||F|| = 10.7852
+	🔁 SNES iter 4  ||F|| = 9.40317
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:34:58] [INFO]    Field output for Step_33
+
+[2026-01-25 16:34:58] [INFO]    Increment 34
+
+	🔁 SNES iter 0  ||F|| = 74.3719
+	🔁 SNES iter 1  ||F|| = 24.7921
+	🔁 SNES iter 2  ||F|| = 18.5491
+	🔁 SNES iter 3  ||F|| = 16.8708
+	🔁 SNES iter 4  ||F|| = 16.3676
+	🔁 SNES iter 5  ||F|| = 16.2543
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:01] [INFO]    Field output for Step_34
+
+[2026-01-25 16:35:01] [INFO]    Increment 35
+
+	🔁 SNES iter 0  ||F|| = 76.8252
+	🔁 SNES iter 1  ||F|| = 26.3395
+	🔁 SNES iter 2  ||F|| = 19.3658
+	🔁 SNES iter 3  ||F|| = 17.1257
+	🔁 SNES iter 4  ||F|| = 16.0679
+	🔁 SNES iter 5  ||F|| = 15.5789
+	🔁 SNES iter 6  ||F|| = 15.5424
+	🔁 SNES iter 7  ||F|| = 1.19618
+	🔁 SNES iter 8  ||F|| = 1.12074
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:04] [INFO]    Field output for Step_35
+
+[2026-01-25 16:35:04] [INFO]    Increment 36
+
+	🔁 SNES iter 0  ||F|| = 76.7406
+	🔁 SNES iter 1  ||F|| = 27.5986
+	🔁 SNES iter 2  ||F|| = 22.0418
+	🔁 SNES iter 3  ||F|| = 21.9547
+	🔁 SNES iter 4  ||F|| = 2.5765
+	🔁 SNES iter 5  ||F|| = 2.20516
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:06] [INFO]    Field output for Step_36
+
+[2026-01-25 16:35:06] [INFO]    Increment 37
+
+	🔁 SNES iter 0  ||F|| = 78.7926
+	🔁 SNES iter 1  ||F|| = 31.574
+	🔁 SNES iter 2  ||F|| = 27.9066
+	🔁 SNES iter 3  ||F|| = 4.66867
+	🔁 SNES iter 4  ||F|| = 3.40456
+	🔁 SNES iter 5  ||F|| = 3.00266
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:08] [INFO]    Field output for Step_37
+
+[2026-01-25 16:35:08] [INFO]    Increment 38
+
+	🔁 SNES iter 0  ||F|| = 81.4846
+	🔁 SNES iter 1  ||F|| = 35.6327
+	🔁 SNES iter 2  ||F|| = 33.8332
+	🔁 SNES iter 3  ||F|| = 6.51078
+	🔁 SNES iter 4  ||F|| = 5.19049
+	🔁 SNES iter 5  ||F|| = 4.86812
+	🔁 SNES iter 6  ||F|| = 4.86812
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:10] [INFO]    Field output for Step_38
+
+[2026-01-25 16:35:10] [INFO]    Increment 39
+
+	🔁 SNES iter 0  ||F|| = 82.3784
+	🔁 SNES iter 1  ||F|| = 36.4595
+	🔁 SNES iter 2  ||F|| = 34.6565
+	🔁 SNES iter 3  ||F|| = 7.84596
+	🔁 SNES iter 4  ||F|| = 6.54083
+	🔁 SNES iter 5  ||F|| = 6.36124
+	🔁 SNES iter 6  ||F|| = 1.02906
+	🔁 SNES iter 7  ||F|| = 1.007
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:13] [INFO]    Field output for Step_39
+
+[2026-01-25 16:35:13] [INFO]    Increment 40
+
+	🔁 SNES iter 0  ||F|| = 82.1411
+	🔁 SNES iter 1  ||F|| = 41.0345
+	🔁 SNES iter 2  ||F|| = 11.2024
+	🔁 SNES iter 3  ||F|| = 9.56272
+	🔁 SNES iter 4  ||F|| = 2.17532
+	🔁 SNES iter 5  ||F|| = 1.67329
+	🔁 SNES iter 6  ||F|| = 1.67329
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:16] [INFO]    Field output for Step_40
+
+[2026-01-25 16:35:16] [INFO]    Increment 41
+
+	🔁 SNES iter 0  ||F|| = 83.1445
+	🔁 SNES iter 1  ||F|| = 45.4701
+	🔁 SNES iter 2  ||F|| = 12.3644
+	🔁 SNES iter 3  ||F|| = 10.3974
+	🔁 SNES iter 4  ||F|| = 2.61983
+	🔁 SNES iter 5  ||F|| = 1.97934
+	🔁 SNES iter 6  ||F|| = 1.97934
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:19] [INFO]    Field output for Step_41
+
+[2026-01-25 16:35:19] [INFO]    Increment 42
+
+	🔁 SNES iter 0  ||F|| = 85.4797
+	🔁 SNES iter 1  ||F|| = 50.8195
+	🔁 SNES iter 2  ||F|| = 14.3117
+	🔁 SNES iter 3  ||F|| = 11.6054
+	🔁 SNES iter 4  ||F|| = 2.90865
+	🔁 SNES iter 5  ||F|| = 2.05489
+	🔁 SNES iter 6  ||F|| = 1.86288
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:21] [INFO]    Field output for Step_42
+
+[2026-01-25 16:35:21] [INFO]    Increment 43
+
+	🔁 SNES iter 0  ||F|| = 87.1317
+	🔁 SNES iter 1  ||F|| = 56.7535
+	🔁 SNES iter 2  ||F|| = 17.0126
+	🔁 SNES iter 3  ||F|| = 14.1542
+	🔁 SNES iter 4  ||F|| = 3.32936
+	🔁 SNES iter 5  ||F|| = 2.45788
+	🔁 SNES iter 6  ||F|| = 2.41181
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:23] [INFO]    Field output for Step_43
+
+[2026-01-25 16:35:23] [INFO]    Increment 44
+
+	🔁 SNES iter 0  ||F|| = 88.2292
+	🔁 SNES iter 1  ||F|| = 62.4134
+	🔁 SNES iter 2  ||F|| = 19.9787
+	🔁 SNES iter 3  ||F|| = 18.1347
+	🔁 SNES iter 4  ||F|| = 4.49434
+	🔁 SNES iter 5  ||F|| = 3.75077
+	🔁 SNES iter 6  ||F|| = 0.744917
+	🔁 SNES iter 7  ||F|| = 0.744917
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:26] [INFO]    Field output for Step_44
+
+[2026-01-25 16:35:26] [INFO]    Increment 45
+
+	🔁 SNES iter 0  ||F|| = 89.6217
+	🔁 SNES iter 1  ||F|| = 67.5137
+	🔁 SNES iter 2  ||F|| = 23.5944
+	🔁 SNES iter 3  ||F|| = 7.53094
+	🔁 SNES iter 4  ||F|| = 7.06201
+	🔁 SNES iter 5  ||F|| = 2.1754
+	🔁 SNES iter 6  ||F|| = 0.579487
+	🔁 SNES iter 7  ||F|| = 0.461637
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:30] [INFO]    Field output for Step_45
+
+[2026-01-25 16:35:30] [INFO]    Increment 46
+
+	🔁 SNES iter 0  ||F|| = 98.1859
+	🔁 SNES iter 1  ||F|| = 71.9384
+	🔁 SNES iter 2  ||F|| = 27.4701
+	🔁 SNES iter 3  ||F|| = 9.48539
+	🔁 SNES iter 4  ||F|| = 8.03231
+	🔁 SNES iter 5  ||F|| = 2.73781
+	🔁 SNES iter 6  ||F|| = 2.4982
+	🔁 SNES iter 7  ||F|| = 2.4982
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:33] [INFO]    Field output for Step_46
+
+[2026-01-25 16:35:33] [INFO]    Increment 47
+
+	🔁 SNES iter 0  ||F|| = 111.82
+	🔁 SNES iter 1  ||F|| = 75.3783
+	🔁 SNES iter 2  ||F|| = 30.9121
+	🔁 SNES iter 3  ||F|| = 11.2307
+	🔁 SNES iter 4  ||F|| = 9.40693
+	🔁 SNES iter 5  ||F|| = 3.20443
+	🔁 SNES iter 6  ||F|| = 2.63865
+	🔁 SNES iter 7  ||F|| = 0.52421
+	🔁 SNES iter 8  ||F|| = 0.484626
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:36] [INFO]    Field output for Step_47
+
+[2026-01-25 16:35:36] [INFO]    Increment 48
+
+	🔁 SNES iter 0  ||F|| = 143.457
+	🔁 SNES iter 1  ||F|| = 80.4806
+	🔁 SNES iter 2  ||F|| = 35.6864
+	🔁 SNES iter 3  ||F|| = 14.2488
+	🔁 SNES iter 4  ||F|| = 11.4902
+	🔁 SNES iter 5  ||F|| = 3.2847
+	🔁 SNES iter 6  ||F|| = 2.75498
+	🔁 SNES iter 7  ||F|| = 0.908269
+	🔁 SNES iter 8  ||F|| = 0.882068
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:39] [INFO]    Field output for Step_48
+
+[2026-01-25 16:35:39] [INFO]    Increment 49
+
+	🔁 SNES iter 0  ||F|| = 180.954
+	🔁 SNES iter 1  ||F|| = 85.878
+	🔁 SNES iter 2  ||F|| = 39.9731
+	🔁 SNES iter 3  ||F|| = 16.6077
+	🔁 SNES iter 4  ||F|| = 14.2656
+	🔁 SNES iter 5  ||F|| = 4.16353
+	🔁 SNES iter 6  ||F|| = 3.6224
+	🔁 SNES iter 7  ||F|| = 0.904364
+	🔁 SNES iter 8  ||F|| = 0.904364
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:43] [INFO]    Field output for Step_49
+
+[2026-01-25 16:35:43] [INFO]    Increment 50
+
+	🔁 SNES iter 0  ||F|| = 211.259
+	🔁 SNES iter 1  ||F|| = 89.8783
+	🔁 SNES iter 2  ||F|| = 43.6926
+	🔁 SNES iter 3  ||F|| = 18.7196
+	🔁 SNES iter 4  ||F|| = 16.9004
+	🔁 SNES iter 5  ||F|| = 5.18951
+	🔁 SNES iter 6  ||F|| = 4.73523
+	🔁 SNES iter 7  ||F|| = 1.06765
+	🔁 SNES iter 8  ||F|| = 1.06765
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:46] [INFO]    Field output for Step_50
+
+[2026-01-25 16:35:46] [INFO]    Increment 51
+
+	🔁 SNES iter 0  ||F|| = 256.33
+	🔁 SNES iter 1  ||F|| = 97.4668
+	🔁 SNES iter 2  ||F|| = 48.5468
+	🔁 SNES iter 3  ||F|| = 21.103
+	🔁 SNES iter 4  ||F|| = 20.1509
+	🔁 SNES iter 5  ||F|| = 6.54228
+	🔁 SNES iter 6  ||F|| = 6.50908
+	🔁 SNES iter 7  ||F|| = 1.45773
+	🔁 SNES iter 8  ||F|| = 1.45773
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:50] [INFO]    Field output for Step_51
+
+[2026-01-25 16:35:50] [INFO]    Increment 52
+
+	🔁 SNES iter 0  ||F|| = 280.865
+	🔁 SNES iter 1  ||F|| = 97.3156
+	🔁 SNES iter 2  ||F|| = 48.7335
+	🔁 SNES iter 3  ||F|| = 20.3283
+	🔁 SNES iter 4  ||F|| = 20.081
+	🔁 SNES iter 5  ||F|| = 8.24297
+	🔁 SNES iter 6  ||F|| = 2.1939
+	🔁 SNES iter 7  ||F|| = 0.678066
+	🔁 SNES iter 8  ||F|| = 0.678066
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:53] [INFO]    Field output for Step_52
+
+[2026-01-25 16:35:53] [INFO]    Increment 53
+
+	🔁 SNES iter 0  ||F|| = 316.623
+	🔁 SNES iter 1  ||F|| = 109.113
+	🔁 SNES iter 2  ||F|| = 55.7528
+	🔁 SNES iter 3  ||F|| = 24.0038
+	🔁 SNES iter 4  ||F|| = 8.55821
+	🔁 SNES iter 5  ||F|| = 3.84874
+	🔁 SNES iter 6  ||F|| = 2.00417
+	🔁 SNES iter 7  ||F|| = 1.14507
+	🔁 SNES iter 8  ||F|| = 0.837495
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:56] [INFO]    Field output for Step_53
+
+[2026-01-25 16:35:56] [INFO]    Increment 54
+
+	🔁 SNES iter 0  ||F|| = 344.202
+	🔁 SNES iter 1  ||F|| = 118.35
+	🔁 SNES iter 2  ||F|| = 60.2592
+	🔁 SNES iter 3  ||F|| = 25.8761
+	🔁 SNES iter 4  ||F|| = 9.36596
+	🔁 SNES iter 5  ||F|| = 4.29144
+	🔁 SNES iter 6  ||F|| = 2.26658
+	🔁 SNES iter 7  ||F|| = 1.31274
+	🔁 SNES iter 8  ||F|| = 1.03624
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:35:59] [INFO]    Field output for Step_54
+
+[2026-01-25 16:35:59] [INFO]    Increment 55
+
+	🔁 SNES iter 0  ||F|| = 373.392
+	🔁 SNES iter 1  ||F|| = 125.939
+	🔁 SNES iter 2  ||F|| = 64.3393
+	🔁 SNES iter 3  ||F|| = 27.7679
+	🔁 SNES iter 4  ||F|| = 10.2054
+	🔁 SNES iter 5  ||F|| = 4.73868
+	🔁 SNES iter 6  ||F|| = 2.57737
+	🔁 SNES iter 7  ||F|| = 1.4797
+	🔁 SNES iter 8  ||F|| = 1.4797
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:36:03] [INFO]    Field output for Step_55
+
+[2026-01-25 16:36:03] [INFO]    Increment 56
+
+	🔁 SNES iter 0  ||F|| = 399.128
+	🔁 SNES iter 1  ||F|| = 138.016
+	🔁 SNES iter 2  ||F|| = 71.1152
+	🔁 SNES iter 3  ||F|| = 31.6421
+	🔁 SNES iter 4  ||F|| = 11.7549
+	🔁 SNES iter 5  ||F|| = 5.20855
+	🔁 SNES iter 6  ||F|| = 2.77994
+	🔁 SNES iter 7  ||F|| = 2.34092
+	🔁 SNES iter 8  ||F|| = 2.34092
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:36:07] [INFO]    Field output for Step_56
+
+[2026-01-25 16:36:07] [INFO]    Increment 57
+
+	🔁 SNES iter 0  ||F|| = 425.901
+	🔁 SNES iter 1  ||F|| = 153.417
+	🔁 SNES iter 2  ||F|| = 80.1743
+	🔁 SNES iter 3  ||F|| = 37.1725
+	🔁 SNES iter 4  ||F|| = 14.3756
+	🔁 SNES iter 5  ||F|| = 13.8707
+	🔁 SNES iter 6  ||F|| = 6.23904
+	🔁 SNES iter 7  ||F|| = 2.38314
+	🔁 SNES iter 8  ||F|| = 1.90232
+	🔁 SNES iter 9  ||F|| = 0.575564
+	🔁 SNES iter 10  ||F|| = 0.575564
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:36:11] [INFO]    Field output for Step_57
+
+[2026-01-25 16:36:11] [INFO]    Increment 58
+
+	🔁 SNES iter 0  ||F|| = 449.065
+	🔁 SNES iter 1  ||F|| = 161.324
+	🔁 SNES iter 2  ||F|| = 86.0607
+	🔁 SNES iter 3  ||F|| = 40.7654
+	🔁 SNES iter 4  ||F|| = 16.0847
+	🔁 SNES iter 5  ||F|| = 15.2292
+	🔁 SNES iter 6  ||F|| = 6.91439
+	🔁 SNES iter 7  ||F|| = 2.61802
+	🔁 SNES iter 8  ||F|| = 2.14029
+	🔁 SNES iter 9  ||F|| = 0.801255
+	🔁 SNES iter 10  ||F|| = 0.801255
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:36:15] [INFO]    Field output for Step_58
+
+[2026-01-25 16:36:15] [INFO]    Increment 59
+
+	🔁 SNES iter 0  ||F|| = 474.156
+	🔁 SNES iter 1  ||F|| = 174.539
+	🔁 SNES iter 2  ||F|| = 94.0805
+	🔁 SNES iter 3  ||F|| = 45.7229
+	🔁 SNES iter 4  ||F|| = 18.7059
+	🔁 SNES iter 5  ||F|| = 17.5281
+	🔁 SNES iter 6  ||F|| = 7.84234
+	🔁 SNES iter 7  ||F|| = 2.84723
+	🔁 SNES iter 8  ||F|| = 2.55883
+	🔁 SNES iter 9  ||F|| = 1.11291
+	🔁 SNES iter 10  ||F|| = 0.997561
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:36:19] [INFO]    Field output for Step_59
+
+[2026-01-25 16:36:19] [INFO]    Increment 60
+
+	🔁 SNES iter 0  ||F|| = 496.466
+	🔁 SNES iter 1  ||F|| = 178.603
+	🔁 SNES iter 2  ||F|| = 96.6122
+	🔁 SNES iter 3  ||F|| = 46.9063
+	🔁 SNES iter 4  ||F|| = 19.3701
+	🔁 SNES iter 5  ||F|| = 17.7557
+	🔁 SNES iter 6  ||F|| = 8.18539
+	🔁 SNES iter 7  ||F|| = 2.94321
+	🔁 SNES iter 8  ||F|| = 0.938327
+	🔁 SNES iter 9  ||F|| = 0.938327
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:36:22] [INFO]    Field output for Step_60
+
+[2026-01-25 16:36:22] [INFO]    Increment 61
+
+	🔁 SNES iter 0  ||F|| = 518.578
+	🔁 SNES iter 1  ||F|| = 200.928
+	🔁 SNES iter 2  ||F|| = 111.768
+	🔁 SNES iter 3  ||F|| = 56.9244
+	🔁 SNES iter 4  ||F|| = 24.9866
+	🔁 SNES iter 5  ||F|| = 24.5232
+	🔁 SNES iter 6  ||F|| = 10.6939
+	🔁 SNES iter 7  ||F|| = 3.76009
+	🔁 SNES iter 8  ||F|| = 3.64099
+	🔁 SNES iter 9  ||F|| = 1.42668
+	🔁 SNES iter 10  ||F|| = 0.400358
+	🔁 SNES iter 11  ||F|| = 0.400358
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:36:27] [INFO]    Field output for Step_61
+
+[2026-01-25 16:36:27] [INFO]    Increment 62
+
+	🔁 SNES iter 0  ||F|| = 541.856
+	🔁 SNES iter 1  ||F|| = 217.993
+	🔁 SNES iter 2  ||F|| = 123.877
+	🔁 SNES iter 3  ||F|| = 64.9542
+	🔁 SNES iter 4  ||F|| = 29.6956
+	🔁 SNES iter 5  ||F|| = 12.2228
+	🔁 SNES iter 6  ||F|| = 5.58889
+	🔁 SNES iter 7  ||F|| = 3.16417
+	🔁 SNES iter 8  ||F|| = 3.16417
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:36:31] [INFO]    Field output for Step_62
+
+[2026-01-25 16:36:31] [INFO]    Increment 63
+
+	🔁 SNES iter 0  ||F|| = 563.848
+	🔁 SNES iter 1  ||F|| = 232.091
+	🔁 SNES iter 2  ||F|| = 134.78
+	🔁 SNES iter 3  ||F|| = 72.6068
+	🔁 SNES iter 4  ||F|| = 34.3667
+	🔁 SNES iter 5  ||F|| = 14.2921
+	🔁 SNES iter 6  ||F|| = 6.46399
+	🔁 SNES iter 7  ||F|| = 3.71944
+	🔁 SNES iter 8  ||F|| = 2.30019
+	🔁 SNES iter 9  ||F|| = 1.4679
+	🔁 SNES iter 10  ||F|| = 1.4679
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:36:35] [INFO]    Field output for Step_63
+
+[2026-01-25 16:36:35] [INFO]    Increment 64
+
+	🔁 SNES iter 0  ||F|| = 585.694
+	🔁 SNES iter 1  ||F|| = 249.432
+	🔁 SNES iter 2  ||F|| = 146.387
+	🔁 SNES iter 3  ||F|| = 80.3568
+	🔁 SNES iter 4  ||F|| = 39.2984
+	🔁 SNES iter 5  ||F|| = 16.6508
+	🔁 SNES iter 6  ||F|| = 7.33806
+	🔁 SNES iter 7  ||F|| = 4.0536
+	🔁 SNES iter 8  ||F|| = 2.42979
+	🔁 SNES iter 9  ||F|| = 1.60186
+	🔁 SNES iter 10  ||F|| = 0.48436
+	🔁 SNES iter 11  ||F|| = 0.48436
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:36:41] [INFO]    Field output for Step_64
+
+[2026-01-25 16:36:41] [INFO]    Increment 65
+
+	🔁 SNES iter 0  ||F|| = 607.202
+	🔁 SNES iter 1  ||F|| = 267.922
+	🔁 SNES iter 2  ||F|| = 159.357
+	🔁 SNES iter 3  ||F|| = 89.2894
+	🔁 SNES iter 4  ||F|| = 45.07
+	🔁 SNES iter 5  ||F|| = 19.5534
+	🔁 SNES iter 6  ||F|| = 8.47122
+	🔁 SNES iter 7  ||F|| = 4.48762
+	🔁 SNES iter 8  ||F|| = 2.54568
+	🔁 SNES iter 9  ||F|| = 1.68231
+	🔁 SNES iter 10  ||F|| = 0.958607
+	🔁 SNES iter 11  ||F|| = 0.958607
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:36:45] [INFO]    Field output for Step_65
+
+[2026-01-25 16:36:45] [INFO]    Increment 66
+
+	🔁 SNES iter 0  ||F|| = 628.893
+	🔁 SNES iter 1  ||F|| = 280.171
+	🔁 SNES iter 2  ||F|| = 168.552
+	🔁 SNES iter 3  ||F|| = 95.5271
+	🔁 SNES iter 4  ||F|| = 48.8098
+	🔁 SNES iter 5  ||F|| = 21.3813
+	🔁 SNES iter 6  ||F|| = 9.31679
+	🔁 SNES iter 7  ||F|| = 4.93202
+	🔁 SNES iter 8  ||F|| = 2.76008
+	🔁 SNES iter 9  ||F|| = 1.84039
+	🔁 SNES iter 10  ||F|| = 1.45395
+	🔁 SNES iter 11  ||F|| = 1.45395
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:36:50] [INFO]    Field output for Step_66
+
+[2026-01-25 16:36:50] [INFO]    Increment 67
+
+	🔁 SNES iter 0  ||F|| = 650.518
+	🔁 SNES iter 1  ||F|| = 302.679
+	🔁 SNES iter 2  ||F|| = 185.312
+	🔁 SNES iter 3  ||F|| = 107.445
+	🔁 SNES iter 4  ||F|| = 56.5658
+	🔁 SNES iter 5  ||F|| = 25.4376
+	🔁 SNES iter 6  ||F|| = 10.9838
+	🔁 SNES iter 7  ||F|| = 5.67483
+	🔁 SNES iter 8  ||F|| = 5.20555
+	🔁 SNES iter 9  ||F|| = 5.20555
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:36:54] [INFO]    Field output for Step_67
+
+[2026-01-25 16:36:54] [INFO]    Increment 68
+
+	🔁 SNES iter 0  ||F|| = 673.555
+	🔁 SNES iter 1  ||F|| = 329.449
+	🔁 SNES iter 2  ||F|| = 204.233
+	🔁 SNES iter 3  ||F|| = 121.347
+	🔁 SNES iter 4  ||F|| = 66.474
+	🔁 SNES iter 5  ||F|| = 31.0326
+	🔁 SNES iter 6  ||F|| = 13.4313
+	🔁 SNES iter 7  ||F|| = 6.84343
+	🔁 SNES iter 8  ||F|| = 6.81429
+	🔁 SNES iter 9  ||F|| = 4.07696
+	🔁 SNES iter 10  ||F|| = 4.07696
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:36:58] [INFO]    Field output for Step_68
+
+[2026-01-25 16:36:58] [INFO]    Increment 69
+
+	🔁 SNES iter 0  ||F|| = 696.025
+	🔁 SNES iter 1  ||F|| = 351.562
+	🔁 SNES iter 2  ||F|| = 222.222
+	🔁 SNES iter 3  ||F|| = 134.802
+	🔁 SNES iter 4  ||F|| = 75.5641
+	🔁 SNES iter 5  ||F|| = 36.2036
+	🔁 SNES iter 6  ||F|| = 15.7292
+	🔁 SNES iter 7  ||F|| = 7.97006
+	🔁 SNES iter 8  ||F|| = 4.51112
+	🔁 SNES iter 9  ||F|| = 2.90795
+	🔁 SNES iter 10  ||F|| = 1.02708
+	🔁 SNES iter 11  ||F|| = 1.02708
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:37:03] [INFO]    Field output for Step_69
+
+[2026-01-25 16:37:03] [INFO]    Increment 70
+
+	🔁 SNES iter 0  ||F|| = 718.92
+	🔁 SNES iter 1  ||F|| = 374.334
+	🔁 SNES iter 2  ||F|| = 238.354
+	🔁 SNES iter 3  ||F|| = 145.233
+	🔁 SNES iter 4  ||F|| = 81.4644
+	🔁 SNES iter 5  ||F|| = 39.1078
+	🔁 SNES iter 6  ||F|| = 17.0185
+	🔁 SNES iter 7  ||F|| = 8.49307
+	🔁 SNES iter 8  ||F|| = 4.85601
+	🔁 SNES iter 9  ||F|| = 3.11829
+	🔁 SNES iter 10  ||F|| = 1.49548
+	🔁 SNES iter 11  ||F|| = 1.49548
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:37:07] [INFO]    Field output for Step_70
+
+[2026-01-25 16:37:07] [INFO]    Increment 71
+
+	🔁 SNES iter 0  ||F|| = 743.151
+	🔁 SNES iter 1  ||F|| = 403.147
+	🔁 SNES iter 2  ||F|| = 260.617
+	🔁 SNES iter 3  ||F|| = 161.538
+	🔁 SNES iter 4  ||F|| = 92.4503
+	🔁 SNES iter 5  ||F|| = 45.4841
+	🔁 SNES iter 6  ||F|| = 19.9801
+	🔁 SNES iter 7  ||F|| = 9.83705
+	🔁 SNES iter 8  ||F|| = 5.90712
+	🔁 SNES iter 9  ||F|| = 3.64361
+	🔁 SNES iter 10  ||F|| = 2.4181
+	🔁 SNES iter 11  ||F|| = 1.40939
+	🔁 SNES iter 12  ||F|| = 1.00309
+	🔁 SNES iter 13  ||F|| = 0.661525
+	🔁 SNES iter 14  ||F|| = 0.661525
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:37:14] [INFO]    Field output for Step_71
+
+[2026-01-25 16:37:14] [INFO]    Increment 72
+
+	🔁 SNES iter 0  ||F|| = 767.001
+	🔁 SNES iter 1  ||F|| = 436.474
+	🔁 SNES iter 2  ||F|| = 280.581
+	🔁 SNES iter 3  ||F|| = 175.5
+	🔁 SNES iter 4  ||F|| = 101.576
+	🔁 SNES iter 5  ||F|| = 50.8419
+	🔁 SNES iter 6  ||F|| = 22.5758
+	🔁 SNES iter 7  ||F|| = 10.918
+	🔁 SNES iter 8  ||F|| = 6.6708
+	🔁 SNES iter 9  ||F|| = 3.81162
+	🔁 SNES iter 10  ||F|| = 2.68705
+	🔁 SNES iter 11  ||F|| = 1.61483
+	🔁 SNES iter 12  ||F|| = 1.1297
+	🔁 SNES iter 13  ||F|| = 1.11863
+	🔁 SNES iter 14  ||F|| = 1.11863
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:37:20] [INFO]    Field output for Step_72
+
+[2026-01-25 16:37:20] [INFO]    Increment 73
+
+	🔁 SNES iter 0  ||F|| = 791.338
+	🔁 SNES iter 1  ||F|| = 468.251
+	🔁 SNES iter 2  ||F|| = 299.67
+	🔁 SNES iter 3  ||F|| = 188.468
+	🔁 SNES iter 4  ||F|| = 109.786
+	🔁 SNES iter 5  ||F|| = 55.6164
+	🔁 SNES iter 6  ||F|| = 24.9901
+	🔁 SNES iter 7  ||F|| = 11.8761
+	🔁 SNES iter 8  ||F|| = 7.29174
+	🔁 SNES iter 9  ||F|| = 6.61584
+	🔁 SNES iter 10  ||F|| = 3.49101
+	🔁 SNES iter 11  ||F|| = 2.06835
+	🔁 SNES iter 12  ||F|| = 2.06835
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:37:24] [INFO]    Field output for Step_73
+
+[2026-01-25 16:37:24] [INFO]    Increment 74
+
+	🔁 SNES iter 0  ||F|| = 817.174
+	🔁 SNES iter 1  ||F|| = 502.205
+	🔁 SNES iter 2  ||F|| = 319.872
+	🔁 SNES iter 3  ||F|| = 202.233
+	🔁 SNES iter 4  ||F|| = 118.364
+	🔁 SNES iter 5  ||F|| = 60.566
+	🔁 SNES iter 6  ||F|| = 27.5938
+	🔁 SNES iter 7  ||F|| = 12.8902
+	🔁 SNES iter 8  ||F|| = 7.93719
+	🔁 SNES iter 9  ||F|| = 6.22813
+	🔁 SNES iter 10  ||F|| = 3.39339
+	🔁 SNES iter 11  ||F|| = 2.12898
+	🔁 SNES iter 12  ||F|| = 1.40771
+	🔁 SNES iter 13  ||F|| = 1.40771
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:37:29] [INFO]    Field output for Step_74
+
+[2026-01-25 16:37:29] [INFO]    Increment 75
+
+	🔁 SNES iter 0  ||F|| = 843.106
+	🔁 SNES iter 1  ||F|| = 540.297
+	🔁 SNES iter 2  ||F|| = 341.158
+	🔁 SNES iter 3  ||F|| = 218.281
+	🔁 SNES iter 4  ||F|| = 129.167
+	🔁 SNES iter 5  ||F|| = 67.0251
+	🔁 SNES iter 6  ||F|| = 31.0368
+	🔁 SNES iter 7  ||F|| = 14.2919
+	🔁 SNES iter 8  ||F|| = 8.86696
+	🔁 SNES iter 9  ||F|| = 5.97323
+	🔁 SNES iter 10  ||F|| = 3.54806
+	🔁 SNES iter 11  ||F|| = 2.37239
+	🔁 SNES iter 12  ||F|| = 1.40058
+	🔁 SNES iter 13  ||F|| = 1.30728
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:37:35] [INFO]    Field output for Step_75
+
+[2026-01-25 16:37:35] [INFO]    Increment 76
+
+	🔁 SNES iter 0  ||F|| = 868.415
+	🔁 SNES iter 1  ||F|| = 571.753
+	🔁 SNES iter 2  ||F|| = 358.816
+	🔁 SNES iter 3  ||F|| = 232.76
+	🔁 SNES iter 4  ||F|| = 138.918
+	🔁 SNES iter 5  ||F|| = 72.9595
+	🔁 SNES iter 6  ||F|| = 34.2637
+	🔁 SNES iter 7  ||F|| = 15.6422
+	🔁 SNES iter 8  ||F|| = 9.73629
+	🔁 SNES iter 9  ||F|| = 6.3636
+	🔁 SNES iter 10  ||F|| = 3.94235
+	🔁 SNES iter 11  ||F|| = 2.53696
+	🔁 SNES iter 12  ||F|| = 1.30592
+	🔁 SNES iter 13  ||F|| = 1.30592
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:37:40] [INFO]    Field output for Step_76
+
+[2026-01-25 16:37:40] [INFO]    Increment 77
+
+	🔁 SNES iter 0  ||F|| = 894.625
+	🔁 SNES iter 1  ||F|| = 614.193
+	🔁 SNES iter 2  ||F|| = 382.676
+	🔁 SNES iter 3  ||F|| = 253.015
+	🔁 SNES iter 4  ||F|| = 152.806
+	🔁 SNES iter 5  ||F|| = 81.8226
+	🔁 SNES iter 6  ||F|| = 39.0858
+	🔁 SNES iter 7  ||F|| = 17.507
+	🔁 SNES iter 8  ||F|| = 10.7905
+	🔁 SNES iter 9  ||F|| = 7.15786
+	🔁 SNES iter 10  ||F|| = 4.68449
+	🔁 SNES iter 11  ||F|| = 2.78852
+	🔁 SNES iter 12  ||F|| = 2.78852
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:37:47] [INFO]    Field output for Step_77
+
+[2026-01-25 16:37:47] [INFO]    Increment 78
+
+	🔁 SNES iter 0  ||F|| = 921.735
+	🔁 SNES iter 1  ||F|| = 660.361
+	🔁 SNES iter 2  ||F|| = 409.18
+	🔁 SNES iter 3  ||F|| = 273.861
+	🔁 SNES iter 4  ||F|| = 167.618
+	🔁 SNES iter 5  ||F|| = 91.2436
+	🔁 SNES iter 6  ||F|| = 44.316
+	🔁 SNES iter 7  ||F|| = 44.2256
+	🔁 SNES iter 8  ||F|| = 25.809
+	🔁 SNES iter 9  ||F|| = 11.858
+	🔁 SNES iter 10  ||F|| = 4.10057
+	🔁 SNES iter 11  ||F|| = 2.05499
+	🔁 SNES iter 12  ||F|| = 2.05499
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:37:51] [INFO]    Field output for Step_78
+
+[2026-01-25 16:37:51] [INFO]    Increment 79
+
+	🔁 SNES iter 0  ||F|| = 949.217
+	🔁 SNES iter 1  ||F|| = 699.862
+	🔁 SNES iter 2  ||F|| = 431.681
+	🔁 SNES iter 3  ||F|| = 288.437
+	🔁 SNES iter 4  ||F|| = 179.116
+	🔁 SNES iter 5  ||F|| = 98.3615
+	🔁 SNES iter 6  ||F|| = 48.3676
+	🔁 SNES iter 7  ||F|| = 48.2173
+	🔁 SNES iter 8  ||F|| = 28.0414
+	🔁 SNES iter 9  ||F|| = 12.7013
+	🔁 SNES iter 10  ||F|| = 4.49069
+	🔁 SNES iter 11  ||F|| = 2.25855
+	🔁 SNES iter 12  ||F|| = 2.25855
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:37:56] [INFO]    Field output for Step_79
+
+[2026-01-25 16:37:56] [INFO]    Increment 80
+
+	🔁 SNES iter 0  ||F|| = 978.343
+	🔁 SNES iter 1  ||F|| = 743.156
+	🔁 SNES iter 2  ||F|| = 456.69
+	🔁 SNES iter 3  ||F|| = 304.579
+	🔁 SNES iter 4  ||F|| = 193.676
+	🔁 SNES iter 5  ||F|| = 107.705
+	🔁 SNES iter 6  ||F|| = 53.6668
+	🔁 SNES iter 7  ||F|| = 52.8528
+	🔁 SNES iter 8  ||F|| = 30.1655
+	🔁 SNES iter 9  ||F|| = 13.2054
+	🔁 SNES iter 10  ||F|| = 4.67878
+	🔁 SNES iter 11  ||F|| = 2.34023
+	🔁 SNES iter 12  ||F|| = 2.34023
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:38:01] [INFO]    Field output for Step_80
+
+[2026-01-25 16:38:01] [INFO]    Increment 81
+
+	🔁 SNES iter 0  ||F|| = 1006.5
+	🔁 SNES iter 1  ||F|| = 796.106
+	🔁 SNES iter 2  ||F|| = 564.715
+	🔁 SNES iter 3  ||F|| = 362.267
+	🔁 SNES iter 4  ||F|| = 239.126
+	🔁 SNES iter 5  ||F|| = 137.681
+	🔁 SNES iter 6  ||F|| = 68.8088
+	🔁 SNES iter 7  ||F|| = 29.4498
+	🔁 SNES iter 8  ||F|| = 16.2898
+	🔁 SNES iter 9  ||F|| = 14.1185
+	🔁 SNES iter 10  ||F|| = 8.92467
+	🔁 SNES iter 11  ||F|| = 5.51804
+	🔁 SNES iter 12  ||F|| = 2.68953
+	🔁 SNES iter 13  ||F|| = 2.68953
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:38:07] [INFO]    Field output for Step_81
+
+[2026-01-25 16:38:07] [INFO]    Increment 82
+
+	🔁 SNES iter 0  ||F|| = 1035.66
+	🔁 SNES iter 1  ||F|| = 877.422
+	🔁 SNES iter 2  ||F|| = 731.174
+	🔁 SNES iter 3  ||F|| = 576.868
+	🔁 SNES iter 4  ||F|| = 424.875
+	🔁 SNES iter 5  ||F|| = 279.46
+	🔁 SNES iter 6  ||F|| = 169.201
+	🔁 SNES iter 7  ||F|| = 83.9435
+	🔁 SNES iter 8  ||F|| = 36.8272
+	🔁 SNES iter 9  ||F|| = 23.7532
+	🔁 SNES iter 10  ||F|| = 19.9732
+	🔁 SNES iter 11  ||F|| = 10.9223
+	🔁 SNES iter 12  ||F|| = 4.42788
+	🔁 SNES iter 13  ||F|| = 4.42788
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:38:12] [INFO]    Field output for Step_82
+
+[2026-01-25 16:38:12] [INFO]    Increment 83
+
+	🔁 SNES iter 0  ||F|| = 1065.72
+	🔁 SNES iter 1  ||F|| = 983.155
+	🔁 SNES iter 2  ||F|| = 864.403
+	🔁 SNES iter 3  ||F|| = 787.092
+	🔁 SNES iter 4  ||F|| = 631.296
+	🔁 SNES iter 5  ||F|| = 477.065
+	🔁 SNES iter 6  ||F|| = 327.859
+	🔁 SNES iter 7  ||F|| = 207.938
+	🔁 SNES iter 8  ||F|| = 109.148
+	🔁 SNES iter 9  ||F|| = 47.8057
+	🔁 SNES iter 10  ||F|| = 31.4712
+	🔁 SNES iter 11  ||F|| = 23.8811
+	🔁 SNES iter 12  ||F|| = 12.3774
+	🔁 SNES iter 13  ||F|| = 4.97136
+	🔁 SNES iter 14  ||F|| = 4.85301
+	🔁 SNES iter 15  ||F|| = 2.93732
+	🔁 SNES iter 16  ||F|| = 2.93732
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:38:20] [INFO]    Field output for Step_83
+
+[2026-01-25 16:38:20] [INFO]    Increment 84
+
+	🔁 SNES iter 0  ||F|| = 1097.15
+	🔁 SNES iter 1  ||F|| = 594.038
+	🔁 SNES iter 2  ||F|| = 454.342
+	🔁 SNES iter 3  ||F|| = 286.623
+	🔁 SNES iter 4  ||F|| = 202.631
+	🔁 SNES iter 5  ||F|| = 151.274
+	🔁 SNES iter 6  ||F|| = 72.9087
+	🔁 SNES iter 7  ||F|| = 39.4377
+	🔁 SNES iter 8  ||F|| = 24.1494
+	🔁 SNES iter 9  ||F|| = 15.5395
+	🔁 SNES iter 10  ||F|| = 9.04239
+	🔁 SNES iter 11  ||F|| = 8.51934
+	🔁 SNES iter 12  ||F|| = 4.87234
+	🔁 SNES iter 13  ||F|| = 2.46542
+	🔁 SNES iter 14  ||F|| = 1.0491
+	🔁 SNES iter 15  ||F|| = 1.02537
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:38:27] [INFO]    Field output for Step_84
+
+[2026-01-25 16:38:27] [INFO]    Increment 85
+
+	🔁 SNES iter 0  ||F|| = 1128.3
+	🔁 SNES iter 1  ||F|| = 638.61
+	🔁 SNES iter 2  ||F|| = 513.69
+	🔁 SNES iter 3  ||F|| = 339.814
+	🔁 SNES iter 4  ||F|| = 229.743
+	🔁 SNES iter 5  ||F|| = 170.641
+	🔁 SNES iter 6  ||F|| = 67.5923
+	🔁 SNES iter 7  ||F|| = 33.0459
+	🔁 SNES iter 8  ||F|| = 19.7271
+	🔁 SNES iter 9  ||F|| = 13.7617
+	🔁 SNES iter 10  ||F|| = 8.40818
+	🔁 SNES iter 11  ||F|| = 4.41657
+	🔁 SNES iter 12  ||F|| = 3.22299
+	🔁 SNES iter 13  ||F|| = 2.19631
+	🔁 SNES iter 14  ||F|| = 1.35425
+	🔁 SNES iter 15  ||F|| = 1.02129
+	🔁 SNES iter 16  ||F|| = 0.705944
+	🔁 SNES iter 17  ||F|| = 0.510331
+	🔁 SNES iter 18  ||F|| = 0.324343
+	🔁 SNES iter 19  ||F|| = 0.324343
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:38:35] [INFO]    Field output for Step_85
+
+[2026-01-25 16:38:35] [INFO]    Increment 86
+
+	🔁 SNES iter 0  ||F|| = 1140.71
+	🔁 SNES iter 1  ||F|| = 667.796
+	🔁 SNES iter 2  ||F|| = 541.215
+	🔁 SNES iter 3  ||F|| = 356.756
+	🔁 SNES iter 4  ||F|| = 233.987
+	🔁 SNES iter 5  ||F|| = 177.973
+	🔁 SNES iter 6  ||F|| = 143.086
+	🔁 SNES iter 7  ||F|| = 75.9926
+	🔁 SNES iter 8  ||F|| = 45.4308
+	🔁 SNES iter 9  ||F|| = 30.4228
+	🔁 SNES iter 10  ||F|| = 19.5068
+	🔁 SNES iter 11  ||F|| = 9.78381
+	🔁 SNES iter 12  ||F|| = 5.98362
+	🔁 SNES iter 13  ||F|| = 5.52919
+	🔁 SNES iter 14  ||F|| = 3.1649
+	🔁 SNES iter 15  ||F|| = 3.1649
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:38:42] [INFO]    Field output for Step_86
+
+[2026-01-25 16:38:42] [INFO]    Increment 87
+
+	🔁 SNES iter 0  ||F|| = 1590.33
+	🔁 SNES iter 1  ||F|| = 1066.54
+	🔁 SNES iter 2  ||F|| = 563.152
+	🔁 SNES iter 3  ||F|| = 398.068
+	🔁 SNES iter 4  ||F|| = 239.709
+	🔁 SNES iter 5  ||F|| = 185.272
+	🔁 SNES iter 6  ||F|| = 129.844
+	🔁 SNES iter 7  ||F|| = 89.9349
+	🔁 SNES iter 8  ||F|| = 63.5785
+	🔁 SNES iter 9  ||F|| = 45.1982
+	🔁 SNES iter 10  ||F|| = 31.9688
+	🔁 SNES iter 11  ||F|| = 23.6121
+	🔁 SNES iter 12  ||F|| = 15.8991
+	🔁 SNES iter 13  ||F|| = 6.35378
+	🔁 SNES iter 14  ||F|| = 3.19853
+	🔁 SNES iter 15  ||F|| = 2.22466
+	🔁 SNES iter 16  ||F|| = 1.51624
+	🔁 SNES iter 17  ||F|| = 0.84263
+	🔁 SNES iter 18  ||F|| = 0.84263
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:38:50] [INFO]    Field output for Step_87
+
+[2026-01-25 16:38:50] [INFO]    Increment 88
+
+	🔁 SNES iter 0  ||F|| = 1924.42
+	🔁 SNES iter 1  ||F|| = 1529.97
+	🔁 SNES iter 2  ||F|| = 1036.6
+	🔁 SNES iter 3  ||F|| = 519.459
+	🔁 SNES iter 4  ||F|| = 312.775
+	🔁 SNES iter 5  ||F|| = 217.414
+	🔁 SNES iter 6  ||F|| = 169.344
+	🔁 SNES iter 7  ||F|| = 115.418
+	🔁 SNES iter 8  ||F|| = 70.5113
+	🔁 SNES iter 9  ||F|| = 27.0716
+	🔁 SNES iter 10  ||F|| = 17.5885
+	🔁 SNES iter 11  ||F|| = 15.8139
+	🔁 SNES iter 12  ||F|| = 9.56357
+	🔁 SNES iter 13  ||F|| = 6.0515
+	🔁 SNES iter 14  ||F|| = 2.77783
+	🔁 SNES iter 15  ||F|| = 1.23697
+	🔁 SNES iter 16  ||F|| = 1.23697
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:38:57] [INFO]    Field output for Step_88
+
+[2026-01-25 16:38:57] [INFO]    Increment 89
+
+	🔁 SNES iter 0  ||F|| = 2168.64
+	🔁 SNES iter 1  ||F|| = 1715.71
+	🔁 SNES iter 2  ||F|| = 1322.65
+	🔁 SNES iter 3  ||F|| = 852.641
+	🔁 SNES iter 4  ||F|| = 481.392
+	🔁 SNES iter 5  ||F|| = 471.495
+	🔁 SNES iter 6  ||F|| = 334.863
+	🔁 SNES iter 7  ||F|| = 206.932
+	🔁 SNES iter 8  ||F|| = 100.44
+	🔁 SNES iter 9  ||F|| = 48.4449
+	🔁 SNES iter 10  ||F|| = 27.7904
+	🔁 SNES iter 11  ||F|| = 25.6577
+	🔁 SNES iter 12  ||F|| = 16.1625
+	🔁 SNES iter 13  ||F|| = 10.418
+	🔁 SNES iter 14  ||F|| = 10.418
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:39:02] [INFO]    Field output for Step_89
+
+[2026-01-25 16:39:02] [INFO]    Increment 90
+
+	🔁 SNES iter 0  ||F|| = 2406.32
+	🔁 SNES iter 1  ||F|| = 1831.33
+	🔁 SNES iter 2  ||F|| = 1485.75
+	🔁 SNES iter 3  ||F|| = 1123.33
+	🔁 SNES iter 4  ||F|| = 726.691
+	🔁 SNES iter 5  ||F|| = 525.407
+	🔁 SNES iter 6  ||F|| = 303.208
+	🔁 SNES iter 7  ||F|| = 170.676
+	🔁 SNES iter 8  ||F|| = 108.582
+	🔁 SNES iter 9  ||F|| = 70.784
+	🔁 SNES iter 10  ||F|| = 45.8982
+	🔁 SNES iter 11  ||F|| = 28.107
+	🔁 SNES iter 12  ||F|| = 9.90912
+	🔁 SNES iter 13  ||F|| = 6.08067
+	🔁 SNES iter 14  ||F|| = 4.56783
+	🔁 SNES iter 15  ||F|| = 3.10654
+	🔁 SNES iter 16  ||F|| = 3.10654
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:39:09] [INFO]    Field output for Step_90
+
+[2026-01-25 16:39:09] [INFO]    Increment 91
+
+	🔁 SNES iter 0  ||F|| = 2739.15
+	🔁 SNES iter 1  ||F|| = 1975.08
+	🔁 SNES iter 2  ||F|| = 1572.78
+	🔁 SNES iter 3  ||F|| = 1247.24
+	🔁 SNES iter 4  ||F|| = 864.221
+	🔁 SNES iter 5  ||F|| = 717.498
+	🔁 SNES iter 6  ||F|| = 469.175
+	🔁 SNES iter 7  ||F|| = 396.164
+	🔁 SNES iter 8  ||F|| = 268.062
+	🔁 SNES iter 9  ||F|| = 164.661
+	🔁 SNES iter 10  ||F|| = 68.4668
+	🔁 SNES iter 11  ||F|| = 25.7922
+	🔁 SNES iter 12  ||F|| = 18.2107
+	🔁 SNES iter 13  ||F|| = 10.8087
+	🔁 SNES iter 14  ||F|| = 7.16622
+	🔁 SNES iter 15  ||F|| = 7.08321
+	🔁 SNES iter 16  ||F|| = 3.47535
+	🔁 SNES iter 17  ||F|| = 2.03967
+	🔁 SNES iter 18  ||F|| = 2.03967
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:39:16] [INFO]    Field output for Step_91
+
+[2026-01-25 16:39:16] [INFO]    Increment 92
+
+	🔁 SNES iter 0  ||F|| = 2789.26
+	🔁 SNES iter 1  ||F|| = 2043.58
+	🔁 SNES iter 2  ||F|| = 1653.06
+	🔁 SNES iter 3  ||F|| = 1335.9
+	🔁 SNES iter 4  ||F|| = 960.425
+	🔁 SNES iter 5  ||F|| = 835.369
+	🔁 SNES iter 6  ||F|| = 481.218
+	🔁 SNES iter 7  ||F|| = 417.921
+	🔁 SNES iter 8  ||F|| = 276.225
+	🔁 SNES iter 9  ||F|| = 167.367
+	🔁 SNES iter 10  ||F|| = 66.0292
+	🔁 SNES iter 11  ||F|| = 31.85
+	🔁 SNES iter 12  ||F|| = 19.1908
+	🔁 SNES iter 13  ||F|| = 18.6302
+	🔁 SNES iter 14  ||F|| = 10.8145
+	🔁 SNES iter 15  ||F|| = 7.46519
+	🔁 SNES iter 16  ||F|| = 4.42967
+	🔁 SNES iter 17  ||F|| = 3.88322
+	🔁 SNES iter 18  ||F|| = 2.491
+	🔁 SNES iter 19  ||F|| = 2.491
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:39:25] [INFO]    Field output for Step_92
+
+[2026-01-25 16:39:25] [INFO]    Increment 93
+
+	🔁 SNES iter 0  ||F|| = 3052.91
+	🔁 SNES iter 1  ||F|| = 2192.22
+	🔁 SNES iter 2  ||F|| = 1779.03
+	🔁 SNES iter 3  ||F|| = 1482.56
+	🔁 SNES iter 4  ||F|| = 1119.99
+	🔁 SNES iter 5  ||F|| = 1000.43
+	🔁 SNES iter 6  ||F|| = 560.711
+	🔁 SNES iter 7  ||F|| = 330.127
+	🔁 SNES iter 8  ||F|| = 229.958
+	🔁 SNES iter 9  ||F|| = 193.122
+	🔁 SNES iter 10  ||F|| = 123.383
+	🔁 SNES iter 11  ||F|| = 74.4198
+	🔁 SNES iter 12  ||F|| = 38.0927
+	🔁 SNES iter 13  ||F|| = 11.2285
+	🔁 SNES iter 14  ||F|| = 6.98598
+	🔁 SNES iter 15  ||F|| = 5.35208
+	🔁 SNES iter 16  ||F|| = 5.35208
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:39:32] [INFO]    Field output for Step_93
+
+[2026-01-25 16:39:32] [INFO]    Increment 94
+
+	🔁 SNES iter 0  ||F|| = 2476.27
+	🔁 SNES iter 1  ||F|| = 2109.21
+	🔁 SNES iter 2  ||F|| = 1731.76
+	🔁 SNES iter 3  ||F|| = 1150.37
+	🔁 SNES iter 4  ||F|| = 676.969
+	🔁 SNES iter 5  ||F|| = 384.655
+	🔁 SNES iter 6  ||F|| = 236.565
+	🔁 SNES iter 7  ||F|| = 164.997
+	🔁 SNES iter 8  ||F|| = 108.147
+	🔁 SNES iter 9  ||F|| = 62.9084
+	🔁 SNES iter 10  ||F|| = 43.4113
+	🔁 SNES iter 11  ||F|| = 26.6938
+	🔁 SNES iter 12  ||F|| = 22.5956
+	🔁 SNES iter 13  ||F|| = 9.23732
+	🔁 SNES iter 14  ||F|| = 4.24449
+	🔁 SNES iter 15  ||F|| = 2.51272
+	🔁 SNES iter 16  ||F|| = 2.51272
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:39:39] [INFO]    Field output for Step_94
+
+[2026-01-25 16:39:39] [INFO]    Increment 95
+
+	🔁 SNES iter 0  ||F|| = 2722.11
+	🔁 SNES iter 1  ||F|| = 2333.04
+	🔁 SNES iter 2  ||F|| = 1708.31
+	🔁 SNES iter 3  ||F|| = 1669.91
+	🔁 SNES iter 4  ||F|| = 1171.44
+	🔁 SNES iter 5  ||F|| = 653.601
+	🔁 SNES iter 6  ||F|| = 338.128
+	🔁 SNES iter 7  ||F|| = 228.637
+	🔁 SNES iter 8  ||F|| = 117.533
+	🔁 SNES iter 9  ||F|| = 72.4353
+	🔁 SNES iter 10  ||F|| = 54.2543
+	🔁 SNES iter 11  ||F|| = 29.1049
+	🔁 SNES iter 12  ||F|| = 18.4816
+	🔁 SNES iter 13  ||F|| = 12.2012
+	🔁 SNES iter 14  ||F|| = 5.65573
+	🔁 SNES iter 15  ||F|| = 3.83449
+	🔁 SNES iter 16  ||F|| = 2.30004
+	🔁 SNES iter 17  ||F|| = 2.30004
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:39:46] [INFO]    Field output for Step_95
+
+[2026-01-25 16:39:46] [INFO]    Increment 96
+
+	🔁 SNES iter 0  ||F|| = 3068.77
+	🔁 SNES iter 1  ||F|| = 2362.69
+	🔁 SNES iter 2  ||F|| = 1540.1
+	🔁 SNES iter 3  ||F|| = 1472.11
+	🔁 SNES iter 4  ||F|| = 954.899
+	🔁 SNES iter 5  ||F|| = 493.658
+	🔁 SNES iter 6  ||F|| = 374.916
+	🔁 SNES iter 7  ||F|| = 169.611
+	🔁 SNES iter 8  ||F|| = 47.2944
+	🔁 SNES iter 9  ||F|| = 28.183
+	🔁 SNES iter 10  ||F|| = 23.1801
+	🔁 SNES iter 11  ||F|| = 13.0947
+	🔁 SNES iter 12  ||F|| = 13.0356
+	🔁 SNES iter 13  ||F|| = 13.0356
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:39:51] [INFO]    Field output for Step_96
+
+[2026-01-25 16:39:51] [INFO]    Increment 97
+
+	🔁 SNES iter 0  ||F|| = 3695.5
+	🔁 SNES iter 1  ||F|| = 2682.93
+	🔁 SNES iter 2  ||F|| = 2412.38
+	🔁 SNES iter 3  ||F|| = 1785.91
+	🔁 SNES iter 4  ||F|| = 1084.16
+	🔁 SNES iter 5  ||F|| = 831.015
+	🔁 SNES iter 6  ||F|| = 326.874
+	🔁 SNES iter 7  ||F|| = 85.1262
+	🔁 SNES iter 8  ||F|| = 35.9645
+	🔁 SNES iter 9  ||F|| = 20.3987
+	🔁 SNES iter 10  ||F|| = 15.3727
+	🔁 SNES iter 11  ||F|| = 9.45732
+	🔁 SNES iter 12  ||F|| = 6.08905
+	🔁 SNES iter 13  ||F|| = 6.08905
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:39:57] [INFO]    Field output for Step_97
+
+[2026-01-25 16:39:57] [INFO]    Increment 98
+
+	🔁 SNES iter 0  ||F|| = 4670.45
+	🔁 SNES iter 1  ||F|| = 3173.83
+	🔁 SNES iter 2  ||F|| = 1969.1
+	🔁 SNES iter 3  ||F|| = 1195.28
+	🔁 SNES iter 4  ||F|| = 712.851
+	🔁 SNES iter 5  ||F|| = 427.165
+	🔁 SNES iter 6  ||F|| = 263.877
+	🔁 SNES iter 7  ||F|| = 162.983
+	🔁 SNES iter 8  ||F|| = 107.321
+	🔁 SNES iter 9  ||F|| = 42.8411
+	🔁 SNES iter 10  ||F|| = 26.2885
+	🔁 SNES iter 11  ||F|| = 17.3693
+	🔁 SNES iter 12  ||F|| = 10.8012
+	🔁 SNES iter 13  ||F|| = 7.22614
+	🔁 SNES iter 14  ||F|| = 7.22614
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:40:03] [INFO]    Field output for Step_98
+
+[2026-01-25 16:40:03] [INFO]    Increment 99
+
+	🔁 SNES iter 0  ||F|| = 6171.14
+	🔁 SNES iter 1  ||F|| = 4322.61
+	🔁 SNES iter 2  ||F|| = 2879.73
+	🔁 SNES iter 3  ||F|| = 1822.98
+	🔁 SNES iter 4  ||F|| = 1045.14
+	🔁 SNES iter 5  ||F|| = 652.541
+	🔁 SNES iter 6  ||F|| = 405.173
+	🔁 SNES iter 7  ||F|| = 267.534
+	🔁 SNES iter 8  ||F|| = 135.405
+	🔁 SNES iter 9  ||F|| = 83.9388
+	🔁 SNES iter 10  ||F|| = 54.5462
+	🔁 SNES iter 11  ||F|| = 32.7151
+	🔁 SNES iter 12  ||F|| = 24.1179
+	🔁 SNES iter 13  ||F|| = 11.4404
+	🔁 SNES iter 14  ||F|| = 3.72017
+	🔁 SNES iter 15  ||F|| = 3.68825
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:40:09] [INFO]    Field output for Step_99
+
+[2026-01-25 16:40:09] [INFO]    Increment 100
+
+	🔁 SNES iter 0  ||F|| = 8443.33
+	🔁 SNES iter 1  ||F|| = 8435.57
+	🔁 SNES iter 2  ||F|| = 6733.95
+	🔁 SNES iter 3  ||F|| = 5018.47
+	🔁 SNES iter 4  ||F|| = 3129.32
+	🔁 SNES iter 5  ||F|| = 1893.08
+	🔁 SNES iter 6  ||F|| = 1209.74
+	🔁 SNES iter 7  ||F|| = 658.889
+	🔁 SNES iter 8  ||F|| = 365.761
+	🔁 SNES iter 9  ||F|| = 220.689
+	🔁 SNES iter 10  ||F|| = 133.764
+	🔁 SNES iter 11  ||F|| = 91.3809
+	🔁 SNES iter 12  ||F|| = 37.3517
+	🔁 SNES iter 13  ||F|| = 24.5524
+	🔁 SNES iter 14  ||F|| = 15.7613
+	🔁 SNES iter 15  ||F|| = 7.64977
+	🔁 SNES iter 16  ||F|| = 4.86328
+	🔁 SNES iter 17  ||F|| = 2.53937
+	🔁 SNES iter 18  ||F|| = 2.53937
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:40:16] [INFO]    Field output for Step_100
+
+[2026-01-25 16:40:16] [INFO]    Increment 101
+
+	🔁 SNES iter 0  ||F|| = 11556.4
+	🔁 SNES iter 1  ||F|| = 7816.52
+	🔁 SNES iter 2  ||F|| = 4917.5
+	🔁 SNES iter 3  ||F|| = 3117.29
+	🔁 SNES iter 4  ||F|| = 1776.26
+	🔁 SNES iter 5  ||F|| = 1076.75
+	🔁 SNES iter 6  ||F|| = 694.049
+	🔁 SNES iter 7  ||F|| = 432.979
+	🔁 SNES iter 8  ||F|| = 304.205
+	🔁 SNES iter 9  ||F|| = 129.154
+	🔁 SNES iter 10  ||F|| = 77.8884
+	🔁 SNES iter 11  ||F|| = 52.0017
+	🔁 SNES iter 12  ||F|| = 31.5069
+	🔁 SNES iter 13  ||F|| = 26.8977
+	🔁 SNES iter 14  ||F|| = 12.7616
+	🔁 SNES iter 15  ||F|| = 3.20556
+	🔁 SNES iter 16  ||F|| = 1.45515
+	🔁 SNES iter 17  ||F|| = 0.920252
+	🔁 SNES iter 18  ||F|| = 0.554966
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:40:24] [INFO]    Field output for Step_101
+
+[2026-01-25 16:40:24] [INFO]    Increment 102
+
+	🔁 SNES iter 0  ||F|| = 14827.6
+	🔁 SNES iter 1  ||F|| = 10569.2
+	🔁 SNES iter 2  ||F|| = 7014.54
+	🔁 SNES iter 3  ||F|| = 4498.92
+	🔁 SNES iter 4  ||F|| = 2898.85
+	🔁 SNES iter 5  ||F|| = 1816.95
+	🔁 SNES iter 6  ||F|| = 1206.04
+	🔁 SNES iter 7  ||F|| = 764.586
+	🔁 SNES iter 8  ||F|| = 550.054
+	🔁 SNES iter 9  ||F|| = 168.721
+	🔁 SNES iter 10  ||F|| = 107.953
+	🔁 SNES iter 11  ||F|| = 71.4644
+	🔁 SNES iter 12  ||F|| = 37.8237
+	🔁 SNES iter 13  ||F|| = 24.3494
+	🔁 SNES iter 14  ||F|| = 20.5997
+	🔁 SNES iter 15  ||F|| = 10.9147
+	🔁 SNES iter 16  ||F|| = 6.83982
+	🔁 SNES iter 17  ||F|| = 4.65134
+	🔁 SNES iter 18  ||F|| = 2.41047
+	🔁 SNES iter 19  ||F|| = 1.59474
+	🔁 SNES iter 20  ||F|| = 0.845211
+	🔁 SNES iter 21  ||F|| = 0.845211
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:40:34] [INFO]    Field output for Step_102
+
+[2026-01-25 16:40:34] [INFO]    Increment 103
+
+	🔁 SNES iter 0  ||F|| = 17497.6
+	🔁 SNES iter 1  ||F|| = 12803
+	🔁 SNES iter 2  ||F|| = 8277.96
+	🔁 SNES iter 3  ||F|| = 5816.17
+	🔁 SNES iter 4  ||F|| = 4973.03
+	🔁 SNES iter 5  ||F|| = 3522.66
+	🔁 SNES iter 6  ||F|| = 2183.91
+	🔁 SNES iter 7  ||F|| = 952.048
+	🔁 SNES iter 8  ||F|| = 860.197
+	🔁 SNES iter 9  ||F|| = 389.169
+	🔁 SNES iter 10  ||F|| = 101.54
+	🔁 SNES iter 11  ||F|| = 53.0595
+	🔁 SNES iter 12  ||F|| = 23.4655
+	🔁 SNES iter 13  ||F|| = 16.8829
+	🔁 SNES iter 14  ||F|| = 10.6817
+	🔁 SNES iter 15  ||F|| = 6.17559
+	🔁 SNES iter 16  ||F|| = 4.59988
+	🔁 SNES iter 17  ||F|| = 2.87693
+	🔁 SNES iter 18  ||F|| = 2.13236
+	🔁 SNES iter 19  ||F|| = 1.54913
+	🔁 SNES iter 20  ||F|| = 1.54913
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:40:42] [INFO]    Field output for Step_103
+
+[2026-01-25 16:40:42] [INFO]    Increment 104
+
+	🔁 SNES iter 0  ||F|| = 19605.4
+	🔁 SNES iter 1  ||F|| = 13931.9
+	🔁 SNES iter 2  ||F|| = 8528.44
+	🔁 SNES iter 3  ||F|| = 5624.71
+	🔁 SNES iter 4  ||F|| = 3940.71
+	🔁 SNES iter 5  ||F|| = 2556.43
+	🔁 SNES iter 6  ||F|| = 1545.14
+	🔁 SNES iter 7  ||F|| = 640.109
+	🔁 SNES iter 8  ||F|| = 629.962
+	🔁 SNES iter 9  ||F|| = 417.656
+	🔁 SNES iter 10  ||F|| = 234.633
+	🔁 SNES iter 11  ||F|| = 76.996
+	🔁 SNES iter 12  ||F|| = 36.4194
+	🔁 SNES iter 13  ||F|| = 23.2481
+	🔁 SNES iter 14  ||F|| = 23.0117
+	🔁 SNES iter 15  ||F|| = 12.8409
+	🔁 SNES iter 16  ||F|| = 9.13186
+	🔁 SNES iter 17  ||F|| = 5.22947
+	🔁 SNES iter 18  ||F|| = 2.98005
+	🔁 SNES iter 19  ||F|| = 2.00545
+	🔁 SNES iter 20  ||F|| = 1.2362
+	🔁 SNES iter 21  ||F|| = 1.2362
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:40:51] [INFO]    Field output for Step_104
+
+[2026-01-25 16:40:51] [INFO]    Increment 105
+
+	🔁 SNES iter 0  ||F|| = 20920.3
+	🔁 SNES iter 1  ||F|| = 20822.6
+	🔁 SNES iter 2  ||F|| = 14228.1
+	🔁 SNES iter 3  ||F|| = 7193.68
+	🔁 SNES iter 4  ||F|| = 4023.66
+	🔁 SNES iter 5  ||F|| = 1462.93
+	🔁 SNES iter 6  ||F|| = 725.122
+	🔁 SNES iter 7  ||F|| = 414.974
+	🔁 SNES iter 8  ||F|| = 254.536
+	🔁 SNES iter 9  ||F|| = 148.809
+	🔁 SNES iter 10  ||F|| = 102.419
+	🔁 SNES iter 11  ||F|| = 82.0917
+	🔁 SNES iter 12  ||F|| = 43.3031
+	🔁 SNES iter 13  ||F|| = 25.222
+	🔁 SNES iter 14  ||F|| = 17.0218
+	🔁 SNES iter 15  ||F|| = 11.296
+	🔁 SNES iter 16  ||F|| = 8.81862
+	🔁 SNES iter 17  ||F|| = 8.81862
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:40:58] [INFO]    Field output for Step_105
+
+[2026-01-25 16:40:58] [INFO]    Increment 106
+
+	🔁 SNES iter 0  ||F|| = 21447.9
+	🔁 SNES iter 1  ||F|| = 19510.4
+	🔁 SNES iter 2  ||F|| = 12184.3
+	🔁 SNES iter 3  ||F|| = 7264.99
+	🔁 SNES iter 4  ||F|| = 4575.6
+	🔁 SNES iter 5  ||F|| = 2195.94
+	🔁 SNES iter 6  ||F|| = 747.95
+	🔁 SNES iter 7  ||F|| = 443.171
+	🔁 SNES iter 8  ||F|| = 294.482
+	🔁 SNES iter 9  ||F|| = 176.647
+	🔁 SNES iter 10  ||F|| = 82.0776
+	🔁 SNES iter 11  ||F|| = 32.2436
+	🔁 SNES iter 12  ||F|| = 20.8215
+	🔁 SNES iter 13  ||F|| = 11.4213
+	🔁 SNES iter 14  ||F|| = 5.46322
+	🔁 SNES iter 15  ||F|| = 5.46322
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:41:06] [INFO]    Field output for Step_106
+
+[2026-01-25 16:41:06] [INFO]    Increment 107
+
+	🔁 SNES iter 0  ||F|| = 21380.8
+	🔁 SNES iter 1  ||F|| = 19002.9
+	🔁 SNES iter 2  ||F|| = 12558.1
+	🔁 SNES iter 3  ||F|| = 6553.43
+	🔁 SNES iter 4  ||F|| = 2992.38
+	🔁 SNES iter 5  ||F|| = 957.661
+	🔁 SNES iter 6  ||F|| = 547.664
+	🔁 SNES iter 7  ||F|| = 463.291
+	🔁 SNES iter 8  ||F|| = 288.83
+	🔁 SNES iter 9  ||F|| = 186.224
+	🔁 SNES iter 10  ||F|| = 95.4349
+	🔁 SNES iter 11  ||F|| = 40.2851
+	🔁 SNES iter 12  ||F|| = 27.7824
+	🔁 SNES iter 13  ||F|| = 15.8087
+	🔁 SNES iter 14  ||F|| = 9.96957
+	🔁 SNES iter 15  ||F|| = 9.02923
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:41:13] [INFO]    Field output for Step_107
+
+[2026-01-25 16:41:13] [INFO]    Increment 108
+
+	🔁 SNES iter 0  ||F|| = 21341.3
+	🔁 SNES iter 1  ||F|| = 17555.1
+	🔁 SNES iter 2  ||F|| = 11944.2
+	🔁 SNES iter 3  ||F|| = 6476.49
+	🔁 SNES iter 4  ||F|| = 2914.63
+	🔁 SNES iter 5  ||F|| = 1026.38
+	🔁 SNES iter 6  ||F|| = 579.833
+	🔁 SNES iter 7  ||F|| = 514.833
+	🔁 SNES iter 8  ||F|| = 308.387
+	🔁 SNES iter 9  ||F|| = 203.891
+	🔁 SNES iter 10  ||F|| = 114.313
+	🔁 SNES iter 11  ||F|| = 35.4531
+	🔁 SNES iter 12  ||F|| = 20.6897
+	🔁 SNES iter 13  ||F|| = 16.8919
+	🔁 SNES iter 14  ||F|| = 10.2212
+	🔁 SNES iter 15  ||F|| = 5.09109
+	🔁 SNES iter 16  ||F|| = 2.01025
+	🔁 SNES iter 17  ||F|| = 1.87108
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:41:20] [INFO]    Field output for Step_108
+
+[2026-01-25 16:41:20] [INFO]    Increment 109
+
+	🔁 SNES iter 0  ||F|| = 21673.5
+	🔁 SNES iter 1  ||F|| = 17581.7
+	🔁 SNES iter 2  ||F|| = 12316.6
+	🔁 SNES iter 3  ||F|| = 10530.4
+	🔁 SNES iter 4  ||F|| = 7381.96
+	🔁 SNES iter 5  ||F|| = 6507.36
+	🔁 SNES iter 6  ||F|| = 3179.82
+	🔁 SNES iter 7  ||F|| = 834.809
+	🔁 SNES iter 8  ||F|| = 380.248
+	🔁 SNES iter 9  ||F|| = 215.283
+	🔁 SNES iter 10  ||F|| = 145.319
+	🔁 SNES iter 11  ||F|| = 95.7221
+	🔁 SNES iter 12  ||F|| = 53.6825
+	🔁 SNES iter 13  ||F|| = 34.3695
+	🔁 SNES iter 14  ||F|| = 22.7511
+	🔁 SNES iter 15  ||F|| = 22.7511
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:41:26] [INFO]    Field output for Step_109
+
+[2026-01-25 16:41:26] [INFO]    Increment 110
+
+	🔁 SNES iter 0  ||F|| = 23017.2
+	🔁 SNES iter 1  ||F|| = 19973.2
+	🔁 SNES iter 2  ||F|| = 13804.4
+	🔁 SNES iter 3  ||F|| = 10888.7
+	🔁 SNES iter 4  ||F|| = 7677.04
+	🔁 SNES iter 5  ||F|| = 5123.11
+	🔁 SNES iter 6  ||F|| = 1714.01
+	🔁 SNES iter 7  ||F|| = 744.669
+	🔁 SNES iter 8  ||F|| = 407.47
+	🔁 SNES iter 9  ||F|| = 204.588
+	🔁 SNES iter 10  ||F|| = 135.573
+	🔁 SNES iter 11  ||F|| = 97.7566
+	🔁 SNES iter 12  ||F|| = 57.6769
+	🔁 SNES iter 13  ||F|| = 36.323
+	🔁 SNES iter 14  ||F|| = 22.9794
+	🔁 SNES iter 15  ||F|| = 13.5762
+	🔁 SNES iter 16  ||F|| = 8.43002
+	🔁 SNES iter 17  ||F|| = 4.82196
+	🔁 SNES iter 18  ||F|| = 4.82196
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:41:34] [INFO]    Field output for Step_110
+
+[2026-01-25 16:41:34] [INFO]    Increment 111
+
+	🔁 SNES iter 0  ||F|| = 24768
+	🔁 SNES iter 1  ||F|| = 20505.5
+	🔁 SNES iter 2  ||F|| = 14769.4
+	🔁 SNES iter 3  ||F|| = 7530.08
+	🔁 SNES iter 4  ||F|| = 4434.94
+	🔁 SNES iter 5  ||F|| = 2338.46
+	🔁 SNES iter 6  ||F|| = 1368.9
+	🔁 SNES iter 7  ||F|| = 1025.76
+	🔁 SNES iter 8  ||F|| = 617.442
+	🔁 SNES iter 9  ||F|| = 356.136
+	🔁 SNES iter 10  ||F|| = 183.058
+	🔁 SNES iter 11  ||F|| = 117.198
+	🔁 SNES iter 12  ||F|| = 39.4522
+	🔁 SNES iter 13  ||F|| = 19.2369
+	🔁 SNES iter 14  ||F|| = 16.4938
+	🔁 SNES iter 15  ||F|| = 9.53592
+	🔁 SNES iter 16  ||F|| = 4.31967
+	🔁 SNES iter 17  ||F|| = 4.31967
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:41:42] [INFO]    Field output for Step_111
+
+[2026-01-25 16:41:42] [INFO]    Increment 112
+
+	🔁 SNES iter 0  ||F|| = 26336.5
+	🔁 SNES iter 1  ||F|| = 21610.7
+	🔁 SNES iter 2  ||F|| = 15713.5
+	🔁 SNES iter 3  ||F|| = 8342.24
+	🔁 SNES iter 4  ||F|| = 6953.37
+	🔁 SNES iter 5  ||F|| = 4728.1
+	🔁 SNES iter 6  ||F|| = 3392.19
+	🔁 SNES iter 7  ||F|| = 1927.58
+	🔁 SNES iter 8  ||F|| = 758.193
+	🔁 SNES iter 9  ||F|| = 416.676
+	🔁 SNES iter 10  ||F|| = 238.887
+	🔁 SNES iter 11  ||F|| = 160.311
+	🔁 SNES iter 12  ||F|| = 91.618
+	🔁 SNES iter 13  ||F|| = 66.3717
+	🔁 SNES iter 14  ||F|| = 48.0714
+	🔁 SNES iter 15  ||F|| = 25.3415
+	🔁 SNES iter 16  ||F|| = 25.3415
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:41:49] [INFO]    Field output for Step_112
+
+[2026-01-25 16:41:49] [INFO]    Increment 113
+
+	🔁 SNES iter 0  ||F|| = 27893.8
+	🔁 SNES iter 1  ||F|| = 26209.6
+	🔁 SNES iter 2  ||F|| = 18787.1
+	🔁 SNES iter 3  ||F|| = 13917
+	🔁 SNES iter 4  ||F|| = 9736.06
+	🔁 SNES iter 5  ||F|| = 6590.37
+	🔁 SNES iter 6  ||F|| = 2859.1
+	🔁 SNES iter 7  ||F|| = 903.068
+	🔁 SNES iter 8  ||F|| = 597.16
+	🔁 SNES iter 9  ||F|| = 429.442
+	🔁 SNES iter 10  ||F|| = 254.754
+	🔁 SNES iter 11  ||F|| = 125.096
+	🔁 SNES iter 12  ||F|| = 120.055
+	🔁 SNES iter 13  ||F|| = 55.7392
+	🔁 SNES iter 14  ||F|| = 15.9003
+	🔁 SNES iter 15  ||F|| = 9.23032
+	🔁 SNES iter 16  ||F|| = 7.77751
+	🔁 SNES iter 17  ||F|| = 4.59919
+	🔁 SNES iter 18  ||F|| = 4.59919
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:41:56] [INFO]    Field output for Step_113
+
+[2026-01-25 16:41:56] [INFO]    Increment 114
+
+	🔁 SNES iter 0  ||F|| = 29374.8
+	🔁 SNES iter 1  ||F|| = 28287
+	🔁 SNES iter 2  ||F|| = 18280.3
+	🔁 SNES iter 3  ||F|| = 8121.16
+	🔁 SNES iter 4  ||F|| = 4232.11
+	🔁 SNES iter 5  ||F|| = 1480.39
+	🔁 SNES iter 6  ||F|| = 750.887
+	🔁 SNES iter 7  ||F|| = 479.988
+	🔁 SNES iter 8  ||F|| = 306.798
+	🔁 SNES iter 9  ||F|| = 214.942
+	🔁 SNES iter 10  ||F|| = 121.801
+	🔁 SNES iter 11  ||F|| = 63.8987
+	🔁 SNES iter 12  ||F|| = 39.7118
+	🔁 SNES iter 13  ||F|| = 27.7454
+	🔁 SNES iter 14  ||F|| = 16.219
+	🔁 SNES iter 15  ||F|| = 10.8414
+	🔁 SNES iter 16  ||F|| = 4.56295
+	🔁 SNES iter 17  ||F|| = 4.56295
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:42:03] [INFO]    Field output for Step_114
+
+[2026-01-25 16:42:03] [INFO]    Increment 115
+
+	🔁 SNES iter 0  ||F|| = 31330.2
+	🔁 SNES iter 1  ||F|| = 28044.2
+	🔁 SNES iter 2  ||F|| = 19588.9
+	🔁 SNES iter 3  ||F|| = 12221.5
+	🔁 SNES iter 4  ||F|| = 7611.04
+	🔁 SNES iter 5  ||F|| = 4446.95
+	🔁 SNES iter 6  ||F|| = 1901.84
+	🔁 SNES iter 7  ||F|| = 726.895
+	🔁 SNES iter 8  ||F|| = 466.988
+	🔁 SNES iter 9  ||F|| = 333.936
+	🔁 SNES iter 10  ||F|| = 198.768
+	🔁 SNES iter 11  ||F|| = 112.323
+	🔁 SNES iter 12  ||F|| = 53.9309
+	🔁 SNES iter 13  ||F|| = 39.8839
+	🔁 SNES iter 14  ||F|| = 23.1051
+	🔁 SNES iter 15  ||F|| = 10.0376
+	🔁 SNES iter 16  ||F|| = 4.72521
+	🔁 SNES iter 17  ||F|| = 4.72521
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:42:11] [INFO]    Field output for Step_115
+
+[2026-01-25 16:42:11] [INFO]    Increment 116
+
+	🔁 SNES iter 0  ||F|| = 33110.2
+	🔁 SNES iter 1  ||F|| = 32798.5
+	🔁 SNES iter 2  ||F|| = 20032.4
+	🔁 SNES iter 3  ||F|| = 9774.19
+	🔁 SNES iter 4  ||F|| = 6668.39
+	🔁 SNES iter 5  ||F|| = 4432.63
+	🔁 SNES iter 6  ||F|| = 2395.92
+	🔁 SNES iter 7  ||F|| = 1973.68
+	🔁 SNES iter 8  ||F|| = 1067.35
+	🔁 SNES iter 9  ||F|| = 340.005
+	🔁 SNES iter 10  ||F|| = 127.993
+	🔁 SNES iter 11  ||F|| = 72.5871
+	🔁 SNES iter 12  ||F|| = 38.8723
+	🔁 SNES iter 13  ||F|| = 23.7185
+	🔁 SNES iter 14  ||F|| = 11.5457
+	🔁 SNES iter 15  ||F|| = 5.59574
+	🔁 SNES iter 16  ||F|| = 3.46369
+	🔁 SNES iter 17  ||F|| = 2.25125
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:42:20] [INFO]    Field output for Step_116
+
+[2026-01-25 16:42:20] [INFO]    Increment 117
+
+	🔁 SNES iter 0  ||F|| = 34696.5
+	🔁 SNES iter 1  ||F|| = 23618.9
+	🔁 SNES iter 2  ||F|| = 13661.7
+	🔁 SNES iter 3  ||F|| = 9024.41
+	🔁 SNES iter 4  ||F|| = 5318.13
+	🔁 SNES iter 5  ||F|| = 4062.9
+	🔁 SNES iter 6  ||F|| = 2434.19
+	🔁 SNES iter 7  ||F|| = 1790.64
+	🔁 SNES iter 8  ||F|| = 1013.76
+	🔁 SNES iter 9  ||F|| = 585.218
+	🔁 SNES iter 10  ||F|| = 362.593
+	🔁 SNES iter 11  ||F|| = 222.279
+	🔁 SNES iter 12  ||F|| = 127.174
+	🔁 SNES iter 13  ||F|| = 61.5484
+	🔁 SNES iter 14  ||F|| = 32.3683
+	🔁 SNES iter 15  ||F|| = 20.2079
+	🔁 SNES iter 16  ||F|| = 8.27278
+	🔁 SNES iter 17  ||F|| = 4.87856
+	🔁 SNES iter 18  ||F|| = 2.65577
+	🔁 SNES iter 19  ||F|| = 1.46002
+	🔁 SNES iter 20  ||F|| = 1.46002
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:42:29] [INFO]    Field output for Step_117
+
+[2026-01-25 16:42:29] [INFO]    Increment 118
+
+	🔁 SNES iter 0  ||F|| = 36225.4
+	🔁 SNES iter 1  ||F|| = 33708.3
+	🔁 SNES iter 2  ||F|| = 20817.3
+	🔁 SNES iter 3  ||F|| = 8313.65
+	🔁 SNES iter 4  ||F|| = 5568.69
+	🔁 SNES iter 5  ||F|| = 2718.77
+	🔁 SNES iter 6  ||F|| = 1266.46
+	🔁 SNES iter 7  ||F|| = 608.692
+	🔁 SNES iter 8  ||F|| = 411.905
+	🔁 SNES iter 9  ||F|| = 246.155
+	🔁 SNES iter 10  ||F|| = 162.514
+	🔁 SNES iter 11  ||F|| = 53.7733
+	🔁 SNES iter 12  ||F|| = 32.9906
+	🔁 SNES iter 13  ||F|| = 22.6269
+	🔁 SNES iter 14  ||F|| = 14.3944
+	🔁 SNES iter 15  ||F|| = 8.44979
+	🔁 SNES iter 16  ||F|| = 5.29717
+	🔁 SNES iter 17  ||F|| = 3.54136
+	🔁 SNES iter 18  ||F|| = 3.54136
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:42:37] [INFO]    Field output for Step_118
+
+[2026-01-25 16:42:37] [INFO]    Increment 119
+
+	🔁 SNES iter 0  ||F|| = 37014.9
+	🔁 SNES iter 1  ||F|| = 32659.6
+	🔁 SNES iter 2  ||F|| = 20500.3
+	🔁 SNES iter 3  ||F|| = 8758.35
+	🔁 SNES iter 4  ||F|| = 4786.84
+	🔁 SNES iter 5  ||F|| = 1679.86
+	🔁 SNES iter 6  ||F|| = 748.436
+	🔁 SNES iter 7  ||F|| = 437.414
+	🔁 SNES iter 8  ||F|| = 177.645
+	🔁 SNES iter 9  ||F|| = 107.523
+	🔁 SNES iter 10  ||F|| = 59.246
+	🔁 SNES iter 11  ||F|| = 40.1034
+	🔁 SNES iter 12  ||F|| = 18.0124
+	🔁 SNES iter 13  ||F|| = 6.38317
+	🔁 SNES iter 14  ||F|| = 6.38317
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:42:43] [INFO]    Field output for Step_119
+
+[2026-01-25 16:42:43] [INFO]    Increment 120
+
+	🔁 SNES iter 0  ||F|| = 37492.1
+	🔁 SNES iter 1  ||F|| = 36650.6
+	🔁 SNES iter 2  ||F|| = 21953.6
+	🔁 SNES iter 3  ||F|| = 9193.46
+	🔁 SNES iter 4  ||F|| = 6669.38
+	🔁 SNES iter 5  ||F|| = 4453.94
+	🔁 SNES iter 6  ||F|| = 1901.24
+	🔁 SNES iter 7  ||F|| = 1089.31
+	🔁 SNES iter 8  ||F|| = 1028.34
+	🔁 SNES iter 9  ||F|| = 617.86
+	🔁 SNES iter 10  ||F|| = 411.834
+	🔁 SNES iter 11  ||F|| = 254.544
+	🔁 SNES iter 12  ||F|| = 92.4472
+	🔁 SNES iter 13  ||F|| = 60.6665
+	🔁 SNES iter 14  ||F|| = 36.0769
+	🔁 SNES iter 15  ||F|| = 18.9048
+	🔁 SNES iter 16  ||F|| = 11.1935
+	🔁 SNES iter 17  ||F|| = 9.14486
+	🔁 SNES iter 18  ||F|| = 9.14486
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:42:51] [INFO]    Field output for Step_120
+
+[2026-01-25 16:42:51] [INFO]    Increment 121
+
+	🔁 SNES iter 0  ||F|| = 39000.6
+	🔁 SNES iter 1  ||F|| = 36102.9
+	🔁 SNES iter 2  ||F|| = 24542.7
+	🔁 SNES iter 3  ||F|| = 13107
+	🔁 SNES iter 4  ||F|| = 7737.87
+	🔁 SNES iter 5  ||F|| = 3455.27
+	🔁 SNES iter 6  ||F|| = 1445.62
+	🔁 SNES iter 7  ||F|| = 989.872
+	🔁 SNES iter 8  ||F|| = 788.087
+	🔁 SNES iter 9  ||F|| = 485.645
+	🔁 SNES iter 10  ||F|| = 311.334
+	🔁 SNES iter 11  ||F|| = 174.623
+	🔁 SNES iter 12  ||F|| = 160.853
+	🔁 SNES iter 13  ||F|| = 81.8697
+	🔁 SNES iter 14  ||F|| = 26.7799
+	🔁 SNES iter 15  ||F|| = 9.54105
+	🔁 SNES iter 16  ||F|| = 5.58888
+	🔁 SNES iter 17  ||F|| = 2.55639
+	🔁 SNES iter 18  ||F|| = 2.55639
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:43:00] [INFO]    Field output for Step_121
+
+[2026-01-25 16:43:00] [INFO]    Increment 122
+
+	🔁 SNES iter 0  ||F|| = 40380.6
+	🔁 SNES iter 1  ||F|| = 36259.6
+	🔁 SNES iter 2  ||F|| = 27749.3
+	🔁 SNES iter 3  ||F|| = 16092.2
+	🔁 SNES iter 4  ||F|| = 8183.91
+	🔁 SNES iter 5  ||F|| = 5969.41
+	🔁 SNES iter 6  ||F|| = 3677.76
+	🔁 SNES iter 7  ||F|| = 1543.54
+	🔁 SNES iter 8  ||F|| = 840.371
+	🔁 SNES iter 9  ||F|| = 451.656
+	🔁 SNES iter 10  ||F|| = 290.574
+	🔁 SNES iter 11  ||F|| = 215.334
+	🔁 SNES iter 12  ||F|| = 123.169
+	🔁 SNES iter 13  ||F|| = 76.4399
+	🔁 SNES iter 14  ||F|| = 50.2535
+	🔁 SNES iter 15  ||F|| = 31.2095
+	🔁 SNES iter 16  ||F|| = 19.1493
+	🔁 SNES iter 17  ||F|| = 11.7299
+	🔁 SNES iter 18  ||F|| = 6.37162
+	🔁 SNES iter 19  ||F|| = 3.75432
+	🔁 SNES iter 20  ||F|| = 3.75432
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:43:09] [INFO]    Field output for Step_122
+
+[2026-01-25 16:43:09] [INFO]    Increment 123
+
+	🔁 SNES iter 0  ||F|| = 42059.8
+	🔁 SNES iter 1  ||F|| = 40086
+	🔁 SNES iter 2  ||F|| = 25682.5
+	🔁 SNES iter 3  ||F|| = 12690.9
+	🔁 SNES iter 4  ||F|| = 7234.39
+	🔁 SNES iter 5  ||F|| = 3242.53
+	🔁 SNES iter 6  ||F|| = 3167.98
+	🔁 SNES iter 7  ||F|| = 1903.85
+	🔁 SNES iter 8  ||F|| = 816.248
+	🔁 SNES iter 9  ||F|| = 347.448
+	🔁 SNES iter 10  ||F|| = 206.885
+	🔁 SNES iter 11  ||F|| = 135.21
+	🔁 SNES iter 12  ||F|| = 56.6526
+	🔁 SNES iter 13  ||F|| = 33.3322
+	🔁 SNES iter 14  ||F|| = 24.6771
+	🔁 SNES iter 15  ||F|| = 6.07164
+	🔁 SNES iter 16  ||F|| = 6.07164
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:43:16] [INFO]    Field output for Step_123
+
+[2026-01-25 16:43:16] [INFO]    Increment 124
+
+	🔁 SNES iter 0  ||F|| = 43728
+	🔁 SNES iter 1  ||F|| = 41222.8
+	🔁 SNES iter 2  ||F|| = 27081
+	🔁 SNES iter 3  ||F|| = 15749.9
+	🔁 SNES iter 4  ||F|| = 11714
+	🔁 SNES iter 5  ||F|| = 8099.89
+	🔁 SNES iter 6  ||F|| = 4439.24
+	🔁 SNES iter 7  ||F|| = 1578.66
+	🔁 SNES iter 8  ||F|| = 910.695
+	🔁 SNES iter 9  ||F|| = 595.147
+	🔁 SNES iter 10  ||F|| = 402.844
+	🔁 SNES iter 11  ||F|| = 274.894
+	🔁 SNES iter 12  ||F|| = 185.065
+	🔁 SNES iter 13  ||F|| = 132.934
+	🔁 SNES iter 14  ||F|| = 50.4182
+	🔁 SNES iter 15  ||F|| = 26.1888
+	🔁 SNES iter 16  ||F|| = 16.9615
+	🔁 SNES iter 17  ||F|| = 12.3266
+	🔁 SNES iter 18  ||F|| = 10.5182
+	🔁 SNES iter 19  ||F|| = 10.5182
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:43:24] [INFO]    Field output for Step_124
+
+[2026-01-25 16:43:24] [INFO]    Increment 125
+
+	🔁 SNES iter 0  ||F|| = 45115.1
+	🔁 SNES iter 1  ||F|| = 44369.1
+	🔁 SNES iter 2  ||F|| = 28331.8
+	🔁 SNES iter 3  ||F|| = 13853.8
+	🔁 SNES iter 4  ||F|| = 9480.23
+	🔁 SNES iter 5  ||F|| = 6245.92
+	🔁 SNES iter 6  ||F|| = 2741.97
+	🔁 SNES iter 7  ||F|| = 1791.18
+	🔁 SNES iter 8  ||F|| = 1576.2
+	🔁 SNES iter 9  ||F|| = 905.254
+	🔁 SNES iter 10  ||F|| = 622.811
+	🔁 SNES iter 11  ||F|| = 190.345
+	🔁 SNES iter 12  ||F|| = 125.885
+	🔁 SNES iter 13  ||F|| = 57.9054
+	🔁 SNES iter 14  ||F|| = 39.3352
+	🔁 SNES iter 15  ||F|| = 28.3196
+	🔁 SNES iter 16  ||F|| = 17.9045
+	🔁 SNES iter 17  ||F|| = 11.4048
+	🔁 SNES iter 18  ||F|| = 6.05783
+	🔁 SNES iter 19  ||F|| = 5.51159
+	🔁 SNES iter 20  ||F|| = 5.51159
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:43:32] [INFO]    Field output for Step_125
+
+[2026-01-25 16:43:32] [INFO]    Increment 126
+
+	🔁 SNES iter 0  ||F|| = 45261
+	🔁 SNES iter 1  ||F|| = 30044.4
+	🔁 SNES iter 2  ||F|| = 18601
+	🔁 SNES iter 3  ||F|| = 14067.6
+	🔁 SNES iter 4  ||F|| = 8218.75
+	🔁 SNES iter 5  ||F|| = 4234.25
+	🔁 SNES iter 6  ||F|| = 1618.19
+	🔁 SNES iter 7  ||F|| = 901.374
+	🔁 SNES iter 8  ||F|| = 615.082
+	🔁 SNES iter 9  ||F|| = 417.405
+	🔁 SNES iter 10  ||F|| = 243.25
+	🔁 SNES iter 11  ||F|| = 158.227
+	🔁 SNES iter 12  ||F|| = 100.132
+	🔁 SNES iter 13  ||F|| = 54.8624
+	🔁 SNES iter 14  ||F|| = 46.2086
+	🔁 SNES iter 15  ||F|| = 28.2435
+	🔁 SNES iter 16  ||F|| = 18.9831
+	🔁 SNES iter 17  ||F|| = 10.8808
+	🔁 SNES iter 18  ||F|| = 10.3705
+	🔁 SNES iter 19  ||F|| = 6.66193
+	🔁 SNES iter 20  ||F|| = 4.29664
+	🔁 SNES iter 21  ||F|| = 1.74495
+	🔁 SNES iter 22  ||F|| = 1.74495
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:43:42] [INFO]    Field output for Step_126
+
+[2026-01-25 16:43:42] [INFO]    Increment 127
+
+	🔁 SNES iter 0  ||F|| = 46035.8
+	🔁 SNES iter 1  ||F|| = 31216.3
+	🔁 SNES iter 2  ||F|| = 19063.9
+	🔁 SNES iter 3  ||F|| = 14538.9
+	🔁 SNES iter 4  ||F|| = 10323.7
+	🔁 SNES iter 5  ||F|| = 5873.24
+	🔁 SNES iter 6  ||F|| = 2552.08
+	🔁 SNES iter 7  ||F|| = 1288.33
+	🔁 SNES iter 8  ||F|| = 727.451
+	🔁 SNES iter 9  ||F|| = 485.846
+	🔁 SNES iter 10  ||F|| = 375.006
+	🔁 SNES iter 11  ||F|| = 208.381
+	🔁 SNES iter 12  ||F|| = 121.963
+	🔁 SNES iter 13  ||F|| = 78.4878
+	🔁 SNES iter 14  ||F|| = 53.4286
+	🔁 SNES iter 15  ||F|| = 35.5924
+	🔁 SNES iter 16  ||F|| = 15.4361
+	🔁 SNES iter 17  ||F|| = 8.49765
+	🔁 SNES iter 18  ||F|| = 6.41511
+	🔁 SNES iter 19  ||F|| = 4.04464
+	🔁 SNES iter 20  ||F|| = 1.95377
+	🔁 SNES iter 21  ||F|| = 1.95377
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:43:53] [INFO]    Field output for Step_127
+
+[2026-01-25 16:43:53] [INFO]    Increment 128
+
+	🔁 SNES iter 0  ||F|| = 47568.2
+	🔁 SNES iter 1  ||F|| = 30893.8
+	🔁 SNES iter 2  ||F|| = 17218.8
+	🔁 SNES iter 3  ||F|| = 9658.11
+	🔁 SNES iter 4  ||F|| = 5484.56
+	🔁 SNES iter 5  ||F|| = 3346.13
+	🔁 SNES iter 6  ||F|| = 2194.66
+	🔁 SNES iter 7  ||F|| = 1436.01
+	🔁 SNES iter 8  ||F|| = 814.825
+	🔁 SNES iter 9  ||F|| = 501.261
+	🔁 SNES iter 10  ||F|| = 324.17
+	🔁 SNES iter 11  ||F|| = 193.542
+	🔁 SNES iter 12  ||F|| = 158.08
+	🔁 SNES iter 13  ||F|| = 86.8452
+	🔁 SNES iter 14  ||F|| = 32.9858
+	🔁 SNES iter 15  ||F|| = 13.7904
+	🔁 SNES iter 16  ||F|| = 8.6325
+	🔁 SNES iter 17  ||F|| = 4.23545
+	🔁 SNES iter 18  ||F|| = 2.00686
+	🔁 SNES iter 19  ||F|| = 2.00686
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:44:01] [INFO]    Field output for Step_128
+
+[2026-01-25 16:44:01] [INFO]    Increment 129
+
+	🔁 SNES iter 0  ||F|| = 48499.1
+	🔁 SNES iter 1  ||F|| = 32071.9
+	🔁 SNES iter 2  ||F|| = 17912.8
+	🔁 SNES iter 3  ||F|| = 15952.1
+	🔁 SNES iter 4  ||F|| = 10664
+	🔁 SNES iter 5  ||F|| = 6708.6
+	🔁 SNES iter 6  ||F|| = 3047.38
+	🔁 SNES iter 7  ||F|| = 1397.09
+	🔁 SNES iter 8  ||F|| = 1333.29
+	🔁 SNES iter 9  ||F|| = 734.978
+	🔁 SNES iter 10  ||F|| = 199.526
+	🔁 SNES iter 11  ||F|| = 97.5774
+	🔁 SNES iter 12  ||F|| = 45.971
+	🔁 SNES iter 13  ||F|| = 31.6036
+	🔁 SNES iter 14  ||F|| = 19.5409
+	🔁 SNES iter 15  ||F|| = 12.2237
+	🔁 SNES iter 16  ||F|| = 6.27672
+	🔁 SNES iter 17  ||F|| = 2.59525
+	🔁 SNES iter 18  ||F|| = 2.59525
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:44:09] [INFO]    Field output for Step_129
+
+[2026-01-25 16:44:09] [INFO]    Increment 130
+
+	🔁 SNES iter 0  ||F|| = 49643.8
+	🔁 SNES iter 1  ||F|| = 45359.1
+	🔁 SNES iter 2  ||F|| = 24774.2
+	🔁 SNES iter 3  ||F|| = 14133.6
+	🔁 SNES iter 4  ||F|| = 10888.4
+	🔁 SNES iter 5  ||F|| = 5845.59
+	🔁 SNES iter 6  ||F|| = 5275.61
+	🔁 SNES iter 7  ||F|| = 3958.3
+	🔁 SNES iter 8  ||F|| = 2620.25
+	🔁 SNES iter 9  ||F|| = 1210.88
+	🔁 SNES iter 10  ||F|| = 583.852
+	🔁 SNES iter 11  ||F|| = 212.254
+	🔁 SNES iter 12  ||F|| = 116.952
+	🔁 SNES iter 13  ||F|| = 97.3893
+	🔁 SNES iter 14  ||F|| = 63.6009
+	🔁 SNES iter 15  ||F|| = 33.1922
+	🔁 SNES iter 16  ||F|| = 9.44322
+	🔁 SNES iter 17  ||F|| = 9.44322
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:44:15] [INFO]    Field output for Step_130
+
+[2026-01-25 16:44:15] [INFO]    Increment 131
+
+	🔁 SNES iter 0  ||F|| = 51710.8
+	🔁 SNES iter 1  ||F|| = 35267.8
+	🔁 SNES iter 2  ||F|| = 32188.8
+	🔁 SNES iter 3  ||F|| = 17731.3
+	🔁 SNES iter 4  ||F|| = 10040.4
+	🔁 SNES iter 5  ||F|| = 5952.57
+	🔁 SNES iter 6  ||F|| = 3048.51
+	🔁 SNES iter 7  ||F|| = 1240.36
+	🔁 SNES iter 8  ||F|| = 582.308
+	🔁 SNES iter 9  ||F|| = 385.411
+	🔁 SNES iter 10  ||F|| = 329.245
+	🔁 SNES iter 11  ||F|| = 176.679
+	🔁 SNES iter 12  ||F|| = 100.637
+	🔁 SNES iter 13  ||F|| = 62.8779
+	🔁 SNES iter 14  ||F|| = 41.7131
+	🔁 SNES iter 15  ||F|| = 26.7905
+	🔁 SNES iter 16  ||F|| = 13.8552
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:44:23] [INFO]    Field output for Step_131
+
+[2026-01-25 16:44:23] [INFO]    Increment 132
+
+	🔁 SNES iter 0  ||F|| = 54587.8
+	🔁 SNES iter 1  ||F|| = 37280.9
+	🔁 SNES iter 2  ||F|| = 21958.9
+	🔁 SNES iter 3  ||F|| = 20234.6
+	🔁 SNES iter 4  ||F|| = 12531
+	🔁 SNES iter 5  ||F|| = 6162.58
+	🔁 SNES iter 6  ||F|| = 5299.39
+	🔁 SNES iter 7  ||F|| = 2680.42
+	🔁 SNES iter 8  ||F|| = 930.824
+	🔁 SNES iter 9  ||F|| = 360.094
+	🔁 SNES iter 10  ||F|| = 214.124
+	🔁 SNES iter 11  ||F|| = 89.0563
+	🔁 SNES iter 12  ||F|| = 33.8819
+	🔁 SNES iter 13  ||F|| = 17.752
+	🔁 SNES iter 14  ||F|| = 10.8003
+	🔁 SNES iter 15  ||F|| = 5.14504
+	🔁 SNES iter 16  ||F|| = 4.78195
+	🔁 SNES iter 17  ||F|| = 4.78195
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:44:30] [INFO]    Field output for Step_132
+
+[2026-01-25 16:44:30] [INFO]    Increment 133
+
+	🔁 SNES iter 0  ||F|| = 58238.3
+	🔁 SNES iter 1  ||F|| = 43476.4
+	🔁 SNES iter 2  ||F|| = 31515.2
+	🔁 SNES iter 3  ||F|| = 19688.4
+	🔁 SNES iter 4  ||F|| = 12338.1
+	🔁 SNES iter 5  ||F|| = 6261.91
+	🔁 SNES iter 6  ||F|| = 2748.69
+	🔁 SNES iter 7  ||F|| = 1655.32
+	🔁 SNES iter 8  ||F|| = 845.125
+	🔁 SNES iter 9  ||F|| = 269.511
+	🔁 SNES iter 10  ||F|| = 138.995
+	🔁 SNES iter 11  ||F|| = 68.5165
+	🔁 SNES iter 12  ||F|| = 29.6293
+	🔁 SNES iter 13  ||F|| = 27.7258
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:44:36] [INFO]    Field output for Step_133
+
+[2026-01-25 16:44:36] [INFO]    Increment 134
+
+	🔁 SNES iter 0  ||F|| = 61758.2
+	🔁 SNES iter 1  ||F|| = 45716
+	🔁 SNES iter 2  ||F|| = 31493.2
+	🔁 SNES iter 3  ||F|| = 21280.1
+	🔁 SNES iter 4  ||F|| = 19280.5
+	🔁 SNES iter 5  ||F|| = 13256.9
+	🔁 SNES iter 6  ||F|| = 7109
+	🔁 SNES iter 7  ||F|| = 2645.61
+	🔁 SNES iter 8  ||F|| = 2637.8
+	🔁 SNES iter 9  ||F|| = 1483.95
+	🔁 SNES iter 10  ||F|| = 698.848
+	🔁 SNES iter 11  ||F|| = 693.995
+	🔁 SNES iter 12  ||F|| = 244.569
+	🔁 SNES iter 13  ||F|| = 82.5004
+	🔁 SNES iter 14  ||F|| = 49.9593
+	🔁 SNES iter 15  ||F|| = 48.7762
+	🔁 SNES iter 16  ||F|| = 30.7399
+	🔁 SNES iter 17  ||F|| = 15.2881
+	🔁 SNES iter 18  ||F|| = 5.3955
+	🔁 SNES iter 19  ||F|| = 5.3955
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:44:44] [INFO]    Field output for Step_134
+
+[2026-01-25 16:44:44] [INFO]    Increment 135
+
+	🔁 SNES iter 0  ||F|| = 63349.2
+	🔁 SNES iter 1  ||F|| = 42640.9
+	🔁 SNES iter 2  ||F|| = 35512.3
+	🔁 SNES iter 3  ||F|| = 19946.9
+	🔁 SNES iter 4  ||F|| = 17157.6
+	🔁 SNES iter 5  ||F|| = 11909.8
+	🔁 SNES iter 6  ||F|| = 6787.63
+	🔁 SNES iter 7  ||F|| = 3382.66
+	🔁 SNES iter 8  ||F|| = 2627.7
+	🔁 SNES iter 9  ||F|| = 1045.06
+	🔁 SNES iter 10  ||F|| = 993.261
+	🔁 SNES iter 11  ||F|| = 432.432
+	🔁 SNES iter 12  ||F|| = 146.058
+	🔁 SNES iter 13  ||F|| = 87.6485
+	🔁 SNES iter 14  ||F|| = 64.6934
+	🔁 SNES iter 15  ||F|| = 28.611
+	🔁 SNES iter 16  ||F|| = 14.2821
+	🔁 SNES iter 17  ||F|| = 6.32083
+	🔁 SNES iter 18  ||F|| = 6.32083
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:44:51] [INFO]    Field output for Step_135
+
+[2026-01-25 16:44:51] [INFO]    Increment 136
+
+	🔁 SNES iter 0  ||F|| = 65194.5
+	🔁 SNES iter 1  ||F|| = 45567.2
+	🔁 SNES iter 2  ||F|| = 35066.7
+	🔁 SNES iter 3  ||F|| = 23826.9
+	🔁 SNES iter 4  ||F|| = 11937.4
+	🔁 SNES iter 5  ||F|| = 5657.78
+	🔁 SNES iter 6  ||F|| = 4635.46
+	🔁 SNES iter 7  ||F|| = 2175.46
+	🔁 SNES iter 8  ||F|| = 587.613
+	🔁 SNES iter 9  ||F|| = 334.762
+	🔁 SNES iter 10  ||F|| = 245.146
+	🔁 SNES iter 11  ||F|| = 92.282
+	🔁 SNES iter 12  ||F|| = 34.1998
+	🔁 SNES iter 13  ||F|| = 20.365
+	🔁 SNES iter 14  ||F|| = 12.3133
+	🔁 SNES iter 15  ||F|| = 6.59656
+	🔁 SNES iter 16  ||F|| = 4.8308
+	🔁 SNES iter 17  ||F|| = 4.8308
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:45:00] [INFO]    Field output for Step_136
+
+[2026-01-25 16:45:00] [INFO]    Increment 137
+
+	🔁 SNES iter 0  ||F|| = 64843.1
+	🔁 SNES iter 1  ||F|| = 61934.1
+	🔁 SNES iter 2  ||F|| = 60219
+	🔁 SNES iter 3  ||F|| = 42204.6
+	🔁 SNES iter 4  ||F|| = 31183.2
+	🔁 SNES iter 5  ||F|| = 22486.9
+	🔁 SNES iter 6  ||F|| = 12065.3
+	🔁 SNES iter 7  ||F|| = 11559.1
+	🔁 SNES iter 8  ||F|| = 5188.25
+	🔁 SNES iter 9  ||F|| = 1737.42
+	🔁 SNES iter 10  ||F|| = 798.869
+	🔁 SNES iter 11  ||F|| = 417.473
+	🔁 SNES iter 12  ||F|| = 267.002
+	🔁 SNES iter 13  ||F|| = 174.263
+	🔁 SNES iter 14  ||F|| = 113.71
+	🔁 SNES iter 15  ||F|| = 78.8824
+	🔁 SNES iter 16  ||F|| = 16.5593
+	🔁 SNES iter 17  ||F|| = 16.5593
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:45:07] [INFO]    Field output for Step_137
+
+[2026-01-25 16:45:07] [INFO]    Increment 138
+
+	🔁 SNES iter 0  ||F|| = 66288.2
+	🔁 SNES iter 1  ||F|| = 50638.9
+	🔁 SNES iter 2  ||F|| = 27756.8
+	🔁 SNES iter 3  ||F|| = 13309.6
+	🔁 SNES iter 4  ||F|| = 8845.92
+	🔁 SNES iter 5  ||F|| = 6560.42
+	🔁 SNES iter 6  ||F|| = 4036.7
+	🔁 SNES iter 7  ||F|| = 3737.2
+	🔁 SNES iter 8  ||F|| = 2413.03
+	🔁 SNES iter 9  ||F|| = 1294.31
+	🔁 SNES iter 10  ||F|| = 442.152
+	🔁 SNES iter 11  ||F|| = 221.399
+	🔁 SNES iter 12  ||F|| = 150.485
+	🔁 SNES iter 13  ||F|| = 127.576
+	🔁 SNES iter 14  ||F|| = 71.5572
+	🔁 SNES iter 15  ||F|| = 49.9051
+	🔁 SNES iter 16  ||F|| = 30.6484
+	🔁 SNES iter 17  ||F|| = 27.6833
+	🔁 SNES iter 18  ||F|| = 17.7473
+	🔁 SNES iter 19  ||F|| = 17.7473
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:45:15] [INFO]    Field output for Step_138
+
+[2026-01-25 16:45:15] [INFO]    Increment 139
+
+	🔁 SNES iter 0  ||F|| = 70028.7
+	🔁 SNES iter 1  ||F|| = 65676.7
+	🔁 SNES iter 2  ||F|| = 34836
+	🔁 SNES iter 3  ||F|| = 14055.5
+	🔁 SNES iter 4  ||F|| = 9671.19
+	🔁 SNES iter 5  ||F|| = 6820.59
+	🔁 SNES iter 6  ||F|| = 3679.23
+	🔁 SNES iter 7  ||F|| = 1311.22
+	🔁 SNES iter 8  ||F|| = 720.128
+	🔁 SNES iter 9  ||F|| = 395.442
+	🔁 SNES iter 10  ||F|| = 272.419
+	🔁 SNES iter 11  ||F|| = 233.565
+	🔁 SNES iter 12  ||F|| = 127.723
+	🔁 SNES iter 13  ||F|| = 72.5402
+	🔁 SNES iter 14  ||F|| = 44.4128
+	🔁 SNES iter 15  ||F|| = 30.0334
+	🔁 SNES iter 16  ||F|| = 30.0334
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:45:22] [INFO]    Field output for Step_139
+
+[2026-01-25 16:45:22] [INFO]    Increment 140
+
+	🔁 SNES iter 0  ||F|| = 71077.6
+	🔁 SNES iter 1  ||F|| = 62898.5
+	🔁 SNES iter 2  ||F|| = 32762.8
+	🔁 SNES iter 3  ||F|| = 13422.6
+	🔁 SNES iter 4  ||F|| = 9238.08
+	🔁 SNES iter 5  ||F|| = 6687.45
+	🔁 SNES iter 6  ||F|| = 4317.42
+	🔁 SNES iter 7  ||F|| = 1754.34
+	🔁 SNES iter 8  ||F|| = 1143.83
+	🔁 SNES iter 9  ||F|| = 471.632
+	🔁 SNES iter 10  ||F|| = 241.776
+	🔁 SNES iter 11  ||F|| = 182.908
+	🔁 SNES iter 12  ||F|| = 96.591
+	🔁 SNES iter 13  ||F|| = 90.3596
+	🔁 SNES iter 14  ||F|| = 49.7452
+	🔁 SNES iter 15  ||F|| = 11.3471
+	🔁 SNES iter 16  ||F|| = 11.3471
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:45:29] [INFO]    Field output for Step_140
+
+[2026-01-25 16:45:29] [INFO]    Increment 141
+
+	🔁 SNES iter 0  ||F|| = 70748.6
+	🔁 SNES iter 1  ||F|| = 57842.4
+	🔁 SNES iter 2  ||F|| = 35630.5
+	🔁 SNES iter 3  ||F|| = 8794.9
+	🔁 SNES iter 4  ||F|| = 4195.09
+	🔁 SNES iter 5  ||F|| = 3741.71
+	🔁 SNES iter 6  ||F|| = 1874.39
+	🔁 SNES iter 7  ||F|| = 582.445
+	🔁 SNES iter 8  ||F|| = 300.742
+	🔁 SNES iter 9  ||F|| = 167.069
+	🔁 SNES iter 10  ||F|| = 71.1264
+	🔁 SNES iter 11  ||F|| = 28.1876
+	🔁 SNES iter 12  ||F|| = 28.1876
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:45:34] [INFO]    Field output for Step_141
+
+[2026-01-25 16:45:34] [INFO]    Increment 142
+
+	🔁 SNES iter 0  ||F|| = 70788.2
+	🔁 SNES iter 1  ||F|| = 54439
+	🔁 SNES iter 2  ||F|| = 30630.4
+	🔁 SNES iter 3  ||F|| = 8630.42
+	🔁 SNES iter 4  ||F|| = 5284.89
+	🔁 SNES iter 5  ||F|| = 4698.02
+	🔁 SNES iter 6  ||F|| = 2237.41
+	🔁 SNES iter 7  ||F|| = 818.071
+	🔁 SNES iter 8  ||F|| = 740.331
+	🔁 SNES iter 9  ||F|| = 323.42
+	🔁 SNES iter 10  ||F|| = 320.064
+	🔁 SNES iter 11  ||F|| = 77.3954
+	🔁 SNES iter 12  ||F|| = 27.4349
+	🔁 SNES iter 13  ||F|| = 10.0723
+	🔁 SNES iter 14  ||F|| = 10.0723
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:45:39] [INFO]    Field output for Step_142
+
+[2026-01-25 16:45:39] [INFO]    Increment 143
+
+	🔁 SNES iter 0  ||F|| = 70700.1
+	🔁 SNES iter 1  ||F|| = 53273.4
+	🔁 SNES iter 2  ||F|| = 28558.2
+	🔁 SNES iter 3  ||F|| = 8540.8
+	🔁 SNES iter 4  ||F|| = 5965.26
+	🔁 SNES iter 5  ||F|| = 3972.94
+	🔁 SNES iter 6  ||F|| = 1945.51
+	🔁 SNES iter 7  ||F|| = 1050.9
+	🔁 SNES iter 8  ||F|| = 657.409
+	🔁 SNES iter 9  ||F|| = 370.779
+	🔁 SNES iter 10  ||F|| = 232.159
+	🔁 SNES iter 11  ||F|| = 147.65
+	🔁 SNES iter 12  ||F|| = 87.7233
+	🔁 SNES iter 13  ||F|| = 62.3521
+	🔁 SNES iter 14  ||F|| = 37.3237
+	🔁 SNES iter 15  ||F|| = 16.0864
+	🔁 SNES iter 16  ||F|| = 16.0864
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:45:46] [INFO]    Field output for Step_143
+
+[2026-01-25 16:45:46] [INFO]    Increment 144
+
+	🔁 SNES iter 0  ||F|| = 69787.8
+	🔁 SNES iter 1  ||F|| = 42305.5
+	🔁 SNES iter 2  ||F|| = 29814.2
+	🔁 SNES iter 3  ||F|| = 28209.6
+	🔁 SNES iter 4  ||F|| = 13891.5
+	🔁 SNES iter 5  ||F|| = 9470.75
+	🔁 SNES iter 6  ||F|| = 3449.2
+	🔁 SNES iter 7  ||F|| = 1839.63
+	🔁 SNES iter 8  ||F|| = 1413.81
+	🔁 SNES iter 9  ||F|| = 789.683
+	🔁 SNES iter 10  ||F|| = 409.292
+	🔁 SNES iter 11  ||F|| = 404.697
+	🔁 SNES iter 12  ||F|| = 215.032
+	🔁 SNES iter 13  ||F|| = 99.9587
+	🔁 SNES iter 14  ||F|| = 78.9056
+	🔁 SNES iter 15  ||F|| = 24.4794
+	🔁 SNES iter 16  ||F|| = 8.8845
+	🔁 SNES iter 17  ||F|| = 8.8845
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:45:53] [INFO]    Field output for Step_144
+
+[2026-01-25 16:45:53] [INFO]    Increment 145
+
+	🔁 SNES iter 0  ||F|| = 70194.8
+	🔁 SNES iter 1  ||F|| = 47076.1
+	🔁 SNES iter 2  ||F|| = 30229.3
+	🔁 SNES iter 3  ||F|| = 14880.8
+	🔁 SNES iter 4  ||F|| = 12785.9
+	🔁 SNES iter 5  ||F|| = 9020.58
+	🔁 SNES iter 6  ||F|| = 3989.87
+	🔁 SNES iter 7  ||F|| = 3678.7
+	🔁 SNES iter 8  ||F|| = 1882.91
+	🔁 SNES iter 9  ||F|| = 635.157
+	🔁 SNES iter 10  ||F|| = 276.983
+	🔁 SNES iter 11  ||F|| = 141.116
+	🔁 SNES iter 12  ||F|| = 115.889
+	🔁 SNES iter 13  ||F|| = 67.3612
+	🔁 SNES iter 14  ||F|| = 36.1368
+	🔁 SNES iter 15  ||F|| = 32.9042
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:46:01] [INFO]    Field output for Step_145
+
+[2026-01-25 16:46:01] [INFO]    Increment 146
+
+	🔁 SNES iter 0  ||F|| = 72766.9
+	🔁 SNES iter 1  ||F|| = 55143
+	🔁 SNES iter 2  ||F|| = 33835.2
+	🔁 SNES iter 3  ||F|| = 11037.7
+	🔁 SNES iter 4  ||F|| = 5035.82
+	🔁 SNES iter 5  ||F|| = 4927.24
+	🔁 SNES iter 6  ||F|| = 2438.57
+	🔁 SNES iter 7  ||F|| = 2316.1
+	🔁 SNES iter 8  ||F|| = 467.312
+	🔁 SNES iter 9  ||F|| = 175.97
+	🔁 SNES iter 10  ||F|| = 84.2264
+	🔁 SNES iter 11  ||F|| = 42.9789
+	🔁 SNES iter 12  ||F|| = 42.9789
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:46:06] [INFO]    Field output for Step_146
+
+[2026-01-25 16:46:06] [INFO]    Increment 147
+
+	🔁 SNES iter 0  ||F|| = 73176.2
+	🔁 SNES iter 1  ||F|| = 54867.9
+	🔁 SNES iter 2  ||F|| = 34683.5
+	🔁 SNES iter 3  ||F|| = 9380.86
+	🔁 SNES iter 4  ||F|| = 4617.34
+	🔁 SNES iter 5  ||F|| = 2921.24
+	🔁 SNES iter 6  ||F|| = 1626.44
+	🔁 SNES iter 7  ||F|| = 860.844
+	🔁 SNES iter 8  ||F|| = 485.014
+	🔁 SNES iter 9  ||F|| = 266.348
+	🔁 SNES iter 10  ||F|| = 162.537
+	🔁 SNES iter 11  ||F|| = 97.3133
+	🔁 SNES iter 12  ||F|| = 65.124
+	🔁 SNES iter 13  ||F|| = 39.671
+	🔁 SNES iter 14  ||F|| = 28.1177
+	🔁 SNES iter 15  ||F|| = 5.51178
+	🔁 SNES iter 16  ||F|| = 5.51178
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:46:13] [INFO]    Field output for Step_147
+
+[2026-01-25 16:46:13] [INFO]    Increment 148
+
+	🔁 SNES iter 0  ||F|| = 72703.5
+	🔁 SNES iter 1  ||F|| = 66037.9
+	🔁 SNES iter 2  ||F|| = 29236.5
+	🔁 SNES iter 3  ||F|| = 7693.36
+	🔁 SNES iter 4  ||F|| = 4005.74
+	🔁 SNES iter 5  ||F|| = 1407.71
+	🔁 SNES iter 6  ||F|| = 625.434
+	🔁 SNES iter 7  ||F|| = 361.46
+	🔁 SNES iter 8  ||F|| = 152.795
+	🔁 SNES iter 9  ||F|| = 84.2786
+	🔁 SNES iter 10  ||F|| = 38.7473
+	🔁 SNES iter 11  ||F|| = 36.9055
+	🔁 SNES iter 12  ||F|| = 22.6724
+	🔁 SNES iter 13  ||F|| = 14.4554
+	🔁 SNES iter 14  ||F|| = 8.80372
+	🔁 SNES iter 15  ||F|| = 8.80372
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:46:20] [INFO]    Field output for Step_148
+
+[2026-01-25 16:46:20] [INFO]    Increment 149
+
+	🔁 SNES iter 0  ||F|| = 70522.2
+	🔁 SNES iter 1  ||F|| = 36800.6
+	🔁 SNES iter 2  ||F|| = 25784.5
+	🔁 SNES iter 3  ||F|| = 17788.6
+	🔁 SNES iter 4  ||F|| = 8415.51
+	🔁 SNES iter 5  ||F|| = 5860.24
+	🔁 SNES iter 6  ||F|| = 2613.36
+	🔁 SNES iter 7  ||F|| = 2265.67
+	🔁 SNES iter 8  ||F|| = 1251.01
+	🔁 SNES iter 9  ||F|| = 621.171
+	🔁 SNES iter 10  ||F|| = 429.38
+	🔁 SNES iter 11  ||F|| = 172.442
+	🔁 SNES iter 12  ||F|| = 153.101
+	🔁 SNES iter 13  ||F|| = 66.178
+	🔁 SNES iter 14  ||F|| = 64.0533
+	🔁 SNES iter 15  ||F|| = 15.0139
+	🔁 SNES iter 16  ||F|| = 15.0139
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:46:26] [INFO]    Field output for Step_149
+
+[2026-01-25 16:46:26] [INFO]    Increment 150
+
+	🔁 SNES iter 0  ||F|| = 69831.4
+	🔁 SNES iter 1  ||F|| = 29006.9
+	🔁 SNES iter 2  ||F|| = 21106.4
+	🔁 SNES iter 3  ||F|| = 10453.6
+	🔁 SNES iter 4  ||F|| = 3006.89
+	🔁 SNES iter 5  ||F|| = 1269.19
+	🔁 SNES iter 6  ||F|| = 650.423
+	🔁 SNES iter 7  ||F|| = 349.938
+	🔁 SNES iter 8  ||F|| = 196.089
+	🔁 SNES iter 9  ||F|| = 194.712
+	🔁 SNES iter 10  ||F|| = 105.716
+	🔁 SNES iter 11  ||F|| = 57.5743
+	🔁 SNES iter 12  ||F|| = 31.5925
+	🔁 SNES iter 13  ||F|| = 17.6933
+	🔁 SNES iter 14  ||F|| = 10.237
+	🔁 SNES iter 15  ||F|| = 9.47594
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:46:33] [INFO]    Field output for Step_150
+
+[2026-01-25 16:46:33] [INFO]    Increment 151
+
+	🔁 SNES iter 0  ||F|| = 66374.5
+	🔁 SNES iter 1  ||F|| = 23954
+	🔁 SNES iter 2  ||F|| = 19319.6
+	🔁 SNES iter 3  ||F|| = 13863.6
+	🔁 SNES iter 4  ||F|| = 7277.99
+	🔁 SNES iter 5  ||F|| = 2908.82
+	🔁 SNES iter 6  ||F|| = 2146.77
+	🔁 SNES iter 7  ||F|| = 830.877
+	🔁 SNES iter 8  ||F|| = 642.355
+	🔁 SNES iter 9  ||F|| = 125.351
+	🔁 SNES iter 10  ||F|| = 41.3449
+	🔁 SNES iter 11  ||F|| = 27.0116
+	🔁 SNES iter 12  ||F|| = 9.37941
+	🔁 SNES iter 13  ||F|| = 8.23336
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:46:39] [INFO]    Field output for Step_151
+
+[2026-01-25 16:46:39] [INFO]    Increment 152
+
+	🔁 SNES iter 0  ||F|| = 64743.1
+	🔁 SNES iter 1  ||F|| = 24612.9
+	🔁 SNES iter 2  ||F|| = 18855
+	🔁 SNES iter 3  ||F|| = 12391.8
+	🔁 SNES iter 4  ||F|| = 11379.9
+	🔁 SNES iter 5  ||F|| = 6936.18
+	🔁 SNES iter 6  ||F|| = 2411.04
+	🔁 SNES iter 7  ||F|| = 1024.46
+	🔁 SNES iter 8  ||F|| = 489.669
+	🔁 SNES iter 9  ||F|| = 331.054
+	🔁 SNES iter 10  ||F|| = 156.456
+	🔁 SNES iter 11  ||F|| = 72.7984
+	🔁 SNES iter 12  ||F|| = 31.433
+	🔁 SNES iter 13  ||F|| = 14.0216
+	🔁 SNES iter 14  ||F|| = 6.73278
+	🔁 SNES iter 15  ||F|| = 3.1521
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:46:45] [INFO]    Field output for Step_152
+
+[2026-01-25 16:46:45] [INFO]    Increment 153
+
+	🔁 SNES iter 0  ||F|| = 66622.1
+	🔁 SNES iter 1  ||F|| = 32041.6
+	🔁 SNES iter 2  ||F|| = 22261.1
+	🔁 SNES iter 3  ||F|| = 10032.9
+	🔁 SNES iter 4  ||F|| = 3771.54
+	🔁 SNES iter 5  ||F|| = 1423.71
+	🔁 SNES iter 6  ||F|| = 889.336
+	🔁 SNES iter 7  ||F|| = 348.55
+	🔁 SNES iter 8  ||F|| = 243.651
+	🔁 SNES iter 9  ||F|| = 64.5692
+	🔁 SNES iter 10  ||F|| = 28.8507
+	🔁 SNES iter 11  ||F|| = 17.7227
+	🔁 SNES iter 12  ||F|| = 17.1496
+	🔁 SNES iter 13  ||F|| = 7.44979
+	🔁 SNES iter 14  ||F|| = 7.44979
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:46:51] [INFO]    Field output for Step_153
+
+[2026-01-25 16:46:51] [INFO]    Increment 154
+
+	🔁 SNES iter 0  ||F|| = 70944.9
+	🔁 SNES iter 1  ||F|| = 38899.8
+	🔁 SNES iter 2  ||F|| = 24577.8
+	🔁 SNES iter 3  ||F|| = 11162.5
+	🔁 SNES iter 4  ||F|| = 6417.77
+	🔁 SNES iter 5  ||F|| = 2196.21
+	🔁 SNES iter 6  ||F|| = 981.602
+	🔁 SNES iter 7  ||F|| = 830.253
+	🔁 SNES iter 8  ||F|| = 398.944
+	🔁 SNES iter 9  ||F|| = 187.284
+	🔁 SNES iter 10  ||F|| = 79.4501
+	🔁 SNES iter 11  ||F|| = 70.4627
+	🔁 SNES iter 12  ||F|| = 33.7978
+	🔁 SNES iter 13  ||F|| = 15.4711
+	🔁 SNES iter 14  ||F|| = 5.77917
+	🔁 SNES iter 15  ||F|| = 5.77917
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:46:57] [INFO]    Field output for Step_154
+
+[2026-01-25 16:46:57] [INFO]    Increment 155
+
+	🔁 SNES iter 0  ||F|| = 71876
+	🔁 SNES iter 1  ||F|| = 44697.9
+	🔁 SNES iter 2  ||F|| = 27868.2
+	🔁 SNES iter 3  ||F|| = 10066.5
+	🔁 SNES iter 4  ||F|| = 4879.91
+	🔁 SNES iter 5  ||F|| = 1941.23
+	🔁 SNES iter 6  ||F|| = 1445.15
+	🔁 SNES iter 7  ||F|| = 620.429
+	🔁 SNES iter 8  ||F|| = 202.079
+	🔁 SNES iter 9  ||F|| = 84.8297
+	🔁 SNES iter 10  ||F|| = 64.0684
+	🔁 SNES iter 11  ||F|| = 29.1268
+	🔁 SNES iter 12  ||F|| = 12.0301
+	🔁 SNES iter 13  ||F|| = 6.29445
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:47:02] [INFO]    Field output for Step_155
+
+[2026-01-25 16:47:02] [INFO]    Increment 156
+
+	🔁 SNES iter 0  ||F|| = 67982.1
+	🔁 SNES iter 1  ||F|| = 30382.3
+	🔁 SNES iter 2  ||F|| = 23245.6
+	🔁 SNES iter 3  ||F|| = 15555.9
+	🔁 SNES iter 4  ||F|| = 11645
+	🔁 SNES iter 5  ||F|| = 3089.15
+	🔁 SNES iter 6  ||F|| = 3024.69
+	🔁 SNES iter 7  ||F|| = 1309.58
+	🔁 SNES iter 8  ||F|| = 446.236
+	🔁 SNES iter 9  ||F|| = 414.851
+	🔁 SNES iter 10  ||F|| = 184.851
+	🔁 SNES iter 11  ||F|| = 74.4163
+	🔁 SNES iter 12  ||F|| = 65.1332
+	🔁 SNES iter 13  ||F|| = 22.6683
+	🔁 SNES iter 14  ||F|| = 20.9685
+	🔁 SNES iter 15  ||F|| = 5.25246
+	🔁 SNES iter 16  ||F|| = 5.19212
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:47:09] [INFO]    Field output for Step_156
+
+[2026-01-25 16:47:09] [INFO]    Increment 157
+
+	🔁 SNES iter 0  ||F|| = 63712.2
+	🔁 SNES iter 1  ||F|| = 25625.2
+	🔁 SNES iter 2  ||F|| = 19021
+	🔁 SNES iter 3  ||F|| = 11651.3
+	🔁 SNES iter 4  ||F|| = 8200.15
+	🔁 SNES iter 5  ||F|| = 2005.64
+	🔁 SNES iter 6  ||F|| = 872.993
+	🔁 SNES iter 7  ||F|| = 618.695
+	🔁 SNES iter 8  ||F|| = 272.509
+	🔁 SNES iter 9  ||F|| = 98.6078
+	🔁 SNES iter 10  ||F|| = 38.5045
+	🔁 SNES iter 11  ||F|| = 19.2547
+	🔁 SNES iter 12  ||F|| = 5.88914
+	🔁 SNES iter 13  ||F|| = 4.34944
+	🔁 SNES iter 14  ||F|| = 1.73828
+	🔁 SNES iter 15  ||F|| = 1.6885
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:47:15] [INFO]    Field output for Step_157
+
+[2026-01-25 16:47:15] [INFO]    Increment 158
+
+	🔁 SNES iter 0  ||F|| = 60263.4
+	🔁 SNES iter 1  ||F|| = 20224.2
+	🔁 SNES iter 2  ||F|| = 16731.5
+	🔁 SNES iter 3  ||F|| = 12999.5
+	🔁 SNES iter 4  ||F|| = 8624.23
+	🔁 SNES iter 5  ||F|| = 6977.3
+	🔁 SNES iter 6  ||F|| = 2214.25
+	🔁 SNES iter 7  ||F|| = 887.648
+	🔁 SNES iter 8  ||F|| = 855.367
+	🔁 SNES iter 9  ||F|| = 396.246
+	🔁 SNES iter 10  ||F|| = 172.68
+	🔁 SNES iter 11  ||F|| = 69.3975
+	🔁 SNES iter 12  ||F|| = 55.0525
+	🔁 SNES iter 13  ||F|| = 24.7542
+	🔁 SNES iter 14  ||F|| = 10.2179
+	🔁 SNES iter 15  ||F|| = 7.46063
+	🔁 SNES iter 16  ||F|| = 2.63161
+	🔁 SNES iter 17  ||F|| = 1.98522
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:47:23] [INFO]    Field output for Step_158
+
+[2026-01-25 16:47:23] [INFO]    Increment 159
+
+	🔁 SNES iter 0  ||F|| = 57567.7
+	🔁 SNES iter 1  ||F|| = 19097.6
+	🔁 SNES iter 2  ||F|| = 15223.3
+	🔁 SNES iter 3  ||F|| = 10675.1
+	🔁 SNES iter 4  ||F|| = 5746.18
+	🔁 SNES iter 5  ||F|| = 1531.87
+	🔁 SNES iter 6  ||F|| = 1024.4
+	🔁 SNES iter 7  ||F|| = 414.36
+	🔁 SNES iter 8  ||F|| = 140.566
+	🔁 SNES iter 9  ||F|| = 63.1291
+	🔁 SNES iter 10  ||F|| = 30.9158
+	🔁 SNES iter 11  ||F|| = 16.5569
+	🔁 SNES iter 12  ||F|| = 9.55665
+	🔁 SNES iter 13  ||F|| = 5.48211
+	🔁 SNES iter 14  ||F|| = 5.48211
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:47:30] [INFO]    Field output for Step_159
+
+[2026-01-25 16:47:30] [INFO]    Increment 160
+
+	🔁 SNES iter 0  ||F|| = 55505.2
+	🔁 SNES iter 1  ||F|| = 19979.2
+	🔁 SNES iter 2  ||F|| = 15504
+	🔁 SNES iter 3  ||F|| = 10146.2
+	🔁 SNES iter 4  ||F|| = 9386.25
+	🔁 SNES iter 5  ||F|| = 3416.64
+	🔁 SNES iter 6  ||F|| = 1528.09
+	🔁 SNES iter 7  ||F|| = 1437.58
+	🔁 SNES iter 8  ||F|| = 761.203
+	🔁 SNES iter 9  ||F|| = 391.367
+	🔁 SNES iter 10  ||F|| = 191.425
+	🔁 SNES iter 11  ||F|| = 141.74
+	🔁 SNES iter 12  ||F|| = 64.73
+	🔁 SNES iter 13  ||F|| = 22.5611
+	🔁 SNES iter 14  ||F|| = 9.61153
+	🔁 SNES iter 15  ||F|| = 9.59286
+	🔁 SNES iter 16  ||F|| = 4.90477
+	🔁 SNES iter 17  ||F|| = 4.90477
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:47:37] [INFO]    Field output for Step_160
+
+[2026-01-25 16:47:37] [INFO]    Increment 161
+
+	🔁 SNES iter 0  ||F|| = 56654.4
+	🔁 SNES iter 1  ||F|| = 21904.6
+	🔁 SNES iter 2  ||F|| = 16152.6
+	🔁 SNES iter 3  ||F|| = 9498.45
+	🔁 SNES iter 4  ||F|| = 5105.29
+	🔁 SNES iter 5  ||F|| = 2121.48
+	🔁 SNES iter 6  ||F|| = 839.442
+	🔁 SNES iter 7  ||F|| = 385.354
+	🔁 SNES iter 8  ||F|| = 202.626
+	🔁 SNES iter 9  ||F|| = 117.815
+	🔁 SNES iter 10  ||F|| = 63.889
+	🔁 SNES iter 11  ||F|| = 34.1515
+	🔁 SNES iter 12  ||F|| = 17.0055
+	🔁 SNES iter 13  ||F|| = 9.74253
+	🔁 SNES iter 14  ||F|| = 5.15891
+	🔁 SNES iter 15  ||F|| = 2.48508
+	🔁 SNES iter 16  ||F|| = 1.40543
+	🔁 SNES iter 17  ||F|| = 1.40543
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:47:45] [INFO]    Field output for Step_161
+
+[2026-01-25 16:47:45] [INFO]    Increment 162
+
+	🔁 SNES iter 0  ||F|| = 55200.2
+	🔁 SNES iter 1  ||F|| = 21346.2
+	🔁 SNES iter 2  ||F|| = 16636.8
+	🔁 SNES iter 3  ||F|| = 11267.1
+	🔁 SNES iter 4  ||F|| = 10529.4
+	🔁 SNES iter 5  ||F|| = 3125.97
+	🔁 SNES iter 6  ||F|| = 2268.9
+	🔁 SNES iter 7  ||F|| = 945.876
+	🔁 SNES iter 8  ||F|| = 312.993
+	🔁 SNES iter 9  ||F|| = 149.664
+	🔁 SNES iter 10  ||F|| = 91.9737
+	🔁 SNES iter 11  ||F|| = 24.6999
+	🔁 SNES iter 12  ||F|| = 12.6328
+	🔁 SNES iter 13  ||F|| = 9.72034
+	🔁 SNES iter 14  ||F|| = 5.73302
+	🔁 SNES iter 15  ||F|| = 3.14063
+	🔁 SNES iter 16  ||F|| = 3.14063
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:47:52] [INFO]    Field output for Step_162
+
+[2026-01-25 16:47:52] [INFO]    Increment 163
+
+	🔁 SNES iter 0  ||F|| = 51677
+	🔁 SNES iter 1  ||F|| = 22411.3
+	🔁 SNES iter 2  ||F|| = 17874.3
+	🔁 SNES iter 3  ||F|| = 12997.9
+	🔁 SNES iter 4  ||F|| = 7225.93
+	🔁 SNES iter 5  ||F|| = 2671.99
+	🔁 SNES iter 6  ||F|| = 994.745
+	🔁 SNES iter 7  ||F|| = 437.501
+	🔁 SNES iter 8  ||F|| = 276.072
+	🔁 SNES iter 9  ||F|| = 159.021
+	🔁 SNES iter 10  ||F|| = 84.9609
+	🔁 SNES iter 11  ||F|| = 84.0488
+	🔁 SNES iter 12  ||F|| = 43.8659
+	🔁 SNES iter 13  ||F|| = 17.7219
+	🔁 SNES iter 14  ||F|| = 5.19207
+	🔁 SNES iter 15  ||F|| = 2.88958
+	🔁 SNES iter 16  ||F|| = 2.27779
+	🔁 SNES iter 17  ||F|| = 1.21799
+	🔁 SNES iter 18  ||F|| = 1.21799
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:47:59] [INFO]    Field output for Step_163
+
+[2026-01-25 16:47:59] [INFO]    Increment 164
+
+	🔁 SNES iter 0  ||F|| = 50568.2
+	🔁 SNES iter 1  ||F|| = 23995.7
+	🔁 SNES iter 2  ||F|| = 17798.8
+	🔁 SNES iter 3  ||F|| = 10921.2
+	🔁 SNES iter 4  ||F|| = 6417.69
+	🔁 SNES iter 5  ||F|| = 2164.55
+	🔁 SNES iter 6  ||F|| = 1076.99
+	🔁 SNES iter 7  ||F|| = 577.37
+	🔁 SNES iter 8  ||F|| = 275.149
+	🔁 SNES iter 9  ||F|| = 106.37
+	🔁 SNES iter 10  ||F|| = 44.4315
+	🔁 SNES iter 11  ||F|| = 23.7704
+	🔁 SNES iter 12  ||F|| = 10.7523
+	🔁 SNES iter 13  ||F|| = 5.5735
+	🔁 SNES iter 14  ||F|| = 2.8159
+	🔁 SNES iter 15  ||F|| = 1.2551
+	🔁 SNES iter 16  ||F|| = 0.776399
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:48:06] [INFO]    Field output for Step_164
+
+[2026-01-25 16:48:06] [INFO]    Increment 165
+
+	🔁 SNES iter 0  ||F|| = 48858.4
+	🔁 SNES iter 1  ||F|| = 23108.8
+	🔁 SNES iter 2  ||F|| = 17053.3
+	🔁 SNES iter 3  ||F|| = 9715.28
+	🔁 SNES iter 4  ||F|| = 3610.9
+	🔁 SNES iter 5  ||F|| = 1640.29
+	🔁 SNES iter 6  ||F|| = 775.871
+	🔁 SNES iter 7  ||F|| = 502.821
+	🔁 SNES iter 8  ||F|| = 179.913
+	🔁 SNES iter 9  ||F|| = 166.586
+	🔁 SNES iter 10  ||F|| = 53.1209
+	🔁 SNES iter 11  ||F|| = 13.588
+	🔁 SNES iter 12  ||F|| = 12.7776
+	🔁 SNES iter 13  ||F|| = 4.04756
+	🔁 SNES iter 14  ||F|| = 1.1332
+	🔁 SNES iter 15  ||F|| = 0.817498
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:48:12] [INFO]    Field output for Step_165
+
+[2026-01-25 16:48:12] [INFO]    Increment 166
+
+	🔁 SNES iter 0  ||F|| = 46970.7
+	🔁 SNES iter 1  ||F|| = 22156.6
+	🔁 SNES iter 2  ||F|| = 16428.5
+	🔁 SNES iter 3  ||F|| = 10049
+	🔁 SNES iter 4  ||F|| = 4992.15
+	🔁 SNES iter 5  ||F|| = 1470.84
+	🔁 SNES iter 6  ||F|| = 737.553
+	🔁 SNES iter 7  ||F|| = 350.72
+	🔁 SNES iter 8  ||F|| = 120.05
+	🔁 SNES iter 9  ||F|| = 93.7895
+	🔁 SNES iter 10  ||F|| = 32.5552
+	🔁 SNES iter 11  ||F|| = 27.3505
+	🔁 SNES iter 12  ||F|| = 5.97247
+	🔁 SNES iter 13  ||F|| = 2.4438
+	🔁 SNES iter 14  ||F|| = 1.65357
+	🔁 SNES iter 15  ||F|| = 1.6506
+	🔁 SNES iter 16  ||F|| = 0.649943
+	🔁 SNES iter 17  ||F|| = 0.599211
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:48:20] [INFO]    Field output for Step_166
+
+[2026-01-25 16:48:20] [INFO]    Increment 167
+
+	🔁 SNES iter 0  ||F|| = 44061.8
+	🔁 SNES iter 1  ||F|| = 19723.7
+	🔁 SNES iter 2  ||F|| = 15524.3
+	🔁 SNES iter 3  ||F|| = 10960
+	🔁 SNES iter 4  ||F|| = 6260.6
+	🔁 SNES iter 5  ||F|| = 1269.17
+	🔁 SNES iter 6  ||F|| = 430.306
+	🔁 SNES iter 7  ||F|| = 199.02
+	🔁 SNES iter 8  ||F|| = 122.173
+	🔁 SNES iter 9  ||F|| = 38.2134
+	🔁 SNES iter 10  ||F|| = 27.036
+	🔁 SNES iter 11  ||F|| = 5.57069
+	🔁 SNES iter 12  ||F|| = 5.36964
+	🔁 SNES iter 13  ||F|| = 1.91895
+	🔁 SNES iter 14  ||F|| = 0.521046
+	🔁 SNES iter 15  ||F|| = 0.521046
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:48:28] [INFO]    Field output for Step_167
+
+[2026-01-25 16:48:28] [INFO]    Increment 168
+
+	🔁 SNES iter 0  ||F|| = 40090.6
+	🔁 SNES iter 1  ||F|| = 17814.7
+	🔁 SNES iter 2  ||F|| = 14567.4
+	🔁 SNES iter 3  ||F|| = 11038.7
+	🔁 SNES iter 4  ||F|| = 7145.28
+	🔁 SNES iter 5  ||F|| = 3020.32
+	🔁 SNES iter 6  ||F|| = 1027.84
+	🔁 SNES iter 7  ||F|| = 947.923
+	🔁 SNES iter 8  ||F|| = 352.183
+	🔁 SNES iter 9  ||F|| = 109.396
+	🔁 SNES iter 10  ||F|| = 72.2356
+	🔁 SNES iter 11  ||F|| = 20.0032
+	🔁 SNES iter 12  ||F|| = 19.8756
+	🔁 SNES iter 13  ||F|| = 5.76296
+	🔁 SNES iter 14  ||F|| = 5.02247
+	🔁 SNES iter 15  ||F|| = 4.99669
+	🔁 SNES iter 16  ||F|| = 0.707077
+	🔁 SNES iter 17  ||F|| = 0.198059
+	🔁 SNES iter 18  ||F|| = 0.178943
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:48:36] [INFO]    Field output for Step_168
+
+[2026-01-25 16:48:36] [INFO]    Increment 169
+
+	🔁 SNES iter 0  ||F|| = 37591.4
+	🔁 SNES iter 1  ||F|| = 17147.9
+	🔁 SNES iter 2  ||F|| = 14453.3
+	🔁 SNES iter 3  ||F|| = 10975.5
+	🔁 SNES iter 4  ||F|| = 6948.04
+	🔁 SNES iter 5  ||F|| = 2918.01
+	🔁 SNES iter 6  ||F|| = 744.83
+	🔁 SNES iter 7  ||F|| = 692.081
+	🔁 SNES iter 8  ||F|| = 282.105
+	🔁 SNES iter 9  ||F|| = 99.4967
+	🔁 SNES iter 10  ||F|| = 64.1722
+	🔁 SNES iter 11  ||F|| = 17.5011
+	🔁 SNES iter 12  ||F|| = 15.7622
+	🔁 SNES iter 13  ||F|| = 4.51146
+	🔁 SNES iter 14  ||F|| = 4.33857
+	🔁 SNES iter 15  ||F|| = 1.26373
+	🔁 SNES iter 16  ||F|| = 1.16127
+	🔁 SNES iter 17  ||F|| = 0.26842
+	🔁 SNES iter 18  ||F|| = 0.26842
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:48:43] [INFO]    Field output for Step_169
+
+[2026-01-25 16:48:43] [INFO]    Increment 170
+
+	🔁 SNES iter 0  ||F|| = 37916.6
+	🔁 SNES iter 1  ||F|| = 16395.6
+	🔁 SNES iter 2  ||F|| = 13926
+	🔁 SNES iter 3  ||F|| = 11074.3
+	🔁 SNES iter 4  ||F|| = 6827.26
+	🔁 SNES iter 5  ||F|| = 2460.7
+	🔁 SNES iter 6  ||F|| = 810.246
+	🔁 SNES iter 7  ||F|| = 700.112
+	🔁 SNES iter 8  ||F|| = 236.634
+	🔁 SNES iter 9  ||F|| = 78.4371
+	🔁 SNES iter 10  ||F|| = 48.8382
+	🔁 SNES iter 11  ||F|| = 15.4784
+	🔁 SNES iter 12  ||F|| = 4.63064
+	🔁 SNES iter 13  ||F|| = 2.0724
+	🔁 SNES iter 14  ||F|| = 1.66093
+	🔁 SNES iter 15  ||F|| = 0.59036
+	🔁 SNES iter 16  ||F|| = 0.23202
+	🔁 SNES iter 17  ||F|| = 0.17644
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:48:52] [INFO]    Field output for Step_170
+
+[2026-01-25 16:48:52] [INFO]    Increment 171
+
+	🔁 SNES iter 0  ||F|| = 39697.3
+	🔁 SNES iter 1  ||F|| = 17388.4
+	🔁 SNES iter 2  ||F|| = 13796.6
+	🔁 SNES iter 3  ||F|| = 10281.9
+	🔁 SNES iter 4  ||F|| = 4655.56
+	🔁 SNES iter 5  ||F|| = 3381.33
+	🔁 SNES iter 6  ||F|| = 2005.62
+	🔁 SNES iter 7  ||F|| = 991.188
+	🔁 SNES iter 8  ||F|| = 360.982
+	🔁 SNES iter 9  ||F|| = 97.2517
+	🔁 SNES iter 10  ||F|| = 72.2627
+	🔁 SNES iter 11  ||F|| = 21.9801
+	🔁 SNES iter 12  ||F|| = 6.50358
+	🔁 SNES iter 13  ||F|| = 4.57631
+	🔁 SNES iter 14  ||F|| = 1.51414
+	🔁 SNES iter 15  ||F|| = 1.50939
+	🔁 SNES iter 16  ||F|| = 0.457418
+	🔁 SNES iter 17  ||F|| = 0.457418
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:48:58] [INFO]    Field output for Step_171
+
+[2026-01-25 16:48:58] [INFO]    Increment 172
+
+	🔁 SNES iter 0  ||F|| = 45228.5
+	🔁 SNES iter 1  ||F|| = 19963
+	🔁 SNES iter 2  ||F|| = 15569.8
+	🔁 SNES iter 3  ||F|| = 14055.5
+	🔁 SNES iter 4  ||F|| = 6669.99
+	🔁 SNES iter 5  ||F|| = 3142.85
+	🔁 SNES iter 6  ||F|| = 1051.43
+	🔁 SNES iter 7  ||F|| = 695.968
+	🔁 SNES iter 8  ||F|| = 226.05
+	🔁 SNES iter 9  ||F|| = 131.318
+	🔁 SNES iter 10  ||F|| = 30.3482
+	🔁 SNES iter 11  ||F|| = 26.7785
+	🔁 SNES iter 12  ||F|| = 6.50104
+	🔁 SNES iter 13  ||F|| = 5.96474
+	🔁 SNES iter 14  ||F|| = 1.36234
+	🔁 SNES iter 15  ||F|| = 1.03031
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:49:05] [INFO]    Field output for Step_172
+
+[2026-01-25 16:49:05] [INFO]    Increment 173
+
+	🔁 SNES iter 0  ||F|| = 56637.4
+	🔁 SNES iter 1  ||F|| = 25636.9
+	🔁 SNES iter 2  ||F|| = 22898.7
+	🔁 SNES iter 3  ||F|| = 20451.4
+	🔁 SNES iter 4  ||F|| = 17867.1
+	🔁 SNES iter 5  ||F|| = 14699.5
+	🔁 SNES iter 6  ||F|| = 10488.1
+	🔁 SNES iter 7  ||F|| = 4256.09
+	🔁 SNES iter 8  ||F|| = 1502.27
+	🔁 SNES iter 9  ||F|| = 639.529
+	🔁 SNES iter 10  ||F|| = 486.987
+	🔁 SNES iter 11  ||F|| = 138.186
+	🔁 SNES iter 12  ||F|| = 69.0694
+	🔁 SNES iter 13  ||F|| = 15.8865
+	🔁 SNES iter 14  ||F|| = 12.9199
+	🔁 SNES iter 15  ||F|| = 2.99277
+	🔁 SNES iter 16  ||F|| = 2.31806
+	🔁 SNES iter 17  ||F|| = 0.541119
+	🔁 SNES iter 18  ||F|| = 0.294209
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:49:12] [INFO]    Field output for Step_173
+
+[2026-01-25 16:49:12] [INFO]    Increment 174
+
+	🔁 SNES iter 0  ||F|| = 72512.5
+	🔁 SNES iter 1  ||F|| = 39125.3
+	🔁 SNES iter 2  ||F|| = 34280.2
+	🔁 SNES iter 3  ||F|| = 27795.8
+	🔁 SNES iter 4  ||F|| = 20430.5
+	🔁 SNES iter 5  ||F|| = 16333.9
+	🔁 SNES iter 6  ||F|| = 4178.32
+	🔁 SNES iter 7  ||F|| = 2327.52
+	🔁 SNES iter 8  ||F|| = 2271.7
+	🔁 SNES iter 9  ||F|| = 2232.8
+	🔁 SNES iter 10  ||F|| = 1252.51
+	🔁 SNES iter 11  ||F|| = 1161.63
+	🔁 SNES iter 12  ||F|| = 386.423
+	🔁 SNES iter 13  ||F|| = 139.142
+	🔁 SNES iter 14  ||F|| = 38.5175
+	🔁 SNES iter 15  ||F|| = 17.5358
+	🔁 SNES iter 16  ||F|| = 4.63434
+	🔁 SNES iter 17  ||F|| = 3.7406
+	🔁 SNES iter 18  ||F|| = 0.87773
+	🔁 SNES iter 19  ||F|| = 0.661907
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:49:22] [INFO]    Field output for Step_174
+
+[2026-01-25 16:49:22] [INFO]    Increment 175
+
+	🔁 SNES iter 0  ||F|| = 88621.4
+	🔁 SNES iter 1  ||F|| = 64345.4
+	🔁 SNES iter 2  ||F|| = 54539.3
+	🔁 SNES iter 3  ||F|| = 52854.5
+	🔁 SNES iter 4  ||F|| = 11259.8
+	🔁 SNES iter 5  ||F|| = 6884.1
+	🔁 SNES iter 6  ||F|| = 5851.06
+	🔁 SNES iter 7  ||F|| = 2709.32
+	🔁 SNES iter 8  ||F|| = 1037.41
+	🔁 SNES iter 9  ||F|| = 1027.79
+	🔁 SNES iter 10  ||F|| = 401.467
+	🔁 SNES iter 11  ||F|| = 148.19
+	🔁 SNES iter 12  ||F|| = 65.8731
+	🔁 SNES iter 13  ||F|| = 18.3175
+	🔁 SNES iter 14  ||F|| = 8.28633
+	🔁 SNES iter 15  ||F|| = 5.36729
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:49:29] [INFO]    Field output for Step_175
+
+[2026-01-25 16:49:29] [INFO]    Increment 176
+
+	🔁 SNES iter 0  ||F|| = 89415.1
+	🔁 SNES iter 1  ||F|| = 71961
+	🔁 SNES iter 2  ||F|| = 71774.1
+	🔁 SNES iter 3  ||F|| = 50083.3
+	🔁 SNES iter 4  ||F|| = 18576.1
+	🔁 SNES iter 5  ||F|| = 470.767
+	🔁 SNES iter 6  ||F|| = 33.5563
+
+   SNES converged ✅ Reason: CONVERGED_SNORM_RELATIVE (code 4)
+
+[2026-01-25 16:49:33] [INFO]    Field output for Step_176
+
+[2026-01-25 16:49:33] [INFO]    Increment 177
+
+	🔁 SNES iter 0  ||F|| = 49627
+	🔁 SNES iter 1  ||F|| = 35582.6
+	🔁 SNES iter 2  ||F|| = 3.04487e-07
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_RELATIVE (code 3)
+
+[2026-01-25 16:49:34] [INFO]    Field output for Step_177
+
+[2026-01-25 16:49:34] [INFO]    Increment 178
+
+	🔁 SNES iter 0  ||F|| = 156.64
+	🔁 SNES iter 1  ||F|| = 7.92537e-08
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_RELATIVE (code 3)
+
+[2026-01-25 16:49:34] [INFO]    Field output for Step_178
+
+[2026-01-25 16:49:34] [INFO]    Increment 179
+
+	🔁 SNES iter 0  ||F|| = 74.0372
+	🔁 SNES iter 1  ||F|| = 5.33526e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:35] [INFO]    Field output for Step_179
+
+[2026-01-25 16:49:35] [INFO]    Increment 180
+
+	🔁 SNES iter 0  ||F|| = 73.5435
+	🔁 SNES iter 1  ||F|| = 3.76742e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:35] [INFO]    Field output for Step_180
+
+[2026-01-25 16:49:35] [INFO]    Increment 181
+
+	🔁 SNES iter 0  ||F|| = 69.7537
+	🔁 SNES iter 1  ||F|| = 3.32606e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:36] [INFO]    Field output for Step_181
+
+[2026-01-25 16:49:36] [INFO]    Increment 182
+
+	🔁 SNES iter 0  ||F|| = 79.9046
+	🔁 SNES iter 1  ||F|| = 3.61699e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:37] [INFO]    Field output for Step_182
+
+[2026-01-25 16:49:37] [INFO]    Increment 183
+
+	🔁 SNES iter 0  ||F|| = 96.3248
+	🔁 SNES iter 1  ||F|| = 3.82101e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:37] [INFO]    Field output for Step_183
+
+[2026-01-25 16:49:37] [INFO]    Increment 184
+
+	🔁 SNES iter 0  ||F|| = 107.389
+	🔁 SNES iter 1  ||F|| = 3.99341e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:38] [INFO]    Field output for Step_184
+
+[2026-01-25 16:49:38] [INFO]    Increment 185
+
+	🔁 SNES iter 0  ||F|| = 108.359
+	🔁 SNES iter 1  ||F|| = 3.38901e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:38] [INFO]    Field output for Step_185
+
+[2026-01-25 16:49:38] [INFO]    Increment 186
+
+	🔁 SNES iter 0  ||F|| = 79.6566
+	🔁 SNES iter 1  ||F|| = 3.81062e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:39] [INFO]    Field output for Step_186
+
+[2026-01-25 16:49:39] [INFO]    Increment 187
+
+	🔁 SNES iter 0  ||F|| = 65.1835
+	🔁 SNES iter 1  ||F|| = 3.41938e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:40] [INFO]    Field output for Step_187
+
+[2026-01-25 16:49:40] [INFO]    Increment 188
+
+	🔁 SNES iter 0  ||F|| = 63.6457
+	🔁 SNES iter 1  ||F|| = 3.40692e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:41] [INFO]    Field output for Step_188
+
+[2026-01-25 16:49:41] [INFO]    Increment 189
+
+	🔁 SNES iter 0  ||F|| = 42.5006
+	🔁 SNES iter 1  ||F|| = 3.38197e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:41] [INFO]    Field output for Step_189
+
+[2026-01-25 16:49:41] [INFO]    Increment 190
+
+	🔁 SNES iter 0  ||F|| = 20.2987
+	🔁 SNES iter 1  ||F|| = 3.37858e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:42] [INFO]    Field output for Step_190
+
+[2026-01-25 16:49:42] [INFO]    Increment 191
+
+	🔁 SNES iter 0  ||F|| = 12.3751
+	🔁 SNES iter 1  ||F|| = 3.36617e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:43] [INFO]    Field output for Step_191
+
+[2026-01-25 16:49:43] [INFO]    Increment 192
+
+	🔁 SNES iter 0  ||F|| = 9.96735
+	🔁 SNES iter 1  ||F|| = 3.33332e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:43] [INFO]    Field output for Step_192
+
+[2026-01-25 16:49:43] [INFO]    Increment 193
+
+	🔁 SNES iter 0  ||F|| = 11.4908
+	🔁 SNES iter 1  ||F|| = 3.34932e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:44] [INFO]    Field output for Step_193
+
+[2026-01-25 16:49:44] [INFO]    Increment 194
+
+	🔁 SNES iter 0  ||F|| = 19.098
+	🔁 SNES iter 1  ||F|| = 3.39847e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:45] [INFO]    Field output for Step_194
+
+[2026-01-25 16:49:45] [INFO]    Increment 195
+
+	🔁 SNES iter 0  ||F|| = 36.9015
+	🔁 SNES iter 1  ||F|| = 3.38831e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:45] [INFO]    Field output for Step_195
+
+[2026-01-25 16:49:45] [INFO]    Increment 196
+
+	🔁 SNES iter 0  ||F|| = 71.6502
+	🔁 SNES iter 1  ||F|| = 3.32014e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:46] [INFO]    Field output for Step_196
+
+[2026-01-25 16:49:46] [INFO]    Increment 197
+
+	🔁 SNES iter 0  ||F|| = 104.01
+	🔁 SNES iter 1  ||F|| = 3.41747e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:47] [INFO]    Field output for Step_197
+
+[2026-01-25 16:49:47] [INFO]    Increment 198
+
+	🔁 SNES iter 0  ||F|| = 41.4541
+	🔁 SNES iter 1  ||F|| = 3.43007e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:47] [INFO]    Field output for Step_198
+
+[2026-01-25 16:49:47] [INFO]    Increment 199
+
+	🔁 SNES iter 0  ||F|| = 12.2051
+	🔁 SNES iter 1  ||F|| = 3.60002e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:48] [INFO]    Field output for Step_199
+
+[2026-01-25 16:49:48] [INFO]    Increment 200
+
+	🔁 SNES iter 0  ||F|| = 9.49712
+	🔁 SNES iter 1  ||F|| = 3.43472e-09
+
+   SNES converged ✅ Reason: CONVERGED_FNORM_ABS (code 2)
+
+[2026-01-25 16:49:48] [INFO]    Field output for Step_200
+
+[2026-01-25 16:49:48] [INFO]    Simulation completed successfully
+[2026-01-25 16:49:48] [INFO]    Total run time is: 15.300000 minutes.
+

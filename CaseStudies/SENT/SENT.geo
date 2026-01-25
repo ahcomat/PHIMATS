@@ -83,3 +83,9 @@ Field[10] = Min;
 Field[10].FieldsList = {2, 4};  // combine all thresholds
 
 Background Field = 10;
+//+
+Physical Point("corner", 12) = {1};
+//+
+Physical Curve("bottom", 13) = {6};
+//+
+Physical Curve("top", 14) = {9};

@@ -23,9 +23,9 @@ Choose **ONLY** one of them and comment out the other two.
 
 Run the **`Preprocessing`** notebook:
 
-* Sets up material parameters and generates the **`_in.hdf5`** input file.
-* Creates the **`_out.hdf5`** file for writing the results.
-* Generates **`.xdmf`** file for visualization in **ParaView (v5.9.1 recommended)**.
+* Sets up material parameters and generates the **`.in.hdf5`** input file.
+* Creates the **`.out.hdf5`** file for writing the results.
+* Generates **`.xdmf`** file for visualization in **ParaView**.
 
 ---
 
@@ -37,7 +37,7 @@ Run the **`Preprocessing`** notebook:
 make
 ```
 
-* This compiles the provided **`.cxx` driver** and links it with `libphimats.a`.
+* This compiles the provided **`.cxx` driver** and links it with `libphimats.so`.
 
 **Step 2: Run the simulation**
 
@@ -53,9 +53,9 @@ Run the **`PostProcessing`** notebook to obtain the total force and crack mouth 
 
 ---
 
-The results shown in this study were generated using **PHIMATS v1.2.0**. To activate this specific version, run:
+The results shown in this study were generated using **PHIMATS v1.3.0**. To activate this specific version, run:
 
 ```bash
-git checkout v1.2.0
+git checkout v1.3.0
 ```
 And recompile.
