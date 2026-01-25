@@ -9,6 +9,7 @@ build/
 *.a
 *.pyc
 **/__pycache__/
+phimats_env.sh
 
 # --- Documentation & Private ---
 Doxygen/*

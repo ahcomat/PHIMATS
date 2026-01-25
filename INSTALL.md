@@ -23,12 +23,6 @@ To download **PHIMATS**, clone the repository using **Git**
 git clone https://github.com/ahcomat/PHIMATS.git
 ```
 
-Set the project path by adding your local `PHIMATS` path in `~/.bashrc` file
-
-```sh
-export PHIMATS_DIR=/path/to/PHIMATS
-```
-
 ---
 
 ### 4️⃣ Compiling 
@@ -43,7 +37,7 @@ Uses a pre-built environment containing `PETSc`, `Eigen`, and `HDF5`, optimized 
 docker pull ahcomat/phimats_dep:latest
 ```
 
-2. Run this command from your PHIMATS root folder to start the container and mount your code:
+2. Run this command from your `PHIMATS` root folder to start the container and mount your code:
 
 ```sh
 docker run --rm -it \
@@ -57,7 +51,10 @@ cd build
 cmake -DCMAKE_BUILD_TYPE=Release ../src && make
 ```
 
-**Note** All outputs will be saved to your local drive.
+**Note:** All build and simulation outputs are saved directly to your local WSL drive within the project folder.
+
+- **Persistence**: Because we "mount" your local `PHIMATS` directory into the container, these files remain on your disk even after you close the `docker` terminal or restart your computer.
+- **Accessibility**: You can access these files directly through Windows File Explorer by typing `explorer.exe .` in your WSL terminal.
 
 #### 🛠️ Option B: Manual Installation (Advanced)
 
@@ -77,9 +74,16 @@ conda env create -f environment.yml
 
 
 ##### 3 Installing PETSc
-PETSc must be installed with an **optimized configuration** (`arch-opt`). Run the following command in your terminal:
+
+Clone `PETSc`
+```
+git clone -b release https://gitlab.com/petsc/petsc.git 
+cd petsc
+```
+
+`PETSc` must be installed with an **optimized configuration** (`arch-opt`). Run the following command in your terminal:
 ```sh
-./configure PETSC_ARCH=$PETSC_ARCH \
+./configure PETSC_ARCH=arch-opt \
     --with-shared-libraries=1 \
     --with-fortran-bindings=0 \
     --with-debugging=0 \
@@ -91,35 +95,26 @@ PETSc must be installed with an **optimized configuration** (`arch-opt`). Run th
     COPTFLAGS='-O3 -march=native -mtune=native' \
     CXXOPTFLAGS='-O3 -march=native -mtune=native' \
     FOPTFLAGS='-O3 -march=native -mtune=native' && \
-    make all -j$(nproc)
+    make PETSC_DIR=$(pwd) PETSC_ARCH=arch-opt all -j$(nproc)
 ```
 
 ---
 
 ##### 4 Setting Up Environment Variables
-Add the following lines **(after modifying the paths!)** to your `~/.bashrc` file:
+
+Run the `configure_env.sh` script to set up the environment variables
+
+* Make executable
+
 ```sh
-# Provide your local /path/to below
-export PETSC_DIR=/path/to/petsc
-export EIGEN=/path/to/eigen
-export PHIMATS_DIR=/path/to/PHIMATS
-
-export PYTHONPATH=$PYTHONPATH:$PHIMATS_DIR/src/FEM_utils
-export PHIMATSINCLUDES=$PHIMATS_DIR/src/include/
-export PHIMATSLIBDIR=$PHIMATS_DIR/src/lib/
-export PETSC_ARCH=arch-opt
-export HDF5_USE_FILE_LOCKING=FALSE
-
-# Detect HDF5 installation path automatically
-export H5LD=$(h5cc -show | awk '{for(i=1;i<=NF;i++) if($i ~ "-L") print substr($i,3)}')
-export H5ID=$(h5cc -show | awk '{for(i=1;i<=NF;i++) if($i ~ "-I") print substr($i,3)}')
-export HDF5_USE_FILE_LOCKING=FALSE
-
-# Detect MPICH installation path automatically
-export MPICHID=$(mpicc -show | awk '{for(i=1;i<=NF;i++) if($i ~ "-I") print substr($i,3)}')
-export MPICHLD=$(mpicc -show | awk '{for(i=1;i<=NF;i++) if($i ~ "-L") print substr($i,3)}')
+chmod +x configure_env.sh
 ```
-After adding these, apply the changes by running:
+* Run the script and follow the prompts
+
+```
+./configure_env.sh
+```
+* Apply the changes by running
 ```sh
 source ~/.bashrc
 ```
