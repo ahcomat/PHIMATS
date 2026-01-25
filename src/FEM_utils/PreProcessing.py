@@ -181,6 +181,7 @@ class PreProcessing:
                 f.create_group("Time")
                 if kwargs.get('AVCON'): f.create_group('AvCon')
                 if kwargs.get('FLUX'): f.create_group('Flux')
+                if kwargs.get('AVFLUX'):   f.create_group('AvFlux')
                 if kwargs.get('TDS'):   f.create_group('Temp')
         
         print(f"  Output file initialized: {filename}")
