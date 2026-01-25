@@ -6,7 +6,7 @@ $(PROG): $(OBJ)
 	@echo ""
 	@echo "Linking $(PROG) with libphimats.a"
 	@echo ""
-	${CXXLINKER} ${$(SETTINGS)} -o $@ ${OBJ} -L$(PHIMATSLIBDIR) -lphimats -I${PETSC_DIR}/include/ -L${PETSC_LIB} -I$(H5ID) $(LDFLAGS)
+	${CXXLINKER} ${$(SETTINGS)} -o $@ ${OBJ} -L$(PHIMATSLIBDIR) -lphimats -Wl,-rpath,$(PHIMATSLIBDIR) -I${PETSC_DIR}/include/ -L${PETSC_LIB} -I$(H5ID) $(LDFLAGS)
 	${RM} ${OBJ}
 
 ${OBJ}: ${SRC}
