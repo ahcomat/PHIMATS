@@ -36,7 +36,10 @@ To balance **simulation flexibility** with **high performance**, `PHIMATS` is co
 
 ### Citation  
 For citing **PHIMATS**, please use:  
-**A. Hussein**, *Finite Element Theory for PHIMATS*, 2025. doi: 10.48550/ARXIV. 2502.16283.
+
+- [![DOI](https://zenodo.org/badge/755482016.svg)](https://doi.org/10.5281/zenodo.18376381)
+
+- **A. Hussein**, *Finite Element Theory for PHIMATS*, 2025. doi: 10.48550/arXiv.2502.16283.
 
 Additionally, consider citing relevant references from the `CaseStudies` directory if applicable.  
 
