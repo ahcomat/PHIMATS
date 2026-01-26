@@ -2,6 +2,10 @@
 
 This case study demonstrates how to model the effect of grain boundary character on hydrogen permeation using **PHIMATS**. The grain boundaries are represented using the double-obstacle potential from the order parameters of the phase-field method, allowing hydrogen interactions to be driven by $\nabla g(\phi)_\mathrm{HAGB}$ and $\nabla g(\phi)_\mathrm{LAGB}$. 
 
+**Note:** For generating custom RVEs and FE mesh, check out the companion code [PHIMATS *RVE*](https://github.com/ahcomat/PHIMATS_RVE)
+
+---
+
 📄 For more background on the model, see:
 **"The Effect of grain Boundary misorientation on hydrogen flux using a phase‐field‐based diffusion and trapping model"**
 *Advanced Engineering Materials*, **26(22)** (2024) 2401561

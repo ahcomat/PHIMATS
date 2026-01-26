@@ -34,6 +34,12 @@ To balance **simulation flexibility** with **high performance**, `PHIMATS` is co
 
 ---
 
+### Companion Tools
+
+* **[PHIMATS *RVE*](https://github.com/ahcomat/PHIMATS_RVE)**: A specialized multiphase-field generator for creating Representative Volume Elements (RVEs) and finite element meshes (via Gmsh) for `PHIMATS` simulations.
+
+---
+
 ### Citation  
 For citing **PHIMATS**, please use:  
 
