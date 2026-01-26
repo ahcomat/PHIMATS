@@ -4,9 +4,9 @@ This case study demonstrates how to run a phase-field fracture simulation in **P
 
 📄 For more background on the model, see:
 
-Christian Miehe et al. **Phase field modeling of fracture in multi-physics problems. Part I. Balance of crack surface and failure criteria for brittle crack propagation in thermo-elastic solids**. *Computer Methods in Applied Mechanics and Engineering* 294 (2015), pp. 449–485. [DOI](https://doi.org/10.1016/j.cma.2014.11.016)
+- Christian Miehe et al. **Phase field modeling of fracture in multi-physics problems. Part I. Balance of crack surface and failure criteria for brittle crack propagation in thermo-elastic solids**. *Computer Methods in Applied Mechanics and Engineering* 294 (2015), pp. 449–485. [DOI](https://doi.org/10.1016/j.cma.2014.11.016)
 
-Christian Miehe et al. **Phase field modeling of fracture in multi-physics problems. Part II. Coupled brittle-to-ductile failure criteria and crack propagation in thermo-elastic–plastic solids**. *Computer Methods in Applied Mechanics and Engineering* 294 (2015), pp. 486–522. [DOI](https://doi.org/10.1016/j.cma.2014.11.016)
+- Christian Miehe et al. **Phase field modeling of fracture in multi-physics problems. Part II. Coupled brittle-to-ductile failure criteria and crack propagation in thermo-elastic–plastic solids**. *Computer Methods in Applied Mechanics and Engineering* 294 (2015), pp. 486–522. [DOI](https://doi.org/10.1016/j.cma.2014.11.016)
 
 The model is applied to an SENT sample in plane strain condition. The mechanics material model is elastoplastic with power-law hardeing. Three options for the crack driving force are available in the `SENT.cxx` simulation driver code :
 - Brittle ```CalcDrivForcB``` with the formula $\tilde{\mathcal{D}}^\mathrm{b} = \frac{\tilde{\psi}^\mathrm{e+}}{w_\mathrm{c}}$.
@@ -56,6 +56,6 @@ Run the **`PostProcessing`** notebook to obtain the total force and crack mouth 
 The results shown in this study were generated using **PHIMATS v1.3.0**. To activate this specific version, run:
 
 ```bash
-git checkout v1.3.0
+git checkout v1.3.0-beta.1
 ```
 And recompile.

@@ -7,13 +7,13 @@ This case study demonstrates how to model the effect of grain boundary character
 ---
 
 📄 For more background on the model, see:
-**"The Effect of grain Boundary misorientation on hydrogen flux using a phase‐field‐based diffusion and trapping model"**
+- **"The Effect of grain Boundary misorientation on hydrogen flux using a phase‐field‐based diffusion and trapping model"**
 *Advanced Engineering Materials*, **26(22)** (2024) 2401561
 [DOI](https://doi.org/10.1002/adem.202401561) | [arXiv PDF](https://arxiv.org/pdf/2412.19129)
 
 While the simulations in that paper were conducted using **finite difference method**, this case study uses the **finite element implementation** in PHIMATS, based on the formulation developed in:
 
-**"A full-field model for hydrogen diffusion and trapping in two-phase microstructures: Application to thermal desorption spectroscopy of duplex stainless steel"**
+- **"A full-field model for hydrogen diffusion and trapping in two-phase microstructures: Application to thermal desorption spectroscopy of duplex stainless steel"**
 *Acta Materialia* (2025) 121042
 [Open Access](https://doi.org/10.1016/j.actamat.2025.121042)
 
@@ -63,7 +63,7 @@ Run the **`PostProcessing`** notebook to:
 PHIMATS is under continuous development and newer versions might function differently. The results shown in this study were generated using **PHIMATS v1.3.0**. To activate this specific version, run:
 
 ```bash
-git checkout v1.3.0
+git checkout v1.3.0-beta.1
 ```
 
 And recompile.
