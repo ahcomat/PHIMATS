@@ -37,7 +37,7 @@ Download and install these apps like any other Windows software:
 
 ---
 
-###  Setup VS Code for Linux
+### 4️⃣ Setup VS Code for Linux
 
 1. Open **VS Code**.
 2. Click the **Extensions** icon (the 4 squares on the left).
@@ -48,7 +48,7 @@ Download and install these apps like any other Windows software:
 
 ---
 
-### 4️⃣ Get PHIMATS and Docker Ready
+### 5️⃣ Get PHIMATS and Docker Ready
 
 1. In a terminal, **Clone the code:**
 ```bash
