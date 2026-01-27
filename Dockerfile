@@ -2,13 +2,13 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Basic Tools + GUI support libraries
+# Basic Tools
 RUN apt-get update && apt-get install -y \
     build-essential cmake git wget python3 python3-pip \
     libhdf5-dev gfortran \
     && rm -rf /var/lib/apt/lists/*
 
-# Python (No Conda)
+# Python 
 RUN pip3 install --no-cache-dir numpy scipy h5py \
     matplotlib meshio ipykernel nbformat
 
@@ -17,7 +17,7 @@ WORKDIR /opt
 RUN wget https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz && \
     tar -xf eigen-3.4.0.tar.gz && mv eigen-3.4.0 eigen
 
-# PETSs
+# PETSc
 WORKDIR /opt/petsc
 RUN git clone -b release https://gitlab.com/petsc/petsc.git .
 ENV PETSC_DIR=/opt/petsc
