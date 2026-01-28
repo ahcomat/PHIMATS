@@ -5,6 +5,8 @@ To make these simulations feasible for a standard PC, this setup reduces the dom
 - **PC version**: Requires ~3.2 GB of RAM.
 - **Full RVE version** (as in the paper): **Required ~15 GB RAM** and was run on the **Flemish Supercomputer Center (VSC)**. 
 
+---
+
 ###  Simulation Overview
 There are **two main simulations** in this case study:  
 1️⃣ **`Charging`** → Simulates **0.2-day hydrogen charging**  
@@ -17,8 +19,8 @@ There are **two main simulations** in this case study:
 ### Instructions
 ####  1. Pre-processing
 Each directory contains a **`PreProcessing` notebook** that:
-- Sets up **input parameters** and generates the **`_in.hdf5` input file**.
-- Outputs the **`_out.hdf5` simulation results**.
+- Sets up **input parameters** and generates the **`.in.hdf5` input file**.
+- Outputs the **`.out.hdf5` simulation results**.
 - Generates **`.xdmf` visualization files** (compatible with **ParaView v5.9.1**).
 
 ####  2. Compilation & Execution
@@ -28,7 +30,7 @@ Each directory contains a **`PreProcessing` notebook** that:
      ```sh
      make
      ```
-   - This compiles the **`.cxx` driver code** and links with `libphimats.a`.  
+   - This compiles the **`.cxx` driver code** and links with `libphimats.so`.  
 
 2️⃣ **Run the simulations**  
    - Execute:  
@@ -43,8 +45,8 @@ Each directory contains a **`PreProcessing` notebook** that:
      (This step **takes longer** due to stiffness matrix updates.)  
 
 ####  3. Expected Run Times
-💻 **Charging**: ~20 minutes  
-💻 **TDS**: ~2.5 hours (requires stiffness matrix updates at each time step)  
+💻 **Charging**: ~1 minute
+💻 **TDS**: ~20 minutes (requires stiffness matrix updates at each time step)  
 
 ####  4. Post-processing
 - The **`PostProcessing` notebook** includes Python scripts for:
@@ -53,9 +55,9 @@ Each directory contains a **`PreProcessing` notebook** that:
 
 --- 
 
-PHIMATS is under continuous development and newer versions might function differently. The results shown in this study were generated using **PHIMATS v1.0.0**. To activate this specific version, run:
+PHIMATS is under continuous development and newer versions might function differently. The results shown in this study were generated using **PHIMATS v1.3.0**. To activate this specific version, run:
 
 ```bash
-git checkout v1.0.0
+git checkout v1.3.0-beta.1
 ```
 And recompile.

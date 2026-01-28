@@ -7,8 +7,20 @@
 #include "Nodes.h"
 #include "FiniteElements/Trapping/Tri3TH.h"
 #include "Models/TrappingModel.h"
-#include "Solvers/LinearTransport.h"
+#include "Solvers/LinearSolver.h"
 #include "Logger.h"
+
+struct PhysicsIO {
+    H5IO* in;
+    H5IO* out;
+    string modelName;
+
+    PhysicsIO(const string& name, Logger& logger) : modelName(name) {
+        in  = new H5IO(name + ".in.hdf5", logger);
+        out = new H5IO(name + ".out.hdf5", logger);
+    }
+    ~PhysicsIO() { delete in; delete out; }
+};
 
 using namespace std;
 
@@ -20,54 +32,58 @@ int main(int argc, char **argv){
 	// Read inputs -----------
 
 	// Model name, same as `Simul`
-	string modelName = "ChargingHT990";
+	string SimulName = "ChargingHT990";
 
 	// Logger object for handling terminal user interface
-	Logger logger(PETSC_COMM_WORLD, modelName+".log");
+	Logger logger(PETSC_COMM_WORLD, SimulName+".log");
 	// Start timer
 	logger.StartTimer();
 	// Print intro message
 	logger.IntroMessage();
 
 	// Initialize I/O hdf5 files
-	const string infileName = modelName+"_in.hdf5";
-	H5IO H5File_in(infileName, logger);
 
-	const string outfileName = modelName+"_out.hdf5";
-	H5IO H5File_out(outfileName, logger);
+	// Mesh file
+    const string meshFileName = SimulName + ".mesh.hdf5";
+    H5IO meshH5File(meshFileName, logger);
+    // RVE file
+    const string rveFile = "../HT990.rve.hdf5";
+	H5IO H5File_rve(rveFile, logger);
+
+	PhysicsIO diff(SimulName + ".diff", logger);
 
 	// Material vector
 	vector<BaseTrapping*> matTVec;
-	matTVec.push_back(new TrapPhase("2D", H5File_in, 1, logger));
+	matTVec.push_back(new TrapPhase("2D", *diff.in, 1, logger));
 
 	// Nodes
 	Nodes Nodes;
-	Nodes.ReadNodes(H5File_in);
+	Nodes.ReadNodes(*diff.in, meshH5File);
 
 	// Elements vector
 	vector<BaseElemTrap*> Tri3THElemVec;
-	Tri3THElemVec.push_back(new Tri3TH(H5File_in, Nodes, 1, logger));
+	Tri3THElemVec.push_back(new Tri3TH(*diff.in, meshH5File, Nodes, 1, logger, &H5File_rve));
 
 	// Initialize the system -----------
 
 	// Model
-	TrappingModel model(Tri3THElemVec, H5File_in, logger);
+	TrappingModel model(Tri3THElemVec, *diff.in, logger);
 
 	// Calculate the initial stiffness matrix
 	model.CalcElemStiffMatx(Tri3THElemVec, matTVec);
 
 	// Initialize boundary conditions
-	model.InitializeBC(H5File_in);
+	model.InitializeBC(*diff.in);
 
 	// Assemble global stiffness matrix
 	model.Assemble(Tri3THElemVec);
 
 	// Solver: "DIRECT" solver much faster for charging/permeation simulations
-	LinearTransport linearSolver(model.getK(), logger, "DIRECT");
+	LinearSolver linearSolver(model.getK(), logger, "DIRECT");
 
 	// Write initial conditions
-	model.WriteAvCon(Tri3THElemVec, H5File_out, 0);    // Volume average concentration 
-	model.WriteOut(H5File_out, to_string(0));		   // Concentration field 
+	model.WriteAvCon(Tri3THElemVec, *diff.out, 0);    // Volume average concentration 
+	model.WriteOut(*diff.out, to_string(0));		   // Concentration field 
 
 	// Solver loop -----------
 
@@ -94,13 +110,13 @@ int main(int argc, char **argv){
 		linearSolver.Solve(model.getX(), model.getF());
 
 		// Write average concetration (every step)
-		model.WriteAvCon(Tri3THElemVec, H5File_out, iStep);
+		model.WriteAvCon(Tri3THElemVec, *diff.out, iStep);
 
 		// Write field output (in this case, every step)
 		if (!(iStep%tOut)){
 			
 			// Full field output
-			model.WriteOut( H5File_out, to_string(iStep));
+			model.WriteOut(*diff.out, to_string(iStep));
 			logger.FieldOutput(iStep);
 
 		}

@@ -7,8 +7,20 @@
 #include "Nodes.h"
 #include "FiniteElements/Trapping/Tri3TH.h"
 #include "Models/TrappingModel.h"
-#include "Solvers/LinearTransport.h"
+#include "Solvers/LinearSolver.h"
 #include "Logger.h"
+
+struct PhysicsIO {
+    H5IO* in;
+    H5IO* out;
+    string modelName;
+
+    PhysicsIO(const string& name, Logger& logger) : modelName(name) {
+        in  = new H5IO(name + ".in.hdf5", logger);
+        out = new H5IO(name + ".out.hdf5", logger);
+    }
+    ~PhysicsIO() { delete in; delete out; }
+};
 
 using namespace std;
 
@@ -20,61 +32,64 @@ int main(int argc, char **argv){
   // Read inputs -----------
 
 	// Model name, same as `Simul`
-	string modelName = "TDSHT990";
+	string SimulName = "TDSHT990";
 
   	// Logger object for handling terminal user interface
-	Logger logger(PETSC_COMM_WORLD, modelName+".log");
+	Logger logger(PETSC_COMM_WORLD, SimulName+".log");
 	logger.StartTimer();
 	logger.IntroMessage();
 
-  // Initialize I/O hdf5 files
-	const string infileName = modelName+"_in.hdf5";
-	H5IO H5File_in(infileName, logger);
+    // Initialize I/O hdf5 files
+	// Mesh file
+    const string meshFileName = SimulName + ".mesh.hdf5";
+    H5IO meshH5File(meshFileName, logger);
+    // RVE file
+    const string rveFile = "../HT990.rve.hdf5";
+	H5IO H5File_rve(rveFile, logger);
 
-	const string outfileName = modelName+"_out.hdf5";
-	H5IO H5File_out(outfileName, logger);
+	PhysicsIO diff(SimulName + ".diff", logger);
 
-  // Initial conditions for TDS simulation
-  const string infileName2 = "../Charging/ChargingHT990_out.hdf5";
+    // Initial conditions for TDS simulation
+    const string infileName2 = "../Charging/ChargingHT990.diff.out.hdf5";
 	H5IO H5File_in2(infileName2, logger);
 
-  // Material vector
-  vector<BaseTrapping*> matTVec;
-  matTVec.push_back(new TrapPhase("2D", H5File_in, 1, logger));
+    // Material vector
+    vector<BaseTrapping*> matTVec;
+    matTVec.push_back(new TrapPhase("2D", *diff.in, 1, logger));
 
-  // Nodes
-  Nodes Nodes;
-  Nodes.ReadNodes(H5File_in);
- 
-  // Elements
-  vector<BaseElemTrap*> Tri3THElemVec;
-  Tri3THElemVec.push_back(new Tri3TH(H5File_in, Nodes, 1, logger));
+    // Nodes
+    Nodes Nodes;
+    Nodes.ReadNodes(*diff.in, meshH5File);
+    
+    // Elements
+    vector<BaseElemTrap*> Tri3THElemVec;
+    Tri3THElemVec.push_back(new Tri3TH(*diff.in, meshH5File, Nodes, 1, logger, &H5File_rve));
 
-  // Initialize the sytem -----------
+    // Initialize the sytem -----------
 
-  // Model
-  TrappingModel model(Tri3THElemVec, H5File_in, logger);
- 
-  // Calculate the stiffness matrix
-  model.CalcElemStiffMatx(Tri3THElemVec, matTVec);
+    // Model
+    TrappingModel model(Tri3THElemVec, *diff.in, logger);
+    
+    // Calculate the stiffness matrix
+    model.CalcElemStiffMatx(Tri3THElemVec, matTVec);
 
-  // Initialize boundary conditions (must be called before `Assemble`!)
-	model.InitializeBC(H5File_in);
+    // Initialize boundary conditions (must be called before `Assemble`!)
+    model.InitializeBC(*diff.in);
 
-  // Assemble global stiffness matrix
-  model.Assemble(Tri3THElemVec);
+    // Assemble global stiffness matrix
+    model.Assemble(Tri3THElemVec);
 
-  // Solver: "GMRES" solver is more efficient for large system TDS simulations because
-  // it handles the frequent updates to the stiffness matrix more effectively
-  LinearTransport linearSolver(model.getK(), logger, "GMRES");
+    // Solver: "GMRES" solver is more efficient for large system TDS simulations because
+    // it handles the frequent updates to the stiffness matrix more effectively
+    LinearSolver linearSolver(model.getK(), logger, "GMRES");
 
-  // Read initial data (Last step in the charing simulation)
-	model.ReadInitialCon(H5File_in2, 20);
+    // Read initial data (Last step in the charing simulation)
+    model.ReadInitialCon(H5File_in2, 20);
 
-	// Write initial conditions
-  model.WriteTemp(H5File_out, 0);
-	model.WriteAvCon(Tri3THElemVec, H5File_out, 0);
-	model.WriteOut( H5File_out, to_string(0));
+    // Write initial conditions
+    model.WriteTemp(*diff.out, 0);
+	model.WriteAvCon(Tri3THElemVec, *diff.out, 0);
+	model.WriteOut( *diff.out, to_string(0));
   
   // Solver loop -----------
 
@@ -95,7 +110,7 @@ int main(int argc, char **argv){
 
 		// TDS
 		model.UpdateTemp(iStep, HR);
-		model.WriteTemp(H5File_out, iStep);
+		model.WriteTemp(*diff.out, iStep);
 		model.CalcElemStiffMatx(Tri3THElemVec, matTVec);
 		model.Assemble(Tri3THElemVec);
 		linearSolver.UpdateKSP(model.getK());
@@ -107,24 +122,26 @@ int main(int argc, char **argv){
 		linearSolver.Solve(model.getX(), model.getF());
 
 		// Write total concetration
-		model.WriteAvCon(Tri3THElemVec, H5File_out, iStep);
+		model.WriteAvCon(Tri3THElemVec, *diff.out, iStep);
 
 		// Write field output
 		if (!(iStep%tOut)){
       // Full field output
-      model.WriteOut( H5File_out, to_string(iStep));
+      model.WriteOut( *diff.out, to_string(iStep));
       logger.FieldOutput(iStep);
 		}
 	}
 
-  // Deallocate
-  for (auto* elem : Tri3THElemVec) { // Elements
-    delete elem;
-  }
+    logger.ExitMessage();
 
-    for (auto* mat : matTVec) { // Material
-    delete mat;
-  }
+    // Deallocate
+    for (auto* elem : Tri3THElemVec) { // Elements
+        delete elem;
+    }
 
-  return 0;
+        for (auto* mat : matTVec) { // Material
+        delete mat;
+    }
+
+    return 0;
 }
