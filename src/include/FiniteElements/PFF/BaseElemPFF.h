@@ -105,7 +105,7 @@ inline ColVecd3 tensorToVoigt2D(const Eigen::Matrix2d& t) {
  * 
  * @param mat 
  */
-inline void set_wc_const(double const_wc){
+inline void set_const_wc(double const_wc){
 
     for (auto& row : elem_wc)
     std::fill(row.begin(), row.end(), const_wc);

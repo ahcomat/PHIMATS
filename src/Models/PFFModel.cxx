@@ -129,7 +129,7 @@ void PFFModel::set_const_wc(vector<BaseElemPFF*> pffElem, vector<BasePFF*> pffMa
         
         for (int iSet=0; iSet<nElementSets; iSet++){
 
-            pffElem[iSet]->set_wc_const(pffMat[iSet]->get_wc());
+            pffElem[iSet]->set_const_wc(pffMat[iSet]->get_wc());
 
         }
 
