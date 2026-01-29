@@ -280,8 +280,8 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
         }
 
     } catch (const std::runtime_error& e) {
-
-        logger.log("\nException caught in Quad4TH::InitializeElements:\n", "", false);
+        
+        logger.log("\nException caught in Quad4TH::InitializeElements:\n", "ERROR", true);
         logger.log("    " + std::string(e.what()), "", false);
         logger.log("\nCritical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
