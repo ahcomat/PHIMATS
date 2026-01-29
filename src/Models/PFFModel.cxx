@@ -135,8 +135,9 @@ void PFFModel::set_const_wc(vector<BaseElemPFF*> pffElem, vector<BasePFF*> pffMa
 
     } catch (const exception& e) {
 
-        cerr << "ERROR: " << e.what() << endl;
-        cerr << "Terminating!" << endl;
+        logger.log("Exception caught in PFFModel::set_const_wc:\n", "ERROR", true);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("    Critical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
 
     }
