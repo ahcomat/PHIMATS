@@ -38,7 +38,9 @@
 #include "Logger.h"
 #include "FiniteElements/PFF/BaseElemPFF.h"
 #include "FiniteElements/Mechanics/BaseElemMech.h"
+#include "FiniteElements/Trapping/BaseElemTrap.h"
 #include "Materials/PFF/BasePFF.h"
+#include "Materials/PFF/ChemoMech.h"
 #include "Materials/Mechanics/BaseMechanics.h"
 #include "H5IO.h"
 
@@ -64,6 +66,15 @@ void InitializePETSc(vector<BaseElemPFF*> pffElem);
  * @param pffMat PFF materials vector
  */
 void set_const_wc(vector<BaseElemPFF*> pffElem, vector<BasePFF*> pffMat);
+
+/**
+ * @brief Sets `pffElem->elem_wc` to decay as a function of the local concentration.
+ * 
+ * @param pffElem 
+ * @param pffMat 
+ * @param trapElem 
+ */
+void set_decay_wc(vector<BaseElemPFF*> pffElem, vector<BasePFF*> pffMat, vector<BaseElemTrap*> trapElem);
 
 /**
  * @brief Calculates the spectral decomposition of the strain energy density. 

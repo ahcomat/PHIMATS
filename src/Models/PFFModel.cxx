@@ -143,6 +143,41 @@ void PFFModel::set_const_wc(vector<BaseElemPFF*> pffElem, vector<BasePFF*> pffMa
     }
 }
 
+void  PFFModel::set_decay_wc(vector<BaseElemPFF*> pffElem, vector<BasePFF*> pffMat, vector<BaseElemTrap*> trapElem){
+    
+    try{
+        
+        for (int iSet=0; iSet<nElementSets; iSet++){
+
+            // Cast BasePFF material pointer to ChemoMech class
+            auto* chemoMat = dynamic_cast<ChemoMech*>(pffMat[iSet]);
+            
+            if (chemoMat) {
+                // Retrieve int-pt concentration field
+                const std::vector<std::vector<double>>& el_con = trapElem[iSet]->getElCon();
+
+                pffElem[iSet]->set_decay_wc(
+                    el_con, 
+                    chemoMat->get_wc(), 
+                    chemoMat->get_wc_min(), 
+                    chemoMat->get_beta()
+                );
+            } else {
+                logger.log("Material at set " + to_string(iSet) + " is not of type ChemoMech", "ERROR", true);
+            }
+            
+        }
+
+    } catch (const exception& e) {
+
+        logger.log("Exception caught in PFFModel::set_decay_wc:\n", "ERROR", true);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("    Critical error encountered. Terminating!\n", "", false);
+        exit(EXIT_FAILURE);
+
+    }
+}
+
 void PFFModel::CalcPsiSpectral(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, vector<BaseMechanics*> mechMat){
 
     try{
@@ -184,7 +219,7 @@ void PFFModel::CalcDrivForcEP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*
 
         pffElem[iSet]->CalcDrivForcEP(&el_wp);
 
-    } 
+    }
 }
 
 void PFFModel::CalcDrivForcEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta){

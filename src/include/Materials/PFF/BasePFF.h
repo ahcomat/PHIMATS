@@ -47,7 +47,7 @@ double get_wc() const {return wc;}
  */
 double get_const_ell() const {return const_ell;}
 
-protected:    
+protected:
 
 /// @brief Critial work density.
 double wc = 0.0;

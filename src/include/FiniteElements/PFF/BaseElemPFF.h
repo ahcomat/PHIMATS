@@ -113,15 +113,26 @@ inline void set_const_wc(double const_wc){
 }
 
 /**
- * @brief Set elem_wc to constant wc value. 
+ * @brief Set a decaying wc as a function of concentration. 
  * 
- * @param mat 
+ * @param elCon 
+ * @param const_wc 
+ * @param wc_min 
+ * @param beta 
  */
-inline void set_decay_wc(double const_wc){
+inline void set_decay_wc(const std::vector<std::vector<double>>& elCon, 
+                         double wc_0, double wc_min, double beta) {
 
-    for (auto& row : elem_wc)
-    std::fill(row.begin(), row.end(), const_wc);
-
+    for (int iElem = 0; iElem < nElements; iElem++) {
+        for (int iGauss = 0; iGauss < nElGauss; iGauss++) {
+            
+            // local concentration at the integration point
+            double c = elCon.at(iElem).at(iGauss);
+            
+            // Formula: w_c(c) = w_min + (w_0 - w_min) * exp(-beta * c)
+            elem_wc.at(iElem).at(iGauss) = wc_min + (wc_0 - wc_min) * std::exp(-beta * c);
+        }
+    }
 }
 
 /**
