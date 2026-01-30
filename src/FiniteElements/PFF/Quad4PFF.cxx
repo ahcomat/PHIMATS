@@ -11,11 +11,12 @@
  l -> total displacement dofs.
 */
 
-Quad4PFF::Quad4PFF(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, Logger& logger)
+Quad4PFF::Quad4PFF(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, double ell, Logger& logger)
     : BaseElemPFF(2, 4, 4, 4, logger){ // nElDim, nElNodes, nElGauss, nElConDofs 
 
     InitShapeFunc();
     ReadElementsData(H5File_in, H5File_mesh, iSet);
+    const_ell = ell;
     InitializeElements(Nodes, H5File_in);
 }   
 

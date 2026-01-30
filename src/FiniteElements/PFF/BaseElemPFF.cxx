@@ -15,7 +15,6 @@ void BaseElemPFF::ReadElementsData(H5IO &H5File_in, H5IO &H5File_mesh, int iSet)
     nElements = H5File_mesh.ReadScalar(dsetName);
     dsetName = "Elements/ElementSet_"+std::to_string(iSet)+"/nNodes";
     nNodes = H5File_mesh.ReadScalar(dsetName);
-    const_ell = H5File_in.ReadScalar("Materials/Material_" + to_string(iSet)+"/PFF/const_ell");
     
     // Initialize the size.
     elemNodeConn.resize(nElements);  
