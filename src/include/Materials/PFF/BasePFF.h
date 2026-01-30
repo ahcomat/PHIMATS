@@ -40,6 +40,13 @@ BasePFF(string dimensions, Logger& logger): BaseMaterial(dimensions, logger) {};
  */
 double get_wc() const {return wc;}
 
+/**
+ * @brief Get const_ell.
+ * 
+ * @return double 
+ */
+double get_const_ell() const {return const_ell;}
+
 protected:    
 
 /// @brief Critial work density.
