@@ -66,7 +66,7 @@ int main(int argc, char **argv){
     mechElemVec.push_back(new Quad4(*mech.in, meshH5File, Nodes, 1, "ElastoPlastic", logger));
 
     vector<BaseElemPFF*> pffElemVec;
-    pffElemVec.push_back(new Quad4PFF(*pff.in, meshH5File, Nodes, 1, logger));
+    pffElemVec.push_back(new Quad4PFF(*pff.in, meshH5File, Nodes, 1, pffMatVec[0]->get_const_ell(), logger));
 
     // ----------- Initialize the system -----------
 
