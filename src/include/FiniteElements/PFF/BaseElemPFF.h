@@ -127,10 +127,10 @@ inline void set_decay_wc(const std::vector<std::vector<double>>& elCon,
         for (int iGauss = 0; iGauss < nElGauss; iGauss++) {
             
             // local concentration at the integration point
-            double c = elCon.at(iElem).at(iGauss);
+            double c = accessVec(elCon, iElem, iGauss);
             
             // Formula: w_c(c) = w_min + (w_0 - w_min) * exp(-beta * c)
-            elem_wc.at(iElem).at(iGauss) = wc_min + (wc_0 - wc_min) * std::exp(-beta * c);
+            accessVec(elem_wc, iElem, iGauss) = wc_min + (wc_0 - wc_min) * std::exp(-beta * c);
         }
     }
 }
