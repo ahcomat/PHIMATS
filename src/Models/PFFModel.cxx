@@ -160,7 +160,8 @@ void  PFFModel::set_decay_wc(vector<BaseElemPFF*> pffElem, vector<BasePFF*> pffM
                     el_con, 
                     chemoMat->get_wc(), 
                     chemoMat->get_wc_min(), 
-                    chemoMat->get_beta()
+                    chemoMat->get_beta(),
+                    chemoMat->get_c_crit()
                 );
             } else {
                 logger.log("Material at set " + to_string(iSet) + " is not of type ChemoMech", "ERROR", true);

@@ -121,16 +121,16 @@ inline void set_const_wc(double const_wc){
  * @param beta 
  */
 inline void set_decay_wc(const std::vector<std::vector<double>>& elCon, 
-                         double wc_0, double wc_min, double beta) {
+                         double wc_0, double wc_min, double beta, double c_crit) {
 
     for (int iElem = 0; iElem < nElements; iElem++) {
         for (int iGauss = 0; iGauss < nElGauss; iGauss++) {
             
             // local concentration at the integration point
-            double c = accessVec(elCon, iElem, iGauss);
+            double c_hat = accessVec(elCon, iElem, iGauss)/c_crit;
             
-            // Formula: w_c(c) = w_min + (w_0 - w_min) * exp(-beta * c)
-            accessVec(elem_wc, iElem, iGauss) = wc_min + (wc_0 - wc_min) * std::exp(-beta * c);
+            // Formula: w_c(c) = w_min + (w_0 - w_min) * exp(-beta * c_hat)
+            accessVec(elem_wc, iElem, iGauss) = wc_min + (wc_0 - wc_min) * std::exp(-beta * c_hat);
         }
     }
 }
