@@ -49,11 +49,18 @@ ChemoMech(string dimensions, H5IO& H5File, int iSet, Logger& logger);
 double get_beta() const {return beta;}
 
 /**
- * @brief Get const_ell.
+ * @brief Get minimum `wc` for decyaing fracture energy.
  * 
  * @return double 
  */
 double get_wc_min() const {return wc_min;}
+
+/**
+ * @brief Get critical concentration `c_crit` for decyaing fracture energy.
+ * 
+ * @return double 
+ */
+double get_c_crit() const {return c_crit;}
 
 private:  
 
