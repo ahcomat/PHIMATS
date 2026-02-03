@@ -87,6 +87,7 @@ class WriteXDMF:
                     self._add_attr(grid, t, "Strain_eq", "Scalar", f_out)
                     self._add_attr(grid, t, "Stress_eq", "Scalar", f_out)
                     self._add_attr(grid, t, "Stress_h", "Scalar", f_out)
+                    self._add_attr(grid, t, "Rho", "Scalar", f_out)
 
         # Write output
         with open(f"{fileName}.xdmf", "w") as f:
