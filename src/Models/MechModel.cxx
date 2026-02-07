@@ -715,7 +715,7 @@ void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const
 
     // Displacement
     VecGetArrayRead(vecDisp, &globalBuffer);
-    H5File_out.WriteArray1D("Disp/Step_"+iStep, nTotDofs, globalBuffer);
+    H5File_out.WriteArray1D("Disp/Step_"+iStep, nTotDofs, globalBuffer, 10);
     VecRestoreArrayRead(vecDisp, &globalBuffer);
     
     // Force
@@ -723,22 +723,22 @@ void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const
 
     // Equivalent stress and strain
     H5File_out.WriteArray1D("Stress_eq/Step_"+iStep, nTotNodes, nodStres_eq.data());
-    H5File_out.WriteArray1D("Strain_eq/Step_"+iStep, nTotNodes, nodStran_eq.data());
+    H5File_out.WriteArray1D("Strain_eq/Step_"+iStep, nTotNodes, nodStran_eq.data(), 10);
     H5File_out.WriteArray1D("Stress_h/Step_"+iStep, nTotNodes, nodStres_h.data());
     
-    H5File_out.WriteArray1D("Rho/Step_"+iStep, nTotNodes, nodRho.data()); // Will write it as output anyways for now
+    H5File_out.WriteArray1D("Rho/Step_"+iStep, nTotNodes, nodRho.data(), 10); // Will write it as output anyways for now
 
 
     // Stresses and strains
     if (nDim==2){
         H5File_out.WriteTensor("Strain/Step_"+iStep, nTotNodes, 3, nodStran);
-        H5File_out.WriteTensor("Strain_e/Step_"+iStep, nTotNodes, 3, nodStran_e);
-        H5File_out.WriteTensor("Strain_p/Step_"+iStep, nTotNodes, 3, nodStran_p);
+        H5File_out.WriteTensor("Strain_e/Step_"+iStep, nTotNodes, 3, nodStran_e, 10);
+        H5File_out.WriteTensor("Strain_p/Step_"+iStep, nTotNodes, 3, nodStran_p, 10);
         H5File_out.WriteTensor("Stress/Step_"+iStep, nTotNodes, 3, nodStres);
     } else if (nDim==3) {
         H5File_out.WriteTensor("Strain/Step_"+iStep, nTotNodes, 6, nodStran);
-        H5File_out.WriteTensor("Strain_e/Step_"+iStep, nTotNodes, 6, nodStran_e);
-        H5File_out.WriteTensor("Strain_p/Step_"+iStep, nTotNodes, 6, nodStran_p);
+        H5File_out.WriteTensor("Strain_e/Step_"+iStep, nTotNodes, 6, nodStran_e, 10);
+        H5File_out.WriteTensor("Strain_p/Step_"+iStep, nTotNodes, 6, nodStran_p, 10);
         H5File_out.WriteTensor("Stress/Step_"+iStep, nTotNodes, 6, nodStres);
     }
 

@@ -218,7 +218,7 @@ void ReadField2D(const string& dsetName, const int dim1, const int dim2, vector<
  * @param xSize Size of array.
  * @param Array The array to write.
  */
-void WriteArray1D(const string& dsetName, const int xSize, const double *Array);
+void WriteArray1D(const string& dsetName, const int xSize, const double *Array, int dscale = 7);
 
 /**
  * @brief Writes a tensor field in Voigt notation.
@@ -228,7 +228,7 @@ void WriteArray1D(const string& dsetName, const int xSize, const double *Array);
  * @param nStres Sizer of tensor in Voigt notation (`2`, `3` or `6`)
  * @param Array The tensor field container.
  */
-void WriteTensor(const string& dsetName,const int nNodes, const int nStres, const T_nodStres& Array);
+void WriteTensor(const string& dsetName,const int nNodes, const int nStres, const T_nodStres& Array, int dscale = 7);
 
 private:
 

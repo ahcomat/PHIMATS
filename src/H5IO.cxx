@@ -144,47 +144,41 @@ string H5IO::ReadString(const string& dsetName) {
     return result;
 }
 
-void H5IO::WriteArray1D(const string& dsetName, const int xSize, const double *Array){
+void H5IO::WriteArray1D(const string& dsetName, const int xSize, const double *Array, int dscale){
 
     try{
 
-        hid_t  file_id, dataset_id, dataspace_id;
-        hsize_t dims[1];
+        hid_t  file_id, dataset_id, dataspace_id, dcpl;
+        hsize_t dims[1]{ (hsize_t)xSize };
+        hsize_t chunk_dims[1] = { (hsize_t)xSize }; // Chunk size equals total size for 1D
 
-        dims[0] = xSize;
-
-        // Open the HDF5 file
         file_id = H5Fopen(H5FileName.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
-        if (file_id < 0) {
-            throw std::runtime_error("Failed to open HDF5 file: " + H5FileName);
-        }
+        if (file_id < 0) throw std::runtime_error("Failed to open HDF5 file: " + H5FileName);
 
-        // Create the dataspace
         dataspace_id = H5Screate_simple(1, dims, NULL);
-        if (dataspace_id < 0) {
-            H5Fclose(file_id);
-            throw std::runtime_error("Failed to create dataspace for dataset: " + dsetName);
-        }
 
-        // Create the dataset
-        dataset_id = H5Dcreate2(file_id, dsetName.c_str(), H5T_NATIVE_DOUBLE, dataspace_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+        // --- Compression Setup ---
+        dcpl = H5Pcreate(H5P_DATASET_CREATE);
+        H5Pset_layout(dcpl, H5D_CHUNKED);
+        H5Pset_chunk(dcpl, 1, chunk_dims);
+        H5Pset_scaleoffset(dcpl, H5Z_SO_FLOAT_DSCALE, dscale);
+        H5Pset_shuffle(dcpl);
+        H5Pset_deflate(dcpl, 7); // Level 6 is a good balance of speed/compression
+
+        dataset_id = H5Dcreate2(file_id, dsetName.c_str(), H5T_NATIVE_DOUBLE, dataspace_id, 
+                                H5P_DEFAULT, dcpl, H5P_DEFAULT);
+        
         if (dataset_id < 0) {
+            H5Pclose(dcpl);
             H5Sclose(dataspace_id);
             H5Fclose(file_id);
             throw std::runtime_error("Failed to create dataset: " + dsetName);
         }
 
-        // Write the data
-        herr_t status = H5Dwrite(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, Array);
-        if (status < 0) {
-            H5Dclose(dataset_id);
-            H5Sclose(dataspace_id);
-            H5Fclose(file_id);
-            throw std::runtime_error("Failed to write data to dataset: " + dsetName);
-        }
+        H5Dwrite(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, Array);
 
-        // Close resources
         H5Dclose(dataset_id);
+        H5Pclose(dcpl);
         H5Sclose(dataspace_id);
         H5Fclose(file_id);
 
@@ -196,15 +190,14 @@ void H5IO::WriteArray1D(const string& dsetName, const int xSize, const double *A
     }
 }
 
-void H5IO::WriteTensor(const string& dsetName, const int nNodes, const int nStres, const T_nodStres& Array){
+void H5IO::WriteTensor(const string& dsetName, const int nNodes, const int nStres, const T_nodStres& Array, int dscale){
 
     try {
 
-        hid_t  file_id, dataset_id, dataspace_id;
-        hsize_t dims[2];
-
-        dims[0] = nNodes;
-        dims[1] = nStres;
+        hid_t file_id, dataset_id, dataspace_id, dcpl;
+        hsize_t dims[2] = { (hsize_t)nNodes, (hsize_t)nStres };
+        // Chunking by rows (e.g., 1000 nodes at a time) or the whole field
+        hsize_t chunk_dims[2] = { (hsize_t)nNodes, (hsize_t)nStres };
 
         std::vector<double> BufferField(nNodes * nStres);
 
@@ -234,36 +227,27 @@ void H5IO::WriteTensor(const string& dsetName, const int nNodes, const int nStre
 
         // Open the HDF5 file
         file_id = H5Fopen(H5FileName.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
-        if (file_id < 0) {
-            throw std::runtime_error("Failed to open HDF5 file: " + H5FileName);
-        }
-
-        // Create the dataspace
         dataspace_id = H5Screate_simple(2, dims, NULL);
-        if (dataspace_id < 0) {
-            H5Fclose(file_id);
-            throw std::runtime_error("Failed to create dataspace for dataset: " + dsetName);
-        }
 
-        // Create the dataset
-        dataset_id = H5Dcreate2(file_id, dsetName.c_str(), H5T_NATIVE_DOUBLE, dataspace_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-        if (dataset_id < 0) {
-            H5Sclose(dataspace_id);
-            H5Fclose(file_id);
-            throw std::runtime_error("Failed to create dataset: " + dsetName);
-        }
+        // --- Compression Setup ---
+        dcpl = H5Pcreate(H5P_DATASET_CREATE);
+        H5Pset_layout(dcpl, H5D_CHUNKED);   
+        H5Pset_chunk(dcpl, 2, chunk_dims);
+        // Scale-Offset (Lossy compression: keeps 7 decimal places)
+        // This reduces entropy by discarding unnecessary precision
+        H5Pset_scaleoffset(dcpl, H5Z_SO_FLOAT_DSCALE, dscale);
+        // Shuffle (Reorders bytes for better pattern matching)
+        H5Pset_shuffle(dcpl);
+        H5Pset_deflate(dcpl, 7); 
+        // --------------------------
 
-        // Write the data
-        herr_t status = H5Dwrite(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, BufferField.data());
-            if (status < 0) {
-                H5Dclose(dataset_id);
-                H5Sclose(dataspace_id);
-                H5Fclose(file_id);
-                throw std::runtime_error("Failed to write data to dataset: " + dsetName);
-            }
+        dataset_id = H5Dcreate2(file_id, dsetName.c_str(), H5T_NATIVE_DOUBLE, dataspace_id, 
+                                H5P_DEFAULT, dcpl, H5P_DEFAULT);
 
-        // Close resources
+        H5Dwrite(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, BufferField.data());
+
         H5Dclose(dataset_id);
+        H5Pclose(dcpl);
         H5Sclose(dataspace_id);
         H5Fclose(file_id);
 
