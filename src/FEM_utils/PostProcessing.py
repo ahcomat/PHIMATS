@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
 
 class WriteXDMF:
-    def __init__(self, fileName, elementName, nSteps, components, nDim, 
+    def __init__(self, simFileName, meshFileName, elementName, nSteps, components, nDim, 
                  mechModel="Elastic", START=0, tOut=1, FLUX=False, TDS=False):
         """
         Args:
@@ -19,17 +19,16 @@ class WriteXDMF:
             FLUX (bool): Flag for flux field. Defaults to False.
             TDS (bool): Flag for writing Temp in TDS. 
         """
-        self.FName = fileName
         self.nDim = nDim
         self.components = components
         self.mechModel = mechModel
         
         # Standardized file map 
-        self.mesh_file = f"{fileName}.mesh.hdf5"
+        self.mesh_file = f"{meshFileName}.mesh.hdf5"
         self.file_map = {
-            "mech": f"{fileName}.mech.out.hdf5",
-            "diff": f"{fileName}.diff.out.hdf5",
-            "pff":  f"{fileName}.pff.out.hdf5"
+            "mech": f"{simFileName}.mech.out.hdf5",
+            "diff": f"{simFileName}.diff.out.hdf5",
+            "pff":  f"{simFileName}.pff.out.hdf5"
         }
 
         # Element configuration
@@ -90,7 +89,7 @@ class WriteXDMF:
                     self._add_attr(grid, t, "Rho", "Scalar", f_out)
 
         # Write output
-        with open(f"{fileName}.xdmf", "w") as f:
+        with open(f"{simFileName}.xdmf", "w") as f:
             f.write(self.prettify(root))
 
     def _create_step_header(self, t):
