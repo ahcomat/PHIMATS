@@ -65,8 +65,6 @@ TrappingModel::~TrappingModel(){
     // Deallocate memory.
     PetscFree(presDofs); PetscFree(presVals);
     VecDestroy(&vecF); VecDestroy(&vecx); MatDestroy(&matK); MatDestroy(&matM);
-    // Finalize PETSc
-    PetscFinalize();
     // Exit message
     cout << "TrappingModel model exited correctly" << "\n";
 }

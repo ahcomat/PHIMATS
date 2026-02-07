@@ -54,8 +54,6 @@ TransportModel::~TransportModel(){
     // Deallocate memory.
     PetscFree(presDofs); PetscFree(presVals);
     VecDestroy(&F); VecDestroy(&x); MatDestroy(&K);
-    // Finalize PETSc
-    PetscFinalize();
     // Exit message
     cout << "TransportModel model exited correctly" << "\n";
 }

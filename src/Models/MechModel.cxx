@@ -74,8 +74,6 @@ MechModel::~MechModel(){
     VecDestroy(&vecFext); VecDestroy(&vecDisp); VecDestroy(&vecFint); 
     VecDestroy(&vecR); MatDestroy(&matA);
     SNESDestroy(&snes);
-    // Finalize PETSc
-    PetscFinalize();
     // Exit message
     cout << "MechModel elements exited correctly" << "\n";
 }
