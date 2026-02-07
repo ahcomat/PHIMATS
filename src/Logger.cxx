@@ -21,7 +21,7 @@ Logger::Logger(MPI_Comm comm, const std::string& fileName)
 
     // Open log file if specified and rank is 0
     if (logToFile && rank == 0) {
-        logFile.open(fileName, std::ios::out | std::ios::trunc);
+        logFile.open(fileName, std::ios::out | std::ios::app);
         if (!logFile.is_open()) {
             throw std::runtime_error("Failed to open log file: " + fileName);
         }
