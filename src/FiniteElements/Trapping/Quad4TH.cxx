@@ -26,11 +26,7 @@ Quad4TH::Quad4TH(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, Log
     InitializeElements(Nodes, H5File_rve);
 }   
 
-Quad4TH::~Quad4TH(){
-
-    // Exit message
-    cout << "Quad4TH elements exited correctly" << "\n";
-}
+Quad4TH::~Quad4TH(){}
 
 void Quad4TH::InitShapeFunc(){
 

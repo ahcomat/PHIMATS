@@ -23,11 +23,7 @@ Quad4T::Quad4T(H5IO &H5File_in, Nodes &Nodes, int iSet)
     InitializeElements(Nodes);
 }   
 
-Quad4T::~Quad4T(){
-
-    // Exit message
-    cout << "Quad4T elements exited correctly" << "\n";
-}
+Quad4T::~Quad4T(){}
 
 void Quad4T::InitShapeFunc(){
 

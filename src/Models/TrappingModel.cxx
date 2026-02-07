@@ -65,8 +65,6 @@ TrappingModel::~TrappingModel(){
     // Deallocate memory.
     PetscFree(presDofs); PetscFree(presVals);
     VecDestroy(&vecF); VecDestroy(&vecx); MatDestroy(&matK); MatDestroy(&matM);
-    // Exit message
-    cout << "TrappingModel model exited correctly" << "\n";
 }
 
 void TrappingModel::setZero_nodFlux(){

@@ -54,11 +54,7 @@ LinearSolver::LinearSolver(Mat &A, Logger& logger, string solverType)
     }
 }
 
-LinearSolver::~LinearSolver(){
-
-    // Exit message
-    std::cout << "LinearSolver solver exited correctly" << "\n";
-}
+LinearSolver::~LinearSolver(){}
 
 void LinearSolver::UpdateKSP(Mat &A){
 

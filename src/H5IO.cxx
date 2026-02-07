@@ -18,11 +18,7 @@ H5IO::H5IO(string H5FName, Logger& logger)
 
 }
 
-H5IO::~H5IO(){
-
-    // Exit message
-    cout << "H5IO exited correctly" << "\n";
-}
+H5IO::~H5IO(){}
 
 double H5IO::ReadScalar(const string& dsetName){
 

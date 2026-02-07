@@ -29,11 +29,7 @@ Quad4::Quad4(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, string 
     InitializeElements(Nodes);
 }   
 
-Quad4::~Quad4(){
-
-    // Exit message
-    cout << "Quad4 elements exited correctly" << "\n";
-}
+Quad4::~Quad4(){}
 
 void Quad4::InitShapeFunc(){
 

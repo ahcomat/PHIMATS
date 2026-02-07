@@ -20,11 +20,7 @@ Quad4PFF::Quad4PFF(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, d
     InitializeElements(Nodes, H5File_in);
 }   
 
-Quad4PFF::~Quad4PFF(){
-
-    // Exit message
-    cout << "Quad4PFF elements exited correctly" << "\n";
-}
+Quad4PFF::~Quad4PFF(){}
 
 void Quad4PFF::InitShapeFunc(){
 

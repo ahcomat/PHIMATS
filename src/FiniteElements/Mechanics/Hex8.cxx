@@ -30,11 +30,7 @@ Hex8::Hex8(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, string ma
     InitializeElements(Nodes);
 }
 
-Hex8::~Hex8(){
-
-    // Exit message
-    cout << "Elements exited correctly" << "\n";
-}
+Hex8::~Hex8(){}
 
 void Hex8::InitShapeFunc(){
 

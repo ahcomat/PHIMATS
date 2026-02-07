@@ -26,11 +26,7 @@ Tri3TH::Tri3TH(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, Logge
     InitializeElements(Nodes, H5File_rve);
 }   
 
-Tri3TH::~Tri3TH(){
-
-    // Exit message
-    cout << "Tri3TH elements exited correctly" << "\n";
-}
+Tri3TH::~Tri3TH(){}
 
 void Tri3TH::InitShapeFunc(){
 

@@ -54,8 +54,6 @@ TransportModel::~TransportModel(){
     // Deallocate memory.
     PetscFree(presDofs); PetscFree(presVals);
     VecDestroy(&F); VecDestroy(&x); MatDestroy(&K);
-    // Exit message
-    cout << "TransportModel model exited correctly" << "\n";
 }
 
 void TransportModel::setZero_nodFlux(){

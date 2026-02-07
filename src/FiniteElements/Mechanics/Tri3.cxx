@@ -28,11 +28,7 @@ Tri3::Tri3(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, string ma
     InitializeElements(Nodes);
 }
 
-Tri3::~Tri3(){
-
-    // Exit message
-    cout << "Tri3 elements exited correctly" << "\n";
-}
+Tri3::~Tri3(){}
 
 void Tri3::InitShapeFunc(){
 

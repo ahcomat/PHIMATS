@@ -23,11 +23,7 @@ Tri3T::Tri3T(H5IO &H5File_in, Nodes &Nodes, int iSet, Logger& logger)
     InitializeElements(Nodes);
 }   
 
-Tri3T::~Tri3T(){
-
-    // Exit message
-    cout << "Tri3T elements exited correctly" << "\n";
-}
+Tri3T::~Tri3T(){}
 
 void Tri3T::InitShapeFunc(){
 

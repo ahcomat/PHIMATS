@@ -45,8 +45,6 @@ PFFModel::~PFFModel(){
     // Deallocate memory
     PetscFree(FH); PetscFree(indices);
     VecDestroy(&vecFp); VecDestroy(&vecx); MatDestroy(&matK);
-    // Exit message
-    cout << "PFFModel model exited correctly" << "\n";
 }
 
 void PFFModel::InitializePETSc(vector<BaseElemPFF*> elements){

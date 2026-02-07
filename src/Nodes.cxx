@@ -5,11 +5,7 @@
 #define at(x) operator[](x)
 #endif
 
-Nodes::~Nodes(){
-
-    // Exit message
-    cout << "Nodes exited correctly" << "\n";
-}
+Nodes::~Nodes(){}
 
 void Nodes::ReadNodes(H5IO &H5File_in, H5IO &H5File_mesh){
 

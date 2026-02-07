@@ -25,11 +25,7 @@ Tri6TH::Tri6TH(H5IO &H5File_in, H5IO &H5File_mesh, Nodes &Nodes, int iSet, Logge
     InitializeElements(Nodes, H5File_in);
 }   
 
-Tri6TH::~Tri6TH(){
-
-    // Exit message
-    cout << "Tri6TH elements exited correctly" << "\n";
-}
+Tri6TH::~Tri6TH(){}
 
 void Tri6TH::InitShapeFunc(){
 
