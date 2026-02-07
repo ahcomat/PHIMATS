@@ -28,6 +28,8 @@ int main(int argc, char **argv){
 
 	// Initialize PETSc (model object finalizes PETSc in the destructor)
 	PetscInitialize(&argc, &argv, NULL, NULL);
+    
+    {
 
 	// Read inputs -----------
 
@@ -133,6 +135,12 @@ int main(int argc, char **argv){
 	for (auto* mat : matTVec) { // Material
 	delete mat;
 	}
+
+    }
+
+    // Finalize PETSc -----------
+    
+    PetscFinalize();
 
 	return 0;
 }

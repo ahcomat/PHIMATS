@@ -30,6 +30,8 @@ int main(int argc, char **argv){
     // Initialize PETSc (always here!)
     PetscInitialize(&argc, &argv, NULL, NULL);
 
+    {
+
     // Read inputs -----------
 
     string SimulName = "SENT_EPTH";
@@ -187,6 +189,12 @@ int main(int argc, char **argv){
     for (auto* mat : pffMatVec) { // Pff material
         delete mat;
     }
+
+    }
+
+    // Finalize PETSc -----------
+    
+    PetscFinalize();
 
     return 0;
 }

@@ -28,8 +28,9 @@ int main(int argc, char **argv){
 
   	// Initialize PETSc 
 	PetscInitialize(&argc, &argv, NULL, NULL);
+    {
 
-  // Read inputs -----------
+    // Read inputs -----------
 
 	// Model name, same as `Simul`
 	string SimulName = "TDSHT990";
@@ -142,6 +143,12 @@ int main(int argc, char **argv){
         for (auto* mat : matTVec) { // Material
         delete mat;
     }
+
+    }
+
+    // Finalize PETSc -----------
+    
+    PetscFinalize();
 
     return 0;
 }
