@@ -4,14 +4,6 @@
 #include <stdexcept>
 #include <regex>
 
-std::string Logger::getCurrentTime() const {
-    
-    std::time_t now = std::time(nullptr);
-    char buf[80];
-    std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", std::localtime(&now));
-    return std::string(buf);
-}
-
 Logger::Logger(MPI_Comm comm, const std::string& fileName)
     : logToFile(!fileName.empty()) {
 
@@ -141,3 +133,10 @@ void Logger::ExitMessage(){
     }
 }
 
+std::string Logger::getCurrentTime() const {
+    
+    std::time_t now = std::time(nullptr);
+    char buf[80];
+    std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", std::localtime(&now));
+    return std::string(buf);
+}
