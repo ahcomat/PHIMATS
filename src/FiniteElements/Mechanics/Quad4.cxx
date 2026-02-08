@@ -350,10 +350,15 @@ void Quad4::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres&
 
     try {
         if (elStran_e.data() == nullptr){
-            throw runtime_error("Plasicity strain container vectors were not allocated.\n\n       Please add the keyword argument < Elastoplastic > in the element constructor.\n");
+            throw runtime_error("Plasicity strain container vectors were not allocated.\n    Please add the keyword argument < Elastoplastic > in the element constructor.\n");
         }
     } catch (const exception& e) {
         cerr << "ERROR: " << e.what() << endl;
+        logger.log("Exception caught in CalcNodVals::CalcNodVals\n", "ERROR", true);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("    Critical error encountered. Terminating!\n", "", false);
+        exit(EXIT_FAILURE);
+
     }
 
     // Integration point values.
