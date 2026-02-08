@@ -43,7 +43,8 @@ public:
 
 enum class AnalysisType{
     PlaneStrain,
-    PlaneStress
+    PlaneStress,
+    Axisymmetric
 };
 
 enum class HardeningLaw{
