@@ -34,9 +34,12 @@ LinearElastic::LinearElastic(string dimensions, H5IO& H5File, int iSet, Logger& 
         }
 
     } catch (const std::exception& e) {
-        cerr << "ERROR: " << e.what() << endl;
-        cerr << "Terminating!" << endl;
+
+        logger.log("Exception caught in LinearElastic constructor\n", "ERROR", true);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("    Critical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
+
     }
 }
 
@@ -84,9 +87,12 @@ void LinearElastic::InitializeIsoElasticityMatrix(const string& analysisType, do
             throw std::invalid_argument("Undefined material analysis type: < " + analysisType + " >");
         }
     } catch (const std::exception& e) {
-        cerr << "ERROR: " << e.what() << endl;
-        cerr << "Terminating!" << endl;
+
+        logger.log("Exception caught in LinearElastic::InitializeIsoElasticityMatrix\n", "ERROR", true);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("    Critical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
+
     }
 }
 
@@ -115,8 +121,10 @@ void LinearElastic::InitializeCubicElasticityMatrix(const string& analysisType, 
             throw std::invalid_argument("Undefined material analysis type: < " + analysisType + " >");
         }
     } catch (const std::exception& e) {
-        cerr << "ERROR: " << e.what() << endl;
-        cerr << "Terminating!" << endl;
+
+        logger.log("Exception caught in LinearElastic::InitializeCubicElasticityMatrix\n", "ERROR", true);
+        logger.log("    " + std::string(e.what()), "", false);
+        logger.log("    Critical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
     }
 }
