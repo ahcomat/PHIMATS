@@ -84,25 +84,46 @@ double Mises3D(const ColVecd6& sig3D);
  * @param eps_e_old 
  * @param eps_p_old 
  * @param eqp_old 
- * @param iStep Step number.
+ * @param iStep Step.
  */
 void ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep);
 
 /**
  * @brief Return mapping algorithm for 2D isotropic hardening plasticity. 
  * 
- * @param deps Strain increment
+ * @param deps Strain increment.
  * @param sig Stress tensor.
  * @param eps_e Elastic strain.
  * @param eps_p Plastic strain.
- * @param eps_eq Equivalent plastic strain
+ * @param eps_eq Equivalent plastic strain.
  * @param sig_eq Equivalent stress.
  * @param sig_h Hydrostatic stress.
  * @param rho Normalized dislocation density.
  * @param eps_e_old 
  * @param eps_p_old 
  * @param eps_eq_old 
- * @param iStep 
+ * @param iStep Step.
+ */
+void ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep);
+
+/**
+ * @brief Return mapping algorithm for 2D isotropic hardening plasticity with PFF. 
+ * 
+ * @param deps Strain increment.
+ * @param sig Stress tensor.
+ * @param eps_e Elastic strain.
+ * @param eps_p Plastic strain.
+ * @param eps_eq Equivalent plastic strain.
+ * @param sig_eq Equivalent stress.
+ * @param sig_h Hydrostatic stress.
+ * @param rho Normalized dislocation density.
+ * @param eps_e_old 
+ * @param eps_p_old 
+ * @param eps_eq_old 
+ * @param iStep Step.
+ * @param gPhi_d g(phi).
+ * @param wp_old 
+ * @param wp Plastic work density.
  */
 void ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep);
 
