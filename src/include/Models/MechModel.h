@@ -194,7 +194,7 @@ Vec& getX();
 Mat& getA();
 
 /**
- * @brief Calculates strains, stresses and internal force for linear elastic material. Maps strain/stress to nodal values.
+ * @brief Calculates strains, stresses and internal force for linear elastic material. Maps strain/stress to nodal values (elasticity).
  * 
  * @param elements Elements
  * @param mats Mechanics material (linear elastic)
