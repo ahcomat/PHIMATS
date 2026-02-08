@@ -62,26 +62,41 @@ void LinearElastic::InitializeIsoElasticityMatrix(const string& analysisType, do
                    0, 0, 0, 0, uo, 0,
                    0, 0, 0, 0, 0, uo;
 
-        } else if (analysisType == "PlaneStrain" || analysisType == "PlaneStress" || analysisType == "PlaneStrainPFF") {
+        } else if (analysisType == "PlaneStrain" || analysisType == "PlaneStress" ||
+                   analysisType == "PlaneStrainPFF" || analysisType == "AxiSym" || analysisType == "AxiSymPFF") {
 
-            if (dims != "2D")
-                throw std::invalid_argument("Invalid dimension: < " + dims + " > for < " + analysisType + " > analysis.");
+            if (analysisType == "Axisymmetric") {
+                CMatx_e = Matd4x4(Matd4x4::Zero());
+                auto& mat = std::get<Matd4x4>(CMatx_e);
 
-            CMatx_e = Matd3x3(Matd3x3::Zero());
-            auto& mat = std::get<Matd3x3>(CMatx_e);
+                // Lame parameters for isotropic materials
+                double factor = Emod / ((1.0 + nu) * (1.0 - 2.0 * nu));
 
-            double param = Emod * (1 - nu) / ((1 + nu) * (1 - 2 * nu));
+                // Rows: radial (r), axial (z), hoop (theta), shear (rz)
+                mat << (1.0 - nu), nu,          nu,          0,
+                    nu,          (1.0 - nu), nu,          0,
+                    nu,          nu,          (1.0 - nu), 0,
+                    0,           0,           0,          (1.0 - 2.0 * nu) / 2.0;
+                
+                mat *= factor;
 
-            if (analysisType == "PlaneStrain" || analysisType == "PlaneStrainPFF") {
-                mat << param, param * nu / (1.0 - nu), 0,
-                       param * nu / (1.0 - nu), param, 0,
-                       0, 0, param * (1.0 - 2.0 * nu) / (2.0 * (1.0 - nu));
+            } else {
+                CMatx_e = Matd3x3(Matd3x3::Zero());
+                auto& mat = std::get<Matd3x3>(CMatx_e);
 
-            } else if (analysisType == "PlaneStress") {
-                param = Emod / (1.0 - nu * nu);
-                mat << param, param * nu, 0,
-                       param * nu, param, 0,
-                       0, 0, param * (1.0 - nu) / 2.0;
+                double param = Emod * (1 - nu) / ((1 + nu) * (1 - 2 * nu));
+
+                if (analysisType == "PlaneStrain" || analysisType == "PlaneStrainPFF") {
+                    mat << param, param * nu / (1.0 - nu), 0,
+                        param * nu / (1.0 - nu), param, 0,
+                        0, 0, param * (1.0 - 2.0 * nu) / (2.0 * (1.0 - nu));
+
+                } else if (analysisType == "PlaneStress") {
+                    param = Emod / (1.0 - nu * nu);
+                    mat << param, param * nu, 0,
+                        param * nu, param, 0,
+                        0, 0, param * (1.0 - nu) / 2.0;
+                }
             }
         } else {
             throw std::invalid_argument("Undefined material analysis type: < " + analysisType + " >");
