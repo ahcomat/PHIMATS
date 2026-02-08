@@ -335,7 +335,7 @@ static RM2DFnPFF selectRM2DPFF(AnalysisType analysis2D, HardeningLaw hardening) 
                 case HardeningLaw::Voce:
                     return &IsoHard::RM2DPFF<PlaneStrain, Voce>;
                 case HardeningLaw::KME:
-                    return &IsoHard::RM2DPFF<PlaneStrain, Voce>;
+                    return &IsoHard::RM2DPFF<PlaneStrain, KME>;
                 default:
                     throw std::runtime_error("Unsupported hardening law.");
             }
