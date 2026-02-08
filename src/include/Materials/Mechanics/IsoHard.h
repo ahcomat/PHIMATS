@@ -44,7 +44,7 @@ public:
 enum class AnalysisType{
     PlaneStrain,
     PlaneStress,
-    Axisymmetric
+    AxiSymmetric
 };
 
 enum class HardeningLaw{
@@ -126,9 +126,25 @@ void ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& e
  * @param wp_old 
  * @param wp Plastic work density.
  */
-void ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep);
-
 void ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp);
+
+/**
+ * @brief Return mapping algorithm for 2D axi-symmetric isotropic hardening plasticity. 
+ * 
+ * @param deps Strain increment.
+ * @param sig Stress tensor.
+ * @param eps_e Elastic strain.
+ * @param eps_p Plastic strain.
+ * @param eps_eq Equivalent plastic strain
+ * @param sig_eq Equivalent stress.
+ * @param sig_h Hydrostatic stress.
+ * @param rho Normalized dislocation density.
+ * @param eps_e_old 
+ * @param eps_p_old 
+ * @param eps_eq_old 
+ * @param iStep Step.
+ */
+void ReturnMappingAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep);
 
 /**
  * @brief Returns the stiffness matrix in Voigt notation.
@@ -360,6 +376,30 @@ static RM2DFnPFF selectRM2DPFF(AnalysisType analysis2D, HardeningLaw hardening) 
             throw std::runtime_error("Unsupported analysis type.");
 
     }
+}
+
+// Axi-symmetric return-mapping to handle different hardening laws.
+template <typename HardeningLaw>
+void RMAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep);
+
+using RMAxiFn = void (IsoHard::*)(ColVecd4&, ColVecd4&, ColVecd4&, ColVecd4&, double&, double&, double&, double&, const ColVecd4&, const ColVecd4&, const double&, const int);
+
+// Function pointer for the selected ReturnMapping variant
+RMAxiFn selectedRMAxi;
+
+// Function to map HardeningLaw to the appropriate ReturnMapping
+static RMAxiFn selectRMAxi(HardeningLaw hardening) {
+
+    switch (hardening) {
+        case HardeningLaw::PowerLaw:
+            return &IsoHard::RMAxi<PowerLaw>;
+        case HardeningLaw::Voce:
+            return &IsoHard::RMAxi<Voce>;
+        case HardeningLaw::KME:
+            return &IsoHard::RMAxi<KME>;
+        default:
+            throw std::runtime_error("Unsupported hardening law.");
+    }        
 }
 
 };

@@ -382,3 +382,10 @@ void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& 
 
     }
 }
+
+/// @brief Specialization 
+template <typename HardeningLaw>
+void IsoHard::RMAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep){
+
+
+}

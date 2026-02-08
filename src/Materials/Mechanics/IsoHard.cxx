@@ -51,7 +51,7 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
 
         }
     } catch (const std::runtime_error& e) {
-        logger.log("\nException caught in IsoHard constructro\n", "Error", true);
+        logger.log("\nException caught in IsoHard constructor\n", "Error", true);
         logger.log("    " + std::string(e.what()), "", false);
         logger.log("\nCritical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
@@ -92,6 +92,16 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
             } else if (hardLaw == "KME") {
                 selectedRM2DPFF = &IsoHard::RM2DPFF<PlaneStrain, KME>;
             }
+        } else if (analysisType == "AxiSymmetric") {
+            analysis2D = AnalysisType::AxiSymmetric;
+            if (hardLaw == "PowerLaw") {
+                selectedRMAxi = &IsoHard::RMAxi<PowerLaw>;
+            } else if (hardLaw == "Voce") {
+                selectedRMAxi = &IsoHard::RMAxi<Voce>;
+            } else if (hardLaw == "KME") {
+                selectedRMAxi = &IsoHard::RMAxi<KME>;
+            }
+            CMatx_ep = Matd4x4(Matd4x4::Zero()); // Initialize as 4x4
         } else if (analysisType == "PlaneStress") {
             analysis2D = AnalysisType::PlaneStress;
             if (hardLaw == "PowerLaw") {
@@ -164,6 +174,16 @@ void IsoHard::ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e
     }
 
     (this->*selectedRM2DPFF)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, rho, eps_e_old, eps_p_old, eps_eq_old, iStep, gPhi_d, wp_old, wp);
+}
+
+void IsoHard::ReturnMappingAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep){
+
+    // Ensure selectedRM3D is valid
+    if (!selectedRMAxi) {
+        throw std::runtime_error("ReturnMappingAxi function pointer is not set. Make sure you are not using a PFF material model.");
+    }
+
+    (this->*selectedRMAxi)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, rho, eps_e_old, eps_p_old, eps_eq_old, iStep);
 }
 
 T_DMatx IsoHard::getCMatx() const{
