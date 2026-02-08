@@ -148,7 +148,7 @@ void IsoHard::ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, Co
 
 void IsoHard::ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep){
 
-    // Ensure selectedRM3D is valid
+    // Ensure selectedRM2D is valid
     if (!selectedRM2D) {
         throw std::runtime_error("ReturnMapping2D function pointer is not set. Make sure you are not using a PFF material model.");
     }
@@ -158,7 +158,7 @@ void IsoHard::ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, Co
 
 void IsoHard::ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp){
 
-    // Ensure selectedRM3D is valid
+    // Ensure selectedRM2DPFF is valid
     if (!selectedRM2DPFF) {
         throw std::runtime_error("ReturnMapping2DPFF function pointer is not set.");
     }
