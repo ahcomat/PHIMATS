@@ -38,7 +38,7 @@ class PreProcessing:
             "Transport": ["Transport", "2PhaseTrapping", "GBTrapping", "HLGBTrapping", "MechTrapping", "MechTrappingPFF"],
             "PFF": ["PFF", "ChemoMech"]
         }
-        self._allowed_Analysis = ["3D", "PlaneStrain", "PlaneStress", "PlaneStrainPFF", "AxiSym", "AxiSymPFF"]
+        self._allowed_Analysis = ["3D", "PlaneStrain", "PlaneStress", "PlaneStrainPFF", "AxiSymmetric", "AxiSymmetricPFF"]
         self._allowed_Isotropy = ["Isotropic", "Cubic"]
         
         # Mapping requirements for dictionary validation
