@@ -51,7 +51,7 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
 
         }
     } catch (const std::runtime_error& e) {
-        logger.log("\nException caught in IsoHard\n", "", false);
+        logger.log("\nException caught in IsoHard constructro\n", "Error", true);
         logger.log("    " + std::string(e.what()), "", false);
         logger.log("\nCritical error encountered. Terminating!\n", "", false);
         exit(EXIT_FAILURE);
