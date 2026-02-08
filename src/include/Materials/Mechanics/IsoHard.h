@@ -71,6 +71,14 @@ IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger);
 double Mises3D(const ColVecd6& sig3D);
 
 /**
+ * @brief Calculates Mises stress for AxiSymmetrix models. 
+ * 
+ * @param sig stress tensor
+ * @return double 
+ */
+double MisesAxi(const ColVecd4& sig);
+
+/**
  * @brief Return mapping algorithm for 3D isotropic hardening plasticity. 
  * 
  * @param deps Strain increment

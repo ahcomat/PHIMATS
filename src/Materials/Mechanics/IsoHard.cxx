@@ -146,6 +146,21 @@ double IsoHard::Mises3D(const ColVecd6& sig3D){
     return sqrt(term);
 }
 
+double IsoHard::MisesAxi(const ColVecd4& sig) {
+    
+    double s_rr = sig(0); 
+    double s_zz = sig(1); 
+    double s_hoop = sig(2); 
+    double t_rz = sig(3); 
+
+    double term = 0.5 * (std::pow(s_rr - s_zz, 2) + 
+                         std::pow(s_zz - s_hoop, 2) + 
+                         std::pow(s_hoop - s_rr, 2)) + 
+                  3.0 * std::pow(t_rz, 2);
+
+    return std::sqrt(term);
+}
+
 void IsoHard::ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd6& eps_e_old, const ColVecd6& eps_p_old, const double& eps_eq_old, const int iStep){
 
     // Ensure selectedRM3D is valid
