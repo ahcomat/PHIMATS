@@ -25,6 +25,7 @@ Major architectural refactor of pre-/post-processing and PFF/hydrogen chemo-mech
 - `PreProcessing`
   - Deprecate geometry-based functions (`TensileDisp2D`, `TensileDisp3D`, `PermeationX`, `WriteConBCs`, `WriteDispBCs`)
   - Implemented `AssignDirichletBC` and `WriteBCVTK` as general-purpose functions leveraging Gmsh's `Physical groups`.
+- `H5IO` added compression to output files for size reduction.
 
 ### Build System & Infrastructure
 - Shared library `.so` build support compared to the previous static library `.a` for reduced driver code binary size.
