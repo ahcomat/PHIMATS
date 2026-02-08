@@ -160,6 +160,9 @@ const ColVecd6 I6 = (ColVecd6() << 1.0, 1.0, 1.0, 0.0, 0.0, 0.0).finished();
 /// @brief 2D Identity tensor in Voigt notation.
 const ColVecd3 I3 = (ColVecd3() << 1.0, 1.0, 0.0).finished();
 
+/// @brief Axisymmetric Identity tensor: [1, 1, 1, 0]
+const ColVecd4 I4 = (ColVecd4() << 1.0, 1.0, 1.0, 0.0).finished();
+
 /// @brief Plasticity type.
 string Platicity;         
 
