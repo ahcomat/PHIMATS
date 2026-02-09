@@ -105,7 +105,7 @@ using T_nodStres = std::variant<vector<ColVecd2>, vector<ColVecd3>, vector<ColVe
  * @brief Variants for element stress/strain (tensor in Voigt notation) quantities.
  * 
  */
-using T_elStres = std::variant<vector<vector<ColVecd3>>*, vector<vector<ColVecd6>>*>;
+using T_elStres = std::variant<vector<vector<ColVecd3>>*, vector<vector<ColVecd4>>*, vector<vector<ColVecd6>>*>;
 
 
 template <typename T>
