@@ -385,16 +385,16 @@ void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& 
 
 /// @brief Specialization 
 template <typename HardeningLaw>
-void IsoHard::RMAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep){
+void IsoHard::RMAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const Matd4x4& Ce, Matd4x4& Cep){
 
-        // Elastic strain
+    // Elastic strain
     eps_e = eps_e_old + deps;
 
     // Plastic strain
     eps_p = eps_p_old;
 
     // Trial stress
-    ColVecd4 sig_trial = std::get<Matd4x4>(CMatx_e)*eps_e;
+    ColVecd4 sig_trial = Ce*eps_e;
 
     //Mises stress
     double sig_trial_eq = MisesAxi(sig_trial);
@@ -418,9 +418,12 @@ void IsoHard::RMAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& ep
         sig = sig_trial;
         sig_eq = sig_trial_eq;
         sig_h = sig_trial.dot(I4) / 3.0;
-        std::get<Matd4x4>(CMatx_ep) = std::get<Matd4x4>(CMatx_e);
+        Cep = Ce; // Zero-overhead copy;
 
     } else { // --> Plastic step
+
+        // PRE-CALCULATE constants for the loop
+        const double three_uo = 3.0 * uo;
 
         // Iteration counter
         int nIter_RM = 0;
@@ -435,11 +438,11 @@ void IsoHard::RMAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& ep
             // Update Iteration counter
             nIter_RM++;
 
-            // Update plastic strain increment 
-            deqpl += f_yield/(3*uo + hard);
+            // Update plastic strain increment, Use the pre-calculated constant
+            deqpl += f_yield / (three_uo + hard);
             p = eps_eq_old + deqpl;
             UHard<HardeningLaw>(p, sYield, rho, hard);
-            f_yield = sig_trial_eq - 3*uo*deqpl - sYield;
+            f_yield = sig_trial_eq - three_uo * deqpl - sYield;
 
             if(nIter_RM > max_iter){
 
@@ -460,18 +463,16 @@ void IsoHard::RMAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& ep
         eps_p += deqpl*N_tr;    // Plastic strain tensor
         eps_e -= deqpl*N_tr;    // Elastic strain tensor
         
-        sig = std::get<Matd4x4>(CMatx_e)*eps_e;  // Stress tensor
+        sig = Ce*eps_e;  // Stress tensor
         sig_eq = MisesAxi(sig);;  // Von Mises stress
         sig_h = sig.dot(I4) / 3.0; // Hydostatic stress
 
         // Tangent stiffness matrix
 
-        Matd4x4& Ce = std::get<Matd4x4>(CMatx_e);
-
         RowVecd4 Ce_N = Ce*N_tr;
         double N_Ce_N = N_tr.dot(Ce_N);
         double denom = (2.0 / 3.0) * hard + N_Ce_N;
-        std::get<Matd4x4>(CMatx_ep) = Ce - (Ce_N.transpose() * Ce_N)/denom;
+        Cep.noalias() = Ce - (Ce_N.transpose() * Ce_N)/denom;
 
     }
 

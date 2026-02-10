@@ -152,14 +152,14 @@ void ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd
  * @param eps_eq_old 
  * @param iStep Step.
  */
-void ReturnMappingAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep);
+void ReturnMappingAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const Matd4x4& Ce, Matd4x4& Cep);
 
 /**
  * @brief Returns the stiffness matrix in Voigt notation.
  * 
  * @return T_DMatx 
  */
-T_DMatx getCMatx() const override;
+T_DMatx& getCMatx_ep();
 
 private:
 
@@ -388,9 +388,9 @@ static RM2DFnPFF selectRM2DPFF(AnalysisType analysis2D, HardeningLaw hardening) 
 
 // Axi-symmetric return-mapping to handle different hardening laws.
 template <typename HardeningLaw>
-void RMAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep);
+void RMAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const Matd4x4& Ce, Matd4x4& Cep);
 
-using RMAxiFn = void (IsoHard::*)(ColVecd4&, ColVecd4&, ColVecd4&, ColVecd4&, double&, double&, double&, double&, const ColVecd4&, const ColVecd4&, const double&, const int);
+using RMAxiFn = void (IsoHard::*)(ColVecd4&, ColVecd4&, ColVecd4&, ColVecd4&, double&, double&, double&, double&, const ColVecd4&, const ColVecd4&, const double&, const int, const Matd4x4&, Matd4x4&);
 
 // Function pointer for the selected ReturnMapping variant
 RMAxiFn selectedRMAxi;
