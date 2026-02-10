@@ -240,7 +240,10 @@ int iterCounter = 0;
 bool updateStiffMat = true;
 
 /// @brief Number of element displacement dofs.
-int nElDispDofs;    
+int nElDispDofs;  
+
+/// @brief Stress/strain components of the elements. 
+int nElStres;
 
 /// @brief Nodal stress.
 T_nodStres nodStres;
