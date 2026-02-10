@@ -212,6 +212,14 @@ void H5IO::WriteTensor(const string& dsetName, const int nNodes, const int nStre
                 }
             }
 
+        } else if(nStres==4){
+
+            for (int i=0; i<nNodes; i++){
+                for (int j=0; j<nStres; j++){
+                    BufferField[i*nStres + j] = std::get<std::vector<ColVecd4>>(Array).at(i)(j);
+                }
+            }
+
         } else if(nStres==6) {
 
             for (int i=0; i<nNodes; i++){
