@@ -30,20 +30,38 @@ MechModel::MechModel(vector<BaseElemMech*> elements, H5IO& H5File_in, Logger& lo
     nodStres_eq.resize(nTotNodes);
     nodStres_h.resize(nTotNodes);
     nodRho.resize(nTotNodes);
-    if (nDim == 2){ // Case 2D model
 
-        nodStres = vector<ColVecd3>(nTotNodes);
-        nodStran = vector<ColVecd3>(nTotNodes);
-        nodStran_e = vector<ColVecd3>(nTotNodes);
-        nodStran_p = vector<ColVecd3>(nTotNodes);
+    // Iterate through element sets to find required dimensions
+    for (auto& elemSet : elements) { // elements is vector<BaseElemMech*>
 
-    } else if (nDim == 3){ // Case 3D
+        nElStres = elemSet->get_nElStres(); // Query the stress components (3 or 4)
 
-        nodStres = vector<ColVecd6>(nTotNodes);
-        nodStran = vector<ColVecd6>(nTotNodes);
-        nodStran_e = vector<ColVecd6>(nTotNodes);
-        nodStran_p = vector<ColVecd6>(nTotNodes);
+        if (nElStres == 3){ // Plane Strain/Stress
 
+
+            nodStres = vector<ColVecd3>(nTotNodes);
+            nodStran = vector<ColVecd3>(nTotNodes);
+            nodStran_e = vector<ColVecd3>(nTotNodes);
+            nodStran_p = vector<ColVecd3>(nTotNodes);
+
+        } else if (nElStres == 4){ // AxiSymmetric
+
+            nodStres = vector<ColVecd4>(nTotNodes);
+            nodStran = vector<ColVecd4>(nTotNodes);
+            nodStran_e = vector<ColVecd4>(nTotNodes);
+            nodStran_p = vector<ColVecd4>(nTotNodes);
+
+        } else if (nElStres == 6){ // 3D
+
+            nodStres = vector<ColVecd6>(nTotNodes);
+            nodStran = vector<ColVecd6>(nTotNodes);
+            nodStran_e = vector<ColVecd6>(nTotNodes);
+            nodStran_p = vector<ColVecd6>(nTotNodes);
+
+        }
+        
+        // Break after checking the first valid set assuming the whole model shares one analysis type
+        break; 
     }
 
     // Allocate memory for `Fint` and `indices`.
@@ -78,7 +96,8 @@ MechModel::~MechModel(){
 
 void MechModel::setZeroNodVals(){
 
-    if (nDim == 2){ // Case 2D model
+    if (nElStres == 3){ // Plane Strain/Stress
+
 
         for(int iNod=0; iNod<nTotNodes; iNod++){
 
@@ -94,7 +113,7 @@ void MechModel::setZeroNodVals(){
             
         }
 
-    } else if (nDim == 3){ // Case 3D
+    } else if (nElStres == 4){ // 3D
 
         for(int iNod=0; iNod<nTotNodes; iNod++){
             
@@ -651,7 +670,7 @@ void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*>
             std::get<std::vector<ColVecd3>>(nodStres).at(iNod) = std::get<std::vector<ColVecd3>>(nodStres).at(iNod)/nodCount.at(iNod);
         }
 
-    } else if (nDim==3){
+    } else if (nElStres == 6){ // 3D
 
         for(int iNod=0; iNod<nTotNodes; iNod++){
             
@@ -724,19 +743,10 @@ void MechModel::WriteOut(vector<BaseElemMech*> elements, H5IO &H5File_out, const
     
     H5File_out.WriteArray1D("Rho/Step_"+iStep, nTotNodes, nodRho.data(), 10); // Will write it as output anyways for now
 
-
-    // Stresses and strains
-    if (nDim==2){
-        H5File_out.WriteTensor("Strain/Step_"+iStep, nTotNodes, 3, nodStran);
-        H5File_out.WriteTensor("Strain_e/Step_"+iStep, nTotNodes, 3, nodStran_e, 10);
-        H5File_out.WriteTensor("Strain_p/Step_"+iStep, nTotNodes, 3, nodStran_p, 10);
-        H5File_out.WriteTensor("Stress/Step_"+iStep, nTotNodes, 3, nodStres);
-    } else if (nDim==3) {
-        H5File_out.WriteTensor("Strain/Step_"+iStep, nTotNodes, 6, nodStran);
-        H5File_out.WriteTensor("Strain_e/Step_"+iStep, nTotNodes, 6, nodStran_e, 10);
-        H5File_out.WriteTensor("Strain_p/Step_"+iStep, nTotNodes, 6, nodStran_p, 10);
-        H5File_out.WriteTensor("Stress/Step_"+iStep, nTotNodes, 6, nodStres);
-    }
+    H5File_out.WriteTensor("Strain/Step_"+iStep, nTotNodes, nElStres, nodStran);
+    H5File_out.WriteTensor("Strain_e/Step_"+iStep, nTotNodes, nElStres, nodStran_e, 10);
+    H5File_out.WriteTensor("Strain_p/Step_"+iStep, nTotNodes, nElStres, nodStran_p, 10);
+    H5File_out.WriteTensor("Stress/Step_"+iStep, nTotNodes, nElStres, nodStres);
 
     // Set nodal vlaues to zero
     setZeroNodVals();
