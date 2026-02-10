@@ -101,15 +101,16 @@ void MechModel::setZeroNodVals(){
 
         for(int iNod=0; iNod<nTotNodes; iNod++){
 
-            std::get<std::vector<ColVecd3>>(nodStran).at(iNod).setZero();
-            std::get<std::vector<ColVecd3>>(nodStran_e).at(iNod).setZero();
-            std::get<std::vector<ColVecd3>>(nodStran_p).at(iNod).setZero();
-            std::get<std::vector<ColVecd3>>(nodStres).at(iNod).setZero();
-            nodStran_eq.at(iNod) = 0;
-            nodStres_eq.at(iNod) = 0;
-            nodStres_h.at(iNod) = 0;
-            nodRho.at(iNod) = 0;
-            nodCount.at(iNod) = 0;
+            accessVec(std::get<std::vector<ColVecd3>>(nodStran), iNod).setZero();
+            accessVec(std::get<std::vector<ColVecd3>>(nodStran_e), iNod).setZero();
+            accessVec(std::get<std::vector<ColVecd3>>(nodStran_p), iNod).setZero();
+            accessVec(std::get<std::vector<ColVecd3>>(nodStres), iNod).setZero();
+
+            accessVec(nodStran_eq, iNod) = 0;
+            accessVec(nodStres_eq, iNod) = 0;
+            accessVec(nodStres_h, iNod) = 0;
+            accessVec(nodRho, iNod) = 0;
+            accessVec(nodCount, iNod) = 0;
             
         }
 
@@ -117,15 +118,33 @@ void MechModel::setZeroNodVals(){
 
         for(int iNod=0; iNod<nTotNodes; iNod++){
             
-            std::get<std::vector<ColVecd6>>(nodStran).at(iNod).setZero();
-            std::get<std::vector<ColVecd6>>(nodStran_e).at(iNod).setZero();
-            std::get<std::vector<ColVecd6>>(nodStran_p).at(iNod).setZero();
-            std::get<std::vector<ColVecd6>>(nodStres).at(iNod).setZero();
-            nodStran_eq.at(iNod) = 0;
-            nodStres_eq.at(iNod) = 0;
-            nodStres_h.at(iNod) = 0;
-            nodRho.at(iNod) = 0;
-            nodCount.at(iNod) = 0;
+            accessVec(std::get<std::vector<ColVecd4>>(nodStran), iNod).setZero();
+            accessVec(std::get<std::vector<ColVecd4>>(nodStran_e), iNod).setZero();
+            accessVec(std::get<std::vector<ColVecd4>>(nodStran_p), iNod).setZero();
+            accessVec(std::get<std::vector<ColVecd4>>(nodStres), iNod).setZero();
+
+            accessVec(nodStran_eq, iNod) = 0;
+            accessVec(nodStres_eq, iNod) = 0;
+            accessVec(nodStres_h, iNod) = 0;
+            accessVec(nodRho, iNod) = 0;
+            accessVec(nodCount, iNod) = 0;
+
+        }
+
+    } else if (nElStres == 6){ // 3D
+
+        for(int iNod=0; iNod<nTotNodes; iNod++){
+            
+            accessVec(std::get<std::vector<ColVecd6>>(nodStran), iNod).setZero();
+            accessVec(std::get<std::vector<ColVecd6>>(nodStran_e), iNod).setZero();
+            accessVec(std::get<std::vector<ColVecd6>>(nodStran_p), iNod).setZero();
+            accessVec(std::get<std::vector<ColVecd6>>(nodStres), iNod).setZero();
+
+            accessVec(nodStran_eq, iNod) = 0;
+            accessVec(nodStres_eq, iNod) = 0;
+            accessVec(nodStres_h, iNod) = 0;
+            accessVec(nodRho, iNod) = 0;
+            accessVec(nodCount, iNod) = 0;
 
         }
     }
@@ -662,20 +681,28 @@ void MechModel::CalcStres(vector<BaseElemMech*> elements, vector<BaseMechanics*>
     VecRestoreArrayRead(vecDisp, &globalBuffer);
 
     // Number averaging the nodal values
-    if (nDim==2){
+    if (nElStres == 3){ // Plane Strain/Stress
+
+        for(int iNod=0; iNod<nTotNodes; iNod++){
+
+            accessVec(std::get<std::vector<ColVecd3>>(nodStran), iNod) =  accessVec(std::get<std::vector<ColVecd3>>(nodStran), iNod)/accessVec(nodCount, iNod);
+            accessVec(std::get<std::vector<ColVecd3>>(nodStres), iNod) =  accessVec(std::get<std::vector<ColVecd3>>(nodStres), iNod)/accessVec(nodCount, iNod);
+        }
+
+    } else if (nElStres == 4){ // AxiSymmetric
 
         for(int iNod=0; iNod<nTotNodes; iNod++){
             
-            std::get<std::vector<ColVecd3>>(nodStran).at(iNod) = std::get<std::vector<ColVecd3>>(nodStran).at(iNod)/nodCount.at(iNod);
-            std::get<std::vector<ColVecd3>>(nodStres).at(iNod) = std::get<std::vector<ColVecd3>>(nodStres).at(iNod)/nodCount.at(iNod);
+            accessVec(std::get<std::vector<ColVecd4>>(nodStran), iNod) =  accessVec(std::get<std::vector<ColVecd4>>(nodStran), iNod)/accessVec(nodCount, iNod);
+            accessVec(std::get<std::vector<ColVecd4>>(nodStres), iNod) =  accessVec(std::get<std::vector<ColVecd4>>(nodStres), iNod)/accessVec(nodCount, iNod);
         }
 
     } else if (nElStres == 6){ // 3D
 
         for(int iNod=0; iNod<nTotNodes; iNod++){
             
-            std::get<std::vector<ColVecd6>>(nodStran).at(iNod) = std::get<std::vector<ColVecd6>>(nodStran).at(iNod)/nodCount.at(iNod);
-            std::get<std::vector<ColVecd6>>(nodStres).at(iNod) = std::get<std::vector<ColVecd6>>(nodStres).at(iNod)/nodCount.at(iNod);
+            accessVec(std::get<std::vector<ColVecd6>>(nodStran), iNod) =  accessVec(std::get<std::vector<ColVecd6>>(nodStran), iNod)/accessVec(nodCount, iNod);
+            accessVec(std::get<std::vector<ColVecd6>>(nodStres), iNod) =  accessVec(std::get<std::vector<ColVecd6>>(nodStres), iNod)/accessVec(nodCount, iNod);
         }
     }
 
@@ -692,32 +719,50 @@ void MechModel::CalcNodVals(vector<BaseElemMech*> elements){
     }
 
     // Number averaging the nodal values
-    if (nDim==2){
+    if (nElStres == 2){ // Plane Strain/Stress
 
         for(int iNod=0; iNod<nTotNodes; iNod++){
+
+            accessVec(std::get<std::vector<ColVecd3>>(nodStran), iNod) =  accessVec(std::get<std::vector<ColVecd3>>(nodStran), iNod)/accessVec(nodCount, iNod);
+            accessVec(std::get<std::vector<ColVecd3>>(nodStran_e), iNod) =  accessVec(std::get<std::vector<ColVecd3>>(nodStran_e), iNod)/accessVec(nodCount, iNod);
+            accessVec(std::get<std::vector<ColVecd3>>(nodStran_p), iNod) =  accessVec(std::get<std::vector<ColVecd3>>(nodStran_p), iNod)/accessVec(nodCount, iNod);
+            accessVec(std::get<std::vector<ColVecd3>>(nodStres), iNod) =  accessVec(std::get<std::vector<ColVecd3>>(nodStres), iNod)/accessVec(nodCount, iNod);
             
-            std::get<std::vector<ColVecd3>>(nodStran).at(iNod) = std::get<std::vector<ColVecd3>>(nodStran).at(iNod)/nodCount.at(iNod);
-            std::get<std::vector<ColVecd3>>(nodStran_e).at(iNod) = std::get<std::vector<ColVecd3>>(nodStran_e).at(iNod)/nodCount.at(iNod);
-            std::get<std::vector<ColVecd3>>(nodStran_p).at(iNod) = std::get<std::vector<ColVecd3>>(nodStran_p).at(iNod)/nodCount.at(iNod);
-            std::get<std::vector<ColVecd3>>(nodStres).at(iNod) = std::get<std::vector<ColVecd3>>(nodStres).at(iNod)/nodCount.at(iNod);
-            nodStran_eq.at(iNod) = nodStran_eq.at(iNod)/nodCount.at(iNod);
-            nodStres_eq.at(iNod) = nodStres_eq.at(iNod)/nodCount.at(iNod);
-            nodStres_h.at(iNod) = nodStres_h.at(iNod)/nodCount.at(iNod);
-            nodRho.at(iNod) = nodRho.at(iNod)/nodCount.at(iNod);
+            accessVec(nodStran_eq, iNod) = accessVec(nodStran_eq, iNod)/accessVec(nodCount, iNod);
+            accessVec(nodStres_eq, iNod) = accessVec(nodStres_eq, iNod)/accessVec(nodCount, iNod);
+            accessVec(nodStres_h, iNod) = accessVec(nodStres_h, iNod)/accessVec(nodCount, iNod);
+            accessVec(nodRho, iNod) = accessVec(nodRho, iNod)/accessVec(nodCount, iNod);
         }
 
-    } else if (nDim==3){
+    } else if (nElStres == 4){ // AxiSymmetric
 
         for(int iNod=0; iNod<nTotNodes; iNod++){
-            
-            std::get<std::vector<ColVecd6>>(nodStran).at(iNod) = std::get<std::vector<ColVecd6>>(nodStran).at(iNod)/nodCount.at(iNod);
-            std::get<std::vector<ColVecd6>>(nodStran_e).at(iNod) = std::get<std::vector<ColVecd6>>(nodStran_e).at(iNod)/nodCount.at(iNod);
-            std::get<std::vector<ColVecd6>>(nodStran_p).at(iNod) = std::get<std::vector<ColVecd6>>(nodStran_p).at(iNod)/nodCount.at(iNod);
-            std::get<std::vector<ColVecd6>>(nodStres).at(iNod) = std::get<std::vector<ColVecd6>>(nodStres).at(iNod)/nodCount.at(iNod);
-            nodStran_eq.at(iNod) = nodStran_eq.at(iNod)/nodCount.at(iNod);
-            nodStres_eq.at(iNod) = nodStres_eq.at(iNod)/nodCount.at(iNod);
-            nodStres_h.at(iNod) = nodStres_h.at(iNod)/nodCount.at(iNod);
-            nodRho.at(iNod) = nodRho.at(iNod)/nodCount.at(iNod);
+
+            accessVec(std::get<std::vector<ColVecd4>>(nodStran), iNod) =  accessVec(std::get<std::vector<ColVecd4>>(nodStran), iNod)/accessVec(nodCount, iNod);
+            accessVec(std::get<std::vector<ColVecd4>>(nodStran_e), iNod) =  accessVec(std::get<std::vector<ColVecd4>>(nodStran_e), iNod)/accessVec(nodCount, iNod);
+            accessVec(std::get<std::vector<ColVecd4>>(nodStran_p), iNod) =  accessVec(std::get<std::vector<ColVecd4>>(nodStran_p), iNod)/accessVec(nodCount, iNod);
+            accessVec(std::get<std::vector<ColVecd4>>(nodStres), iNod) =  accessVec(std::get<std::vector<ColVecd4>>(nodStres), iNod)/accessVec(nodCount, iNod);
+
+            accessVec(nodStran_eq, iNod) = accessVec(nodStran_eq, iNod)/accessVec(nodCount, iNod);
+            accessVec(nodStres_eq, iNod) = accessVec(nodStres_eq, iNod)/accessVec(nodCount, iNod);
+            accessVec(nodStres_h, iNod) = accessVec(nodStres_h, iNod)/accessVec(nodCount, iNod);
+            accessVec(nodRho, iNod) = accessVec(nodRho, iNod)/accessVec(nodCount, iNod);
+        }
+
+
+    } else if (nElStres == 6){ // 3D
+
+        for(int iNod=0; iNod<nTotNodes; iNod++){
+
+            accessVec(std::get<std::vector<ColVecd6>>(nodStran), iNod) =  accessVec(std::get<std::vector<ColVecd6>>(nodStran), iNod)/accessVec(nodCount, iNod);
+            accessVec(std::get<std::vector<ColVecd6>>(nodStran_e), iNod) =  accessVec(std::get<std::vector<ColVecd6>>(nodStran_e), iNod)/accessVec(nodCount, iNod);
+            accessVec(std::get<std::vector<ColVecd6>>(nodStran_p), iNod) =  accessVec(std::get<std::vector<ColVecd6>>(nodStran_p), iNod)/accessVec(nodCount, iNod);
+            accessVec(std::get<std::vector<ColVecd6>>(nodStres), iNod) =  accessVec(std::get<std::vector<ColVecd6>>(nodStres), iNod)/accessVec(nodCount, iNod);
+
+            accessVec(nodStran_eq, iNod) = accessVec(nodStran_eq, iNod)/accessVec(nodCount, iNod);
+            accessVec(nodStres_eq, iNod) = accessVec(nodStres_eq, iNod)/accessVec(nodCount, iNod);
+            accessVec(nodStres_h, iNod) = accessVec(nodStres_h, iNod)/accessVec(nodCount, iNod);
+            accessVec(nodRho, iNod) = accessVec(nodRho, iNod)/accessVec(nodCount, iNod);
         }
     }
 
