@@ -144,7 +144,7 @@ void LinearElastic::InitializeCubicElasticityMatrix(const string& analysisType, 
     }
 }
 
-T_DMatx LinearElastic::getCMatx() const{
+const T_DMatx& LinearElastic::getCMatx() const{
 
     return CMatx_e;
 }

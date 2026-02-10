@@ -52,7 +52,7 @@ double getGmod() const { return uo; }
  * 
  * @return T_DMatx 
  */
-virtual T_DMatx getCMatx() const = 0;
+virtual const T_DMatx& getCMatx() const = 0;
 
 protected:
 
