@@ -35,6 +35,7 @@ class WriteXDMF:
         self.element_config = {
             "triangle":   {"ElTopology": "Triangle", "nElNodes": 3, "nElStres": 3},
             "quad":       {"ElTopology": "Quadrilateral", "nElNodes": 4, "nElStres": 3},
+            "quadAxi":       {"ElTopology": "Quadrilateral", "nElNodes": 4, "nElStres": 4},
             "hexahedron": {"ElTopology": "Hexahedron", "nElNodes": 8, "nElStres": 6},
         }
         
