@@ -65,7 +65,7 @@ void LinearElastic::InitializeIsoElasticityMatrix(const string& analysisType, do
         } else if (analysisType == "PlaneStrain" || analysisType == "PlaneStress" ||
                    analysisType == "PlaneStrainPFF" || analysisType == "AxiSymmetric" || analysisType == "AxiSymmetricPFF") {
 
-            if (analysisType == "AxiDymmetric" || analysisType == "AxiSymmetricPFF") {
+            if (analysisType == "AxiSymmetric" || analysisType == "AxiSymmetricPFF") {
                 CMatx_e = Matd4x4(Matd4x4::Zero());
                 auto& mat = std::get<Matd4x4>(CMatx_e);
 
