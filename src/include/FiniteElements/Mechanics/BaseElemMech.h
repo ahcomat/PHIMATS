@@ -43,6 +43,13 @@ BaseElemMech(int nElDim, int nElNodes, int nElGauss, int dispDofs, int nElStres,
 int get_nDim() const { return nElDim; };
 
 /**
+ * @brief Get dimensions of the element. 
+ * 
+ * @return int 
+ */
+int get_nElStres() const { return nElStres; };
+
+/**
  * @brief Get the number of element disp DOFs. 
  * 
  * @return int 
