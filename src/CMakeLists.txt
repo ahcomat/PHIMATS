@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(PHIMATS VERSION 1.3.0 LANGUAGES CXX)
 
-# Force C++20 and Position Independent Code (-fPIC) for the 90MB library
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -23,15 +22,27 @@ include_directories(
 )
 
 # Collect all Source Files
-file(GLOB_RECURSE PHIMATS_SOURCES 
-    "${CMAKE_CURRENT_SOURCE_DIR}/*.cxx"
-)
+file(GLOB_RECURSE PHIMATS_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cxx")
 
-# Create the Shared Library (libphimats.so)
+# --- STEP 1: Create the Target FIRST ---
 add_library(phimats SHARED ${PHIMATS_SOURCES})
 
+# --- STEP 2: Configure the Target ---
+
+# Define the DEBUG macro for your accessVec (Only in Debug mode)
+target_compile_definitions(phimats PRIVATE $<$<CONFIG:Debug>:DEBUG>)
+
+# Add high-performance flags
+if(NOT MSVC)
+    # Release: Max speed + Eigen safety off
+    target_compile_options(phimats PRIVATE $<$<CONFIG:Release>:-O3 -march=native>)
+    target_compile_definitions(phimats PRIVATE $<$<CONFIG:Release>:NDEBUG>)
+    
+    # Debug: Symbols for GDB
+    target_compile_options(phimats PRIVATE $<$<CONFIG:Debug>:-g -O0>)
+endif()
+
 # Link Dependencies
-# Use the H5LD path you exported to find the serial HDF5 libraries
 target_link_libraries(phimats 
     PRIVATE 
     ${HDF5_LIB}/libhdf5.so
