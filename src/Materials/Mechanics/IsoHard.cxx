@@ -18,6 +18,7 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
 
             K_hard = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/K_hard");
             n_pow = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/n_pow");
+            eps_0 = std::pow(sig_y0 / K_hard, 1.0 / n_pow);
             hardening = HardeningLaw::PowerLaw;
 
             rho_0 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/rho_0");

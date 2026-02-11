@@ -200,7 +200,10 @@ string hardLaw;
 double K_hard = 0.0;      
 
 /// @brief Strain hardening exponent.
-double n_pow = 0.0;  
+double n_pow = 0.0; 
+
+/// @brief Initial plastic strainn.
+double eps_0 = 0.0;
 
 /// @brief Initial dislocation density
 double rho_0 = 0.0;
