@@ -719,7 +719,7 @@ void MechModel::CalcNodVals(vector<BaseElemMech*> elements){
     }
 
     // Number averaging the nodal values
-    if (nElStres == 2){ // Plane Strain/Stress
+    if (nElStres == 3){ // Plane Strain/Stress
 
         for(int iNod=0; iNod<nTotNodes; iNod++){
 
