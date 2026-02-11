@@ -421,9 +421,6 @@ void IsoHard::RMAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& ep
 
     } else { // --> Plastic step
 
-        // PRE-CALCULATE constants for the loop
-        const double three_uo = 3.0 * uo;
-
         // Iteration counter
         int nIter_RM = 0;
 

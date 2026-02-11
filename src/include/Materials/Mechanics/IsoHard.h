@@ -205,6 +205,9 @@ double n_pow = 0.0;
 /// @brief Initial plastic strainn.
 double eps_0 = 0.0;
 
+/// @brief Shear modulus x3.
+double three_uo = 0.0;
+
 /// @brief Initial dislocation density
 double rho_0 = 0.0;
 
