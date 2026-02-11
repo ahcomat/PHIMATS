@@ -151,6 +151,10 @@ void ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd
  * @param eps_p_old 
  * @param eps_eq_old 
  * @param iStep Step.
+ * @param Ce Elastic stiffness matrix.
+ * @param Cep Elastoplastic stiffness matrix.
+ * @param Ce Elastic stiffness matrix.
+ * @param Cep Elastoplastic stiffness matrix.
  */
 void ReturnMappingAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const Matd4x4& Ce, Matd4x4& Cep);
 
