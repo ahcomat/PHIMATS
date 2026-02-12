@@ -312,7 +312,7 @@ void MechModel::InitializePETSc(vector<BaseElemMech*> elements){
     //
     //   - max_funcs : Maximum number of function evaluations allowed (for Jacobian reuse)
     //
-    SNESSetTolerances(snes, 1e-8, 1e-6, 1e-5, 50, 1000);
+    SNESSetTolerances(snes, 1e-5, 1e-6, 1e-5, 50, 1000);
 
     // Get KSP from SNES
     SNESGetKSP(snes, &ksp);
