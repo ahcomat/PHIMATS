@@ -139,23 +139,29 @@ void IsoHard::RM3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& eps
 
 /// @brief Specialization for plane strain.
 template <>
-inline double IsoHard::Mises2D<PlaneStrain>(const ColVecd3& sig2D){
+inline double IsoHard::Mises2D<PlaneStrain>(const ColVecd3& sig2D, const double& sig_z){
 
-    double sx = sig2D(0); 
-    double sy = sig2D(1); 
-    double txy = sig2D(2);  
-    double sz = nu * (sx + sy);
+    // Use the components directly from the arguments
+    const double sx  = sig2D(0); 
+    const double sy  = sig2D(1); 
+    const double txy = sig2D(2);  
+    const double sz  = sig_z; 
 
-    double term = 0.5 * (pow(sx - sy, 2) +
-                         pow(sy - sz, 2) +
-                         pow(sz - sx, 2)) + 3 * txy * txy;
+    // Manual squaring for speed in the NR loop
+    const double s11_22 = sx - sy;
+    const double s22_33 = sy - sz;
+    const double s33_11 = sz - sx;
 
-    return sqrt(term);
+    const double term = 0.5 * (s11_22 * s11_22 + 
+                               s22_33 * s22_33 + 
+                               s33_11 * s33_11) + 3.0 * (txy * txy);
+
+    return std::sqrt(term);
 }
 
 /// @brief Specialization for plane stress.
 template <>
-inline double IsoHard::Mises2D<PlaneStress>(const ColVecd3& sig2D){
+inline double IsoHard::Mises2D<PlaneStress>(const ColVecd3& sig2D, const double& sig_z){
 
     double sx = sig2D(0); 
     double sy = sig2D(1); 
