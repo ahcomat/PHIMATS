@@ -172,31 +172,6 @@ inline double IsoHard::Mises2D<PlaneStress>(const ColVecd3& sig2D, const double&
     return sqrt(term);
 }
 
-/// @brief Specialization for plane strain.
-template <>
-inline double IsoHard::Shydro2D<PlaneStrain>(const ColVecd3& sig2D){
-
-    double sx = sig2D(0); 
-    double sy = sig2D(1); 
-    double sz = nu * (sx + sy);
-
-    double hydrostatic = 1.0/3.0* (sx + sy + sz);
-
-    return hydrostatic;
-}
-
-/// @brief Specialization for plane stress.
-template <>
-inline double IsoHard::Shydro2D<PlaneStress>(const ColVecd3& sig2D){
-
-    double sx = sig2D(0); 
-    double sy = sig2D(1); 
-
-    double hydrostatic = 1.0/3.0* (sx + sy);
-
-    return hydrostatic;
-}
-
 /// @brief Specialization 
 template <typename AnalysisType, typename HardeningLaw>
 void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const Matd3x3& Ce, Matd3x3& Cep){

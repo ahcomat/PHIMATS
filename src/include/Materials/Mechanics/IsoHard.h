@@ -306,16 +306,6 @@ static RM3DFn selectRM3D(HardeningLaw hardening) {
 template <typename AnalysisType>
 double Mises2D(const ColVecd3& sig2D, const double& sig_z);
 
-/**
- * @brief Template for 2D hydrostatic stress. Works for plane stress and plane strain.  
- * 
- * @tparam AnalysisType `enmum` class to store analysis type. 
- * @param sig2D Stress vector
- * @return double 
- */
-template <typename AnalysisType>
-double Shydro2D(const ColVecd3& sig2D);
-
 // 2D Return-mapping to handle different hardening laws and stress state.
 template <typename AnalysisType, typename HardeningLaw>
 void RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const Matd3x3& Ce, Matd3x3& Cep);
