@@ -43,7 +43,7 @@ int main(int argc, char **argv){
 
   // Initialize I/O files  -------------------------
 
-    const string meshFileName = SimulName + ".mesh.hdf5";
+    const string meshFileName = "../SENT.mesh.hdf5";
     H5IO meshH5File(meshFileName, logger);
 
     PhysicsIO mech(SimulName + ".mech", logger);

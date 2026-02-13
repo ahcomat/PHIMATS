@@ -41,8 +41,10 @@ make
 
 **Step 2: Run the simulation**
 
+**Note** Use `PETSc` command line options for line-search to improve convergence.
+
 ```sh
-./SENT
+./SENT -snes_linesearch_type bt -snes_linesearch_damping 0.8 -snes_linesearch_max_it 50 -snes_linesearch_monitor -snes_max_it 100
 ```
 
 ---
