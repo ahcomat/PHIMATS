@@ -547,8 +547,15 @@ void IsoHard::RMAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& ep
         // --------- CONVERGED ---> Update variables
 
         eps_eq = p;             // Equivalent plastic strain
-        eps_p += deqpl*N_tr;    // Plastic strain tensor
-        eps_e -= deqpl*N_tr;    // Elastic strain tensor
+
+        ColVecd4 d_eps_p;
+        d_eps_p << deqpl * N_tr(0),      // rr
+                   deqpl * N_tr(1),      // zz
+                   deqpl * N_tr(2),      // θθ
+                   2 * deqpl * N_tr(3);  // rz (Engineering shear)
+
+        eps_p = eps_p_old + d_eps_p;
+        eps_e = (eps_e_old + deps) - d_eps_p;
         
         sig = Ce*eps_e;  // Stress tensor
         sig_eq = MisesAxi(sig);;  // Von Mises stress
