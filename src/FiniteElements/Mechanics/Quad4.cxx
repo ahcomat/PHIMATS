@@ -325,11 +325,11 @@ void Quad4::CalcElDStran(const double* globalBuffer){
 
         // Get element nodal displacements from the solution vector. 
         for(int iDof=0; iDof<nElDispDofs; iDof++){
-            dummyDisp(iDof) = globalBuffer[elemDispDof.at(iElem).at(iDof)];
+            dummyDisp(iDof) = globalBuffer[accessVec(elemDispDof, iElem, iDof)];
         }
 
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
-            elDStran.at(iElem).at(iGaus) = BuMat.at(iElem).at(iGaus)*dummyDisp;
+            accessVec(elDStran, iElem, iGaus) = accessVec(BuMat, iElem, iGaus)*dummyDisp;
         }
     }
 }
@@ -342,11 +342,11 @@ void Quad4::CalcElStran(const double* globalBuffer){
 
         // Get element nodal displacements from the solution vector. 
         for(int iDof=0; iDof<nElDispDofs; iDof++){
-            dummyDisp(iDof) = globalBuffer[elemDispDof.at(iElem).at(iDof)];
+            dummyDisp(iDof) = globalBuffer[accessVec(elemDispDof, iElem, iDof)];
         }
 
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
-            elStran.at(iElem).at(iGaus) = BuMat.at(iElem).at(iGaus)*dummyDisp;
+            accessVec(elStran, iElem, iGaus) = accessVec(BuMat, iElem, iGaus)*dummyDisp;
         }
     }
 }
@@ -366,23 +366,41 @@ void Quad4::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres&
 
     }
 
-    // Integration point values.
-    for(int iElem=0; iElem<nElements; iElem++){
-        // Gauss points
-        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+    // LIFT: Extract references once before the hot loops
+    // This removes runtime type-checking from the nested loops
+    vector<ColVecd3>& v_nodStran   = std::get<std::vector<ColVecd3>>(nodStran);
+    vector<ColVecd3>& v_nodStran_e = std::get<std::vector<ColVecd3>>(nodStran_e);
+    vector<ColVecd3>& v_nodStran_p = std::get<std::vector<ColVecd3>>(nodStran_p);
+    vector<ColVecd3>& v_nodStres   = std::get<std::vector<ColVecd3>>(nodStres);
 
-            // Nodal values
-            for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
+    // Optimized Hot Loops
+    for (int iElem = 0; iElem < nElements; iElem++) {
+        for (int iGaus = 0; iGaus < nElGauss; iGaus++) {
+            
+            // Pre-fetch Gauss point values to avoid redundant accessVec calls inside the node loop
+            const double vol = accessVec(intPtVol, iElem, iGaus);
+            const auto& es   = accessVec(elStres, iElem, iGaus);
+            const auto& en   = accessVec(elStran, iElem, iGaus);
+            const auto& ene  = accessVec(elStran_e, iElem, iGaus);
+            const auto& enp  = accessVec(elStran_p, iElem, iGaus);
+            
+            const double s_eq = accessVec(elStres_eq, iElem, iGaus);
+            const double n_eq = accessVec(elStran_eq, iElem, iGaus);
+            const double s_h  = accessVec(elStres_h, iElem, iGaus);
+            const double rho  = accessVec(elRho, iElem, iGaus);
 
-                std::get<std::vector<ColVecd3>>(nodStran).at(*iNod2) += elStran.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
-                std::get<std::vector<ColVecd3>>(nodStran_e).at(*iNod2) += elStran_e.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
-                std::get<std::vector<ColVecd3>>(nodStran_p).at(*iNod2) += elStran_p.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
-                std::get<std::vector<ColVecd3>>(nodStres).at(*iNod2) += elStres.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
-                nodStran_eq.at(*iNod2) += elStran_eq.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
-                nodStres_eq.at(*iNod2) += elStres_eq.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
-                nodStres_h.at(*iNod2) += elStres_h.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
-                nodRho.at(*iNod2) += elRho.at(iElem).at(iGaus)*intPtVol.at(iElem).at(iGaus);
-                nodCount.at(*iNod2) += intPtVol.at(iElem).at(iGaus);
+            for (auto nodeIdx : elemNodeConn.at(iElem)) {
+                // Now using direct vector indexing and pre-fetched values
+                v_nodStran[nodeIdx]   += en * vol;
+                v_nodStran_e[nodeIdx] += ene * vol;
+                v_nodStran_p[nodeIdx] += enp * vol;
+                v_nodStres[nodeIdx]   += es * vol;
+
+                nodStran_eq[nodeIdx] += n_eq * vol;
+                nodStres_eq[nodeIdx] += s_eq * vol;
+                nodStres_h[nodeIdx]  += s_h * vol;
+                nodRho[nodeIdx]      += rho * vol;
+                nodCount[nodeIdx]    += vol;
             }
         }
     }
@@ -391,6 +409,10 @@ void Quad4::CalcNodVals( T_nodStres& nodStres, T_nodStres& nodStran, T_nodStres&
 void Quad4::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, int iStep){
 
     IsoHard* plasticMat = dynamic_cast<IsoHard*>(mat);
+
+    // LIFT: Resolve the variant types once for the whole element set
+    Matd3x3& Cep = std::get<Matd3x3>(plasticMat->getCMatx_ep());   // Elastoplastic stiffness matrix
+    const Matd3x3& Ce = std::get<Matd3x3>(plasticMat->getCMatx()); // Elastic stiffness
 
     try {
         if (elStran_e.data() == nullptr){
@@ -405,19 +427,20 @@ void Quad4::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, in
         for(int iElem=0; iElem<nElements; iElem++){
             for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                plasticMat->ReturnMapping2D(elDStran.at(iElem).at(iGaus),
-                                            elStres.at(iElem).at(iGaus),
-                                            elStran_e.at(iElem).at(iGaus),
-                                            elStran_p.at(iElem).at(iGaus),
-                                            elStran_eq.at(iElem).at(iGaus), 
-                                            elStres_eq.at(iElem).at(iGaus),
-                                            elStres_h.at(iElem).at(iGaus),
-                                            sig_z.at(iElem).at(iGaus),
-                                            elRho.at(iElem).at(iGaus),
-                                            elStran_e_old.at(iElem).at(iGaus),
-                                            elStran_p_old.at(iElem).at(iGaus),
-                                            elStran_eq_old.at(iElem).at(iGaus),
-                                            sig_z_old.at(iElem).at(iGaus), iStep);
+                plasticMat->ReturnMapping2D(accessVec(elDStran, iElem, iGaus),
+                                            accessVec(elStres, iElem, iGaus),
+                                            accessVec(elStran_e, iElem, iGaus),
+                                            accessVec(elStran_p, iElem, iGaus),
+                                            accessVec(elStran_eq, iElem, iGaus),
+                                            accessVec(elStres_eq, iElem, iGaus),
+                                            accessVec(elStres_h, iElem, iGaus),
+                                            accessVec(sig_z, iElem, iGaus),
+                                            accessVec(elRho, iElem, iGaus),
+                                            accessVec(elStran_e_old, iElem, iGaus),
+                                            accessVec(elStran_p_old, iElem, iGaus),
+                                            accessVec(elStran_eq_old, iElem, iGaus),
+                                            accessVec(sig_z_old, iElem, iGaus), iStep,
+                                            Ce, Cep);
 
             }
         }
@@ -432,19 +455,20 @@ void Quad4::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, in
 
             for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                plasticMat->ReturnMapping2D(elDStran.at(iElem).at(iGaus),
-                                            elStres.at(iElem).at(iGaus),
-                                            elStran_e.at(iElem).at(iGaus),
-                                            elStran_p.at(iElem).at(iGaus),
-                                            elStran_eq.at(iElem).at(iGaus), 
-                                            elStres_eq.at(iElem).at(iGaus),
-                                            elStres_h.at(iElem).at(iGaus),
-                                            sig_z.at(iElem).at(iGaus),
-                                            elRho.at(iElem).at(iGaus),
-                                            elStran_e_old.at(iElem).at(iGaus),
-                                            elStran_p_old.at(iElem).at(iGaus),
-                                            elStran_eq_old.at(iElem).at(iGaus),
-                                            sig_z_old.at(iElem).at(iGaus), iStep);
+                plasticMat->ReturnMapping2D(accessVec(elDStran, iElem, iGaus),
+                                            accessVec(elStres, iElem, iGaus),
+                                            accessVec(elStran_e, iElem, iGaus),
+                                            accessVec(elStran_p, iElem, iGaus),
+                                            accessVec(elStran_eq, iElem, iGaus),
+                                            accessVec(elStres_eq, iElem, iGaus),
+                                            accessVec(elStres_h, iElem, iGaus),
+                                            accessVec(sig_z, iElem, iGaus),
+                                            accessVec(elRho, iElem, iGaus),
+                                            accessVec(elStran_e_old, iElem, iGaus),
+                                            accessVec(elStran_p_old, iElem, iGaus),
+                                            accessVec(elStran_eq_old, iElem, iGaus),
+                                            accessVec(sig_z_old, iElem, iGaus), iStep,
+                                            Ce, Cep);
 
                 const Matd3x8& dummyBu = BuMat.at(iElem).at(iGaus); // Strain matrix for the given gauss point.
                 dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current integration point 
@@ -459,6 +483,9 @@ void Quad4::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, in
 void Quad4::CalcRetrunMapping_PFF(BaseMechanics* mat, const bool& updateStiffMat, int iStep, const std::vector<std::vector<double>>* gPhi_d_ptr){
 
     IsoHard* plasticMat = dynamic_cast<IsoHard*>(mat);
+
+    Matd3x3& Cep = std::get<Matd3x3>(plasticMat->getCMatx_ep());   // Elastoplastic stiffness matrix
+    const Matd3x3& Ce = std::get<Matd3x3>(plasticMat->getCMatx()); // Elastic stiffness
 
     if (!updateStiffMat){
 
@@ -480,7 +507,8 @@ void Quad4::CalcRetrunMapping_PFF(BaseMechanics* mat, const bool& updateStiffMat
                                         accessVec(sig_z_old, iElem, iGaus), iStep,
                                         accessVec(*gPhi_d_ptr, iElem, iGaus),
                                         accessVec(el_wp_old, iElem, iGaus),
-                                        accessVec(el_wp, iElem, iGaus));
+                                        accessVec(el_wp, iElem, iGaus),
+                                        Ce, Cep);
 
         }
     }
@@ -510,7 +538,8 @@ void Quad4::CalcRetrunMapping_PFF(BaseMechanics* mat, const bool& updateStiffMat
                                             accessVec(sig_z_old, iElem, iGaus), iStep,
                                             accessVec(*gPhi_d_ptr, iElem, iGaus),
                                             accessVec(el_wp_old, iElem, iGaus),
-                                            accessVec(el_wp, iElem, iGaus));
+                                            accessVec(el_wp, iElem, iGaus),
+                                            Ce, Cep);
 
                 const Matd3x8& dummyBu = BuMat.at(iElem).at(iGaus); // Strain matrix for the given gauss point.
                 dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current integration point 

@@ -114,8 +114,10 @@ void ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, ColVecd6& e
  * @param eps_eq_old 
  * @param sig_z_old
  * @param iStep Step.
+ * @param Ce Elastic stiffness matrix.
+ * @param Cep Elastoplastic stiffness matrix
  */
-void ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep);
+void ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const Matd3x3& Ce, Matd3x3& Cep);
 
 /**
  * @brief Return mapping algorithm for 2D isotropic hardening plasticity with PFF. 
@@ -137,8 +139,10 @@ void ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& e
  * @param gPhi_d g(phi).
  * @param wp_old 
  * @param wp Plastic work density.
+ * @param Ce Elastic stiffness matrix.
+ * @param Cep Elastoplastic stiffness matrix
  */
-void ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp);
+void ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, const Matd3x3& Ce, Matd3x3& Cep);
 
 /**
  * @brief Return mapping algorithm for 2D axi-symmetric isotropic hardening plasticity. 
@@ -314,9 +318,9 @@ double Shydro2D(const ColVecd3& sig2D);
 
 // 2D Return-mapping to handle different hardening laws and stress state.
 template <typename AnalysisType, typename HardeningLaw>
-void RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep);
+void RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const Matd3x3& Ce, Matd3x3& Cep);
 
-using RM2DFn = void (IsoHard::*)(ColVecd3&, ColVecd3&, ColVecd3&, ColVecd3&, double&, double&, double&, double&, double&, const ColVecd3&, const ColVecd3&, const double&, const double&, const int);
+using RM2DFn = void (IsoHard::*)(ColVecd3&, ColVecd3&, ColVecd3&, ColVecd3&, double&, double&, double&, double&, double&, const ColVecd3&, const ColVecd3&, const double&, const double&, const int, const Matd3x3& Ce, Matd3x3& Cep);
 
 // Function pointer for the selected ReturnMapping variant
 RM2DFn selectedRM2D;
@@ -358,9 +362,9 @@ static RM2DFn selectRM2D(AnalysisType analysis2D, HardeningLaw hardening) {
 
 // 2D Return-mapping to handle different hardening laws and stress state for PFF.
 template <typename AnalysisType, typename HardeningLaw>
-void RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp);
+void RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, const Matd3x3& Ce, Matd3x3& Cep);
 
-using RM2DFnPFF = void (IsoHard::*)(ColVecd3&, ColVecd3&, ColVecd3&, ColVecd3&, double&, double&, double&, double&, double&, const ColVecd3&, const ColVecd3&, const double&, const double&, const int, const double gPhi_d, const double& wp_old, double& wp);
+using RM2DFnPFF = void (IsoHard::*)(ColVecd3&, ColVecd3&, ColVecd3&, ColVecd3&, double&, double&, double&, double&, double&, const ColVecd3&, const ColVecd3&, const double&, const double&, const int, const double gPhi_d, const double& wp_old, double& wp, const Matd3x3& Ce, Matd3x3& Cep);
 
 // Function pointer for the selected ReturnMapping variant
 RM2DFnPFF selectedRM2DPFF;

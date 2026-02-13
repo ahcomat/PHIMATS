@@ -199,10 +199,7 @@ inline double IsoHard::Shydro2D<PlaneStress>(const ColVecd3& sig2D){
 
 /// @brief Specialization 
 template <typename AnalysisType, typename HardeningLaw>
-void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep){
-
-    const Matd3x3& Ce = std::get<Matd3x3>(CMatx_e);
-    Matd3x3& Cep = std::get<Matd3x3>(CMatx_ep);
+void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const Matd3x3& Ce, Matd3x3& Cep){
 
     // Elastic strain
     eps_e = eps_e_old + deps;
@@ -330,10 +327,7 @@ void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps
 
 /// @brief Specialization 
 template <typename AnalysisType, typename HardeningLaw>
-void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp){
-
-    const Matd3x3& Ce = std::get<Matd3x3>(CMatx_e);
-    Matd3x3& Cep = std::get<Matd3x3>(CMatx_ep);
+void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, const Matd3x3& Ce, Matd3x3& Cep){
 
     // Elastic strain
     eps_e = eps_e_old + deps;
