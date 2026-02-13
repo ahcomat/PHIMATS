@@ -199,7 +199,10 @@ inline double IsoHard::Shydro2D<PlaneStress>(const ColVecd3& sig2D){
 
 /// @brief Specialization 
 template <typename AnalysisType, typename HardeningLaw>
-void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep){
+void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep){
+
+    const Matd3x3& Ce = std::get<Matd3x3>(CMatx_e);
+    Matd3x3& Cep = std::get<Matd3x3>(CMatx_ep);
 
     // Elastic strain
     eps_e = eps_e_old + deps;
@@ -207,11 +210,14 @@ void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps
     // Plastic strain
     eps_p = eps_p_old;
 
+    // Sigma zz
+    double sig_z_trial = sig_z_old + ho * (deps(0) + deps(1));
+
     // Trial stress
-    ColVecd3 sig_trial = std::get<Matd3x3>(CMatx_e)*eps_e;
+    ColVecd3 sig_trial = Ce * eps_e;
 
     //Mises stress
-    double sig_trial_eq = Mises2D<AnalysisType>(sig_trial);
+    double sig_trial_eq = Mises2D<AnalysisType>(sig_trial, sig_z_trial);
 
     // Initialize plastic multiplier and increment
     double p = eps_eq_old;
@@ -231,8 +237,9 @@ void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps
         // Update 
         sig = sig_trial;
         sig_eq = sig_trial_eq;
-        sig_h = Shydro2D<AnalysisType>(sig_trial);
-        std::get<Matd3x3>(CMatx_ep) = std::get<Matd3x3>(CMatx_e);
+        sig_z = sig_z_trial;
+        sig_h = (sig_trial(0) + sig_trial(1) + sig_z_trial) / 3.0;
+        Cep = Ce;
 
     } else { // --> Plastic step
 
@@ -240,20 +247,35 @@ void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps
         int nIter_RM = 0;
 
         // Deviatoric stress
+        double sig_h_tr = (sig_trial(0) + sig_trial(1) + sig_z_trial) / 3.0;
 
-        ColVecd3 sig_trial_dev = sig_trial - Shydro2D<AnalysisType>(sig_trial)*I3; 
-        ColVecd3 N_tr = (3.0/2.0)*sig_trial_dev/sig_trial_eq; // Plastic flow direction
+        ColVecd4 sig_trial4;
+        sig_trial4 << sig_trial(0),  // Index 0: xx
+                      sig_trial(1),  // Index 1: yy
+                      sig_z_trial,   // Index 2: zz
+                      sig_trial(2);  // Index 3: xy (Shear);
 
-        while(abs(f_yield > tol)){
+        ColVecd4 sig_trial4_dev = sig_trial4 - sig_h_tr*I4; 
+
+        // Plastic flow direction accounting for zz
+        ColVecd4 N_tr4 = (3.0/2.0)*sig_trial4_dev/sig_trial_eq; 
+
+        // Flow direction in 2D 
+        ColVecd3 N_tr;
+        N_tr << N_tr4(0),      // Index 0: xx
+                N_tr4(1),      // Index 1: yy
+                N_tr4(3);      // Index 3: xy (Tensor Shear);
+
+        while(abs(f_yield) > tol){
 
             // Update Iteration counter
             nIter_RM++;
 
             // Update plastic strain increment 
-            deqpl += f_yield/(3*uo + hard);
+            deqpl += f_yield / (three_uo + hard);
             p = eps_eq_old + deqpl;
             UHard<HardeningLaw>(p, sYield, rho, hard);
-            f_yield = sig_trial_eq - 3*uo*deqpl - sYield;
+            f_yield = sig_trial_eq - three_uo * deqpl - sYield;
 
             if(nIter_RM > max_iter){
 
@@ -261,6 +283,7 @@ void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps
                 oss << "\nReturn mapping did not converge at step: " << iStep << "\n"
                     << "Reached maximum iterations: " << nIter_RM << "\n"
                     << "Final yield function value: " << f_yield << "\n"
+                    << "Plastic strain increment: " << deqpl << "\n"
                     << "Plastic strain increment: " << deqpl << "\n"
                     << "Equivalent plastic strain: " << p << "\n";
                 
@@ -271,28 +294,46 @@ void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps
         // --------- CONVERGED ---> Update variables
 
         eps_eq = p;             // Equivalent plastic strain
-        eps_p += deqpl*N_tr;    // Plastic strain tensor
-        eps_e -= deqpl*N_tr;    // Elastic strain tensor
+
+        ColVecd3 d_eps_p;
+        d_eps_p << deqpl * N_tr(0),      // xx
+                   deqpl * N_tr(1),      // yy
+                   2 * deqpl * N_tr(2);  // xy (Engineering shear)
+
+        eps_p = eps_p_old + d_eps_p;
+        eps_e = (eps_e_old + deps) - d_eps_p;
         
-        sig = std::get<Matd3x3>(CMatx_e)*eps_e;  // Stress tensor
-        sig_eq = Mises2D<AnalysisType>(sig);  // Von Mises stress
-        sig_h = Shydro2D<AnalysisType>(sig); // Hydostatic stress
+        sig = Ce*eps_e;  // Stress tensor
+
+        // 1. Calculate the elastic z-increment (correctly using N_tr4 for zz flow)
+        double d_eps_z_e = - (deqpl * N_tr4(2));
+
+        // 2. Calculate the stress INCREMENT (d_sig_z) 
+        // Use deps(0) and deps(1) because they are the total increments for this step
+        double d_sig_z = ho * (deps(0) + deps(1) + d_eps_z_e) + 2.0 * uo * d_eps_z_e;
+
+        // 3. Update the TOTAL stress by adding the increment to the old state
+        sig_z = sig_z_old + d_sig_z;
+
+        sig_eq = Mises2D<AnalysisType>(sig, sig_z);  // Von Mises stress
+        sig_h = (sig(0) + sig(1) + sig_z) / 3.0;     // Hydostatic stress
 
         // Tangent stiffness matrix
-
-        Matd3x3& Ce = std::get<Matd3x3>(CMatx_e);
-
-        RowVecd3 Ce_N = Ce*N_tr;
+        
+        RowVecd3 Ce_N = Ce*N_tr;  // Note that we use the Tensor shear in N_tr
         double N_Ce_N = N_tr.dot(Ce_N);
         double denom = (2.0 / 3.0) * hard + N_Ce_N;
-        std::get<Matd3x3>(CMatx_ep) = Ce - (Ce_N.transpose() * Ce_N)/denom;
+        std::get<Matd3x3>(CMatx_ep) = (Ce - (Ce_N.transpose() * Ce_N)/denom);
 
     }
 }
 
 /// @brief Specialization 
 template <typename AnalysisType, typename HardeningLaw>
-void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp){
+void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp){
+
+    const Matd3x3& Ce = std::get<Matd3x3>(CMatx_e);
+    Matd3x3& Cep = std::get<Matd3x3>(CMatx_ep);
 
     // Elastic strain
     eps_e = eps_e_old + deps;
@@ -301,11 +342,14 @@ void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& 
     eps_p = eps_p_old;
     wp = wp_old;
 
-    // Trial stress
-    ColVecd3 sig_trial = std::get<Matd3x3>(CMatx_e)*eps_e*gPhi_d;
+    // Sigma zz trial (damaged!)
+    double sig_z_trial = (sig_z_old + ho * (deps(0) + deps(1))) * gPhi_d;
 
-    //Mises stress
-    double sig_trial_eq = Mises2D<AnalysisType>(sig_trial);
+    // Trial stress (damaged!)
+    ColVecd3 sig_trial = Ce * eps_e * gPhi_d;
+
+    // Mises stress (damaged!)
+    double sig_trial_eq = Mises2D<AnalysisType>(sig_trial, sig_z_trial);
 
     // Initialize plastic multiplier and increment
     double p = eps_eq_old;
@@ -325,8 +369,9 @@ void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& 
         // Update 
         sig = sig_trial;
         sig_eq = sig_trial_eq;
-        sig_h = Shydro2D<AnalysisType>(sig_trial);
-        std::get<Matd3x3>(CMatx_ep) = std::get<Matd3x3>(CMatx_e)*gPhi_d;
+        sig_z = sig_z_old + ho * (deps(0) + deps(1));  // We store the undamaged value 
+        sig_h = (sig_trial(0) + sig_trial(1) + sig_z_trial) / 3.0;
+        Cep = Ce*gPhi_d;
 
     } else { // --> Plastic step
 
@@ -335,19 +380,36 @@ void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& 
 
         // Deviatoric stress
 
-        ColVecd3 sig_trial_dev = sig_trial - Shydro2D<AnalysisType>(sig_trial)*I3; 
-        ColVecd3 N_tr = (3.0/2.0)*sig_trial_dev/sig_trial_eq; // Plastic flow direction
+        // Deviatoric stress
+        double sig_h_tr = (sig_trial(0) + sig_trial(1) + sig_z_trial) / 3.0;
 
-        while(abs(f_yield > tol_PFF)){
+        ColVecd4 sig_trial4;
+        sig_trial4 << sig_trial(0),  // Index 0: xx
+                      sig_trial(1),  // Index 1: yy
+                      sig_z_trial,   // Index 2: zz
+                      sig_trial(2);  // Index 3: xy (Shear);
+
+        ColVecd4 sig_trial4_dev = sig_trial4 - sig_h_tr*I4; 
+
+        // Plastic flow direction accounting for zz
+        ColVecd4 N_tr4 = (3.0/2.0)*sig_trial4_dev/sig_trial_eq; 
+
+        // Flow direction in 2D  
+        ColVecd3 N_tr;
+        N_tr << N_tr4(0),    // Index 0: xx
+                N_tr4(1),    // Index 1: yy
+                N_tr4(3);    // Index 3: xy (Tensor Shear);
+
+        while(abs(f_yield) > tol_PFF){
 
             // Update Iteration counter
             nIter_RM++;
 
             // Update plastic strain increment 
-            deqpl += f_yield/(3*uo*gPhi_d + hard);
+            deqpl += f_yield/(three_uo*gPhi_d + hard);
             p = eps_eq_old + deqpl;
             UHard<HardeningLaw>(p, sYield, rho, hard);
-            f_yield = sig_trial_eq - 3*uo*gPhi_d*deqpl - sYield;
+            f_yield = sig_trial_eq - gPhi_d*three_uo*deqpl - sYield;
 
             if(nIter_RM > max_iter){
 
@@ -356,6 +418,7 @@ void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& 
                     << "Reached maximum iterations: " << nIter_RM << "\n"
                     << "Final yield function value: " << f_yield << "\n"
                     << "Plastic strain increment: " << deqpl << "\n"
+                    << "Damage: " << gPhi_d << "\n"
                     << "Equivalent plastic strain: " << p << "\n";
                 
                 throw std::runtime_error(oss.str());
@@ -364,21 +427,43 @@ void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& 
 
         // --------- CONVERGED ---> Update variables
 
-        eps_eq = p;                // Equivalent plastic strain
-        ColVecd3 dep = deqpl*N_tr; // Increment plastic strain tensor
-        eps_p += dep;    // Plastic strain tensor
-        eps_e -= dep;    // Elastic strain tensor
+        eps_eq = p;             // Equivalent plastic strain
+
+        ColVecd3 d_eps_p;
+        d_eps_p << deqpl * N_tr(0),      // xx
+                   deqpl * N_tr(1),      // yy
+                   2 * deqpl * N_tr(2);  // xy (Engineering shear)
+
+        eps_p = eps_p_old + d_eps_p;
+        eps_e = (eps_e_old + deps) - d_eps_p;
         
-        sig = std::get<Matd3x3>(CMatx_e)*eps_e;  // Undamaged stress tensor
+        // Undamaged values
+        sig = Ce*eps_e;  // Stress tensor
+
+        double d_eps_z_e = - (deqpl * N_tr4(2)); // sig_z
+        double d_sig_z = ho * (deps(0) + deps(1) + d_eps_z_e) + 2.0 * uo * d_eps_z_e;
+        sig_z = sig_z_old + d_sig_z;  // We store undamaged sig_z
+
         // Plastic work density using undamaged stress tensor
-        wp = wp_old + ( (sig(0))*dep(0) + (sig(1))*dep(1) + 2*sig(2)*dep(2) ); 
-        sig = sig*gPhi_d;   // Damaged stress tensor
-        sig_eq = Mises2D<AnalysisType>(sig);  // Von Mises stress
-        sig_h = Shydro2D<AnalysisType>(sig); // Hydostatic stress
+        // 1. Calculate the plastic strain increment in Z
+        // (Since total eps_z = 0 in Plane Strain, deps_p_z = -deps_e_z)
+        double d_eps_p_z = - d_eps_z_e; 
+
+        // 2. Calculate the plastic work increment
+        double d_wp = sig(0) * d_eps_p(0) +    // sigma_xx * deps_p_xx
+                      sig(1) * d_eps_p(1) +    // sigma_yy * deps_p_yy
+                      sig_z  * d_eps_p_z +     // sigma_zz * deps_p_zz (The missing piece!)
+                      sig(2) * d_eps_p(2);     // tau_xy   * dgamma_p_xy (Engineering shear)
+
+        // 3. Update total plastic work density
+        wp = wp_old + d_wp;
+
+        // Apply damage to stresses for the final state
+        sig = sig*gPhi_d;   
+        sig_eq = Mises2D<AnalysisType>(sig, sig_z*gPhi_d);  // Von Mises stress
+        sig_h = (sig(0) + sig(1) + sig_z*gPhi_d) / 3.0;     // Hydostatic stress
 
         // Tangent stiffness matrix
-
-        Matd3x3& Ce = std::get<Matd3x3>(CMatx_e);
 
         RowVecd3 Ce_N = Ce*N_tr;
         double N_Ce_N = N_tr.dot(Ce_N);

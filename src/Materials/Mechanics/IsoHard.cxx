@@ -173,24 +173,24 @@ void IsoHard::ReturnMapping3D(ColVecd6& deps, ColVecd6& sig, ColVecd6& eps_e, Co
     (this->*selectedRM3D)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, rho, eps_e_old, eps_p_old, eps_eq_old, iStep);
 }
 
-void IsoHard::ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep){
+void IsoHard::ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep){
 
     // Ensure selectedRM2D is valid
     if (!selectedRM2D) {
         throw std::runtime_error("ReturnMapping2D function pointer is not set. Make sure you are not using a PFF material model.");
     }
 
-    (this->*selectedRM2D)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, rho, eps_e_old, eps_p_old, eps_eq_old, iStep);
+    (this->*selectedRM2D)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, sig_z, rho, eps_e_old, eps_p_old, eps_eq_old, sig_z_old, iStep);
 }
 
-void IsoHard::ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp){
+void IsoHard::ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp){
 
     // Ensure selectedRM2DPFF is valid
     if (!selectedRM2DPFF) {
         throw std::runtime_error("ReturnMapping2DPFF function pointer is not set.");
     }
 
-    (this->*selectedRM2DPFF)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, rho, eps_e_old, eps_p_old, eps_eq_old, iStep, gPhi_d, wp_old, wp);
+    (this->*selectedRM2DPFF)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, sig_z, rho, eps_e_old, eps_p_old, eps_eq_old, sig_z_old, iStep, gPhi_d, wp_old, wp);
 }
 
 void IsoHard::ReturnMappingAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const Matd4x4& Ce, Matd4x4& Cep){

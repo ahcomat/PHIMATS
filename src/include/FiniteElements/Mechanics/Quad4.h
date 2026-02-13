@@ -142,11 +142,17 @@ vector<vector<ColVecd3>> elStran_e;
 /// @brief Int-pt plastic strain [nElStres].
 vector<vector<ColVecd3>> elStran_p;  
 
+/// @brief Stress zz component.
+vector<vector<double>> sig_z; 
+
 /// @brief Int-pt elastic strain (last convergged increment) [nElStres].
 vector<vector<ColVecd3>> elStran_e_old;   
 
 /// @brief Int-pt plastic strain (last convergged increment) [nElStres].
 vector<vector<ColVecd3>> elStran_p_old;  
+
+/// @brief Stress zz component (last convergged increment).
+vector<vector<double>> sig_z_old;
 
 /// @brief Derivatives (scalar) matrix [nElDim, nElNodes].
 vector<vector<Matd2x4>> BMat;
