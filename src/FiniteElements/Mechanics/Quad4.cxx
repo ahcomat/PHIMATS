@@ -474,7 +474,7 @@ void Quad4::CalcRetrunMapping(BaseMechanics* mat, const bool& updateStiffMat, in
                 dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current integration point 
 
                 // [B_kl]^T D_kk B_kl
-                elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*std::get<Matd3x3>(plasticMat->getCMatx())*dummyBu*dummydVol;
+                elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*Cep*dummyBu*dummydVol;
             }
         }
     }
@@ -545,7 +545,7 @@ void Quad4::CalcRetrunMapping_PFF(BaseMechanics* mat, const bool& updateStiffMat
                 dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current integration point 
 
                 // [B_kl]^T D_kk B_kl
-                elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*std::get<Matd3x3>(plasticMat->getCMatx_ep())*dummyBu*dummydVol;
+                elStiffMatx.at(iElem).noalias() += dummyBu.transpose()*Cep*dummyBu*dummydVol;
             }
         }
     }
