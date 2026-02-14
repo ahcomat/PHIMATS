@@ -180,7 +180,7 @@ void IsoHard::ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e
 
 void IsoHard::ReturnMappingAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const Matd4x4& Ce, Matd4x4& Cep){
 
-    // Ensure selectedRM3D is valid
+    // Ensure selectedRMAxi is valid
     if (!selectedRMAxi) {
         throw std::runtime_error("ReturnMappingAxi function pointer is not set. Make sure you are not using a PFF material model.");
     }
@@ -190,8 +190,8 @@ void IsoHard::ReturnMappingAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, C
 
 void IsoHard::ReturnMappingAxi_PFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, const Matd4x4& Ce, Matd4x4& Cep){
 
-    // Ensure selectedRM3D is valid
-    if (!selectedRMAxi) {
+    // Ensure selectedRMAxiPFF is valid
+    if (!selectedRMAxiPFF) {
         throw std::runtime_error("ReturnMappingAxi function pointer is not set. Make sure you are not using a PFF material model.");
     }
 
