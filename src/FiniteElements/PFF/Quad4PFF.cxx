@@ -133,7 +133,7 @@ void Quad4PFF::InitializeElements(Nodes &Nodes, H5IO &H5File_in){
                 // Cart coord of iGauss point.
                 dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
                 // Derivatives and int-pt volume
-                CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), shapeFunc.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
 
             }
 
@@ -156,7 +156,7 @@ RowVecd2 Quad4PFF::getGaussCart(RowVecd4& sFunc, Matd4x2& elNodCoord){
     return sFunc*elNodCoord;  // N_i x_ij
 }
 
-void Quad4PFF::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double& wt, double& intVol, Matd2x4& cartDeriv){
+void Quad4PFF::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const RowVecd4& shFunc, const double& wt, double& intVol, Matd2x4& cartDeriv){
 
     // Calculates the jacobian matrix J_jj = dN_ji x_ij
     Matd2x2 jacMat = sFuncDeriv*elNodCoord;

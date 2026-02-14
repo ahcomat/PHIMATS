@@ -85,9 +85,9 @@ RowVecd2 getGaussCart(RowVecd4& sFunc, Matd4x2& elCoord);
  * @param intVol 
  * @param cartDeriv 
  */
-void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double& wt, double& intVol, Matd2x4& cartDeriv);
+virtual void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const RowVecd4& shFunc, const double& wt, double& intVol, Matd2x4& cartDeriv);
 
-void CalcPsiSpectral(double lam, double Gmod, const T_elStres& elStrain_e) override;
+virtual void CalcPsiSpectral(double lam, double Gmod, const T_elStres& elStrain_e) override;
 
 void CalcElemStiffMatx() override;
 
