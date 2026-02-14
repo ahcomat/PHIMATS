@@ -27,7 +27,10 @@ Major architectural refactor of pre-/post-processing and PFF/hydrogen chemo-mech
   - Deprecate geometry-based functions (`TensileDisp2D`, `TensileDisp3D`, `PermeationX`, `WriteConBCs`, `WriteDispBCs`)
   - Implemented `AssignDirichletBC` and `WriteBCVTK` as general-purpose functions leveraging Gmsh's `Physical groups`.
 - `H5IO` added compression to output files for size reduction.
-- `LinearElastic` and `IsoHard` Implement axisymmetric formulation for elasticity and isotropic hardening plasticity. 
+- `LinearElastic` and `IsoHard` Implement axisymmetric formulation for elasticity and isotropic hardening plasticity.
+  
+### Fixed
+- `Quad4` and `IsoHard` Fix implementation of out of plane component in plane strain.
 
 ### Build System & Infrastructure
 - Shared library `.so` build support compared to the previous static library `.a` for reduced driver code binary size.
