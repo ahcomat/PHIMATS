@@ -442,6 +442,22 @@ void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& 
     }
 }
 
+inline double IsoHard::MisesAxi(const ColVecd4& sig) {
+    const double s_rr = sig(0); 
+    const double s_zz = sig(1); 
+    const double s_hoop = sig(2); 
+    const double t_rz = sig(3); 
+
+    const double d1 = s_rr - s_zz;
+    const double d2 = s_zz - s_hoop;
+    const double d3 = s_hoop - s_rr;
+
+    // Manual multiplication is typically faster than std::pow for squares
+    double term = 0.5 * (d1 * d1 + d2 * d2 + d3 * d3) + 3.0 * (t_rz * t_rz);
+
+    return std::sqrt(term);
+}
+
 /// @brief Specialization 
 template <typename HardeningLaw>
 void IsoHard::RMAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const Matd4x4& Ce, Matd4x4& Cep){
