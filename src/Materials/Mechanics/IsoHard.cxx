@@ -195,7 +195,7 @@ void IsoHard::ReturnMappingAxi_PFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_
         throw std::runtime_error("ReturnMappingAxi function pointer is not set. Make sure you are not using a PFF material model.");
     }
 
-    (this->*selectedRMAxi)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, rho, eps_e_old, eps_p_old, eps_eq_old, iStep, Ce, Cep);
+    (this->*selectedRMAxiPFF)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, rho, eps_e_old, eps_p_old, eps_eq_old, iStep, gPhi_d, wp_old, wp, Ce, Cep);
 }
 
 T_DMatx& IsoHard::getCMatx_ep(){
