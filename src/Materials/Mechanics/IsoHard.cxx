@@ -104,6 +104,16 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
                 selectedRMAxi = &IsoHard::RMAxi<KME>;
             }
             CMatx_ep = Matd4x4(Matd4x4::Zero()); // Initialize as 4x4
+        } else if (analysisType == "AxiSymmetricPFF") {
+            analysis2D = AnalysisType::AxiSymmetricPFF;
+            if (hardLaw == "PowerLaw") {
+                selectedRMAxiPFF = &IsoHard::RMAxiPFF<PowerLaw>;
+            } else if (hardLaw == "Voce") {
+                selectedRMAxiPFF = &IsoHard::RMAxiPFF<Voce>;
+            } else if (hardLaw == "KME") {
+                selectedRMAxiPFF = &IsoHard::RMAxiPFF<KME>;
+            }
+            CMatx_ep = Matd4x4(Matd4x4::Zero()); // Initialize as 4x4
         } else if (analysisType == "PlaneStress") {
             analysis2D = AnalysisType::PlaneStress;
             if (hardLaw == "PowerLaw") {
@@ -192,7 +202,7 @@ void IsoHard::ReturnMappingAxi_PFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_
 
     // Ensure selectedRMAxiPFF is valid
     if (!selectedRMAxiPFF) {
-        throw std::runtime_error("ReturnMappingAxi function pointer is not set. Make sure you are not using a PFF material model.");
+        throw std::runtime_error("ReturnMappingAxiPFF function pointer is not set. Make sure you are not using a PFF material model.");
     }
 
     (this->*selectedRMAxiPFF)(deps, sig, eps_e, eps_p, eps_eq, sig_eq, sig_h, rho, eps_e_old, eps_p_old, eps_eq_old, iStep, gPhi_d, wp_old, wp, Ce, Cep);

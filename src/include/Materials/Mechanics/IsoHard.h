@@ -44,7 +44,8 @@ public:
 enum class AnalysisType{
     PlaneStrain,
     PlaneStress,
-    AxiSymmetric
+    AxiSymmetric, 
+    AxiSymmetricPFF
 };
 
 enum class HardeningLaw{
@@ -434,6 +435,30 @@ static RMAxiFn selectRMAxi(HardeningLaw hardening) {
             return &IsoHard::RMAxi<Voce>;
         case HardeningLaw::KME:
             return &IsoHard::RMAxi<KME>;
+        default:
+            throw std::runtime_error("Unsupported hardening law.");
+    }        
+}
+
+// Axi-symmetric return-mapping to handle different hardening laws.
+template <typename HardeningLaw>
+void RMAxiPFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, const Matd4x4& Ce, Matd4x4& Cep);
+
+using RMAxiFnPFF = void (IsoHard::*)(ColVecd4&, ColVecd4&, ColVecd4&, ColVecd4&, double&, double&, double&, double&, const ColVecd4&, const ColVecd4&, const double&, const int, const double, const double&, double&, const Matd4x4&, Matd4x4&);
+
+// Function pointer for the selected ReturnMapping variant
+RMAxiFnPFF selectedRMAxiPFF;
+
+// Function to map HardeningLaw to the appropriate ReturnMapping
+static RMAxiFnPFF selectRMAxiPFF(HardeningLaw hardening) {
+
+    switch (hardening) {
+        case HardeningLaw::PowerLaw:
+            return &IsoHard::RMAxiPFF<PowerLaw>;
+        case HardeningLaw::Voce:
+            return &IsoHard::RMAxiPFF<Voce>;
+        case HardeningLaw::KME:
+            return &IsoHard::RMAxiPFF<KME>;
         default:
             throw std::runtime_error("Unsupported hardening law.");
     }        

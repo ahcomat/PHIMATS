@@ -555,3 +555,112 @@ void IsoHard::RMAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& ep
 
     }
 }
+
+/// @brief Specialization 
+template <typename HardeningLaw>
+void IsoHard::RMAxiPFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, const Matd4x4& Ce, Matd4x4& Cep){
+
+    // Elastic strain
+    eps_e = eps_e_old + deps;
+
+    // Plastic strain
+    eps_p = eps_p_old;
+
+    // Trial stress
+    ColVecd4 sig_trial = Ce*eps_e * gPhi_d;
+
+    //Mises stress
+    double sig_trial_eq = MisesAxi(sig_trial);
+
+    // Initialize plastic multiplier and increment
+    double p = eps_eq_old;
+    double deqpl = 0;
+
+    // Current yield stress and hardening modulus
+    double sYield0, sYield, hard; 
+    UHard<HardeningLaw>(p, sYield0, rho, hard); 
+    sYield = sYield0;
+
+    // Yield function 
+    double f_yield = sig_trial_eq - sYield0*(1.0 + 1.0e-6);
+
+    // Check yielding 
+    if (f_yield <= 0){  // --> Elastic step
+
+        // Update 
+        sig = sig_trial;
+        sig_eq = sig_trial_eq;
+        sig_h = sig_trial.dot(I4) / 3.0;
+        Cep = Ce * gPhi_d; // Zero-overhead copy;
+
+    } else { // --> Plastic step
+
+        // Iteration counter
+        int nIter_RM = 0;
+
+        // Deviatoric stress
+
+        ColVecd4 sig_trial_dev = sig_trial - (sig_trial.dot(I4) / 3.0) * I4; 
+        ColVecd4 N_tr = (3.0/2.0)*sig_trial_dev/sig_trial_eq; // Plastic flow direction
+
+        while(abs(f_yield) > tol){
+
+            // Update Iteration counter
+            nIter_RM++;
+
+            // Update plastic strain increment, Use the pre-calculated constant
+            deqpl += f_yield / (three_uo*gPhi_d + hard);
+            p = eps_eq_old + deqpl;
+            UHard<HardeningLaw>(p, sYield, rho, hard);
+            f_yield = sig_trial_eq - three_uo * gPhi_d * deqpl - sYield;
+
+            if(nIter_RM > max_iter){
+
+                std::ostringstream oss;
+                oss << "\nReturn mapping did not converge at step: " << iStep << "\n"
+                    << "Reached maximum iterations: " << nIter_RM << "\n"
+                    << "Final yield function value: " << f_yield << "\n"
+                    << "Plastic strain increment: " << deqpl << "\n"
+                    << "Equivalent plastic strain: " << p << "\n";
+                
+                throw std::runtime_error(oss.str());
+            }
+        }
+
+        // --------- CONVERGED ---> Update variables
+
+        eps_eq = p;             // Equivalent plastic strain
+
+        ColVecd4 d_eps_p;
+        d_eps_p << deqpl * N_tr(0),      // rr
+                   deqpl * N_tr(1),      // zz
+                   deqpl * N_tr(2),      // θθ
+                   2 * deqpl * N_tr(3);  // rz (Engineering shear)
+
+        eps_p = eps_p_old + d_eps_p;
+        eps_e = (eps_e_old + deps) - d_eps_p;
+
+        sig = Ce*eps_e;    // Undamaged stress tensor
+
+        // sig here is currently undamaged (sig = Ce * eps_e)
+        double d_wp = sig(0) * d_eps_p(0) + // sigma_rr * deps_p_rr
+                    sig(1) * d_eps_p(1) + // sigma_zz * deps_p_zz
+                    sig(2) * d_eps_p(2) + // sigma_hoop * deps_p_hoop
+                    sig(3) * d_eps_p(3);   // tau_rz * dgamma_p_rz (Engineering shear)
+
+        wp = wp_old + d_wp;
+        
+        sig = sig * gPhi_d;    // Damaged stress tensor
+        sig_eq = MisesAxi(sig);    // Von Mises stress
+        sig_h = sig.dot(I4) / 3.0; // Hydostatic stress
+
+        // Tangent stiffness matrix
+
+        RowVecd4 Ce_N = Ce*N_tr;
+        double N_Ce_N = N_tr.dot(Ce_N);
+        double denom = (2.0 / 3.0) * hard + N_Ce_N;
+        Cep.noalias() = Ce - (Ce_N.transpose() * Ce_N)/denom;
+        Cep = Cep*gPhi_d;
+
+    }
+}
