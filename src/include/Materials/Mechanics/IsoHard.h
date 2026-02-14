@@ -145,7 +145,7 @@ void ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& e
 void ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, const Matd3x3& Ce, Matd3x3& Cep);
 
 /**
- * @brief Return mapping algorithm for 2D axi-symmetric isotropic hardening plasticity. 
+ * @brief Return mapping algorithm for 2D axi-symmetric isotropic hardening plasticity with PFF. 
  * 
  * @param deps Strain increment.
  * @param sig Stress tensor.
@@ -161,10 +161,31 @@ void ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd
  * @param iStep Step.
  * @param Ce Elastic stiffness matrix.
  * @param Cep Elastoplastic stiffness matrix.
+ */
+void ReturnMappingAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const Matd4x4& Ce, Matd4x4& Cep);
+
+/**
+ * @brief Return mapping algorithm for 2D axi-symmetric isotropic hardening plasticity. 
+ * 
+ * @param deps Strain increment.
+ * @param sig Stress tensor.
+ * @param eps_e Elastic strain.
+ * @param eps_p Plastic strain.
+ * @param eps_eq Equivalent plastic strain
+ * @param sig_eq Equivalent stress.
+ * @param sig_h Hydrostatic stress.
+ * @param rho Normalized dislocation density.
+ * @param eps_e_old 
+ * @param eps_p_old 
+ * @param eps_eq_old 
+ * @param iStep Step.
+ * @param gPhi_d g(phi).
+ * @param wp_old 
+ * @param wp Plastic work density.
  * @param Ce Elastic stiffness matrix.
  * @param Cep Elastoplastic stiffness matrix.
  */
-void ReturnMappingAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const Matd4x4& Ce, Matd4x4& Cep);
+void ReturnMappingAxi_PFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, const Matd4x4& Ce, Matd4x4& Cep);
 
 /**
  * @brief Returns the stiffness matrix in Voigt notation.
