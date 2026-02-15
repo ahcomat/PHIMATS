@@ -210,7 +210,7 @@ const double tol = 1e-6;
 const double tol_PFF = 1e-5; 
 
 /// @brief Maximum number of iterations.
-const int max_iter = 20;
+const int max_iter = 30;
 
 /// @brief 3D Identity tensor in Voigt notation.
 const ColVecd6 I6 = (ColVecd6() << 1.0, 1.0, 1.0, 0.0, 0.0, 0.0).finished();
