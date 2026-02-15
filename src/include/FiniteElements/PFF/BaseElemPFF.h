@@ -196,25 +196,6 @@ inline void CalcDrivForcEP_TH(const std::vector<std::vector<double>>* el_wp_ptr,
 }
 
 /**
- * @brief Calculates elastoplastic crack driving force based only on `el_wp`.
- *        
- * @param el_wp_ptr 
- */
-inline void CalcDrivForcP(const std::vector<std::vector<double>>* el_wp_ptr, const double zeta) {
-    for (size_t iElem = 0; iElem < elemH.size(); ++iElem) {
-        for (size_t iGauss = 0; iGauss < elemH[iElem].size(); ++iGauss) {
-
-            double wpPlastic  = accessVec(*el_wp_ptr, iElem, iGauss);
-            double wcLocal    = accessVec(elem_wc, iElem, iGauss);
-
-            double drivForce = (wpPlastic) / wcLocal;
-
-            accessVec(elemH, iElem, iGauss) = zeta*std::max(drivForce, accessVec(elemH, iElem, iGauss));
-        }
-    }
-}
-
-/**
  * @brief Get a constant reference to `el_gPhi_d`.
  * 
  * @return const std::vector<std::vector<double>>& 

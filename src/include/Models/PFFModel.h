@@ -112,14 +112,6 @@ void CalcDrivForcEP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem
 void CalcDrivForcEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta = 1.0);
 
 /**
- * @brief Calculates elastoplastic crack driving force based only on `el_wp`.
- * 
- * @param pffElem 
- * @param mechElem 
- */
-void CalcDrivFrocP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta = 1.0);
-
-/**
  * @brief Calculates the element stiffness matrix.
  * 
  * @param pffElem PFF elements vector

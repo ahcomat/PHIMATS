@@ -232,17 +232,6 @@ void PFFModel::CalcDrivForcEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMe
     } 
 }
 
-void PFFModel::CalcDrivFrocP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta){
-
-    for (int iSet=0; iSet<nElementSets; iSet++){
-
-        const std::vector<std::vector<double>>& el_wp = mechElem[iSet]->getEl_wp();
-
-        pffElem[iSet]->CalcDrivForcP(&el_wp, zeta);
-
-    } 
-}
-
 void PFFModel::CalcElemStiffMatx(vector<BaseElemPFF*> elements){
 
         for (int iSet=0; iSet<nElementSets; iSet++){
