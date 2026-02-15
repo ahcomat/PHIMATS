@@ -25,10 +25,10 @@
 #define VERSION_H
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 2
+#define VERSION_MINOR 3
 #define VERSION_PATCH 0
 
-#define VERSION_STRING "v1.3.0-beta"
+#define VERSION_STRING "v1.3.0"
 #define VERSION_DATE "29-01-2026"  // Release date
 #define PROJECT_WEBSITE  "https://comp-mat.com/phimats"
 #define PROJECT_CITATION "Abdelrahman Hussein \n\
