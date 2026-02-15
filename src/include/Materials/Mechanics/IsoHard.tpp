@@ -621,6 +621,7 @@ void IsoHard::RMAxiPFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4&
                     << "Reached maximum iterations: " << nIter_RM << "\n"
                     << "Final yield function value: " << f_yield << "\n"
                     << "Plastic strain increment: " << deqpl << "\n"
+                    << "Damage: " << gPhi_d << "\n"
                     << "Equivalent plastic strain: " << p << "\n";
                 
                 throw std::runtime_error(oss.str());
