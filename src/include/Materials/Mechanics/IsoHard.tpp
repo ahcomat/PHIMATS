@@ -603,7 +603,7 @@ void IsoHard::RMAxiPFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4&
         ColVecd4 sig_trial_dev = sig_trial - (sig_trial.dot(I4) / 3.0) * I4; 
         ColVecd4 N_tr = (3.0/2.0)*sig_trial_dev/sig_trial_eq; // Plastic flow direction
 
-        while(abs(f_yield) > tol){
+        while(abs(f_yield) > tol_PFF){
 
             // Update Iteration counter
             nIter_RM++;
