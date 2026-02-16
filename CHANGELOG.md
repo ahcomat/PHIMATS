@@ -29,6 +29,8 @@ Major architectural refactor of pre-/post-processing and PFF/hydrogen chemo-mech
   - Implemented `AssignDirichletBC` and `WriteBCVTK` as general-purpose functions leveraging Gmsh's `Physical groups`.
 - `H5IO` added compression to output files for size reduction.
 - `LinearElastic` and `IsoHard` Implement axisymmetric formulation for elasticity and isotropic hardening plasticity.
+- `ModelPFF` implement a new crack driving force for ductile fracture `CalcDrivForcHybridDuctile_TH`.
+
   
 ### Fixed
 - `Quad4` and `IsoHard` Fix implementation of out of plane component in plane strain.
