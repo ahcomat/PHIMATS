@@ -97,9 +97,10 @@ void CalcDrivForcE(vector<BaseElemPFF*> pffElem);
  *        For details, see Miehe et al. CMAME (2016) PI and PII.
  * 
  * @param pffElem 
- * @param mechElem 
+ * @param mechElem
+ * @param eta Contribution percentage to driving force H = (ηψ⁺ + (1-η)wₚ) / w꜀. NOTE that eta should be in the range [0,1].
  */
-void CalcDrivForcEP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem);
+void CalcDrivForcEP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double eta = 0.5);
 
 /**
  * @brief Calculates elastoplastic crack driving force with a threshold based on `psi_plus` and `el_wp`.
@@ -108,8 +109,9 @@ void CalcDrivForcEP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem
  * @param pffElem 
  * @param mechElem 
  * @param zeta Parameter the controls the post initiation behavoir. Default = 1. 
+ * @param eta Contribution percentage to driving force H = (ηψ⁺ + (1-η)wₚ) / w꜀. NOTE that eta should be in the range [0,1].
  */
-void CalcDrivForcEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta = 1.0);
+void CalcDrivForcEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta = 1.0, const double eta = 0.5);
 
 /**
  * @brief Calculates the element stiffness matrix.

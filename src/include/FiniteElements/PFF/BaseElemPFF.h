@@ -148,13 +148,14 @@ inline void CalcDrivForcE() {
     }
 }
 
-/**
- * @brief Calculates elastoplastic crack driving force with a threshold based on `psi_plus` and `el_wp`.
- *        For details, see Miehe et al. CMAME (2016) PI and PII.
- * 
- * @param el_wp_ptr 
- */
-inline void CalcDrivForcEP(const std::vector<std::vector<double>>* el_wp_ptr) {
+ /**
+  * @brief Calculates elastoplastic crack driving force with a threshold based on `psi_plus` and `el_wp`.
+  *       For details, see Miehe et al. CMAME (2016) PI and PII.
+  * 
+  * @param el_wp_ptr Plastic word density.
+  * @param eta Contribution percentage H = (ηψ⁺ + (1-η)wₚ) / w꜀.
+  */
+inline void CalcDrivForcEP(const std::vector<std::vector<double>>* el_wp_ptr, const double eta) {
     for (size_t iElem = 0; iElem < elemH.size(); ++iElem) {
         for (size_t iGauss = 0; iGauss < elemH[iElem].size(); ++iGauss) {
 
@@ -162,7 +163,7 @@ inline void CalcDrivForcEP(const std::vector<std::vector<double>>* el_wp_ptr) {
             double wpPlastic  = accessVec(*el_wp_ptr, iElem, iGauss);
             double wcLocal    = accessVec(elem_wc, iElem, iGauss);
 
-            double drivForce = (psiElastic + wpPlastic) / wcLocal;
+            double drivForce = (psiElastic*eta + wpPlastic*(1.0-eta)) / wcLocal;
 
             accessVec(elemH, iElem, iGauss) = std::max(drivForce, accessVec(elemH, iElem, iGauss));
         }
@@ -175,8 +176,9 @@ inline void CalcDrivForcEP(const std::vector<std::vector<double>>* el_wp_ptr) {
  * 
  * @param el_wp_ptr 
  * @param zeta Parameter the controls the post initiation behavoir. Default = 1. 
+ * @param eta Contribution percentage H = (ηψ⁺ + (1-η)wₚ) / w꜀.
  */
-inline void CalcDrivForcEP_TH(const std::vector<std::vector<double>>* el_wp_ptr, const double zeta) {
+inline void CalcDrivForcEP_TH(const std::vector<std::vector<double>>* el_wp_ptr, const double zeta, const double eta) {
     for (size_t iElem = 0; iElem < elemH.size(); ++iElem) {
         for (size_t iGauss = 0; iGauss < elemH[iElem].size(); ++iGauss) {
 
@@ -185,7 +187,7 @@ inline void CalcDrivForcEP_TH(const std::vector<std::vector<double>>* el_wp_ptr,
             double wcLocal    = accessVec(elem_wc, iElem, iGauss);
 
             // Raw driving force
-            double rawForce = (psiElastic + wpPlastic) / wcLocal;
+            double rawForce = (psiElastic*eta + wpPlastic*(1-eta)) / wcLocal;
 
             // Apply thresholding (subtract 1, clamp to zero)
             double drivForce = zeta*std::max(rawForce - 1.0, 0.0);
