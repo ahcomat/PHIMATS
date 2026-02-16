@@ -387,7 +387,7 @@ void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& 
                     << "Reached maximum iterations: " << nIter_RM << "\n"
                     << "Final yield function value: " << f_yield << "\n"
                     << "Plastic strain increment: " << deqpl << "\n"
-                    << "Damage: " << gPhi_d << "\n"
+                    << "gPhi_d: " << gPhi_d << "\n"
                     << "Equivalent plastic strain: " << p << "\n";
                 
                 throw std::runtime_error(oss.str());
@@ -621,7 +621,7 @@ void IsoHard::RMAxiPFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4&
                     << "Reached maximum iterations: " << nIter_RM << "\n"
                     << "Final yield function value: " << f_yield << "\n"
                     << "Plastic strain increment: " << deqpl << "\n"
-                    << "Damage: " << gPhi_d << "\n"
+                    << "gPhi_d: " << gPhi_d << "\n"
                     << "Equivalent plastic strain: " << p << "\n";
                 
                 throw std::runtime_error(oss.str());
