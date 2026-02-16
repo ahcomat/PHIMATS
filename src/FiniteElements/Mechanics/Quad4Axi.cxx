@@ -107,10 +107,12 @@ void Quad4Axi::InitializeElements(Nodes &Nodes){
         elStres_h.resize(nElements);  // Hydrostatic stress
         elRho.resize(nElements);      // Norm dislocation density
         el_wp.resize(nElements); el_wp_old.resize(nElements);     // Plastic work density
+        elTriax.resize(nElements);  // Triaxiality
         
 
         elStrain_e_Variant = &elStran_e;
         el_wp_ptr = &el_wp;
+        elTriax_ptr = &elTriax;
     }     
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
@@ -148,6 +150,7 @@ void Quad4Axi::InitializeElements(Nodes &Nodes){
             elStres_h.at(iElem).resize(nElGauss);
             elRho.at(iElem).resize(nElGauss);
             accessVec(el_wp, iElem).resize(nElGauss);
+            accessVec(elTriax, iElem).resize(nElGauss);
 
             elStran_e_old.at(iElem).resize(nElGauss);
             elStran_p_old.at(iElem).resize(nElGauss); 
@@ -506,6 +509,7 @@ void Quad4Axi::CalcRetrunMapping_PFF(BaseMechanics* mat, const bool& updateStiff
                                         accessVec(*gPhi_d_ptr, iElem, iGaus),
                                         accessVec(el_wp_old, iElem, iGaus),
                                         accessVec(el_wp, iElem, iGaus),
+                                        accessVec(elTriax, iElem, iGaus),
                                         Ce, Cep);
 
         }
@@ -535,6 +539,7 @@ void Quad4Axi::CalcRetrunMapping_PFF(BaseMechanics* mat, const bool& updateStiff
                                             accessVec(*gPhi_d_ptr, iElem, iGaus),
                                             accessVec(el_wp_old, iElem, iGaus),
                                             accessVec(el_wp, iElem, iGaus),
+                                            accessVec(elTriax, iElem, iGaus),
                                             Ce, Cep);
 
                 const Matd4x8& dummyBu = accessVec(BuMat, iElem, iGaus); // Strain matrix for the given gauss point.

@@ -272,6 +272,28 @@ void PFFModel::CalcDrivForcEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMe
     } 
 }
 
+void PFFModel::CalcDrivForcHybridDuctile_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta, const double eta){
+
+    if (eta < 0.0 || eta > 1.0){
+
+        logger.log("Exception caught in PFFModel::CalcDrivForcHybridDuctile_TH:\n", "ERROR", true);
+        logger.log("    Wrong value for eta: " + std::to_string(eta), "", false);
+        logger.log("    Values should be in the range [0,1]", "", false);
+        logger.log("    Critical error encountered. Terminating!\n", "", false);
+        exit(EXIT_FAILURE);
+
+    }
+
+    for (int iSet=0; iSet<nElementSets; iSet++){
+
+        const std::vector<std::vector<double>>& el_wp = mechElem[iSet]->getEl_wp();
+        const std::vector<std::vector<double>>& elTriax = mechElem[iSet]->getElTriax();
+
+        pffElem[iSet]->CalcDrivForcEP_TH(&el_wp, zeta, eta);
+
+    } 
+}
+
 void PFFModel::CalcElemStiffMatx(vector<BaseElemPFF*> elements){
 
         for (int iSet=0; iSet<nElementSets; iSet++){

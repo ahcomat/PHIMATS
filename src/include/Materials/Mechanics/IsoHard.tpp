@@ -302,7 +302,7 @@ void IsoHard::RM2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps
 
 /// @brief Specialization 
 template <typename AnalysisType, typename HardeningLaw>
-void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, const Matd3x3& Ce, Matd3x3& Cep){
+void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, double& triax, const Matd3x3& Ce, Matd3x3& Cep){
 
     // Elastic strain
     eps_e = eps_e_old + deps;
@@ -341,6 +341,7 @@ void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& 
         sig_z = sig_z_old + ho * (deps(0) + deps(1));  // We store the undamaged value 
         sig_h = (sig_trial(0) + sig_trial(1) + sig_z_trial) / 3.0;
         Cep = Ce*gPhi_d;
+        triax = sig_h/sig_eq;      // Triaxiality  
 
     } else { // --> Plastic step
 
@@ -431,6 +432,7 @@ void IsoHard::RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& 
         sig = sig*gPhi_d;   
         sig_eq = Mises2D<AnalysisType>(sig, sig_z*gPhi_d);  // Von Mises stress
         sig_h = (sig(0) + sig(1) + sig_z*gPhi_d) / 3.0;     // Hydostatic stress
+        triax = sig_h/sig_eq;                               // Triaxiality  
 
         // Tangent stiffness matrix
 
@@ -558,7 +560,7 @@ void IsoHard::RMAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& ep
 
 /// @brief Specialization 
 template <typename HardeningLaw>
-void IsoHard::RMAxiPFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, const Matd4x4& Ce, Matd4x4& Cep){
+void IsoHard::RMAxiPFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, double& triax, const Matd4x4& Ce, Matd4x4& Cep){
 
     // Elastic strain
     eps_e = eps_e_old + deps;
@@ -592,6 +594,7 @@ void IsoHard::RMAxiPFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4&
         sig_eq = sig_trial_eq;
         sig_h = sig_trial.dot(I4) / 3.0;
         Cep = Ce * gPhi_d; // Zero-overhead copy;
+        triax = sig_h/sig_eq;
 
     } else { // --> Plastic step
 
@@ -651,10 +654,11 @@ void IsoHard::RMAxiPFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4&
 
         wp = wp_old + d_wp;
         
-        sig = sig * gPhi_d;    // Damaged stress tensor
+        sig = sig * gPhi_d;        // Damaged stress tensor
         sig_eq = MisesAxi(sig);    // Von Mises stress
         sig_h = sig.dot(I4) / 3.0; // Hydostatic stress
-
+        triax = sig_h/sig_eq;      // Triaxiality  
+ 
         // Tangent stiffness matrix
 
         RowVecd4 Ce_N = Ce*N_tr;

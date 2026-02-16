@@ -120,6 +120,17 @@ void CalcDrivForcEP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem
 void CalcDrivForcEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta = 1.0, const double eta = 0.5);
 
 /**
+ * @brief Calculates a state-dependent ductile driving force using a triaxiality-gated plastic work 
+ *        contribution and a damage-scaled energy transition.
+ * 
+ * @param pffElem 
+ * @param mechElem 
+ * @param zeta Parameter the controls the post initiation behavoir. Default = 1. 
+ * @param eta Contribution percentage to driving force H. NOTE that eta should be in the range [0,1].
+ */
+void CalcDrivForcHybridDuctile_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta = 1.0, const double eta = 0.9);
+
+/**
  * @brief Calculates the element stiffness matrix.
  * 
  * @param pffElem PFF elements vector
@@ -130,7 +141,6 @@ void CalcElemStiffMatx(vector<BaseElemPFF*> pffElem);
  * @brief Helper function for `Assemble`.
  * 
  * @param elMatx_ptr 
- * @param elemConDof_ptr 
  * @param nElConDofs 
  * @param nElements 
  * @param globalMat 

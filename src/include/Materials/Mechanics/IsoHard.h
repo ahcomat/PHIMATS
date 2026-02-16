@@ -143,7 +143,7 @@ void ReturnMapping2D(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& e
  * @param Ce Elastic stiffness matrix.
  * @param Cep Elastoplastic stiffness matrix
  */
-void ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, const Matd3x3& Ce, Matd3x3& Cep);
+void ReturnMapping2D_PFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, double& triax, const Matd3x3& Ce, Matd3x3& Cep);
 
 /**
  * @brief Return mapping algorithm for 2D axi-symmetric isotropic hardening plasticity with PFF. 
@@ -186,7 +186,7 @@ void ReturnMappingAxi(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& 
  * @param Ce Elastic stiffness matrix.
  * @param Cep Elastoplastic stiffness matrix.
  */
-void ReturnMappingAxi_PFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, const Matd4x4& Ce, Matd4x4& Cep);
+void ReturnMappingAxi_PFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, double& triax,const Matd4x4& Ce, Matd4x4& Cep);
 
 /**
  * @brief Returns the stiffness matrix in Voigt notation.
@@ -374,9 +374,9 @@ static RM2DFn selectRM2D(AnalysisType analysis2D, HardeningLaw hardening) {
 
 // 2D Return-mapping to handle different hardening laws and stress state for PFF.
 template <typename AnalysisType, typename HardeningLaw>
-void RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, const Matd3x3& Ce, Matd3x3& Cep);
+void RM2DPFF(ColVecd3& deps, ColVecd3& sig, ColVecd3& eps_e, ColVecd3& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& sig_z, double& rho, const ColVecd3& eps_e_old, const ColVecd3& eps_p_old, const double& eps_eq_old, const double& sig_z_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, double& triax, const Matd3x3& Ce, Matd3x3& Cep);
 
-using RM2DFnPFF = void (IsoHard::*)(ColVecd3&, ColVecd3&, ColVecd3&, ColVecd3&, double&, double&, double&, double&, double&, const ColVecd3&, const ColVecd3&, const double&, const double&, const int, const double, const double&, double&, const Matd3x3&, Matd3x3&);
+using RM2DFnPFF = void (IsoHard::*)(ColVecd3&, ColVecd3&, ColVecd3&, ColVecd3&, double&, double&, double&, double&, double&, const ColVecd3&, const ColVecd3&, const double&, const double&, const int, const double, const double&, double&, double&, const Matd3x3&, Matd3x3&);
 
 // Function pointer for the selected ReturnMapping variant
 RM2DFnPFF selectedRM2DPFF;
@@ -442,9 +442,9 @@ static RMAxiFn selectRMAxi(HardeningLaw hardening) {
 
 // Axi-symmetric return-mapping to handle different hardening laws.
 template <typename HardeningLaw>
-void RMAxiPFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, const Matd4x4& Ce, Matd4x4& Cep);
+void RMAxiPFF(ColVecd4& deps, ColVecd4& sig, ColVecd4& eps_e, ColVecd4& eps_p, double& eps_eq, double& sig_eq, double& sig_h, double& rho, const ColVecd4& eps_e_old, const ColVecd4& eps_p_old, const double& eps_eq_old, const int iStep, const double gPhi_d, const double& wp_old, double& wp, double& triax, const Matd4x4& Ce, Matd4x4& Cep);
 
-using RMAxiFnPFF = void (IsoHard::*)(ColVecd4&, ColVecd4&, ColVecd4&, ColVecd4&, double&, double&, double&, double&, const ColVecd4&, const ColVecd4&, const double&, const int, const double, const double&, double&, const Matd4x4&, Matd4x4&);
+using RMAxiFnPFF = void (IsoHard::*)(ColVecd4&, ColVecd4&, ColVecd4&, ColVecd4&, double&, double&, double&, double&, const ColVecd4&, const ColVecd4&, const double&, const int, const double, const double&, double&, double&, const Matd4x4&, Matd4x4&);
 
 // Function pointer for the selected ReturnMapping variant
 RMAxiFnPFF selectedRMAxiPFF;

@@ -198,6 +198,39 @@ inline void CalcDrivForcEP_TH(const std::vector<std::vector<double>>* el_wp_ptr,
 }
 
 /**
+ * @brief Calculates a state-dependent ductile driving force using a triaxiality-gated plastic work 
+ *        contribution and a damage-scaled energy transition.
+ * 
+ * @param el_wp_ptr Plastic work density pointer.
+ * @param elTriax_ptr Triaxiality pointer.
+ * @param zeta Parameter the controls the post initiation behavoir. Default = 1. 
+ * @param eta Contribution percentage.
+ */
+inline void CalcDrivForcHybridDuctile_TH(const std::vector<std::vector<double>>* el_wp_ptr, const std::vector<std::vector<double>>* elTriax_ptr, const double zeta, const double eta) {
+    for (size_t iElem = 0; iElem < elemH.size(); ++iElem) {
+        for (size_t iGauss = 0; iGauss < elemH[iElem].size(); ++iGauss) {
+
+            double psiElastic = accessVec(psi_plus, iElem, iGauss);
+            double wpPlastic  = accessVec(*el_wp_ptr, iElem, iGauss);
+            double triax  = accessVec(*elTriax_ptr, iElem, iGauss);
+            double wcLocal    = accessVec(elem_wc, iElem, iGauss);
+
+            double triaxiality_gate = std::tanh(2.0 * std::max(0.0, triax)); 
+
+            // Material Stateks
+            double phi_local = accessVec(elPhi, iElem, iGauss);
+            double damage_weight = (1.0 - eta) + (eta * phi_local);
+
+            // Combined Plastic Driving Force Contribution
+            double wp_contribution = triaxiality_gate * damage_weight;
+
+            double rawForce = (psiElastic * eta + wpPlastic * wp_contribution) / wcLocal;
+            accessVec(elemH, iElem, iGauss) = std::max(zeta * std::max(rawForce - 1.0, 0.0), accessVec(elemH, iElem, iGauss));
+        }
+    }
+}
+
+/**
  * @brief Get a constant reference to `el_gPhi_d`.
  * 
  * @return const std::vector<std::vector<double>>& 

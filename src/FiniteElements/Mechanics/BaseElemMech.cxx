@@ -75,3 +75,8 @@ const std::vector<std::vector<double>>& BaseElemMech::getEl_wp() const {
     assert(el_wp_ptr != nullptr && "el_wp_ptr is null!");
     return *el_wp_ptr;
 }
+
+const std::vector<std::vector<double>>& BaseElemMech::getElTriax() const {
+    assert(elTriax_ptr != nullptr && "elTriax_ptr is null!");
+    return *elTriax_ptr;
+}

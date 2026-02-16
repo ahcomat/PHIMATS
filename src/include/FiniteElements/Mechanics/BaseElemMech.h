@@ -93,6 +93,13 @@ const T_elStres& getElStrain_e() const { return elStrain_e_Variant; }
 const std::vector<std::vector<double>>& getEl_wp() const ;
 
 /**
+ * @brief Get a constant reference to `elTriax_ptr`.
+ * 
+ * @return const std::vector<std::vector<double>>& 
+ */
+const std::vector<std::vector<double>>& getElTriax() const ;
+
+/**
  * @brief Calculates the element stiffness matrix.
  */
 virtual void CalcElemStiffMatx(T_DMatx CMatx) = 0;
@@ -199,10 +206,16 @@ vector<vector<double>> el_wp;
 /// @brief Int-pt plastic work density.
 vector<vector<double>> el_wp_old;
 
+/// @brief Int-pt triaxiality.
+vector<vector<double>> elTriax;
+
 /// @brief Variant for passing elastic strain to phase-field fracture.
 T_elStres elStrain_e_Variant; 
 
 vector<vector<double>>* el_wp_ptr;
+
+vector<vector<double>>* elTriax_ptr;
+
 
 };
 #endif
