@@ -93,6 +93,8 @@ void CalcElemStiffMatx() override;
 
 void CalcFH(double* FH) override;
 
+void CalcNodVals(vector<double>& nodH, vector<double>& nodPsi_plus, vector<double>& nod_wp, const std::vector<std::vector<double>>* el_wp_ptr, vector<double>& nodCount) override;
+
 void Calc_gPhi_d(const double* globalBuffer) override;
 
 private:

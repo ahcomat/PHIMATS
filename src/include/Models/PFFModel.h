@@ -52,6 +52,12 @@ PFFModel(vector<BaseElemPFF*> elements, H5IO& H5File_in, Logger& logger);
 ~PFFModel();
 
 /**
+ * @brief Set nodal quantities to zeros.
+ * 
+ */
+void setZeroNodVals();
+
+/**
  * @brief Initializes and preallocates the RHS `F`, solution `x` and 
  *        conductivity matrix `K_D` and capacitance matrix `C`.
  * 
@@ -186,6 +192,13 @@ Vec& getX();
 Mat& getK();
 
 /**
+ * @brief Maps int-point values to nodes for output.
+ * 
+ * @param elements 
+ */
+void CalcNodVals(vector<BaseElemPFF*> elements, vector<BaseElemMech*> mechElem);
+
+/**
  * @brief Write nodal concentration values.
  * 
  * @param elements 
@@ -205,7 +218,19 @@ Logger& logger;
 int nElPhiDofs = 0;     
 
 /// @brief Total number of integration points.
-int  nTotGuasPts = 0;        
+int  nTotGuasPts = 0;    
+
+/// @brief Nodal crack driving force.
+vector<double> nodH;
+
+/// @brief Nodal positive part of the strain energy.
+vector<double> nodPsi_plus;
+
+/// @brief Nodal plastic work density.
+vector<double> nod_wp;
+
+/// @brief Counter for integration points surrounding nodes.
+vector<double> nodCount;  
 
 // PETSc ------------------------
 

@@ -23,6 +23,15 @@ PFFModel::PFFModel(vector<BaseElemPFF*> elements, H5IO& H5File_in, Logger& logge
     dsetName = "SimulationParameters/nTotNodes";
     nTotNodes = H5File_in.ReadScalar(dsetName);
 
+    // Set the type and size
+    nodCount.resize(nTotNodes);
+    nodH.resize(nTotNodes);
+    nodPsi_plus.resize(nTotNodes);
+    nod_wp.resize(nTotNodes);
+
+    // Initialize to zeros, otherwise will get garbage memory values.
+    setZeroNodVals();
+
     // Allocate memory for `Fint` and `indices`.
     PetscMalloc1(nTotDofs, &FH);
     PetscMalloc1(nTotDofs, &indices);
@@ -45,6 +54,17 @@ PFFModel::~PFFModel(){
     // Deallocate memory
     PetscFree(FH); PetscFree(indices);
     VecDestroy(&vecFp); VecDestroy(&vecx); MatDestroy(&matK);
+}
+
+void PFFModel::setZeroNodVals(){
+
+    for(int iNod=0; iNod<nTotNodes; iNod++){
+
+        accessVec(nodH, iNod) = 0;
+        accessVec(nodPsi_plus, iNod) = 0;
+        accessVec(nod_wp, iNod) = 0;
+        accessVec(nodCount, iNod) = 0;
+    }
 }
 
 void PFFModel::InitializePETSc(vector<BaseElemPFF*> elements){
@@ -394,10 +414,35 @@ Mat& PFFModel::getK(){
     return matK;
 }
 
+void PFFModel::CalcNodVals(vector<BaseElemPFF*> elements, vector<BaseElemMech*> mechElem){
+
+    for (int iSet=0; iSet<nElementSets; iSet++){
+
+        const std::vector<std::vector<double>>& el_wp = mechElem[iSet]->getEl_wp();
+        
+        elements[iSet]->CalcNodVals(nodH, nodPsi_plus, nod_wp, &el_wp, nodCount);
+    }
+
+    for(int iNod=0; iNod<nTotNodes; iNod++){
+       
+        accessVec(nodH, iNod) = accessVec(nodH, iNod)/accessVec(nodCount, iNod);
+        accessVec(nodPsi_plus, iNod) = accessVec(nodPsi_plus, iNod)/accessVec(nodCount, iNod);
+        accessVec(nod_wp, iNod) = accessVec(nod_wp, iNod)/accessVec(nodCount, iNod);
+    }
+
+}
+
 void PFFModel::WriteOut(H5IO &H5File_out, const string iStep){
 
     // Concentration
     VecGetArrayRead(vecx, &globalBuffer);
     H5File_out.WriteArray1D("Phi/Step_"+iStep, nTotDofs, globalBuffer);
     VecRestoreArrayRead(vecx, &globalBuffer);
+
+    H5File_out.WriteArray1D("H/Step_"+iStep, nTotNodes, nodH.data());
+    H5File_out.WriteArray1D("Psi_plus/Step_"+iStep, nTotNodes, nodPsi_plus.data(), 10);
+    H5File_out.WriteArray1D("wp/Step_"+iStep, nTotNodes, nod_wp.data());
+
+    // Set nodal vlaues to zero
+    setZeroNodVals();
 }

@@ -71,6 +71,9 @@ class WriteXDMF:
             # --- PHASE FIELD FRACTURE COMPONENTS ---
             if "pff" in self.components:
                 self._add_attr(grid, t, "Phi", "Scalar", self.file_map["pff"])
+                self._add_attr(grid, t, "H", "Scalar", self.file_map["pff"])
+                self._add_attr(grid, t, "Psi_plus", "Scalar", self.file_map["pff"])
+                self._add_attr(grid, t, "wp", "Scalar", self.file_map["pff"])
             
             # --- MECHANICAL COMPONENTS ---
             if "mech" in self.components:

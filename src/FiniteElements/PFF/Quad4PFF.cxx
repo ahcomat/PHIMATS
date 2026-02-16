@@ -288,6 +288,28 @@ void Quad4PFF::CalcFH(double* FH){
     }
 }
 
+void Quad4PFF::CalcNodVals(vector<double>& nodH, vector<double>& nodPsi_plus, vector<double>& nod_wp, const std::vector<std::vector<double>>* el_wp_ptr, vector<double>& nodCount){
+
+    // Optimized Hot Loops
+    for (int iElem = 0; iElem < nElements; iElem++) {
+        for (int iGaus = 0; iGaus < nElGauss; iGaus++) {
+            
+            const double vol = accessVec(intPtVol, iElem, iGaus);
+            const double H = accessVec(elemH, iElem, iGaus);
+            const double psi = accessVec(psi_plus, iElem, iGaus);
+            const double wp  = accessVec(*el_wp_ptr, iElem, iGaus);
+
+            for (auto nodeIdx : elemNodeConn.at(iElem)) {
+
+                nodH[nodeIdx] += H * vol;
+                nodPsi_plus[nodeIdx] += psi * vol;
+                nod_wp[nodeIdx]  += wp * vol;
+                nodCount[nodeIdx]    += vol;
+            }
+        }
+    }
+}
+
 void Quad4PFF::Calc_gPhi_d(const double* globalBuffer){
 
     ColVecd4 dummyPhi;

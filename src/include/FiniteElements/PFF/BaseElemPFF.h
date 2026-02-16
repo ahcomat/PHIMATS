@@ -235,6 +235,16 @@ virtual void CalcElemStiffMatx() = 0;
 virtual void CalcFH(double* FH) = 0;
 
 /**
+ * @brief Maps int-point values to nodes for output.
+ * 
+ * @param nodH Crack driving force.
+ * @param nodPsi_plus Positive part of the strain energy density.
+ * @param nod_wp plastic work density. 
+ * @param nodCount 
+ */
+virtual void CalcNodVals(vector<double>& nodH, vector<double>& nodPsi_plus, vector<double>& nod_wp, const std::vector<std::vector<double>>* el_wp_ptr, vector<double>& nodCount) = 0;
+
+/**
  * @brief Calculated the integration point phi. 
  * 
  * @param globalBuffer 

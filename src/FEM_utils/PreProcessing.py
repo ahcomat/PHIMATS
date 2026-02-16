@@ -175,6 +175,9 @@ class PreProcessing:
             
             elif self.config.PhysicsType == "PFF":
                 f.create_group("Phi")
+                f.create_group("H")
+                f.create_group("Psi_plus")
+                f.create_group("wp")
             
             elif self.config.PhysicsType == "Transport":
                 f.create_group("Con")
