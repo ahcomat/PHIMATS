@@ -302,10 +302,13 @@ void Quad4PFF::Calc_gPhi_d(const double* globalBuffer){
 
         for(int iGauss=0; iGauss<nElGauss; iGauss++){
 
-            accessVec(elPhi, iElem, iGauss) = accessVec(shapeFunc, iGauss)*dummyPhi;
-            phi = 1 - accessVec(elPhi, iElem, iGauss);
-            accessVec(el_gPhi_d, iElem, iGauss) = (phi*phi) + 1e-6;
-
+            double rawPhi = accessVec(shapeFunc, iGauss) * dummyPhi;
+    
+            double clampedPhi = std::max(0.0, std::min(1.0, rawPhi));            
+            accessVec(elPhi, iElem, iGauss) = clampedPhi;
+            
+            double phi = 1.0 - clampedPhi;
+            accessVec(el_gPhi_d, iElem, iGauss) = (phi * phi) + 1e-6;
         }
     }
 }
