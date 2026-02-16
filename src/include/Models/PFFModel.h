@@ -90,7 +90,7 @@ void CalcPsiSpectral(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechEle
  * 
  * @param pffElem PFF elements vector
  */
-void CalcDrivForcB(vector<BaseElemPFF*> pffElem);
+void CalcDrivForcE(vector<BaseElemPFF*> pffElem);
 
 /**
  * @brief Calculates elastoplastic crack driving force based on `psi_plus` and `el_wp`.

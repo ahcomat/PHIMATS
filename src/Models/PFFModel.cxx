@@ -201,11 +201,11 @@ void PFFModel::CalcPsiSpectral(vector<BaseElemPFF*> pffElem, vector<BaseElemMech
     }
 }
 
-void PFFModel::CalcDrivForcB(vector<BaseElemPFF*> pffElem){
+void PFFModel::CalcDrivForcE(vector<BaseElemPFF*> pffElem){
 
     for (int iSet=0; iSet<nElementSets; iSet++){
 
-        pffElem[iSet]->CalcDrivForcB();
+        pffElem[iSet]->CalcDrivForcE();
 
     }  
 }
