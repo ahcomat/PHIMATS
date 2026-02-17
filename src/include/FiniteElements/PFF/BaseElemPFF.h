@@ -215,14 +215,10 @@ inline void CalcDrivForcHybridDuctile_TH(const std::vector<std::vector<double>>*
             double triax  = accessVec(*elTriax_ptr, iElem, iGauss);
             double wcLocal    = accessVec(elem_wc, iElem, iGauss);
 
-            double triaxiality_gate = std::tanh(2.0 * std::max(0.0, triax)); 
-
-            // Material Stateks
-            double phi_local = accessVec(elPhi, iElem, iGauss);
-            double damage_weight = (1.0 - eta) + (eta * phi_local);
+            double triaxiality_gate = std::tanh(4.0 * std::max(0.0, triax)); 
 
             // Combined Plastic Driving Force Contribution
-            double wp_contribution = triaxiality_gate * damage_weight;
+            double wp_contribution = triaxiality_gate * (1.0 - eta);
 
             double rawForce = (psiElastic * eta + wpPlastic * wp_contribution) / wcLocal;
             accessVec(elemH, iElem, iGauss) = std::max(zeta * std::max(rawForce - 1.0, 0.0), accessVec(elemH, iElem, iGauss));

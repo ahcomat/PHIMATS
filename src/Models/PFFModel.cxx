@@ -289,7 +289,7 @@ void PFFModel::CalcDrivForcHybridDuctile_TH(vector<BaseElemPFF*> pffElem, vector
         const std::vector<std::vector<double>>& el_wp = mechElem[iSet]->getEl_wp();
         const std::vector<std::vector<double>>& elTriax = mechElem[iSet]->getElTriax();
 
-        pffElem[iSet]->CalcDrivForcEP_TH(&el_wp, zeta, eta);
+        pffElem[iSet]->CalcDrivForcHybridDuctile_TH(&el_wp, &elTriax, zeta, eta);
 
     } 
 }
