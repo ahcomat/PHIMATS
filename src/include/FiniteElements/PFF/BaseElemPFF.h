@@ -206,7 +206,7 @@ inline void CalcDrivForcEP_TH(const std::vector<std::vector<double>>* el_wp_ptr,
  * @param zeta Parameter the controls the post initiation behavoir. Default = 1. 
  * @param eta Contribution percentage.
  */
-inline void CalcDrivForcHybridDuctile_TH(const std::vector<std::vector<double>>* el_wp_ptr, const std::vector<std::vector<double>>* elTriax_ptr, const double zeta, const double eta) {
+inline void CalcDrivForcHybridDuctile_TH(const std::vector<std::vector<double>>* el_wp_ptr, const std::vector<std::vector<double>>* elTriax_ptr, const double zeta, const double eta, const double kappa) {
     for (size_t iElem = 0; iElem < elemH.size(); ++iElem) {
         for (size_t iGauss = 0; iGauss < elemH[iElem].size(); ++iGauss) {
 
@@ -215,7 +215,7 @@ inline void CalcDrivForcHybridDuctile_TH(const std::vector<std::vector<double>>*
             double triax  = accessVec(*elTriax_ptr, iElem, iGauss);
             double wcLocal    = accessVec(elem_wc, iElem, iGauss);
 
-            double triaxiality_gate = std::tanh(4.0 * std::max(0.0, triax)); 
+            double triaxiality_gate = std::tanh(kappa * std::max(0.0, triax)); 
 
             // Combined Plastic Driving Force Contribution
             double wp_contribution = triaxiality_gate * (1.0 - eta);

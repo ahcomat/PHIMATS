@@ -272,7 +272,7 @@ void PFFModel::CalcDrivForcEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMe
     } 
 }
 
-void PFFModel::CalcDrivForcHybridDuctile_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta, const double eta){
+void PFFModel::CalcDrivForcHybridDuctile_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta, const double eta, const double kappa){
 
     if (eta < 0.0 || eta > 1.0){
 
@@ -289,7 +289,7 @@ void PFFModel::CalcDrivForcHybridDuctile_TH(vector<BaseElemPFF*> pffElem, vector
         const std::vector<std::vector<double>>& el_wp = mechElem[iSet]->getEl_wp();
         const std::vector<std::vector<double>>& elTriax = mechElem[iSet]->getElTriax();
 
-        pffElem[iSet]->CalcDrivForcHybridDuctile_TH(&el_wp, &elTriax, zeta, eta);
+        pffElem[iSet]->CalcDrivForcHybridDuctile_TH(&el_wp, &elTriax, zeta, eta, kappa);
 
     } 
 }

@@ -128,7 +128,7 @@ void CalcDrivForcEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechE
  * @param zeta Parameter the controls the post initiation behavoir. Default = 1. 
  * @param eta Contribution percentage to driving force H. NOTE that eta should be in the range [0,1].
  */
-void CalcDrivForcHybridDuctile_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta = 1.0, const double eta = 0.9);
+void CalcDrivForcHybridDuctile_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta = 0.3, const double eta = 0.6, const double kappa = 6.0);
 
 /**
  * @brief Calculates the element stiffness matrix.
