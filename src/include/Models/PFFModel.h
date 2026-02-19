@@ -114,7 +114,7 @@ void CalcDrivForcEP(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem
  * 
  * @param pffElem 
  * @param mechElem 
- * @param zeta Parameter the controls the post initiation behavoir. Default = 1. 
+ * @param zeta Parameter the controls the post initiation behavoir.
  * @param eta Contribution percentage to driving force H = (ηψ⁺ + (1-η)wₚ) / w꜀. NOTE that eta should be in the range [0,1].
  */
 void CalcDrivForcEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta = 1.0, const double eta = 0.5);
@@ -125,8 +125,9 @@ void CalcDrivForcEP_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechE
  * 
  * @param pffElem 
  * @param mechElem 
- * @param zeta Parameter the controls the post initiation behavoir. Default = 1. 
+ * @param zeta Parameter the controls the post initiation behavoir.
  * @param eta Contribution percentage to driving force H. NOTE that eta should be in the range [0,1].
+ * @param kappa Prefactor for the triaxiality gate function. 
  */
 void CalcDrivForcHybridDuctile_TH(vector<BaseElemPFF*> pffElem, vector<BaseElemMech*> mechElem, const double zeta = 0.3, const double eta = 0.6, const double kappa = 6.0);
 
