@@ -153,7 +153,7 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                     // Cart coord of iGauss point.
                     dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
                     // Derivatives and int-pt volume
-                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), shapeFunc.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
                     // Int-pt phi
                     el_gPhi.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi;
                 }
@@ -221,7 +221,7 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                     // Cart coord of iGauss point.
                     dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
                     // Derivatives and int-pt volume
-                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), shapeFunc.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
                     // Int-pt phi
                     el_phi_j.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_phi_j;
                     el_gPhi_ii.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ii;
@@ -263,7 +263,7 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                     // Cart coord of iGauss point.
                     dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
                     // Derivatives and int-pt volume
-                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), shapeFunc.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
 
                 }
                 gaussPtCart.at(iElem) = dummyElemGauss;
@@ -290,7 +290,7 @@ RowVecd2 Quad4TH::getGaussCart(RowVecd4& sFunc, Matd4x2& elNodCoord){
     return sFunc*elNodCoord;  // N_i x_ij
 }
 
-void Quad4TH::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const double& wt, double& intVol, Matd2x4& cartDeriv){
+void Quad4TH::CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const RowVecd4& shFunc, const double& wt, double& intVol, Matd2x4& cartDeriv){
 
     // Calculates the jacobian matrix J_jj = dN_ji x_ij
     Matd2x2 jacMat = sFuncDeriv*elNodCoord;
