@@ -358,7 +358,8 @@ void Quad4TH::getInPtCoords(T_nodStres& glIntPtCoords){
 //     }
 // }
 
-void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr){
+void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, 
+                                const std::vector<std::vector<double>>* elPhi_d_ptr){
 
     Matd2x2 DMat; 
 
@@ -532,6 +533,15 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::ve
             }
 
         } else if (Trapping=="MechTrappingPFF") {         // PFF 
+
+            if (elPhi_d_ptr == nullptr){
+                logger.log("Error in Quad4TH::CalcElemStiffMatx\n", "ERROR", true);
+                logger.log("    Material model is `MechTrappingPFF`", "", false);
+                logger.log("    but the `elPhi_d_ptr` pointer is null.", "", false);
+                logger.log("    Check if the correct material model is used or pass `elPhi_d_ptr`.", "", false);
+                logger.log("    Critical error encountered. Terminating!\n", "", false);
+                exit(EXIT_FAILURE);
+            }
 
             MechTrap* mechTrapMat = dynamic_cast<MechTrap*>(mat);
             double s = mechTrapMat->get_s();
