@@ -33,7 +33,19 @@ IsoHard::IsoHard(string dimensions, H5IO& H5File, int iSet, Logger& logger)
 
         } else if (hardLaw == "Voce") {
 
+            sig_sat = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/sig_sat");
+            H0 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/H0");
             hardening = HardeningLaw::Voce;
+
+            rho_0 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/rho_0");
+            M = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/M");
+            b = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/b");
+            alpha = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/alpha");
+            k1 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/k1");
+            k2 = H5File.ReadScalar("Materials/Material_" + to_string(iSet) + "/Plastic/k2");
+            rho_s = pow(k1/k2, 2.0);
+            C_prime = (k1/k2) - sqrt(rho_0);
+            three_uo = 3*uo;
 
         } else if (hardLaw == "KME") {
 

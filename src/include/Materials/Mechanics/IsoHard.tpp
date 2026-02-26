@@ -14,11 +14,14 @@ inline void IsoHard::UHard<PowerLaw>(const double& eqpl, double& syield, double&
 template <>
 inline void IsoHard::UHard<Voce>(const double& eqpl, double& syield, double& rho, double& hard){
 
-    // double sigma0 = 200.0;
-    // double sigmaS = 300.0;
-    // double h = 50.0;
-    // syield = sigma0 + (sigmaS - sigma0) * (1 - std::exp(-h * eqpl));
-    // hard = h * (sigmaS - sigma0) * std::exp(-h * eqpl);
+    double exp_term = std::exp(-(H0 / (sig_sat - sig_y0)) * eqpl);
+    syield = sig_sat + (sig_y0 - sig_sat) * exp_term;
+    hard = H0 * exp_term; 
+
+    // Passive evolution of dislocation density, i.e. does not affect hardening
+    double param = (k1/k2) - C_prime*exp(-(M*k2/2)*eqpl);
+    rho = pow(param, 2);
+    rho = rho/rho_s; // Normalizing
 }
 
 template <>

@@ -236,8 +236,14 @@ double K_hard = 0.0;
 /// @brief Strain hardening exponent.
 double n_pow = 0.0; 
 
-/// @brief Initial plastic strainn.
+/// @brief Initial plastic strain.
 double eps_0 = 0.0;
+
+/// @brief Saturation stress.
+double sig_sat = 0.0;
+
+/// @brief Initial hardening rate.
+double H0 = 0.0;
 
 /// @brief Shear modulus x3.
 double three_uo = 0.0;
