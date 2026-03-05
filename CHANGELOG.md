@@ -20,8 +20,9 @@ Major architectural refactor of pre-/post-processing and PFF/hydrogen chemo-mech
 - `WSL_QuickStart.md` WSL environment setup guide for Windows users.
 - `configure_env.sh` to automate setting up environment variables for **Manual Installation**, eliminating the need for manual `.bashrc` edits.
 - `LinearMech` and `LinearTransport` are merged into a unified `LinearSolver` class.
-- `FiniteElements/Mechanics/Quad4Axi` for axisymmetric analysis.
-- `FiniteElements/PFF/Quad4PFFAxi` for axisymmetric analysis.
+- `FiniteElements/Mechanics/Quad4Axi` for mechanics axisymmetric analysis.
+- `FiniteElements/PFF/Quad4PFFAxi` for phase-field axisymmetric analysis.
+- `FiniteElements/Trapping/Quad4THAxi` for hydrogen transport axisymmetric analysis.
 
 ### Changed
 - `PreProcessing`
