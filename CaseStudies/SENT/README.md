@@ -51,13 +51,13 @@ make
 
 #### 3️⃣ Post-processing
 
-Run the **`PostProcessing`** notebook to obtain the total force and crack mouth opening displacement from the _out.hdf5 file and plot them.
+Run the **`PostProcessing`** notebook to obtain the total force and crack mouth opening displacement from the .out.hdf5 file and plot them.
 
 ---
 
 The results shown in this study were generated using **PHIMATS v1.3.0**. To activate this specific version, run:
 
 ```bash
-git checkout v1.3.0-beta.1
+git checkout v1.3.0
 ```
 And recompile.

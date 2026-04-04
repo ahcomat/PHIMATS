@@ -63,7 +63,7 @@ Run the **`PostProcessing`** notebook to:
 PHIMATS is under continuous development and newer versions might function differently. The results shown in this study were generated using **PHIMATS v1.3.0**. To activate this specific version, run:
 
 ```bash
-git checkout v1.3.0-beta.1
+git checkout v1.3.0
 ```
 
 And recompile. 
