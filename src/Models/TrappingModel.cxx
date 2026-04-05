@@ -555,9 +555,9 @@ void TrappingModel::WriteFlux(H5IO &H5File_out, const string iStep){
 
     // Write to H5 file
     if (nDim==2){
-        H5File_out.WriteTensor("Flux/Step_"+iStep, nTotNodes, 2, nodFlux, 10);
+        H5File_out.WriteTensor("Flux/Step_"+iStep, nTotNodes, 2, nodFlux, 15);
     } else if (nDim==3) {
-        H5File_out.WriteTensor("Flux/Step_"+iStep, nTotNodes, 3, nodFlux, 10);
+        H5File_out.WriteTensor("Flux/Step_"+iStep, nTotNodes, 3, nodFlux, 15);
     }
 }
 
