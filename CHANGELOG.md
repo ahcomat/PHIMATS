@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.3.0] - Code Management - PFF/hydrogen chemo-mechanical coupling (Unreleased)
+## [v1.3.0] - Code Management - PFF/hydrogen chemo-mechanical coupling (08-04-2026)
 
 Major architectural refactor of pre-/post-processing and PFF/hydrogen chemo-mechanical coupling.
 
@@ -23,6 +23,7 @@ Major architectural refactor of pre-/post-processing and PFF/hydrogen chemo-mech
 - `FiniteElements/Mechanics/Quad4Axi` for mechanics axisymmetric analysis.
 - `FiniteElements/PFF/Quad4PFFAxi` for phase-field axisymmetric analysis.
 - `FiniteElements/Trapping/Quad4THAxi` for hydrogen transport axisymmetric analysis.
+- `CaseStudies/HydrogenDuctilePFF` case studies for ductile damage and chemo-mechanics of hydrogen embrittlement. 
 
 ### Changed
 - `PreProcessing`
@@ -33,7 +34,7 @@ Major architectural refactor of pre-/post-processing and PFF/hydrogen chemo-mech
 - `ModelPFF` implement a new crack driving force for ductile fracture `CalcDrivForcHybridDuctile_TH`.
   
 ### Fixed
-- `Quad4` and `IsoHard` Fix implementation of out of plane component in plane strain.
+- `Quad4` and `IsoHard` fix implementation of out of plane component in plane strain.
 
 ### Build System & Infrastructure
 - Shared library `.so` build support compared to the previous static library `.a` for reduced driver code binary size.
