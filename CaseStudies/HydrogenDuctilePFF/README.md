@@ -2,14 +2,13 @@
 
 This case study demonstrates the chemo-mechanics coupling for hydrogen embrittlement in **PHIMATS**. The fully kinetic hydrogen transport model is coupled with a modular geometric phase-field fracture. A novel crack driving force is proposed that uses a weighted combination of elastic strain energy and plastic work densities. A hypertangent scaling function of triaxiality is used such that plastic dissipation contribute to damage only in tensile state. Several case studies were presented to reproduce experimentally observed damage patters in ductile metals with and without hydrogen. More importantly, modeling hydrogen accumulation at dislocations was essential for modeling surface cracking at the necking region of smooth round bar and ductile tearing to embrittled crack in compact tension specimen.  
 
-📄 For more background on the model, see:
-- **"A coupled fully kinetic hydrogen transport and ductile phase-field
-fracture framework for modeling hydrogen embrittlement"**
-(2026)
+📄 For more background and details, see:
+- **"A coupled fully kinetic hydrogen transport and ductile phase-field fracture framework for modeling hydrogen embrittlement"**
+(2026) [arXiv DOI](https://doi.org/10.48550/arXiv.2604.05574)
 
 ---
 
-Selected case studies are provided in this directory. Each contain pre-post processing notebooks, driver code and .geo/.msh files by Gmsh. The analysis is either axisymmetirc or plane-strain formulation. In each `PreProcessing` notebook, the optimized `PETSc` cmd options are stated to overcome convergence difficulties.  
+Selected case studies are provided in this directory. Each contain pre/post processing notebooks, driver code and .geo/.msh files by Gmsh. The analysis is either axisymmetirc or plane-strain formulation. In each `PreProcessing` notebook, the optimized `PETSc` cmd options are stated to overcome convergence difficulties.  
 
 - `NRB` notched round bar (cup-and-cone).
 - `DoubleNotch` double notched sample.
