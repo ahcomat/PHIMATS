@@ -40,9 +40,7 @@ docker pull ahcomat/phimats_dep:latest
 2. Run this command from your `PHIMATS` root folder to start the container and mount your code:
 
 ```sh
-docker run --rm -it \
-    -v $PHIMATS_DIR:/home/phimats \
-    ahcomat/phimats_dep:latest /bin/bash
+docker run --rm -it -v "$(pwd)":/home/phimats ahcomat/phimats_dep:latest /bin/bash
 ```
 3. Inside the container, in `PHIMATS` root folder:
 ```sh
