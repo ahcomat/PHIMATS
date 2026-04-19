@@ -10,8 +10,20 @@
 
 ### 2️⃣ Required Third-Party Software
 
+✅ **Gmsh** https://gmsh.info/ 
 ✅ **Paraview** https://www.paraview.org  
-✅ **Gmsh** https://gmsh.info/   
+
+**Note for WSL Users**: If you use a native Windows ParaView installation, it might fail to resolve the relative file paths inside `.xdmf` files when they are stored on the Linux filesystem (`\\wsl$`).
+
+**Workarounds:**
+
+1. Move your entire simulation folder to a native Windows path (e.g., `C:\Users\...`).
+
+2. **Recommended:** Install ParaView directly inside WSL for native filesystem access:
+
+```sh
+sudo apt update && sudo apt install paraview
+```
 
 ---
 
