@@ -87,11 +87,6 @@ RowVecd2 getGaussCart(RowVecd3& sFunc, Matd3x2& elCoord);
  */
 void CalcCartDeriv(Matd3x2& elNodCoord, Matd2x3& sFuncDeriv, const double& wt, double& intVol, Matd2x3& cartDeriv);
 
-/**
- * @brief Returns the int-pt cartesian coordinates
- * 
- * @param glIntPtCoords 
- */
 void getInPtCoords(T_nodStres& glIntPtCoords) override;
 
 // /**
@@ -104,30 +99,12 @@ void getInPtCoords(T_nodStres& glIntPtCoords) override;
 //  */
 // void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi) override;
 
-/**
- * @brief Calculates the element stiffness and capacitance matrix for all elements.
- * 
- * @param mat Material
- * @param T Current temperature
- */
 void CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr = nullptr) override;
 
-/**
- * @brief Calculates the volume averaged concentration
- * 
- * @param globalBuffer Solution vector
- * @return Volume averaged concentration
- */
 double CalcAvCon(const double* globalBuffer) override;
 
-/**
- * @brief Evaluates the int-pt flux vector. Also evaluates the flux at the nodes.
- * 
- * @param KMatx 
- * @param globalBuffer 
- * @param nodFlux 
- * @param nodCount 
- */
+double CalcAvTrapCon() override;
+
 void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr = nullptr) override;
 
 void CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr) override;

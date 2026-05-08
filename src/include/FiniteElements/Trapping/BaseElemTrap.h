@@ -123,7 +123,7 @@ virtual void getInPtCoords(T_nodStres& glIntPtCoords) = 0;
  * @brief Calculates the element stiffness and capacitances matrix.
  * 
  * @param mat 
- * @param T 
+ * @param T Current temperature
  */
 virtual void CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr = nullptr) = 0;
 
