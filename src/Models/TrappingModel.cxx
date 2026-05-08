@@ -45,6 +45,8 @@ TrappingModel::TrappingModel(vector<BaseElemTrap*> elements, H5IO& H5File_in, Lo
 
     // Set the type and size
     nodCount.resize(nTotNodes);
+    nodTrapCon.resize(nTotNodes);
+
     if (nDim == 2){ // Case 2D model
 
         nodFlux = vector<ColVecd2>(nTotNodes);
@@ -64,7 +66,8 @@ TrappingModel::~TrappingModel(){
 
     // Deallocate memory.
     PetscFree(presDofs); PetscFree(presVals);
-    VecDestroy(&vecF); VecDestroy(&vecx); VecDestroy(&vecF_flux); VecDestroy(&vecFsrc);
+    VecDestroy(&vecF); VecDestroy(&vecx); VecDestroy(&vecF_flux); 
+    VecDestroy(&vecFsrc); VecDestroy(&vecF_trap);
     MatDestroy(&matK); MatDestroy(&matM);
 }
 
@@ -76,6 +79,7 @@ void TrappingModel::setZero_nodFlux(){
 
             std::get<std::vector<ColVecd2>>(nodFlux).at(iNod).setZero();
             nodCount.at(iNod) = 0;
+            nodTrapCon.at(iNod) = 0;
 
         }
 
@@ -85,6 +89,7 @@ void TrappingModel::setZero_nodFlux(){
 
             std::get<std::vector<ColVecd3>>(nodFlux).at(iNod).setZero();
             nodCount.at(iNod) = 0;
+            nodTrapCon.at(iNod) = 0;
             
         }
     }
@@ -104,12 +109,15 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
     VecSetType(vecF, VECSEQ);
     VecDuplicate(vecF, &vecx);   
     VecDuplicate(vecF, &vecFsrc);
-    VecDuplicate(vecF, &vecF_flux);      
+    VecDuplicate(vecF, &vecF_flux);
+    VecDuplicate(vecF, &vecF_trap);      
 
-    VecSet(vecF, 0.0);         // Set all values to zero.
-    VecSet(vecF_flux, 0.0);    // Set all values to zero.
-    VecSet(vecFsrc, 0.0);      // Set all values to zero.
-    VecSet(vecx, 0.0);         // Set all values to zero.
+    // Initialize to zero.
+    VecSet(vecF, 0.0);         
+    VecSet(vecF_flux, 0.0);    
+    VecSet(vecF_trap, 0.0);     
+    VecSet(vecFsrc, 0.0);       
+    VecSet(vecx, 0.0);          
 
     // Initialize the coefficient matrices.
     MatCreateSeqAIJ(PETSC_COMM_WORLD, nTotDofs, nTotDofs, PETSC_DEFAULT, NULL, &matK); // Works better for HPC
@@ -187,7 +195,6 @@ void TrappingModel::setFluxBCs(H5IO& H5File_in){
     VecAssemblyEnd(vecF_flux);
 
 }
-
 
 void TrappingModel::ReadInitialCon(H5IO& H5File, const int iStep){
 
@@ -327,6 +334,14 @@ void TrappingModel::Update_dt(vector<BaseElemTrap*> elements, double dtNew){
     for (int iSet=0; iSet<nElementSets; iSet++){
         elements[iSet]->set_dt(dt);
     }
+}
+
+void TrappingModel::CalcPrecipitaitonCon(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
+
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        elements[iSet]->CalcPrecipitaitonCon(mats[iSet], T);
+    }
+
 }
 
 void TrappingModel::WriteTemp(H5IO &H5File_out, const int iStep){
@@ -472,6 +487,21 @@ void TrappingModel::Update_F(){
 
     // Add flux boundary condition contribution
     VecAXPY(vecF, dt, vecF_flux);
+
+    // Trapping load RHS contribution 
+    VecAXPY(vecF, -1.0, vecF_trap);
+}
+
+void TrappingModel::UpdateTrapRHS(vector<BaseElemTrap*> elements){
+
+    PetscScalar* FtrapBuffer;  
+    VecSet(vecF_trap, 0.0);
+    VecGetArray(vecF_trap, &FtrapBuffer);
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        elements[iSet]->CalcTrapRHS(FtrapBuffer);
+    }
+    VecRestoreArray(vecF_trap, &FtrapBuffer);  
+
 }
 
 int TrappingModel::get_nSteps() const{
@@ -543,24 +573,22 @@ void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping
         }
     }
 
-    // TODO: For debug!
-    // cout << std::get<std::vector<ColVecd3>>(nodStran).at(0) << "\n";
-
     VecRestoreArrayRead(vecx, &globalBuffer);
 }
 
-void TrappingModel::CalcFsrc(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, std::vector<BaseElemPFF*> pffElems){
+void TrappingModel::CalcNodTrapCon(vector<BaseElemTrap*> elements){
 
-    PetscScalar* FsrcBuffer;  
-    VecSet(vecFsrc, 0.0);
-    VecGetArray(vecFsrc, &FsrcBuffer);
+    // set zeros
+    setZero_nodFlux();
+
     for (int iSet=0; iSet<nElementSets; iSet++){
-        elements[iSet]->CalcFsrc(conB, mats[iSet], FsrcBuffer, T, &pffElems[iSet]->getElphi());
+        elements[iSet]->CalcNodTrapCon(nodTrapCon, nodCount);
     }
-    VecRestoreArray(vecFsrc, &FsrcBuffer);  
 
-    VecAXPY(vecF, 1.0, vecFsrc);
+    for(int iNod=0; iNod<nTotNodes; iNod++){
 
+        accessVec(nodTrapCon, iNod) = accessVec(nodTrapCon, iNod)/accessVec(nodCount, iNod);
+    }
 }
 
 void TrappingModel::CalcElCon(vector<BaseElemTrap*> elements){
@@ -592,8 +620,14 @@ void TrappingModel::WriteOut(H5IO &H5File_out, const string iStep){
 
     // Concentration
     VecGetArrayRead(vecx, &globalBuffer);
-    H5File_out.WriteArray1D("Con/Step_"+iStep, nTotDofs, globalBuffer);
+    H5File_out.WriteArray1D("Con/Step_"+iStep, nTotDofs, globalBuffer, 15);
     VecRestoreArrayRead(vecx, &globalBuffer);
+}
+
+void TrappingModel::WriteTrapCon(H5IO &H5File_out, const string iStep){
+
+    H5File_out.WriteArray1D("TrapCon/Step_"+iStep, nTotDofs, nodTrapCon.data(), 15);
+
 }
 
 void TrappingModel::WriteAvCon(vector<BaseElemTrap*> elements, H5IO &H5File_out, const int iStep){
@@ -610,6 +644,16 @@ void TrappingModel::WriteAvCon(vector<BaseElemTrap*> elements, H5IO &H5File_out,
 
     H5File_out.WriteScalar("Time/Step_"+to_string(iStep), TotTime);
     H5File_out.WriteScalar("AvCon/Step_"+to_string(iStep), AvCon);
+}
+void TrappingModel::WriteAvTrapCon(vector<BaseElemTrap*> elements, H5IO &H5File_out, const int iStep){
+
+    double AvCon = 0;
+
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        AvCon += elements[iSet]->CalcAvTrapCon();
+    }
+
+    H5File_out.WriteScalar("AvTrapCon/Step_"+to_string(iStep), AvCon);
 }
 
 void TrappingModel::WriteExitFlux(H5IO &H5File_out, const int iStep){

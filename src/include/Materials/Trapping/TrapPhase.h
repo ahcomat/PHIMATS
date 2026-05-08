@@ -37,7 +37,7 @@ public:
  * @param H5File Input file.
  * @param matType Material isotropy.
  */
-TrapPhase(string dimensions, H5IO &H5File, int iSet, Logger& logger);
+TrapPhase(string dimensions, H5IO &H5File, int iSet, Logger& logger, bool trapping=false);
 
 T_DMatx CalcDMatx(const double phi, const double T) override;
 
@@ -49,16 +49,47 @@ double get_zeta_ij() const {return zeta_ij;};
 
 double get_zeta_ii() const {return zeta_ii;};
 
+double get_kf0() const {return kf0;};
+
+double get_kb0() const {return kb0;};
+
+double get_Qf() const {return Qf;};
+
+double get_Qb() const {return Qb;};
+
+double get_Xmax() const {return Xmax;};
 
 private:
 
 /// @ brief diffusivity parameters @todo have to modify
 double D0x1, D0y1, DQx1, DQy1, D0x2, D0y2, DQx2, DQy2;  
 
-double zeta_j;       /// @brief Phase phi_j trapping parameter  
-double zeta_jj;      /// @brief gPhi_jj interface trapping parameter  
-double zeta_ij;      /// @brief gPhi_ij trapping parameter  
-double zeta_ii;      /// @brief gPhi_ii trapping parameter  
+/// @brief Phase phi_j trapping parameter
+double zeta_j;  
+
+/// @brief gPhi_jj interface trapping parameter  
+double zeta_jj;  
+
+/// @brief gPhi_ij trapping parameter  
+double zeta_ij;    
+
+/// @brief gPhi_ii trapping parameter       
+double zeta_ii;      
+
+/// @brief Precipitation pre-exponent
+double kf0;
+
+/// @brief Precipitation activation energy
+double Qf;
+
+/// @brief Dissolution activation energy
+double kb0;
+
+/// @brief Dissolution activation energy
+double Qb;
+
+/// @brief Maximum carbon capacity in carbide
+double Xmax;
 
 };
 #endif

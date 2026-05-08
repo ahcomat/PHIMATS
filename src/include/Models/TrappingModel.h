@@ -139,6 +139,14 @@ void UpdateTemp(const int iStep, double HR);
 void Update_dt(vector<BaseElemTrap*> elements, double dtNew);
 
 /**
+ * @brief Updates precipitation trapped concentraiton.
+ * 
+ * @param elements 
+ * @param mats 
+ */
+void CalcPrecipitaitonCon(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
+
+/**
  * @brief Calculates the integration point concentration.
  * 
  * @param elements 
@@ -192,6 +200,23 @@ void Assemble(vector<BaseElemTrap*> elements, bool assembleM=true);
 void Update_F();
 
 /**
+ * @brief Calculates the RHS source term when a crack is active. 
+ * 
+ * @param elements 
+ * @param mats 
+ * @param pffElemsOpt 
+ */
+void CalcFsrc(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, std::vector<BaseElemPFF*> pffElems);
+
+/**
+ * @brief Updates the trapped RHS load.
+ * 
+ * @param elements 
+ * @param mats 
+ */
+void UpdateTrapRHS(vector<BaseElemTrap*> elements);
+
+/**
  * @brief Get the number of steps to apply load.
  * 
  * @return int 
@@ -231,13 +256,11 @@ void WriteInPtCoords(vector<BaseElemTrap*> elements, H5IO &H5File_out);
 void CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, std::optional<std::vector<BaseElemPFF*>> pffElemsOpt = std::nullopt);
 
 /**
- * @brief Calculates the RHS source term when a crack is active. 
+ * @brief Map trapped concentration to the nodes.
  * 
  * @param elements 
- * @param mats 
- * @param pffElemsOpt 
  */
-void CalcFsrc(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats, std::vector<BaseElemPFF*> pffElems);
+void CalcNodTrapCon(vector<BaseElemTrap*> elements);
 
 /**
  * @brief Write nodal flux field values.
@@ -264,6 +287,22 @@ void WriteOut(H5IO &H5File_out, const string iStep);
  * @param tStep Time step
  */
 void WriteAvCon(vector<BaseElemTrap*> elements, H5IO &H5File_out, const int iStep);
+
+/**
+ * @brief Write the volume averaged trapped concentration of the time step.
+ * 
+ * @param H5File_out Ouput hdf5 file handle
+ * @param tStep Time step
+ */
+void WriteAvTrapCon(vector<BaseElemTrap*> elements, H5IO &H5File_out, const int iStep);
+
+/**
+ * @brief Write trapped concentration values.
+ * 
+ * @param elements 
+ * @param H5File_out 
+ */
+void WriteTrapCon(H5IO &H5File_out, const string iStep);
 
 /**
  * @brief Writes the average exit flux in the x direction.
@@ -314,6 +353,9 @@ T_nodStres nodFlux;
 /// @brief Counter for integration points surrounding nodes.
 vector<double> nodCount; 
 
+/// @brief Nodal trapping concentration.
+vector<double> nodTrapCon;
+
 /// @brief Flux BCs.
 vector<double> fluxBC;
 
@@ -327,6 +369,9 @@ Vec vecF;
 
 /// @brief Flux BCs.
 Vec vecF_flux;
+
+/// @brief Trapping load RHS.
+Vec vecF_trap;
 
 /// @brief RHS source vector.
 Vec vecFsrc; 

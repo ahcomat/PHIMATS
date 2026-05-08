@@ -186,6 +186,7 @@ class PreProcessing:
                 if kwargs.get('FLUX'): f.create_group('Flux')
                 if kwargs.get('AVFLUX'):   f.create_group('AvFlux')
                 if kwargs.get('TDS'):   f.create_group('Temp')
+                if kwargs.get('TRAPPING'): f.create_group('AvConTrap') and f.create_group('TrapCon') and f.create_group('AvTrapCon')
         
         print(f"  Output file initialized: {filename}")
 

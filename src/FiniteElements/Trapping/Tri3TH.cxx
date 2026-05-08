@@ -80,6 +80,9 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
     elStiffMatx.resize(nElements);
     elCapMatx.resize(nElements);
 
+    elCon.resize(nElements);
+    elConTrap.resize(nElements); elDeltaTrap.resize(nElements);
+
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd3x2 dummyElNodCoord;   // For node coordinates.
 
@@ -117,6 +120,10 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
             for(int iElem=0; iElem<nElements; iElem++){
 
                 elFlux.at(iElem).resize(nElGauss);
+                accessVec(elCon, iElem).resize(nElGauss);
+                accessVec(elConTrap, iElem).resize(nElGauss);
+                accessVec(elDeltaTrap, iElem).resize(nElGauss);
+
                 el_gPhi.at(iElem).resize(nElGauss);
 
                 gaussPtCart.at(iElem).resize(nElGauss);
@@ -229,6 +236,10 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
             for(int iElem=0; iElem<nElements; iElem++){
 
                 elFlux.at(iElem).resize(nElGauss);
+
+                accessVec(elCon, iElem).resize(nElGauss);
+                accessVec(elConTrap, iElem).resize(nElGauss);
+                accessVec(elDeltaTrap, iElem).resize(nElGauss);
 
                 el_phi_j.at(iElem).resize(nElGauss);
                 el_gPhi_ii.at(iElem).resize(nElGauss);
@@ -581,9 +592,31 @@ double Tri3TH::CalcAvCon(const double* globalBuffer){
 
         // Gauss points
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
-            IntPtCon = shapeFunc.at(iGaus)*dummyCon;
-            TotVol += intPtVol.at(iElem).at(iGaus);
-            AvCon += IntPtCon*intPtVol.at(iElem).at(iGaus);
+
+            const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
+            const double& dummydVol = accessVec(intPtVol, iElem, iGaus);
+
+            IntPtCon = N_i*dummyCon;
+            TotVol += dummydVol;
+            AvCon += IntPtCon*dummydVol;
+        }
+    }
+
+    return AvCon/TotVol;
+}
+
+double Tri3TH::CalcAvTrapCon(){
+
+    double conTrap, AvCon = 0, TotVol = 0;
+
+    for(int iElem=0; iElem<nElements; iElem++){
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            const double& dummydVol = accessVec(intPtVol, iElem, iGaus);
+
+            conTrap = accessVec(elConTrap, iElem, iGaus);
+            TotVol += dummydVol;
+            AvCon += conTrap*dummydVol;
         }
     }
 
@@ -771,4 +804,96 @@ void Tri3TH::CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer, 
 
 void Tri3TH::CalcElCon(const double* globalBuffer){
 
+    ColVecd3 nodCon;
+
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        // Get element nodal displacements from the solution vector. 
+        for(int iDof=0; iDof<nElConDofs; iDof++){
+            nodCon(iDof) = globalBuffer[accessVec(elemConDof, iElem, iDof)];
+        }
+
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
+            accessVec(elCon, iElem, iGaus) = N_i*nodCon;
+
+        }
+    }
+}
+
+void Tri3TH::CalcPrecipitaitonCon(BaseTrapping* mat, const double T){
+
+    TrapPhase* phaseDriftMat = dynamic_cast<TrapPhase*>(mat);
+
+    double Xmax = phaseDriftMat->get_Xmax();
+    double kf0 = phaseDriftMat->get_kf0();
+    double Qf = phaseDriftMat->get_Qf();
+    double kb0 = phaseDriftMat->get_kb0();
+    double Qb = phaseDriftMat->get_Qb();
+    double mask;
+    double conTrap; double conTrapOld;
+    double conL; double deltsConTrap;
+
+    double kf = kf0 * std::exp(-Qf / (R * T));
+    double kb = kb0 * std::exp(-Qb / (R * T));
+
+    for(int iElem=0; iElem<nElements; iElem++){
+        
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            mask = 1.0 - accessVec(el_phi_j, iElem, iGaus);
+            conTrapOld = accessVec(elConTrap, iElem, iGaus);
+            conL = accessVec(elCon, iElem, iGaus);
+
+            conTrap = (conTrapOld + dt * mask * kf * conL * Xmax) / (1.0 + dt * mask * (kf * conL + kb));
+
+            accessVec(elConTrap, iElem, iGaus) = conTrap;
+            accessVec(elDeltaTrap, iElem, iGaus) = conTrap - conTrapOld;
+
+        }
+    }
+}
+
+void Tri3TH::CalcTrapRHS(double* FtrapBuffer){
+
+    ColVecd3 dummyFtrap;
+
+    for(int iElem=0; iElem<nElements; iElem++){
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
+            const double& dummydVol = accessVec(intPtVol, iElem, iGaus);  
+
+            dummyFtrap = N_i.transpose()*accessVec(elDeltaTrap, iElem, iGaus)*dummydVol;
+
+            for(int iNod2 = 0; iNod2 < nElConDofs; ++iNod2) {
+                int gNod = elemNodeConn[iElem][iNod2];
+                FtrapBuffer[gNod] += dummyFtrap[iNod2];
+            }
+        }
+    }
+}
+
+void Tri3TH::CalcNodTrapCon(vector<double>& nodTrapCon, vector<double>& nodCount){
+
+    for(int iElem=0; iElem<nElements; iElem++){
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            const double& conTrap = accessVec(elConTrap, iElem, iGaus);
+            const double& dummydVol = accessVec(intPtVol, iElem, iGaus);  
+            const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
+
+            // Nodal values
+            int iNode = 0;
+            for(auto iNod2=accessVec(elemNodeConn, iElem).begin(); iNod2!=accessVec(elemNodeConn, iElem).end(); iNod2++){
+
+                double weight = N_i[iNode] * dummydVol;
+                accessVec(nodTrapCon, *iNod2) += conTrap * weight;;
+                nodCount.at(*iNod2) +=  weight;;
+                iNode += 1;
+
+            }
+        }
+    }
 }

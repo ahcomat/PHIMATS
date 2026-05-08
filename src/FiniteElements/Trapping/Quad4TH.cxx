@@ -92,6 +92,8 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
     elCon.resize(nElements);
     elCon_ptr = &elCon;
 
+    elConTrap.resize(nElements); elDeltaTrap.resize(nElements);
+
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd4x2 dummyElNodCoord; // For node coordinates.
 
@@ -130,6 +132,8 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
 
                 accessVec(elFlux, iElem).resize(nElGauss);
                 accessVec(elCon, iElem).resize(nElGauss);
+                accessVec(elConTrap, iElem).resize(nElGauss);
+                accessVec(elDeltaTrap, iElem).resize(nElGauss);
 
                 el_gPhi.at(iElem).resize(nElGauss);
 
@@ -192,6 +196,8 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
 
                 accessVec(elFlux, iElem).resize(nElGauss);
                 accessVec(elCon, iElem).resize(nElGauss);
+                accessVec(elConTrap, iElem).resize(nElGauss);
+                accessVec(elDeltaTrap, iElem).resize(nElGauss);
 
                 el_phi_j.at(iElem).resize(nElGauss);
                 el_gPhi_ii.at(iElem).resize(nElGauss);
@@ -243,6 +249,8 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
 
                 accessVec(elFlux, iElem).resize(nElGauss);
                 accessVec(elCon, iElem).resize(nElGauss);
+                accessVec(elConTrap, iElem).resize(nElGauss);
+                accessVec(elDeltaTrap, iElem).resize(nElGauss);
 
                 gaussPtCart.at(iElem).resize(nElGauss);
                 BMat.at(iElem).resize(nElGauss);
@@ -831,4 +839,16 @@ void Quad4TH::CalcElCon(const double* globalBuffer){
 
         }
     }
+}
+
+void Quad4TH::CalcPrecipitaitonCon(BaseTrapping* mat, const double T){
+
+}
+
+void Quad4TH::CalcTrapRHS(double* FtrapBuffer){
+
+}
+
+void Quad4TH::CalcNodTrapCon(vector<double>& nodTrapCon, vector<double>& nodCount){
+    
 }

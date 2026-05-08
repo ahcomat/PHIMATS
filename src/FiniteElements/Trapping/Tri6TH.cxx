@@ -417,6 +417,10 @@ double Tri6TH::CalcAvCon(const double* globalBuffer){
     return AvCon/TotVol;
 }
 
+double Tri6TH::CalcAvTrapCon(){
+
+}
+
 void Tri6TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr){
 
     Matd2x2 DMat; 
@@ -544,4 +548,16 @@ void Tri6TH::CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer, 
 
 void Tri6TH::CalcElCon(const double* globalBuffer){
 
+}
+
+void Tri6TH::CalcPrecipitaitonCon(BaseTrapping* mat, const double T){
+
+}
+
+void Tri6TH::CalcTrapRHS(double* FtrapBuffer){
+
+}
+
+void Tri6TH::CalcNodTrapCon(vector<double>& nodTrapCon, vector<double>& nodCount){
+    
 }
