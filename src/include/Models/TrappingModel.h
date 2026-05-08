@@ -63,6 +63,13 @@ void setZero_nodFlux();
 void InitializePETSc(vector<BaseElemTrap*> elements);
 
 /**
+ * @brief Sets constant flux boundary conditions.
+ * 
+ * @param H5File 
+ */
+void setFluxBCs(H5IO& H5File_in);
+
+/**
  * @brief Reads initial conditions from hdf5 file. Mainly for TDS.
  * 
  * @param H5File 
@@ -305,7 +312,10 @@ T_nodStres intPtFlux;
 T_nodStres nodFlux;    
 
 /// @brief Counter for integration points surrounding nodes.
-vector<double> nodCount;     
+vector<double> nodCount; 
+
+/// @brief Flux BCs.
+vector<double> fluxBC;
 
 /// @brief Exit nodes IDs.
 vector<int> ExitNodeIDs;     
@@ -314,6 +324,9 @@ vector<int> ExitNodeIDs;
 
 /// @brief RHS vector.
 Vec vecF;  
+
+/// @brief Flux BCs.
+Vec vecF_flux;
 
 /// @brief RHS source vector.
 Vec vecFsrc; 

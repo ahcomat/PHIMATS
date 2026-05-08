@@ -64,7 +64,8 @@ TrappingModel::~TrappingModel(){
 
     // Deallocate memory.
     PetscFree(presDofs); PetscFree(presVals);
-    VecDestroy(&vecF); VecDestroy(&vecx); MatDestroy(&matK); MatDestroy(&matM);
+    VecDestroy(&vecF); VecDestroy(&vecx); VecDestroy(&vecF_flux); VecDestroy(&vecFsrc);
+    MatDestroy(&matK); MatDestroy(&matM);
 }
 
 void TrappingModel::setZero_nodFlux(){
@@ -102,11 +103,13 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
 
     VecSetType(vecF, VECSEQ);
     VecDuplicate(vecF, &vecx);   
-    VecDuplicate(vecF, &vecFsrc);      
+    VecDuplicate(vecF, &vecFsrc);
+    VecDuplicate(vecF, &vecF_flux);      
 
-    VecSet(vecF, 0.0);    // Set all values to zero.
-    VecSet(vecFsrc, 0.0); // Set all values to zero.
-    VecSet(vecx, 0.0);    // Set all values to zero.
+    VecSet(vecF, 0.0);         // Set all values to zero.
+    VecSet(vecF_flux, 0.0);    // Set all values to zero.
+    VecSet(vecFsrc, 0.0);      // Set all values to zero.
+    VecSet(vecx, 0.0);         // Set all values to zero.
 
     // Initialize the coefficient matrices.
     MatCreateSeqAIJ(PETSC_COMM_WORLD, nTotDofs, nTotDofs, PETSC_DEFAULT, NULL, &matK); // Works better for HPC
@@ -169,6 +172,22 @@ void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
 
     PetscFree(nnz);
 }
+
+void TrappingModel::setFluxBCs(H5IO& H5File_in){
+
+    // Read the pre-calculated flux vector from HDF5
+    fluxBC.resize(nTotNodes);
+    H5File_in.ReadField1D("FluxBCs", fluxBC);
+
+    // Set flux BCs
+    for(int iDof=0; iDof<nTotDofs; iDof++){
+        VecSetValue(vecF_flux, iDof, fluxBC.at(iDof), INSERT_VALUES);
+    }
+    VecAssemblyBegin(vecF_flux);
+    VecAssemblyEnd(vecF_flux);
+
+}
+
 
 void TrappingModel::ReadInitialCon(H5IO& H5File, const int iStep){
 
@@ -450,6 +469,9 @@ void TrappingModel::Assemble(vector<BaseElemTrap*> elements, bool assembleM){
 void TrappingModel::Update_F(){
 
     MatMult(matM, vecx, vecF);
+
+    // Add flux boundary condition contribution
+    VecAXPY(vecF, dt, vecF_flux);
 }
 
 int TrappingModel::get_nSteps() const{
