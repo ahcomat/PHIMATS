@@ -141,14 +141,14 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                 elemNodCoord.at(iElem) = dummyElNodCoord;
 
                 // Loop through integration points.
-                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                    // Cart coord of iGauss point.
-                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Cart coord of iGaus point.
+                    dummyElemGauss.at(iGaus) = getGaussCart(shapeFunc.at(iGaus), dummyElNodCoord);
                     // Derivatives and int-pt volume
-                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGaus), wts.at(iGaus), dummyIntVol.at(iGaus), BMat.at(iElem).at(iGaus));
                     // Int-pt phi
-                    el_gPhi.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi;
+                    el_gPhi.at(iElem).at(iGaus)  = shapeFunc.at(iGaus)*dummyElNod_gPhi;
                 }
                 gaussPtCart.at(iElem) = dummyElemGauss;
                 intPtVol.at(iElem) = dummyIntVol;
@@ -192,15 +192,15 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                 elemNodCoord.at(iElem) = dummyElNodCoord;
 
                 // Loop through integration points.
-                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                    // Cart coord of iGauss point.
-                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Cart coord of iGaus point.
+                    dummyElemGauss.at(iGaus) = getGaussCart(shapeFunc.at(iGaus), dummyElNodCoord);
                     // Derivatives and int-pt volume
-                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGaus), wts.at(iGaus), dummyIntVol.at(iGaus), BMat.at(iElem).at(iGaus));
                     // Int-pt phi
-                    el_gPhi_HAGB.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_HAGB;
-                    el_gPhi_LAGB.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_LAGB;
+                    el_gPhi_HAGB.at(iElem).at(iGaus)  = shapeFunc.at(iGaus)*dummyElNod_gPhi_HAGB;
+                    el_gPhi_LAGB.at(iElem).at(iGaus)  = shapeFunc.at(iGaus)*dummyElNod_gPhi_LAGB;
                 }
                 gaussPtCart.at(iElem) = dummyElemGauss;
                 intPtVol.at(iElem) = dummyIntVol;
@@ -264,17 +264,17 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                 elemNodCoord.at(iElem) = dummyElNodCoord;
 
                 // Loop through integration points.
-                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                    // Cart coord of iGauss point.
-                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Cart coord of iGaus point.
+                    dummyElemGauss.at(iGaus) = getGaussCart(shapeFunc.at(iGaus), dummyElNodCoord);
                     // Derivatives and int-pt volume
-                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGaus), wts.at(iGaus), dummyIntVol.at(iGaus), BMat.at(iElem).at(iGaus));
                     // Int-pt phi
-                    el_phi_j.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_phi_j;
-                    el_gPhi_ii.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ii;
-                    el_gPhi_ij.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ij;
-                    el_gPhi_jj.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_jj;
+                    el_phi_j.at(iElem).at(iGaus)  = shapeFunc.at(iGaus)*dummyElNod_phi_j;
+                    el_gPhi_ii.at(iElem).at(iGaus)  = shapeFunc.at(iGaus)*dummyElNod_gPhi_ii;
+                    el_gPhi_ij.at(iElem).at(iGaus)  = shapeFunc.at(iGaus)*dummyElNod_gPhi_ij;
+                    el_gPhi_jj.at(iElem).at(iGaus)  = shapeFunc.at(iGaus)*dummyElNod_gPhi_jj;
 
                 }
                 gaussPtCart.at(iElem) = dummyElemGauss;
@@ -303,12 +303,12 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                 elemNodCoord.at(iElem) = dummyElNodCoord;
 
                 // Loop through integration points.
-                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                    // Cart coord of iGauss point.
-                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Cart coord of iGaus point.
+                    dummyElemGauss.at(iGaus) = getGaussCart(shapeFunc.at(iGaus), dummyElNodCoord);
                     // Derivatives and int-pt volume
-                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGaus), wts.at(iGaus), dummyIntVol.at(iGaus), BMat.at(iElem).at(iGaus));
 
                 }
                 gaussPtCart.at(iElem) = dummyElemGauss;
@@ -432,16 +432,16 @@ void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vec
             }              
 
             // Integration over all Gauss points.
-            for (int iGauss=0; iGauss<nElGauss; iGauss++){
+            for (int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                gPhi = el_gPhi.at(iElem).at(iGauss);  // gPhi of the current int-pt
+                gPhi = el_gPhi.at(iElem).at(iGaus);  // gPhi of the current int-pt
 
                 DMat = std::get<Matd2x2>(mat->CalcDMatx(gPhi, T));
                 TMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcTMatx(gPhi, T));
 
-                const Matd2x3& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
-                const RowVecd3& dummyShFunc = shapeFunc.at(iGauss);
-                dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
+                const Matd2x3& dummyBMat = BMat.at(iElem).at(iGaus); // derivative matrix for the given gauss point.
+                const RowVecd3& dummyShFunc = shapeFunc.at(iGaus);
+                dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current int-pt 
 
                 // [B_ji]^T k_jj B_ji
                 elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
@@ -478,17 +478,17 @@ void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vec
             }              
 
             // Integration over all Gauss points.
-            for (int iGauss=0; iGauss<nElGauss; iGauss++){
+            for (int iGaus=0; iGaus<nElGauss; iGaus++){
 
                 DMat = std::get<Matd2x2>(mat->CalcDMatx(1.0, T));
                 
                 // Useless for now, but can be used for varying diffusivity
-                gPhi_HAGB = el_gPhi_HAGB.at(iElem).at(iGauss);
-                gPhi_LAGB = el_gPhi_LAGB.at(iElem).at(iGauss);
+                gPhi_HAGB = el_gPhi_HAGB.at(iElem).at(iGaus);
+                gPhi_LAGB = el_gPhi_LAGB.at(iElem).at(iGaus);
 
-                const Matd2x3& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
-                const RowVecd3& dummyShFunc = shapeFunc.at(iGauss);
-                dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
+                const Matd2x3& dummyBMat = BMat.at(iElem).at(iGaus); // derivative matrix for the given gauss point.
+                const RowVecd3& dummyShFunc = shapeFunc.at(iGaus);
+                dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current int-pt 
 
                 // [B_ji]^T k_jj B_ji
                 elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
@@ -537,20 +537,20 @@ void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vec
             }              
 
             // Integration over all Gauss points.
-            for (int iGauss=0; iGauss<nElGauss; iGauss++){
+            for (int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                phi_j = el_phi_j.at(iElem).at(iGauss);  // values of the current int-pt
-                gPhi_ii = el_gPhi_ii.at(iElem).at(iGauss);
-                gPhi_ij = el_gPhi_ij.at(iElem).at(iGauss);
-                gPhi_jj = el_gPhi_jj.at(iElem).at(iGauss);
+                phi_j = el_phi_j.at(iElem).at(iGaus);  // values of the current int-pt
+                gPhi_ii = el_gPhi_ii.at(iElem).at(iGaus);
+                gPhi_ij = el_gPhi_ij.at(iElem).at(iGaus);
+                gPhi_jj = el_gPhi_jj.at(iElem).at(iGaus);
 
                 // DMat = std::get<Matd2x2>(dynamic_cast<TrapPhase*>(mat)->CalcDMatx(phi_j, T));
 
                 DMat = std::get<Matd2x2>(mat->CalcDMatx(phi_j, T));
 
-                const Matd2x3& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
-                const RowVecd3& dummyShFunc = shapeFunc.at(iGauss);
-                dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
+                const Matd2x3& dummyBMat = BMat.at(iElem).at(iGaus); // derivative matrix for the given gauss point.
+                const RowVecd3& dummyShFunc = shapeFunc.at(iGaus);
+                dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current int-pt 
 
                 // [B_ji]^T k_jj B_ji
                 elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
