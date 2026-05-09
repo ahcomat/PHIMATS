@@ -435,14 +435,14 @@ void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vec
             // Integration over all Gauss points.
             for (int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                const double& gPhi = accessVec(el_gPhi, iElem, iGaus);  // gPhi of the current int-pt
+                const double gPhi = accessVec(el_gPhi, iElem, iGaus);  // gPhi of the current int-pt
 
                 DMat = std::get<Matd2x2>(gbTrap->CalcDMatx(gPhi, T));
                 TMat = std::get<Matd2x2>(gbTrap->CalcTMatx(gPhi, T));
 
                 const Matd2x3& dummyBMat = accessVec(BMat, iElem, iGaus); // derivative matrix for the given gauss point.
                 const RowVecd3& dummyShFunc = accessVec(shapeFunc, iGaus);
-                const double& dummydVol = accessVec(intPtVol, iElem, iGaus);  // Volume of the current int-pt 
+                const double dummydVol = accessVec(intPtVol, iElem, iGaus);  // Volume of the current int-pt 
                 BDB = dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
                 BTB = dummyBMat.transpose()*TMat*dummyBMat*dummydVol;
 
@@ -489,12 +489,12 @@ void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vec
                 DMat = std::get<Matd2x2>(hlgbTrap->CalcDMatx(1.0, T));
                 
                 // Useless for now, but can be used for varying diffusivity
-                const double& gPhi_HAGB = accessVec(el_gPhi_HAGB, iElem, iGaus);
-                const double& gPhi_LAGB = accessVec(el_gPhi_LAGB, iElem, iGaus);
+                const double gPhi_HAGB = accessVec(el_gPhi_HAGB, iElem, iGaus);
+                const double gPhi_LAGB = accessVec(el_gPhi_LAGB, iElem, iGaus);
 
                 const Matd2x3& dummyBMat = accessVec(BMat, iElem, iGaus); // derivative matrix for the given gauss point.
                 const RowVecd3& dummyShFunc = accessVec(shapeFunc, iGaus);
-                const double& dummydVol = accessVec(intPtVol, iElem, iGaus);  // Volume of the current int-pt 
+                const double dummydVol = accessVec(intPtVol, iElem, iGaus);  // Volume of the current int-pt 
                 BDB = dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
 
                 // [B_ji]^T k_jj B_ji
@@ -546,16 +546,16 @@ void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vec
             // Integration over all Gauss points.
             for (int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                const double& phi_j = accessVec(el_phi_j, iElem, iGaus);  // values of the current int-pt
-                const double& gPhi_ii = accessVec(el_gPhi_ii, iElem, iGaus);
-                const double& gPhi_ij = accessVec(el_gPhi_ij, iElem, iGaus);
-                const double& gPhi_jj = accessVec(el_gPhi_jj, iElem, iGaus);
+                const double phi_j = accessVec(el_phi_j, iElem, iGaus);  // values of the current int-pt
+                const double gPhi_ii = accessVec(el_gPhi_ii, iElem, iGaus);
+                const double gPhi_ij = accessVec(el_gPhi_ij, iElem, iGaus);
+                const double gPhi_jj = accessVec(el_gPhi_jj, iElem, iGaus);
 
                 DMat = std::get<Matd2x2>(phaseTrap->CalcDMatx(phi_j, T));
 
                 const Matd2x3& dummyBMat = accessVec(BMat, iElem, iGaus); // derivative matrix for the given gauss point.
                 const RowVecd3& dummyShFunc = accessVec(shapeFunc, iGaus);
-                const double& dummydVol = accessVec(intPtVol, iElem, iGaus);  // Volume of the current int-pt 
+                const double dummydVol = accessVec(intPtVol, iElem, iGaus);  // Volume of the current int-pt 
 
                 BDB = dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
 
@@ -665,9 +665,9 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
             // Gauss points
             for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                const double& gPhi = accessVec(el_gPhi, iElem, iGaus);
-                const double& IntPtCon = accessVec(shapeFunc, iGaus)*dummyCon;
-                const double& dummydVol = accessVec(intPtVol, iElem, iGaus);  
+                const double gPhi = accessVec(el_gPhi, iElem, iGaus);
+                const double IntPtCon = accessVec(shapeFunc, iGaus)*dummyCon;
+                const double dummydVol = accessVec(intPtVol, iElem, iGaus);  
                 const Matd2x3& dummyBMat = accessVec(BMat, iElem, iGaus);
                 const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
 
@@ -723,8 +723,8 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
 
                 const Matd2x3& dummyBMat = accessVec(BMat, iElem, iGaus);
                 const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
-                const double& IntPtCon = accessVec(shapeFunc, iGaus)*dummyCon;
-                const double& dummydVol = accessVec(intPtVol, iElem, iGaus); 
+                const double IntPtCon = accessVec(shapeFunc, iGaus)*dummyCon;
+                const double dummydVol = accessVec(intPtVol, iElem, iGaus); 
 
                 DMat = std::get<Matd2x2>(hlgbTrap->CalcDMatx(1.0, T));
                 DB = DMat*dummyBMat;
@@ -782,18 +782,18 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
             // Gauss points
             for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                const double& IntPtCon = accessVec(shapeFunc, iGaus)*dummyCon;
+                const double IntPtCon = accessVec(shapeFunc, iGaus)*dummyCon;
 
-                const double& phi_j = accessVec(el_phi_j, iElem, iGaus);  // values of the current int-pt
-                const double& gPhi_ii = accessVec(el_gPhi_ii, iElem, iGaus);
-                const double& gPhi_ij = accessVec(el_gPhi_ij, iElem, iGaus);
-                const double& gPhi_jj = accessVec(el_gPhi_jj, iElem, iGaus);
+                const double phi_j = accessVec(el_phi_j, iElem, iGaus);  // values of the current int-pt
+                const double gPhi_ii = accessVec(el_gPhi_ii, iElem, iGaus);
+                const double gPhi_ij = accessVec(el_gPhi_ij, iElem, iGaus);
+                const double gPhi_jj = accessVec(el_gPhi_jj, iElem, iGaus);
 
                 DMat = std::get<Matd2x2>(phaseTrap->CalcDMatx(phi_j, T));
 
                 const Matd2x3& dummyBMat = accessVec(BMat, iElem, iGaus); // derivative matrix for the given gauss point.
                 const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
-                const double& dummydVol = accessVec(intPtVol, iElem, iGaus);  // Volume of the current int-pt 
+                const double dummydVol = accessVec(intPtVol, iElem, iGaus);  // Volume of the current int-pt 
 
                 DB = DMat*dummyBMat;
 
