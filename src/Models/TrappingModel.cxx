@@ -58,6 +58,7 @@ TrappingModel::TrappingModel(vector<BaseElemTrap*> elements, H5IO& H5File_in, Lo
 
     // Initialize to zeros
     setZero_nodFlux();
+    setZero_nodTrapCon();
 
     InitializePETSc(elements);
 }
@@ -73,26 +74,33 @@ TrappingModel::~TrappingModel(){
 
 void TrappingModel::setZero_nodFlux(){
 
-    if (nDim == 2){ // Case 2D model
+    std::fill(nodCount.begin(), nodCount.end(), 0.0);
 
-        for(int iNod=0; iNod<nTotNodes; iNod++){
-
-            std::get<std::vector<ColVecd2>>(nodFlux).at(iNod).setZero();
-            nodCount.at(iNod) = 0;
-            nodTrapCon.at(iNod) = 0;
-
+    // Zero the flux vectors based on dimension
+    if (nDim == 2){ 
+        
+        // Extract reference ONCE
+        auto& ref_nodFlux = std::get<std::vector<ColVecd2>>(nodFlux);
+        
+        // Range-based loop is faster and avoids index checking
+        for (auto& flux : ref_nodFlux) {
+            flux.setZero();
         }
 
-    } else if (nDim == 3){ // Case 3D
-
-        for(int iNod=0; iNod<nTotNodes; iNod++){
-
-            std::get<std::vector<ColVecd3>>(nodFlux).at(iNod).setZero();
-            nodCount.at(iNod) = 0;
-            nodTrapCon.at(iNod) = 0;
-            
+    } else if (nDim == 3){ 
+        
+        auto& ref_nodFlux = std::get<std::vector<ColVecd3>>(nodFlux);
+        
+        for (auto& flux : ref_nodFlux) {
+            flux.setZero();
         }
     }
+}
+
+void TrappingModel::setZero_nodTrapCon(){
+
+    std::fill(nodTrapCon.begin(), nodTrapCon.end(), 0.0);
+    std::fill(nodCount.begin(), nodCount.end(), 0.0);
 }
 
 void TrappingModel::InitializePETSc(vector<BaseElemTrap*> elements){
@@ -558,18 +566,21 @@ void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping
     }
     
     // Number averaging the nodal values
-    if (nDim==2){
-
-        for(int iNod=0; iNod<nTotNodes; iNod++){
-            
-            std::get<std::vector<ColVecd2>>(nodFlux).at(iNod) = std::get<std::vector<ColVecd2>>(nodFlux).at(iNod)/nodCount.at(iNod);
+    if (nDim == 2) {
+        
+        // Extract the variant reference exactly ONCE
+        auto& ref_nodFlux = std::get<std::vector<ColVecd2>>(nodFlux);
+        
+        for(int iNod = 0; iNod < nTotNodes; iNod++) {
+            ref_nodFlux[iNod] /= nodCount[iNod]; 
         }
 
-    } else if (nDim==3){
+    } else if (nDim == 3) {
 
-        for(int iNod=0; iNod<nTotNodes; iNod++){
-            
-            std::get<std::vector<ColVecd3>>(nodFlux).at(iNod) = std::get<std::vector<ColVecd3>>(nodFlux).at(iNod)/nodCount.at(iNod);
+        auto& ref_nodFlux = std::get<std::vector<ColVecd3>>(nodFlux);
+        
+        for(int iNod = 0; iNod < nTotNodes; iNod++) {
+            ref_nodFlux[iNod] /= nodCount[iNod];
         }
     }
 
@@ -579,7 +590,7 @@ void TrappingModel::CalcFlux(vector<BaseElemTrap*> elements, vector<BaseTrapping
 void TrappingModel::CalcNodTrapCon(vector<BaseElemTrap*> elements){
 
     // set zeros
-    setZero_nodFlux();
+    setZero_nodTrapCon();
 
     for (int iSet=0; iSet<nElementSets; iSet++){
         elements[iSet]->CalcNodTrapCon(nodTrapCon, nodCount);
@@ -660,11 +671,16 @@ void TrappingModel::WriteExitFlux(H5IO &H5File_out, const int iStep){
 
     double sum = 0;
 
+    // Get a reference to the vector to avoid copying
+    const auto& ref_nodFlux = std::get<std::vector<ColVecd2>>(nodFlux);
+
     for (int iExNod : ExitNodeIDs){ 
-        sum += std::get<std::vector<ColVecd2>>(nodFlux).at(iExNod)[0];  // vecx-component
+        sum += ref_nodFlux.at(iExNod)[0];  // vecx-component
     }
 
     sum = sum/nExitNodes;  // Number averaging
 
     H5File_out.WriteScalar("AvFlux/Step_"+to_string(iStep), sum);
+
+    
 }

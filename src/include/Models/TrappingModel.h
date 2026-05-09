@@ -55,6 +55,12 @@ TrappingModel(vector<BaseElemTrap*> elements, H5IO& H5File_in, Logger& logger);
 void setZero_nodFlux();
 
 /**
+ * @brief Set noda trap concentration to zero
+ * 
+ */
+void setZero_nodTrapCon();
+
+/**
  * @brief Initializes and preallocates the RHS `F`, solution `x` and 
  *        conductivity matrix `K_D` and capacitance matrix `C`.
  * 

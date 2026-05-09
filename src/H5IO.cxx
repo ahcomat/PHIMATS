@@ -1,4 +1,5 @@
 #include "H5IO.h"
+#include <algorithm>
 
 #ifndef DEBUG
 #define at(x) operator[](x)
@@ -192,40 +193,52 @@ void H5IO::WriteTensor(const string& dsetName, const int nNodes, const int nStre
 
         hid_t file_id, dataset_id, dataspace_id, dcpl;
         hsize_t dims[2] = { (hsize_t)nNodes, (hsize_t)nStres };
-        // Chunking by rows (e.g., 1000 nodes at a time) or the whole field
-        hsize_t chunk_dims[2] = { (hsize_t)nNodes, (hsize_t)nStres };
+
+        // Caps the chunk size at 10,000 nodes, or uses nNodes if the mesh is tiny.
+        hsize_t chunk_rows = std::min((hsize_t)10000, (hsize_t)nNodes);
+        hsize_t chunk_dims[2] = { chunk_rows, (hsize_t)nStres };
 
         std::vector<double> BufferField(nNodes * nStres);
 
-        if(nStres==2){
+        // Use a raw pointer to walk through the buffer. This avoids all i*nStres math.
+        double* buf_ptr = BufferField.data();
 
-            for (int i=0; i<nNodes; i++){
-                for (int j=0; j<nStres; j++){
-                    BufferField[i*nStres + j] = std::get<std::vector<ColVecd2>>(Array).at(i)(j);
-                }
+        if(nStres == 2){
+            // Extract the variant once
+            const auto& refArray = std::get<std::vector<ColVecd2>>(Array);
+            
+            // Loop unrolling and direct pointer incrementing
+            for (const auto& vec : refArray){
+                *buf_ptr++ = vec(0);
+                *buf_ptr++ = vec(1);
             }
-        } else if(nStres==3){
-
-            for (int i=0; i<nNodes; i++){
-                for (int j=0; j<nStres; j++){
-                    BufferField[i*nStres + j] = std::get<std::vector<ColVecd3>>(Array).at(i)(j);
-                }
+            
+        } else if(nStres == 3){
+            const auto& refArray = std::get<std::vector<ColVecd3>>(Array);
+            for (const auto& vec : refArray){
+                *buf_ptr++ = vec(0);
+                *buf_ptr++ = vec(1);
+                *buf_ptr++ = vec(2);
             }
-
-        } else if(nStres==4){
-
-            for (int i=0; i<nNodes; i++){
-                for (int j=0; j<nStres; j++){
-                    BufferField[i*nStres + j] = std::get<std::vector<ColVecd4>>(Array).at(i)(j);
-                }
+            
+        } else if(nStres == 4){
+            const auto& refArray = std::get<std::vector<ColVecd4>>(Array);
+            for (const auto& vec : refArray){
+                *buf_ptr++ = vec(0);
+                *buf_ptr++ = vec(1);
+                *buf_ptr++ = vec(2);
+                *buf_ptr++ = vec(3);
             }
-
-        } else if(nStres==6) {
-
-            for (int i=0; i<nNodes; i++){
-                for (int j=0; j<nStres; j++){
-                    BufferField[i*nStres + j] = std::get<std::vector<ColVecd6>>(Array).at(i)(j);
-                }
+            
+        } else if(nStres == 6) {
+            const auto& refArray = std::get<std::vector<ColVecd6>>(Array);
+            for (const auto& vec : refArray){
+                *buf_ptr++ = vec(0);
+                *buf_ptr++ = vec(1);
+                *buf_ptr++ = vec(2);
+                *buf_ptr++ = vec(3);
+                *buf_ptr++ = vec(4);
+                *buf_ptr++ = vec(5);
             }        
         }
 
