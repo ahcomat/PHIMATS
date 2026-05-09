@@ -153,6 +153,14 @@ void Update_dt(vector<BaseElemTrap*> elements, double dtNew);
 void CalcPrecipitaitonCon(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
 
 /**
+ * @brief Updates GB trapped concentraiton.
+ * 
+ * @param elements 
+ * @param mats 
+ */
+void CalcGBTrapCon(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
+
+/**
  * @brief Calculates the integration point concentration.
  * 
  * @param elements 

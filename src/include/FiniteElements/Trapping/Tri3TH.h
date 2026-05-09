@@ -113,6 +113,8 @@ void CalcElCon(const double* globalBuffer) override;
 
 void CalcPrecipitaitonCon(BaseTrapping* mat, const double T) override;
 
+void CalcGBTrapCon(BaseTrapping* mat, const double T) override;
+
 void CalcTrapRHS(double* FtrapBuffer) override;
 
 void CalcNodTrapCon(vector<double>& nodTrapCon, vector<double>& nodCount) override;

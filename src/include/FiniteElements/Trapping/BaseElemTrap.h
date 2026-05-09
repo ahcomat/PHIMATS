@@ -181,12 +181,26 @@ virtual void CalcElCon(const double* globalBuffer) = 0;
 virtual void CalcPrecipitaitonCon(BaseTrapping* mat, const double T) = 0;
 
 /**
+ * @brief Calculate the integration point GB trapped concentration.
+ * 
+ * @param mat 
+ * @param T 
+ */
+virtual void CalcGBTrapCon(BaseTrapping* mat, const double T) = 0;
+
+/**
  * @brief Calculates the trapped RHS load. 
  * 
  * @param FtrapBuffer 
  */
 virtual void CalcTrapRHS(double* FtrapBuffer) = 0;
 
+/**
+ * @brief Map integration point values of trapped concentration to the nodes.
+ * 
+ * @param nodTrapCon 
+ * @param nodCount 
+ */
 virtual void CalcNodTrapCon(vector<double>& nodTrapCon, vector<double>& nodCount) = 0;
 
 protected:      

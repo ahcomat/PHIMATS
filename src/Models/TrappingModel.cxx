@@ -349,7 +349,13 @@ void TrappingModel::CalcPrecipitaitonCon(vector<BaseElemTrap*> elements, vector<
     for (int iSet=0; iSet<nElementSets; iSet++){
         elements[iSet]->CalcPrecipitaitonCon(mats[iSet], T);
     }
+}
 
+void TrappingModel::CalcGBTrapCon(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats){
+
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        elements[iSet]->CalcGBTrapCon(mats[iSet], T);
+    }
 }
 
 void TrappingModel::WriteTemp(H5IO &H5File_out, const int iStep){

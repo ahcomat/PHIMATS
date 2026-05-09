@@ -892,6 +892,42 @@ void Tri3TH::CalcPrecipitaitonCon(BaseTrapping* mat, const double T){
     }
 }
 
+void Tri3TH::CalcGBTrapCon(BaseTrapping* mat, const double T){
+
+    TrapGB* gbTrapMat = dynamic_cast<TrapGB*>(mat);
+
+    double Vgb = gbTrapMat->get_Vgb();
+    double kf0 = gbTrapMat->get_kf0();
+    double Qf = gbTrapMat->get_Qf();
+    double kb0 = gbTrapMat->get_kb0();
+    double Qb = gbTrapMat->get_Qb();
+    double conTrap; double conTrapOld;
+    double conL; double deltsConTrap;
+
+    // Precompute all constants and inverses outside the loops
+    double kf = kf0 * std::exp(-Qf / (R * T));
+    double kb = kb0 * std::exp(-Qb / (R * T));
+    double invVgb = 1.0 / Vgb; // Multiplication is much faster than division
+
+
+    for(int iElem=0; iElem<nElements; iElem++){
+        
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            const double gPhi = accessVec(el_gPhi, iElem, iGaus);;
+
+            double conTrapOld = accessVec(elConTrap, iElem, iGaus);
+            double conL = accessVec(elCon, iElem, iGaus);
+
+            conTrap = (conTrapOld + dt * kf * conL * gPhi * invVgb) / (1.0 + dt * (kf * conL + kb));
+
+            accessVec(elConTrap, iElem, iGaus) = conTrap;
+            accessVec(elDeltaTrap, iElem, iGaus) = conTrap - conTrapOld;
+
+        }
+    }
+}
+
 void Tri3TH::CalcTrapRHS(double* FtrapBuffer){
 
     ColVecd3 dummyFtrap;
@@ -900,7 +936,7 @@ void Tri3TH::CalcTrapRHS(double* FtrapBuffer){
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
             const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
-            const double& dummydVol = accessVec(intPtVol, iElem, iGaus);  
+            const double dummydVol = accessVec(intPtVol, iElem, iGaus);  
 
             dummyFtrap = N_i.transpose()*accessVec(elDeltaTrap, iElem, iGaus)*dummydVol;
 
@@ -917,8 +953,8 @@ void Tri3TH::CalcNodTrapCon(vector<double>& nodTrapCon, vector<double>& nodCount
     for(int iElem=0; iElem<nElements; iElem++){
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-            const double& conTrap = accessVec(elConTrap, iElem, iGaus);
-            const double& dummydVol = accessVec(intPtVol, iElem, iGaus);  
+            const double conTrap = accessVec(elConTrap, iElem, iGaus);
+            const double dummydVol = accessVec(intPtVol, iElem, iGaus);  
             const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
 
             // Nodal values

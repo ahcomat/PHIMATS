@@ -849,6 +849,10 @@ void Quad4TH::CalcPrecipitaitonCon(BaseTrapping* mat, const double T){
 
 }
 
+void Quad4TH::CalcGBTrapCon(BaseTrapping* mat, const double T){
+    
+}
+
 void Quad4TH::CalcTrapRHS(double* FtrapBuffer){
 
 }
