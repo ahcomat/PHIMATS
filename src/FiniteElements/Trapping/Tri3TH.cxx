@@ -81,7 +81,7 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
     elCapMatx.resize(nElements);
 
     elCon.resize(nElements);
-    elConTrap.resize(nElements); elDeltaTrap.resize(nElements);
+    elTrapCon.resize(nElements); elDeltaTrap.resize(nElements);
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd3x2 dummyElNodCoord;   // For node coordinates.
@@ -121,7 +121,7 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
 
                 elFlux.at(iElem).resize(nElGauss);
                 accessVec(elCon, iElem).resize(nElGauss);
-                accessVec(elConTrap, iElem).resize(nElGauss);
+                accessVec(elTrapCon, iElem).resize(nElGauss);
                 accessVec(elDeltaTrap, iElem).resize(nElGauss);
 
                 el_gPhi.at(iElem).resize(nElGauss);
@@ -238,7 +238,7 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                 elFlux.at(iElem).resize(nElGauss);
 
                 accessVec(elCon, iElem).resize(nElGauss);
-                accessVec(elConTrap, iElem).resize(nElGauss);
+                accessVec(elTrapCon, iElem).resize(nElGauss);
                 accessVec(elDeltaTrap, iElem).resize(nElGauss);
 
                 el_phi_j.at(iElem).resize(nElGauss);
@@ -621,7 +621,7 @@ double Tri3TH::CalcAvTrapCon(){
 
             const double& dummydVol = accessVec(intPtVol, iElem, iGaus);
 
-            conTrap = accessVec(elConTrap, iElem, iGaus);
+            conTrap = accessVec(elTrapCon, iElem, iGaus);
             TotVol += dummydVol;
             AvCon += conTrap*dummydVol;
         }
@@ -839,16 +839,38 @@ void Tri3TH::CalcElCon(const double* globalBuffer){
 
     for(int iElem=0; iElem<nElements; iElem++){
 
-        // Get element nodal displacements from the solution vector. 
-        for(int iDof=0; iDof<nElConDofs; iDof++){
-            nodCon(iDof) = globalBuffer[accessVec(elemConDof, iElem, iDof)];
-        }
+        // Cache the element's DOF connectivity row once
+        const auto& elDofs = accessVec(elemConDof, iElem);
+
+        // Unroll the 3-DOF fetch directly (Bypasses loop overhead)
+        nodCon(0) = globalBuffer[elDofs[0]];
+        nodCon(1) = globalBuffer[elDofs[1]];
+        nodCon(2) = globalBuffer[elDofs[2]];
 
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
-
             const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
-            accessVec(elCon, iElem, iGaus) = N_i*nodCon;
+            accessVec(elCon, iElem, iGaus) = N_i.dot(nodCon);
+        }
+    }
+}
 
+void Tri3TH::CalcElTrapCon(const vector<double>& nodTrapCon){
+
+    ColVecd3 nodCon;
+
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        // Cache the element's DOF connectivity row once
+        const auto& elDofs = accessVec(elemConDof, iElem);
+
+        // Unroll the 3-DOF fetch directly (Bypasses loop overhead)
+        nodCon(0) = nodTrapCon[elDofs[0]];
+        nodCon(1) = nodTrapCon[elDofs[1]];
+        nodCon(2) = nodTrapCon[elDofs[2]];
+
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+            const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
+            accessVec(elTrapCon, iElem, iGaus) = N_i.dot(nodCon);
         }
     }
 }
@@ -880,12 +902,12 @@ void Tri3TH::CalcPrecipitaitonCon(BaseTrapping* mat, const double T){
             // Mask is 1.0 ONLY if phi is practically 0.0
             double mask = (phi < epsilon) ? 1.0 : 0.0;
 
-            conTrapOld = accessVec(elConTrap, iElem, iGaus);
+            conTrapOld = accessVec(elTrapCon, iElem, iGaus);
             conL = accessVec(elCon, iElem, iGaus);
 
             conTrap = (conTrapOld + dt * mask * kf * conL * Xmax) / (1.0 + dt * mask * (kf * conL + kb));
 
-            accessVec(elConTrap, iElem, iGaus) = conTrap;
+            accessVec(elTrapCon, iElem, iGaus) = conTrap;
             accessVec(elDeltaTrap, iElem, iGaus) = conTrap - conTrapOld;
 
         }
@@ -916,12 +938,12 @@ void Tri3TH::CalcGBTrapCon(BaseTrapping* mat, const double T){
 
             const double gPhi = accessVec(el_gPhi, iElem, iGaus);;
 
-            double conTrapOld = accessVec(elConTrap, iElem, iGaus);
+            double conTrapOld = accessVec(elTrapCon, iElem, iGaus);
             double conL = accessVec(elCon, iElem, iGaus);
 
             conTrap = (conTrapOld + dt * kf * conL * gPhi * invVgb) / (1.0 + dt * (kf * conL + kb));
 
-            accessVec(elConTrap, iElem, iGaus) = conTrap;
+            accessVec(elTrapCon, iElem, iGaus) = conTrap;
             accessVec(elDeltaTrap, iElem, iGaus) = conTrap - conTrapOld;
 
         }
@@ -953,7 +975,7 @@ void Tri3TH::CalcNodTrapCon(vector<double>& nodTrapCon, vector<double>& nodCount
     for(int iElem=0; iElem<nElements; iElem++){
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-            const double conTrap = accessVec(elConTrap, iElem, iGaus);
+            const double conTrap = accessVec(elTrapCon, iElem, iGaus);
             const double dummydVol = accessVec(intPtVol, iElem, iGaus);  
             const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
 

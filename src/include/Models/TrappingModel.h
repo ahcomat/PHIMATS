@@ -83,6 +83,8 @@ void setFluxBCs(H5IO& H5File_in);
  */
 void ReadInitialCon(H5IO& H5File, const int iStep);
 
+void ReadInitialTrapCon(vector<BaseElemTrap*> elements, H5IO& H5File, const int iStep);
+
 /**
  * @brief Set initial uniform concntration. Mainly for mechanics. 
  * 
@@ -166,6 +168,13 @@ void CalcGBTrapCon(vector<BaseElemTrap*> elements, vector<BaseTrapping*> mats);
  * @param elements 
  */
 void CalcElCon(vector<BaseElemTrap*> elements);
+
+/**
+ * @brief Interpolate the nodal trap concentration to the integration points. Usually used when reading initial state. 
+ * 
+ * @param elements 
+ */
+void CalcElTrapCon(vector<BaseElemTrap*> elements);
 
 /**
  * @brief Write the current temperature.

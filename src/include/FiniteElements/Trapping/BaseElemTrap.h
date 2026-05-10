@@ -174,6 +174,13 @@ virtual void CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer, 
 virtual void CalcElCon(const double* globalBuffer) = 0;
 
 /**
+ * @brief Interpolate the nodal trap concentration to the integration points. Usually used when reading initial state. 
+ * 
+ * @param nodTrapCon 
+ */
+virtual void CalcElTrapCon(const vector<double>& nodTrapCon) = 0;
+
+/**
  * @brief Calculate the integration point precipitation concentration. 
  * 
  * @param mat 
@@ -239,7 +246,7 @@ vector<vector<double>> el_gPhi_ii;
 vector<vector<double>> elCon; 
 
 /// @brief Int-pt trapped concentration [nElGauss].
-vector<vector<double>> elConTrap; 
+vector<vector<double>> elTrapCon; 
 
 /// @brief Int-pt delta trapped concentration [nElGauss].
 vector<vector<double>> elDeltaTrap; 

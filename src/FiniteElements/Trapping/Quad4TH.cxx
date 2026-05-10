@@ -92,7 +92,7 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
     elCon.resize(nElements);
     elCon_ptr = &elCon;
 
-    elConTrap.resize(nElements); elDeltaTrap.resize(nElements);
+    elTrapCon.resize(nElements); elDeltaTrap.resize(nElements);
 
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd4x2 dummyElNodCoord; // For node coordinates.
@@ -132,7 +132,7 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
 
                 accessVec(elFlux, iElem).resize(nElGauss);
                 accessVec(elCon, iElem).resize(nElGauss);
-                accessVec(elConTrap, iElem).resize(nElGauss);
+                accessVec(elTrapCon, iElem).resize(nElGauss);
                 accessVec(elDeltaTrap, iElem).resize(nElGauss);
 
                 el_gPhi.at(iElem).resize(nElGauss);
@@ -196,7 +196,7 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
 
                 accessVec(elFlux, iElem).resize(nElGauss);
                 accessVec(elCon, iElem).resize(nElGauss);
-                accessVec(elConTrap, iElem).resize(nElGauss);
+                accessVec(elTrapCon, iElem).resize(nElGauss);
                 accessVec(elDeltaTrap, iElem).resize(nElGauss);
 
                 el_phi_j.at(iElem).resize(nElGauss);
@@ -249,7 +249,7 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
 
                 accessVec(elFlux, iElem).resize(nElGauss);
                 accessVec(elCon, iElem).resize(nElGauss);
-                accessVec(elConTrap, iElem).resize(nElGauss);
+                accessVec(elTrapCon, iElem).resize(nElGauss);
                 accessVec(elDeltaTrap, iElem).resize(nElGauss);
 
                 gaussPtCart.at(iElem).resize(nElGauss);
@@ -831,18 +831,22 @@ void Quad4TH::CalcElCon(const double* globalBuffer){
 
     for(int iElem=0; iElem<nElements; iElem++){
 
-        // Get element nodal displacements from the solution vector. 
-        for(int iDof=0; iDof<nElConDofs; iDof++){
-            nodCon(iDof) = globalBuffer[accessVec(elemConDof, iElem, iDof)];
-        }
+        const auto& elDofs = accessVec(elemConDof, iElem);
+
+        nodCon(0) = globalBuffer[elDofs[0]];
+        nodCon(1) = globalBuffer[elDofs[1]];
+        nodCon(2) = globalBuffer[elDofs[2]];
+        nodCon(3) = globalBuffer[elDofs[3]];
 
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
-
             const RowVecd4& N_i = accessVec(shapeFunc, iGaus);
-            accessVec(elCon, iElem, iGaus) = N_i*nodCon;
-
+            accessVec(elCon, iElem, iGaus) = N_i.dot(nodCon);
         }
     }
+}
+
+void Quad4TH::CalcElTrapCon(const vector<double>& nodTrapCon){
+
 }
 
 void Quad4TH::CalcPrecipitaitonCon(BaseTrapping* mat, const double T){

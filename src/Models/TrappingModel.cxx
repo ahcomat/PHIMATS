@@ -215,6 +215,15 @@ void TrappingModel::ReadInitialCon(H5IO& H5File, const int iStep){
     VecAssemblyBegin(vecx);  VecAssemblyEnd(vecx);
 }
 
+void TrappingModel::ReadInitialTrapCon(vector<BaseElemTrap*> elements, H5IO& H5File, const int iStep){
+
+    H5File.ReadField1D("TrapCon/Step_"+to_string(iStep), nodTrapCon);
+
+    // Interpolate the loaded nodal values to integration points
+    CalcElTrapCon(elements);
+
+}
+
 void TrappingModel::setUniformCon(double uniformCon){
 
     VecSet(vecx, uniformCon); // Set all values to zero.
@@ -603,7 +612,6 @@ void TrappingModel::CalcNodTrapCon(vector<BaseElemTrap*> elements){
     }
 
     for(int iNod=0; iNod<nTotNodes; iNod++){
-
         accessVec(nodTrapCon, iNod) = accessVec(nodTrapCon, iNod)/accessVec(nodCount, iNod);
     }
 }
@@ -615,6 +623,14 @@ void TrappingModel::CalcElCon(vector<BaseElemTrap*> elements){
         elements[iSet]->CalcElCon(globalBuffer);
     }
     VecRestoreArrayRead(vecx, &globalBuffer);
+
+}
+
+void TrappingModel::CalcElTrapCon(vector<BaseElemTrap*> elements){
+
+    for (int iSet=0; iSet<nElementSets; iSet++){
+        elements[iSet]->CalcElTrapCon(nodTrapCon);
+    }
 
 }
 

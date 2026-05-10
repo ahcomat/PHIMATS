@@ -111,6 +111,8 @@ void CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer, const do
 
 void CalcElCon(const double* globalBuffer) override;
 
+void CalcElTrapCon(const vector<double>& nodTrapCon) override;
+
 void CalcPrecipitaitonCon(BaseTrapping* mat, const double T) override;
 
 void CalcGBTrapCon(BaseTrapping* mat, const double T) override;
