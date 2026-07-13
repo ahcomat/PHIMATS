@@ -4,7 +4,7 @@ This case study demonstrates the chemo-mechanics coupling for hydrogen embrittle
 
 📄 For more background and details, see:
 - **"A coupled fully kinetic hydrogen transport and ductile phase-field fracture framework for modeling hydrogen embrittlement"**
-(2026) [arXiv DOI](https://doi.org/10.48550/arXiv.2604.05574)
+Int. J. Plast. (2026) https://doi.org/10.1016/j.ijplas.2026.104765 (Open access)
 
 ---
 
