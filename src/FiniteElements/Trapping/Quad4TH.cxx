@@ -33,9 +33,9 @@ void Quad4TH::InitShapeFunc(){
     // Initialize the Gauss points vectors.
     vector<double> ip = {-0.57735027, 0.57735027};
     vector<double> dummy(nElDim);
-    for(std::size_t iGauss=0; iGauss<ip.size(); iGauss++){
+    for(std::size_t iGaus=0; iGaus<ip.size(); iGaus++){
         for(std::size_t jGauss=0; jGauss<ip.size(); jGauss++){
-            dummy.at(0) = ip.at(iGauss);
+            dummy.at(0) = ip.at(iGaus);
             dummy.at(1) = ip.at(jGauss);
             gaussPts.push_back(dummy);
         }
@@ -92,6 +92,8 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
     elCon.resize(nElements);
     elCon_ptr = &elCon;
 
+    elTrapCon.resize(nElements); elDeltaTrap.resize(nElements);
+
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd4x2 dummyElNodCoord; // For node coordinates.
 
@@ -130,6 +132,8 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
 
                 accessVec(elFlux, iElem).resize(nElGauss);
                 accessVec(elCon, iElem).resize(nElGauss);
+                accessVec(elTrapCon, iElem).resize(nElGauss);
+                accessVec(elDeltaTrap, iElem).resize(nElGauss);
 
                 el_gPhi.at(iElem).resize(nElGauss);
 
@@ -148,14 +152,14 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                 elemNodCoord.at(iElem) = dummyElNodCoord;
 
                 // Loop through integration points.
-                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                    // Cart coord of iGauss point.
-                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Cart coord of iGaus point.
+                    dummyElemGauss.at(iGaus) = getGaussCart(shapeFunc.at(iGaus), dummyElNodCoord);
                     // Derivatives and int-pt volume
-                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), shapeFunc.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGaus), shapeFunc.at(iGaus), wts.at(iGaus), dummyIntVol.at(iGaus), BMat.at(iElem).at(iGaus));
                     // Int-pt phi
-                    el_gPhi.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi;
+                    el_gPhi.at(iElem).at(iGaus)  = shapeFunc.at(iGaus)*dummyElNod_gPhi;
                 }
                 gaussPtCart.at(iElem) = dummyElemGauss;
                 intPtVol.at(iElem) = dummyIntVol;
@@ -192,6 +196,8 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
 
                 accessVec(elFlux, iElem).resize(nElGauss);
                 accessVec(elCon, iElem).resize(nElGauss);
+                accessVec(elTrapCon, iElem).resize(nElGauss);
+                accessVec(elDeltaTrap, iElem).resize(nElGauss);
 
                 el_phi_j.at(iElem).resize(nElGauss);
                 el_gPhi_ii.at(iElem).resize(nElGauss);
@@ -216,17 +222,17 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                 elemNodCoord.at(iElem) = dummyElNodCoord;
 
                 // Loop through integration points.
-                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                    // Cart coord of iGauss point.
-                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Cart coord of iGaus point.
+                    dummyElemGauss.at(iGaus) = getGaussCart(shapeFunc.at(iGaus), dummyElNodCoord);
                     // Derivatives and int-pt volume
-                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), shapeFunc.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGaus), shapeFunc.at(iGaus), wts.at(iGaus), dummyIntVol.at(iGaus), BMat.at(iElem).at(iGaus));
                     // Int-pt phi
-                    el_phi_j.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_phi_j;
-                    el_gPhi_ii.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ii;
-                    el_gPhi_ij.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ij;
-                    el_gPhi_jj.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_jj;
+                    el_phi_j.at(iElem).at(iGaus)  = shapeFunc.at(iGaus)*dummyElNod_phi_j;
+                    el_gPhi_ii.at(iElem).at(iGaus)  = shapeFunc.at(iGaus)*dummyElNod_gPhi_ii;
+                    el_gPhi_ij.at(iElem).at(iGaus)  = shapeFunc.at(iGaus)*dummyElNod_gPhi_ij;
+                    el_gPhi_jj.at(iElem).at(iGaus)  = shapeFunc.at(iGaus)*dummyElNod_gPhi_jj;
 
                 }
                 gaussPtCart.at(iElem) = dummyElemGauss;
@@ -243,6 +249,8 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
 
                 accessVec(elFlux, iElem).resize(nElGauss);
                 accessVec(elCon, iElem).resize(nElGauss);
+                accessVec(elTrapCon, iElem).resize(nElGauss);
+                accessVec(elDeltaTrap, iElem).resize(nElGauss);
 
                 gaussPtCart.at(iElem).resize(nElGauss);
                 BMat.at(iElem).resize(nElGauss);
@@ -258,12 +266,12 @@ void Quad4TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                 elemNodCoord.at(iElem) = dummyElNodCoord;
 
                 // Loop through integration points.
-                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                    // Cart coord of iGauss point.
-                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Cart coord of iGaus point.
+                    dummyElemGauss.at(iGaus) = getGaussCart(shapeFunc.at(iGaus), dummyElNodCoord);
                     // Derivatives and int-pt volume
-                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), shapeFunc.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGaus), shapeFunc.at(iGaus), wts.at(iGaus), dummyIntVol.at(iGaus), BMat.at(iElem).at(iGaus));
 
                 }
                 gaussPtCart.at(iElem) = dummyElemGauss;
@@ -395,16 +403,16 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T,
                 }              
 
                 // Integration over all Gauss points.
-                for (int iGauss=0; iGauss<nElGauss; iGauss++){
+                for (int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                    gPhi = el_gPhi.at(iElem).at(iGauss);  // gPhi of the current int-pt
+                    gPhi = el_gPhi.at(iElem).at(iGaus);  // gPhi of the current int-pt
 
                     DMat = std::get<Matd2x2>(mat->CalcDMatx(gPhi, T));
                     TMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcTMatx(gPhi, T));
 
-                    const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
-                    const RowVecd4& dummyShFunc = shapeFunc.at(iGauss);
-                    dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
+                    const Matd2x4& dummyBMat = BMat.at(iElem).at(iGaus); // derivative matrix for the given gauss point.
+                    const RowVecd4& dummyShFunc = shapeFunc.at(iGaus);
+                    dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current int-pt 
 
                     // [B_ji]^T k_jj B_ji
                     elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
@@ -450,18 +458,18 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T,
                 }              
 
                 // Integration over all Gauss points.
-                for (int iGauss=0; iGauss<nElGauss; iGauss++){
+                for (int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                    phi_j   = el_phi_j.at(iElem).at(iGauss);  // values of the current int-pt
-                    gPhi_ii = el_gPhi_ii.at(iElem).at(iGauss);
-                    gPhi_ij = el_gPhi_ij.at(iElem).at(iGauss);
-                    gPhi_jj = el_gPhi_jj.at(iElem).at(iGauss);
+                    phi_j   = el_phi_j.at(iElem).at(iGaus);  // values of the current int-pt
+                    gPhi_ii = el_gPhi_ii.at(iElem).at(iGaus);
+                    gPhi_ij = el_gPhi_ij.at(iElem).at(iGaus);
+                    gPhi_jj = el_gPhi_jj.at(iElem).at(iGaus);
 
                     DMat = std::get<Matd2x2>(mat->CalcDMatx(phi_j, T));
 
-                    const Matd2x4& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
-                    const RowVecd4& dummyShFunc = shapeFunc.at(iGauss);
-                    dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
+                    const Matd2x4& dummyBMat = BMat.at(iElem).at(iGaus); // derivative matrix for the given gauss point.
+                    const RowVecd4& dummyShFunc = shapeFunc.at(iGaus);
+                    dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current int-pt 
 
                     // [B_ji]^T k_jj B_ji
                     elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
@@ -508,14 +516,14 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T,
                 }       
                 
                 // Integration over all Gauss points.
-                for (int iGauss=0; iGauss<nElGauss; iGauss++){
+                for (int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                    rho = accessVec(shapeFunc, iGauss)*dummyElNod_rho;
+                    rho = accessVec(shapeFunc, iGaus)*dummyElNod_rho;
                     DMat = std::get<Matd2x2>(mechTrapMat->CalcDMatx(rho, T)); 
 
-                    const Matd2x4& dummyBMat = accessVec(BMat, iElem, iGauss); // derivative matrix for the given gauss point.
-                    const RowVecd4& dummyShFunc = accessVec(shapeFunc, iGauss);
-                    dummydVol = accessVec(intPtVol, iElem, iGauss);  // Volume of the current int-pt
+                    const Matd2x4& dummyBMat = accessVec(BMat, iElem, iGaus); // derivative matrix for the given gauss point.
+                    const RowVecd4& dummyShFunc = accessVec(shapeFunc, iGaus);
+                    dummydVol = accessVec(intPtVol, iElem, iGaus);  // Volume of the current int-pt
 
                     BDB = dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
 
@@ -575,14 +583,14 @@ void Quad4TH::CalcElemStiffMatx(BaseTrapping* mat, const double T,
                 }       
                 
                 // Integration over all Gauss points.
-                for (int iGauss=0; iGauss<nElGauss; iGauss++){
+                for (int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                    const Matd2x4& dummyBMat = accessVec(BMat, iElem, iGauss); // derivative matrix for the given gauss point.
-                    const RowVecd4& dummyShFunc = accessVec(shapeFunc, iGauss);
-                    dummydVol = accessVec(intPtVol, iElem, iGauss);  // Volume of the current int-pt
+                    const Matd2x4& dummyBMat = accessVec(BMat, iElem, iGaus); // derivative matrix for the given gauss point.
+                    const RowVecd4& dummyShFunc = accessVec(shapeFunc, iGaus);
+                    dummydVol = accessVec(intPtVol, iElem, iGaus);  // Volume of the current int-pt
 
                     intPtRho = dummyShFunc*dummyElNod_rho;
-                    phi2 = accessVec(*elPhi_d_ptr, iElem, iGauss)*accessVec(*elPhi_d_ptr, iElem, iGauss);
+                    phi2 = accessVec(*elPhi_d_ptr, iElem, iGaus)*accessVec(*elPhi_d_ptr, iElem, iGaus);
                     DMat = std::get<Matd2x2>(mechTrapMat->CalcDMatx(intPtRho, T))*(1 - 0.99*phi2); 
                     BDB = dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
 
@@ -649,6 +657,10 @@ double Quad4TH::CalcAvCon(const double* globalBuffer){
     return AvCon/TotVol;
 }
 
+double Quad4TH::CalcAvTrapCon(){
+
+}
+
 void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr){
 
     Matd2x2 DMat; 
@@ -677,29 +689,29 @@ void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres
                 }
 
                 // Gauss points
-                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                    const RowVecd4& dummyShFunc = accessVec(shapeFunc, iGauss);
+                    const RowVecd4& dummyShFunc = accessVec(shapeFunc, iGaus);
 
                     IntPtCon = dummyShFunc*dummyCon;
                     intPtRho = dummyShFunc*dummyElNod_rho;
                     DMat = std::get<Matd2x2>(mechTrapMat->CalcDMatx(intPtRho, T));
-                    DB = DMat*accessVec(BMat, iElem, iGauss);
+                    DB = DMat*accessVec(BMat, iElem, iGaus);
 
                     // Int pt flux
-                    accessVec(elFlux, iElem, iGauss) = DB*(- dummyCon + Vh/(R*T)*IntPtCon*dummyElNod_sigma_h
+                    accessVec(elFlux, iElem, iGaus) = DB*(- dummyCon + Vh/(R*T)*IntPtCon*dummyElNod_sigma_h
                                                                       + zeta_rho/(R*T)*dummyElNod_rho);
 
-                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGauss)[0] =  accessVec(elFlux, iElem, iGauss)[0];
-                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGauss)[1] =  accessVec(elFlux, iElem, iGauss)[1];
-                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGauss)[2] =  0;
+                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGaus)[0] =  accessVec(elFlux, iElem, iGaus)[0];
+                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGaus)[1] =  accessVec(elFlux, iElem, iGaus)[1];
+                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGaus)[2] =  0;
 
                     // Nodal values
                     iNode = 0;
                     for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
 
-                        std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += accessVec(elFlux, iElem, iGauss)*dummyShFunc[iNode]*accessVec(wts, iGauss);
-                        accessVec(nodCount, *iNod2) += dummyShFunc[iNode]*accessVec(wts, iGauss);
+                        std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += accessVec(elFlux, iElem, iGaus)*dummyShFunc[iNode]*accessVec(wts, iGaus);
+                        accessVec(nodCount, *iNod2) += dummyShFunc[iNode]*accessVec(wts, iGaus);
                         iNode += 1;
                     }
                 }
@@ -726,31 +738,31 @@ void Quad4TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres
                 }
 
                 // Gauss points
-                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                    const RowVecd4& N_i = accessVec(shapeFunc, iGauss);
+                    const RowVecd4& N_i = accessVec(shapeFunc, iGaus);
 
                     IntPtCon = N_i*dummyCon;
-                    double phi2 = accessVec(*elPhi_d_ptr, iElem, iGauss)*accessVec(*elPhi_d_ptr, iElem, iGauss);
+                    double phi2 = accessVec(*elPhi_d_ptr, iElem, iGaus)*accessVec(*elPhi_d_ptr, iElem, iGaus);
                     intPtRho = N_i*dummyElNod_rho;
                     DMat = std::get<Matd2x2>(mechTrapMat->CalcDMatx(intPtRho, T))*(1 - 0.99*phi2);
-                    DB = DMat*accessVec(BMat, iElem, iGauss);
+                    DB = DMat*accessVec(BMat, iElem, iGaus);
 
-                    double dummydVol = accessVec(intPtVol, iElem, iGauss);
+                    double dummydVol = accessVec(intPtVol, iElem, iGaus);
 
                     // Int pt flux
-                    accessVec(elFlux, iElem, iGauss) = DB*( -dummyCon + Vh/(R*T)*IntPtCon*dummyElNod_sigma_h 
+                    accessVec(elFlux, iElem, iGaus) = DB*( -dummyCon + Vh/(R*T)*IntPtCon*dummyElNod_sigma_h 
                                                                       + zeta_rho/(R*T)*dummyElNod_rho);
 
-                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGauss)[0] =  accessVec(elFlux, iElem, iGauss)[0];
-                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGauss)[1] =  accessVec(elFlux, iElem, iGauss)[1];
-                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGauss)[2] =  0;
+                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGaus)[0] =  accessVec(elFlux, iElem, iGaus)[0];
+                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGaus)[1] =  accessVec(elFlux, iElem, iGaus)[1];
+                    std::get<std::vector<ColVecd3>>(intPtFlux).at(accessVec(elemIDs, iElem)*nElGauss+iGaus)[2] =  0;
 
                     // Nodal values
                     iNode = 0;
                     for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
 
-                        std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += accessVec(elFlux, iElem, iGauss)*N_i[iNode]*dummydVol;
+                        std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += accessVec(elFlux, iElem, iGaus)*N_i[iNode]*dummydVol;
                         accessVec(nodCount, *iNod2) += N_i[iNode]*dummydVol;
                         iNode += 1;
                     }
@@ -819,16 +831,36 @@ void Quad4TH::CalcElCon(const double* globalBuffer){
 
     for(int iElem=0; iElem<nElements; iElem++){
 
-        // Get element nodal displacements from the solution vector. 
-        for(int iDof=0; iDof<nElConDofs; iDof++){
-            nodCon(iDof) = globalBuffer[accessVec(elemConDof, iElem, iDof)];
-        }
+        const auto& elDofs = accessVec(elemConDof, iElem);
 
-        for(int iGauss=0; iGauss<nElGauss; iGauss++){
+        nodCon(0) = globalBuffer[elDofs[0]];
+        nodCon(1) = globalBuffer[elDofs[1]];
+        nodCon(2) = globalBuffer[elDofs[2]];
+        nodCon(3) = globalBuffer[elDofs[3]];
 
-            const RowVecd4& N_i = accessVec(shapeFunc, iGauss);
-            accessVec(elCon, iElem, iGauss) = N_i*nodCon;
-
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+            const RowVecd4& N_i = accessVec(shapeFunc, iGaus);
+            accessVec(elCon, iElem, iGaus) = N_i.dot(nodCon);
         }
     }
+}
+
+void Quad4TH::CalcElTrapCon(const vector<double>& nodTrapCon){
+
+}
+
+void Quad4TH::CalcPrecipitaitonCon(BaseTrapping* mat, const double T){
+
+}
+
+void Quad4TH::CalcGBTrapCon(BaseTrapping* mat, const double T){
+    
+}
+
+void Quad4TH::CalcTrapRHS(double* FtrapBuffer){
+
+}
+
+void Quad4TH::CalcNodTrapCon(vector<double>& nodTrapCon, vector<double>& nodCount){
+    
 }

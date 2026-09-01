@@ -5,7 +5,7 @@ import xml.dom.minidom as minidom
 
 class WriteXDMF:
     def __init__(self, simFileName, meshFileName, elementName, nSteps, components, nDim, 
-                 mechModel="Elastic", START=0, tOut=1, FLUX=False, TDS=False):
+                 mechModel="Elastic", START=0, tOut=1, FLUX=False, TDS=False, TRAPPING=False):
         """
         Args:
             fileName (str): Base name of the simulation.
@@ -67,6 +67,7 @@ class WriteXDMF:
                 self._add_attr(grid, t, "Con", "Scalar", f_out)
                 if FLUX: self._add_attr(grid, t, "Flux", "Vector", f_out)
                 if TDS:  self._add_attr(grid, t, "Temp", "Scalar", f_out)
+                if TRAPPING:  self._add_attr(grid, t, "TrapCon", "Scalar", f_out)
             
             # --- PHASE FIELD FRACTURE COMPONENTS ---
             if "pff" in self.components:

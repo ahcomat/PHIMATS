@@ -45,7 +45,11 @@ virtual T_DMatx CalcDMatx(const double phi, const double T) = 0;
 
 protected:
 
-const double R = 8.31446261815324; /// @brief Universal gas constant [J/mol.K]
+/// @brief Universal gas constant [J/mol.K]
+const double R = 8.31446261815324; 
+
+/// @brief Flag for trapping
+bool trappingFlag;
 
 };
 #endif

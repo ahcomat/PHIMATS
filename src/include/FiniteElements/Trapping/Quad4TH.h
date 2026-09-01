@@ -98,41 +98,29 @@ virtual void CalcCartDeriv(Matd4x2& elNodCoord, Matd2x4& sFuncDeriv, const RowVe
 //  */
 // void CalcGrad(T_nodStres& nodGrad, vector<double>& nodCount, double* nodLapPhi) override;
 
-/**
- * @brief Get the int-pt coordinates
- * 
- * @param glIntPtCoords 
- */
 virtual void getInPtCoords(T_nodStres& glIntPtCoords) override;
 
-/**
- * @brief Calculates the element stiffness matrix for all elements.
- * 
- * @param DMatx 
- */
 void CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr = nullptr) override ;
 
-/**
- * @brief Calculates the volume averaged concentration
- * 
- * @param globalBuffer Solution vector
- * @return Volume averaged concentration
- */
 double CalcAvCon(const double* globalBuffer) override;
 
-/**
- * @brief Evaluates the int-pt flux vector. Also evaluates the flux at the nodes.
- * 
- * @param KMatx 
- * @param globalBuffer 
- * @param nodFlux 
- * @param nodCount 
- */
+double CalcAvTrapCon() override;
+
 void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr = nullptr) override;
 
 void CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr) override;
 
 void CalcElCon(const double* globalBuffer) override;
+
+void CalcPrecipitaitonCon(BaseTrapping* mat, const double T) override;
+
+void CalcElTrapCon(const vector<double>& nodTrapCon) override;
+
+void CalcGBTrapCon(BaseTrapping* mat, const double T) override;
+
+void CalcTrapRHS(double* FtrapBuffer) override;
+
+void CalcNodTrapCon(vector<double>& nodTrapCon, vector<double>& nodCount) override;
 
 private:
 

@@ -123,7 +123,7 @@ virtual void getInPtCoords(T_nodStres& glIntPtCoords) = 0;
  * @brief Calculates the element stiffness and capacitances matrix.
  * 
  * @param mat 
- * @param T 
+ * @param T Current temperature
  */
 virtual void CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr = nullptr) = 0;
 
@@ -134,6 +134,8 @@ virtual void CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vec
  * @return double Volume averaged concentration
  */
 virtual double CalcAvCon(const double* globalBuffer) = 0;
+
+virtual double CalcAvTrapCon() = 0;
 
 // /**
 //  * @brief Evaluates the gradients of scalar field at the int-points and maps them to the nodes. 
@@ -165,11 +167,48 @@ virtual void CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
 virtual void CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr) = 0;
 
 /**
- * @brief Calculated the integration point concentration. 
+ * @brief Calculate the integration point concentration. 
  * 
  * @param globalBuffer 
  */
 virtual void CalcElCon(const double* globalBuffer) = 0;
+
+/**
+ * @brief Interpolate the nodal trap concentration to the integration points. Usually used when reading initial state. 
+ * 
+ * @param nodTrapCon 
+ */
+virtual void CalcElTrapCon(const vector<double>& nodTrapCon) = 0;
+
+/**
+ * @brief Calculate the integration point precipitation concentration. 
+ * 
+ * @param mat 
+ */
+virtual void CalcPrecipitaitonCon(BaseTrapping* mat, const double T) = 0;
+
+/**
+ * @brief Calculate the integration point GB trapped concentration.
+ * 
+ * @param mat 
+ * @param T 
+ */
+virtual void CalcGBTrapCon(BaseTrapping* mat, const double T) = 0;
+
+/**
+ * @brief Calculates the trapped RHS load. 
+ * 
+ * @param FtrapBuffer 
+ */
+virtual void CalcTrapRHS(double* FtrapBuffer) = 0;
+
+/**
+ * @brief Map integration point values of trapped concentration to the nodes.
+ * 
+ * @param nodTrapCon 
+ * @param nodCount 
+ */
+virtual void CalcNodTrapCon(vector<double>& nodTrapCon, vector<double>& nodCount) = 0;
 
 protected:      
 
@@ -205,6 +244,12 @@ vector<vector<double>> el_gPhi_ii;
 
 /// @brief Int-pt concentration [nElGauss].
 vector<vector<double>> elCon; 
+
+/// @brief Int-pt trapped concentration [nElGauss].
+vector<vector<double>> elTrapCon; 
+
+/// @brief Int-pt delta trapped concentration [nElGauss].
+vector<vector<double>> elDeltaTrap; 
 
 /// @brief Pointer of int-pt concentraiton [nElGauss]. 
 vector<vector<double>>* elCon_ptr;

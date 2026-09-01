@@ -5,10 +5,12 @@
 
 using namespace std;
 
-TrapGB::TrapGB(string dimensions, H5IO& H5File, int iSet, Logger& logger)
+TrapGB::TrapGB(string dimensions, H5IO& H5File, int iSet, Logger& logger, bool trapping)
     : BaseTrapping(dimensions, logger) {
 
     string dsetName;
+
+    trappingFlag = trapping;
 
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/D0x1";
     D0x1 = H5File.ReadScalar(dsetName);
@@ -37,12 +39,33 @@ TrapGB::TrapGB(string dimensions, H5IO& H5File, int iSet, Logger& logger)
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_GB";
     zeta_GB = H5File.ReadScalar(dsetName);
 
+    if (trappingFlag){
+
+        dsetName = "Materials/Material_"+ std::to_string(iSet)+"/kf0";
+        kf0 = H5File.ReadScalar(dsetName);
+
+        dsetName = "Materials/Material_"+ std::to_string(iSet)+"/Qf";
+        Qf = H5File.ReadScalar(dsetName);
+
+        dsetName = "Materials/Material_"+ std::to_string(iSet)+"/kb0";
+        kb0 = H5File.ReadScalar(dsetName);
+
+        dsetName = "Materials/Material_"+ std::to_string(iSet)+"/Qb";
+        Qb = H5File.ReadScalar(dsetName);
+
+        dsetName = "Materials/Material_"+ std::to_string(iSet)+"/Vgb";
+        Vgb = H5File.ReadScalar(dsetName);
+
+    }
+
     if (dims=="3D"){
 
     }
 }
 
 T_DMatx TrapGB::CalcDMatx(const double phi, const double T){
+
+    //TODO: consider inlining!
 
     // Lattice phase
     double DLx = D0x1*exp(-DQx1/(T*R));

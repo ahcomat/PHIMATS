@@ -80,6 +80,9 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
     elStiffMatx.resize(nElements);
     elCapMatx.resize(nElements);
 
+    elCon.resize(nElements);
+    elTrapCon.resize(nElements); elDeltaTrap.resize(nElements);
+
     elemNodCoord.resize(nElements); // Initialize the size of node coordinates.
     Matd3x2 dummyElNodCoord;   // For node coordinates.
 
@@ -117,6 +120,10 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
             for(int iElem=0; iElem<nElements; iElem++){
 
                 elFlux.at(iElem).resize(nElGauss);
+                accessVec(elCon, iElem).resize(nElGauss);
+                accessVec(elTrapCon, iElem).resize(nElGauss);
+                accessVec(elDeltaTrap, iElem).resize(nElGauss);
+
                 el_gPhi.at(iElem).resize(nElGauss);
 
                 gaussPtCart.at(iElem).resize(nElGauss);
@@ -125,23 +132,23 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                 // Loop through nodes to get coordinates.
                 for(int iNod=0; iNod<nElNodes; iNod++){
 
-                    dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
-                    dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
+                    dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(accessVec(elemNodeConn, iElem, iNod)).at(0);
+                    dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(accessVec(elemNodeConn, iElem, iNod)).at(1);
 
-                    dummyElNod_gPhi[iNod] = nod_gPhi.at(elemNodeConn.at(iElem).at(iNod));
+                    dummyElNod_gPhi[iNod] = accessVec(nod_gPhi, accessVec(elemNodeConn, iElem, iNod));
                 }
 
                 elemNodCoord.at(iElem) = dummyElNodCoord;
 
                 // Loop through integration points.
-                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                    // Cart coord of iGauss point.
-                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Cart coord of iGaus point.
+                    dummyElemGauss.at(iGaus) = getGaussCart(accessVec(shapeFunc, iGaus), dummyElNodCoord);
                     // Derivatives and int-pt volume
-                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGaus), wts.at(iGaus), dummyIntVol.at(iGaus), accessVec(BMat, iElem, iGaus));
                     // Int-pt phi
-                    el_gPhi.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi;
+                    accessVec(el_gPhi, iElem, iGaus)  = accessVec(shapeFunc, iGaus)*dummyElNod_gPhi;
                 }
                 gaussPtCart.at(iElem) = dummyElemGauss;
                 intPtVol.at(iElem) = dummyIntVol;
@@ -175,25 +182,25 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                 // Loop through nodes to get coordinates.
                 for(int iNod=0; iNod<nElNodes; iNod++){
 
-                    dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
-                    dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
+                    dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(accessVec(elemNodeConn, iElem, iNod)).at(0);
+                    dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(accessVec(elemNodeConn, iElem, iNod)).at(1);
 
-                    dummyElNod_gPhi_HAGB[iNod] = nod_gPhi_HAGB.at(elemNodeConn.at(iElem).at(iNod));
-                    dummyElNod_gPhi_LAGB[iNod] = nod_gPhi_LAGB.at(elemNodeConn.at(iElem).at(iNod));
+                    dummyElNod_gPhi_HAGB[iNod] = accessVec(nod_gPhi_HAGB, accessVec(elemNodeConn, iElem, iNod));
+                    dummyElNod_gPhi_LAGB[iNod] = accessVec(nod_gPhi_LAGB, accessVec(elemNodeConn, iElem, iNod));
                 }
 
                 elemNodCoord.at(iElem) = dummyElNodCoord;
 
                 // Loop through integration points.
-                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                    // Cart coord of iGauss point.
-                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Cart coord of iGaus point.
+                    dummyElemGauss.at(iGaus) = getGaussCart(accessVec(shapeFunc, iGaus), dummyElNodCoord);
                     // Derivatives and int-pt volume
-                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGaus), wts.at(iGaus), dummyIntVol.at(iGaus), accessVec(BMat, iElem, iGaus));
                     // Int-pt phi
-                    el_gPhi_HAGB.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_HAGB;
-                    el_gPhi_LAGB.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_LAGB;
+                    accessVec(el_gPhi_HAGB, iElem, iGaus)  = accessVec(shapeFunc, iGaus)*dummyElNod_gPhi_HAGB;
+                    accessVec(el_gPhi_HAGB, iElem, iGaus)  = accessVec(shapeFunc, iGaus)*dummyElNod_gPhi_LAGB;
                 }
                 gaussPtCart.at(iElem) = dummyElemGauss;
                 intPtVol.at(iElem) = dummyIntVol;
@@ -230,6 +237,10 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
 
                 elFlux.at(iElem).resize(nElGauss);
 
+                accessVec(elCon, iElem).resize(nElGauss);
+                accessVec(elTrapCon, iElem).resize(nElGauss);
+                accessVec(elDeltaTrap, iElem).resize(nElGauss);
+
                 el_phi_j.at(iElem).resize(nElGauss);
                 el_gPhi_ii.at(iElem).resize(nElGauss);
                 el_gPhi_ij.at(iElem).resize(nElGauss);
@@ -241,29 +252,29 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                 // Loop through nodes to get coordinates.
                 for(int iNod=0; iNod<nElNodes; iNod++){
 
-                    dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
-                    dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
+                    dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(accessVec(elemNodeConn, iElem, iNod)).at(0);
+                    dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(accessVec(elemNodeConn, iElem, iNod)).at(1);
 
-                    dummyElNod_phi_j[iNod] = nod_phi_j.at(elemNodeConn.at(iElem).at(iNod));
-                    dummyElNod_gPhi_ii[iNod] = nod_gPhi_ii.at(elemNodeConn.at(iElem).at(iNod));
-                    dummyElNod_gPhi_ij[iNod] = nod_gPhi_ij.at(elemNodeConn.at(iElem).at(iNod));
-                    dummyElNod_gPhi_jj[iNod] = nod_gPhi_jj.at(elemNodeConn.at(iElem).at(iNod));
+                    dummyElNod_phi_j[iNod] = nod_phi_j.at(accessVec(elemNodeConn, iElem, iNod));
+                    dummyElNod_gPhi_ii[iNod] = nod_gPhi_ii.at(accessVec(elemNodeConn, iElem, iNod));
+                    dummyElNod_gPhi_ij[iNod] = nod_gPhi_ij.at(accessVec(elemNodeConn, iElem, iNod));
+                    dummyElNod_gPhi_jj[iNod] = nod_gPhi_jj.at(accessVec(elemNodeConn, iElem, iNod));
                 }
 
                 elemNodCoord.at(iElem) = dummyElNodCoord;
 
                 // Loop through integration points.
-                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                    // Cart coord of iGauss point.
-                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Cart coord of iGaus point.
+                    dummyElemGauss.at(iGaus) = getGaussCart(accessVec(shapeFunc, iGaus), dummyElNodCoord);
                     // Derivatives and int-pt volume
-                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGaus), wts.at(iGaus), dummyIntVol.at(iGaus), accessVec(BMat, iElem, iGaus));
                     // Int-pt phi
-                    el_phi_j.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_phi_j;
-                    el_gPhi_ii.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ii;
-                    el_gPhi_ij.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_ij;
-                    el_gPhi_jj.at(iElem).at(iGauss)  = shapeFunc.at(iGauss)*dummyElNod_gPhi_jj;
+                    accessVec(el_phi_j, iElem, iGaus)  = accessVec(shapeFunc, iGaus)*dummyElNod_phi_j;
+                    accessVec(el_gPhi_ii, iElem, iGaus)  = accessVec(shapeFunc, iGaus)*dummyElNod_gPhi_ii;
+                    accessVec(el_gPhi_ij, iElem, iGaus)  = accessVec(shapeFunc, iGaus)*dummyElNod_gPhi_ij;
+                    accessVec(el_gPhi_jj, iElem, iGaus)  = accessVec(shapeFunc, iGaus)*dummyElNod_gPhi_jj;
 
                 }
                 gaussPtCart.at(iElem) = dummyElemGauss;
@@ -284,20 +295,20 @@ void Tri3TH::InitializeElements(Nodes &Nodes, H5IO* H5File_rve){
                 // Loop through nodes to get coordinates.
                 for(int iNod=0; iNod<nElNodes; iNod++){
 
-                    dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(0);
-                    dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(elemNodeConn.at(iElem).at(iNod)).at(1);
+                    dummyElNodCoord(iNod, 0) = Nodes.getNodCoord(accessVec(elemNodeConn, iElem, iNod)).at(0);
+                    dummyElNodCoord(iNod, 1) = Nodes.getNodCoord(accessVec(elemNodeConn, iElem, iNod)).at(1);
 
                 }
 
                 elemNodCoord.at(iElem) = dummyElNodCoord;
 
                 // Loop through integration points.
-                for(int iGauss=0; iGauss<nElGauss; iGauss++){
+                for(int iGaus=0; iGaus<nElGauss; iGaus++){
                 
-                    // Cart coord of iGauss point.
-                    dummyElemGauss.at(iGauss) = getGaussCart(shapeFunc.at(iGauss), dummyElNodCoord);
+                    // Cart coord of iGaus point.
+                    dummyElemGauss.at(iGaus) = getGaussCart(accessVec(shapeFunc, iGaus), dummyElNodCoord);
                     // Derivatives and int-pt volume
-                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGauss), wts.at(iGauss), dummyIntVol.at(iGauss), BMat.at(iElem).at(iGauss));
+                    CalcCartDeriv(dummyElNodCoord, shapeFuncDeriv.at(iGaus), wts.at(iGaus), dummyIntVol.at(iGaus), accessVec(BMat, iElem, iGaus));
 
                 }
                 gaussPtCart.at(iElem) = dummyElemGauss;
@@ -347,9 +358,9 @@ void Tri3TH::getInPtCoords(T_nodStres& glIntPtCoords){
 
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-            std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+iGaus)[0] =  gaussPtCart.at(iElem).at(iGaus)[0];
-            std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+iGaus)[1] =  gaussPtCart.at(iElem).at(iGaus)[1];
-            std::get<std::vector<ColVecd3>>(glIntPtCoords).at(elemIDs.at(iElem)*nElGauss+iGaus)[2] =  0;
+            std::get<std::vector<ColVecd3>>(glIntPtCoords).at(accessVec(elemIDs,iElem)*nElGauss+iGaus)[0] =  gaussPtCart.at(iElem).at(iGaus)[0];
+            std::get<std::vector<ColVecd3>>(glIntPtCoords).at(accessVec(elemIDs,iElem)*nElGauss+iGaus)[1] =  gaussPtCart.at(iElem).at(iGaus)[1];
+            std::get<std::vector<ColVecd3>>(glIntPtCoords).at(accessVec(elemIDs,iElem)*nElGauss+iGaus)[2] =  0;
 
         }
     }
@@ -369,17 +380,17 @@ void Tri3TH::getInPtCoords(T_nodStres& glIntPtCoords){
 
 //         // Loop through element nodes to get nodal values.
 //         for(int iNod=0; iNod<nElNodes; iNod++){
-//             dummyElNodPhi[iNod] = nod_gPhi.at(elemNodeConn.at(iElem).at(iNod));
+//             dummyElNodPhi[iNod] = accessVec(nod_gPhi, accessVec(elemNodeConn, iElem, iNod));
 //         }
 
 //         for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-//             const Matd2x3& dummyBMat = BMat.at(iElem).at(iGaus); // derivative matrix for the given gauss point.
+//             const Matd2x3& dummyBMat = accessVec(BMat, iElem, iGaus); // derivative matrix for the given gauss point.
 //             elGrad_gPhi.at(iElem).at(iGaus) = dummyBMat*dummyElNodPhi;
 //             dummyElNodLapPhi = dummyBMat.transpose()*dummyBMat*dummyElNodPhi;
 
 //             iNode = 0;
-//             for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
+//             for(auto iNod2=accessVec(elemNodeConn,iElem).begin(); iNod2!=accessVec(elemNodeConn,iElem).end(); iNod2++){
 
 //                 std::get<std::vector<ColVecd2>>(nodGrad).at(*iNod2) += elGrad_gPhi.at(iElem).at(iGaus);
 //                 nodCount.at(*iNod2) += 1;
@@ -393,129 +404,136 @@ void Tri3TH::getInPtCoords(T_nodStres& glIntPtCoords){
 void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vector<std::vector<double>>* elPhi_d_pt){
 
     Matd2x2 DMat; 
-
+    Matd3x3 BDB, BTB;
     vector<Matd3x3> elKDMatx(nElements); 
     vector<Matd3x3> elKTMatx(nElements); 
 
-    double dummydVol;       // dummy for int-pt volume.
+    // Precompute thermal constants to avoid division inside any loop
+    const double invRT = 1.0 / (R * T); 
 
     if (Trapping=="GBTrapping"){       // GB
 
+        TrapGB* gbTrap = dynamic_cast<TrapGB*>(mat);
         Matd2x2 TMat; 
 
         ColVecd3 dummyElNod_gPhi;  // For element nodal values of phi.
-        double gPhi;               // dummy for int-pt phi.
 
         // Loop through all elements.
         for(int iElem=0; iElem<nElements; iElem++){
 
             // MUST BE POPULATED WITH ZEROS    
-            elStiffMatx.at(iElem).setZero();
-            elKDMatx.at(iElem).setZero();  
-            elKTMatx.at(iElem).setZero();  
-            elCapMatx.at(iElem).setZero(); 
+            accessVec(elStiffMatx, iElem).setZero();
+            accessVec(elKDMatx, iElem).setZero();  
+            accessVec(elKTMatx, iElem).setZero();  
+            accessVec(elCapMatx, iElem).setZero(); 
 
             // Loop through element nodes to get nodal values.
             for(int iNod=0; iNod<nElNodes; iNod++){
-                dummyElNod_gPhi[iNod] = nod_gPhi.at(elemNodeConn.at(iElem).at(iNod));
+                dummyElNod_gPhi[iNod] = accessVec(nod_gPhi, accessVec(elemNodeConn, iElem, iNod));
             }              
 
             // Integration over all Gauss points.
-            for (int iGauss=0; iGauss<nElGauss; iGauss++){
+            for (int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                gPhi = el_gPhi.at(iElem).at(iGauss);  // gPhi of the current int-pt
+                const double gPhi = accessVec(el_gPhi, iElem, iGaus);  // gPhi of the current int-pt
 
-                DMat = std::get<Matd2x2>(mat->CalcDMatx(gPhi, T));
-                TMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcTMatx(gPhi, T));
+                DMat = std::get<Matd2x2>(gbTrap->CalcDMatx(gPhi, T));
+                TMat = std::get<Matd2x2>(gbTrap->CalcTMatx(gPhi, T));
 
-                const Matd2x3& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
-                const RowVecd3& dummyShFunc = shapeFunc.at(iGauss);
-                dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
+                const Matd2x3& dummyBMat = accessVec(BMat, iElem, iGaus); // derivative matrix for the given gauss point.
+                const RowVecd3& dummyShFunc = accessVec(shapeFunc, iGaus);
+                const double dummydVol = accessVec(intPtVol, iElem, iGaus);  // Volume of the current int-pt 
+                BDB = dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
+                BTB = dummyBMat.transpose()*TMat*dummyBMat*dummydVol;
 
                 // [B_ji]^T k_jj B_ji
-                elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
+                accessVec(elKDMatx, iElem).noalias() += BDB;
                 // [B_ji]^T k_jj B_ji
-                elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*TMat*dummyBMat*dummyElNod_gPhi*dummyShFunc*dummydVol; 
+                accessVec(elKTMatx, iElem).noalias() += (BTB*dummyElNod_gPhi)*dummyShFunc; 
                 // [N_i]^T N_i
-                elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
+                accessVec(elCapMatx, iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
             }
 
-            elStiffMatx.at(iElem) = dt*elKDMatx.at(iElem) - dt*elKTMatx.at(iElem) + elCapMatx.at(iElem);
+            accessVec(elStiffMatx, iElem) = dt*accessVec(elKDMatx, iElem) - dt*accessVec(elKTMatx, iElem) + accessVec(elCapMatx, iElem);
         }
 
     } else if (Trapping=="HLGBTrapping"){
 
-        ColVecd3 dummyElNod_gPhi_HAGB, dummyElNod_gPhi_LAGB;  // For element nodal values of gPhi.
-        double  gPhi_HAGB, gPhi_LAGB;    
+        TrapHLGB* hlgbTrap = dynamic_cast<TrapHLGB*>(mat);
 
-        double zeta_HAGB = dynamic_cast<TrapHLGB*>(mat)->get_zeta_HAGB();
-        double zeta_LAGB = dynamic_cast<TrapHLGB*>(mat)->get_zeta_LAGB();
+        ColVecd3 dummyElNod_gPhi_HAGB, dummyElNod_gPhi_LAGB;  // For element nodal values of gPhi.
+
+        // Pre-scale material properties
+        const double c_zeta_HAGB = hlgbTrap->get_zeta_HAGB() * invRT;
+        const double c_zeta_LAGB = hlgbTrap->get_zeta_LAGB() * invRT;
 
         // Loop through all elements.
         for(int iElem=0; iElem<nElements; iElem++){
 
             // MUST BE POPULATED WITH ZEROS    
-            elStiffMatx.at(iElem).setZero();
-            elKDMatx.at(iElem).setZero();  
-            elKTMatx.at(iElem).setZero();  
-            elCapMatx.at(iElem).setZero(); 
+            accessVec(elStiffMatx, iElem).setZero();
+            accessVec(elKDMatx, iElem).setZero();  
+            accessVec(elKTMatx, iElem).setZero();  
+            accessVec(elCapMatx, iElem).setZero(); 
+            BDB.setZero();
 
             // Loop through element nodes to get nodal values.
             for(int iNod=0; iNod<nElNodes; iNod++){
-                dummyElNod_gPhi_HAGB[iNod] = nod_gPhi_HAGB.at(elemNodeConn.at(iElem).at(iNod));
-                dummyElNod_gPhi_LAGB[iNod] = nod_gPhi_LAGB.at(elemNodeConn.at(iElem).at(iNod));
+                dummyElNod_gPhi_HAGB[iNod] = accessVec(nod_gPhi_HAGB, accessVec(elemNodeConn, iElem, iNod));
+                dummyElNod_gPhi_LAGB[iNod] = accessVec(nod_gPhi_LAGB, accessVec(elemNodeConn, iElem, iNod));
             }              
 
             // Integration over all Gauss points.
-            for (int iGauss=0; iGauss<nElGauss; iGauss++){
+            for (int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                DMat = std::get<Matd2x2>(mat->CalcDMatx(1.0, T));
+                DMat = std::get<Matd2x2>(hlgbTrap->CalcDMatx(1.0, T));
                 
                 // Useless for now, but can be used for varying diffusivity
-                gPhi_HAGB = el_gPhi_HAGB.at(iElem).at(iGauss);
-                gPhi_LAGB = el_gPhi_LAGB.at(iElem).at(iGauss);
+                const double gPhi_HAGB = accessVec(el_gPhi_HAGB, iElem, iGaus);
+                const double gPhi_LAGB = accessVec(el_gPhi_LAGB, iElem, iGaus);
 
-                const Matd2x3& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
-                const RowVecd3& dummyShFunc = shapeFunc.at(iGauss);
-                dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
+                const Matd2x3& dummyBMat = accessVec(BMat, iElem, iGaus); // derivative matrix for the given gauss point.
+                const RowVecd3& dummyShFunc = accessVec(shapeFunc, iGaus);
+                const double dummydVol = accessVec(intPtVol, iElem, iGaus);  // Volume of the current int-pt 
+                BDB = dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
 
                 // [B_ji]^T k_jj B_ji
-                elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
+                accessVec(elKDMatx, iElem).noalias() += BDB;
                 // [B_ji]^T k_jj B_ji
-                elKTMatx.at(iElem).noalias() += 
-                dummyBMat.transpose()*DMat*zeta_HAGB/(R*T)*dummyBMat*dummyElNod_gPhi_HAGB*dummyShFunc*dummydVol + 
-                dummyBMat.transpose()*DMat*zeta_LAGB/(R*T)*dummyBMat*dummyElNod_gPhi_LAGB*dummyShFunc*dummydVol;
+                accessVec(elKTMatx, iElem).noalias() += (BDB*dummyElNod_gPhi_HAGB)*(c_zeta_HAGB*dummyShFunc) + 
+                    (BDB*dummyElNod_gPhi_LAGB)*(c_zeta_LAGB*dummyShFunc);
 
                 // [N_i]^T N_i
-                elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
+                accessVec(elCapMatx, iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
             }
 
-            elStiffMatx.at(iElem) = dt*elKDMatx.at(iElem) - dt*elKTMatx.at(iElem) + elCapMatx.at(iElem);
+            accessVec(elStiffMatx, iElem) = dt*accessVec(elKDMatx, iElem) - dt*accessVec(elKTMatx, iElem) + accessVec(elCapMatx, iElem);
         }
 
     } else if (Trapping=="2PhaseTrapping"){        // 2Phase
 
-        ColVecd3 dummyElNod_phi_j, dummyElNod_gPhi_ij, dummyElNod_gPhi_ii,
-        dummyElNod_gPhi_jj;
-        double phi_j, gPhi_ii, gPhi_ij, gPhi_jj;              
+        TrapPhase* phaseTrap = dynamic_cast<TrapPhase*>(mat);
+
+        ColVecd3 dummyElNod_phi_j, dummyElNod_gPhi_ij, dummyElNod_gPhi_ii, dummyElNod_gPhi_jj;
+
+        const double c_zeta_j  = phaseTrap->get_zeta_j() * invRT + phaseTrap->get_S_over_R();
+        const double c_zeta_ij = phaseTrap->get_zeta_ij() * invRT;
+        const double c_zeta_jj = phaseTrap->get_zeta_jj() * invRT;
+        const double c_zeta_ii = phaseTrap->get_zeta_ii() * invRT;             
 
         vector<int> NodeConn;
-
-        double zeta_j = dynamic_cast<TrapPhase*>(mat)->get_zeta_j();
-        double zeta_ij = dynamic_cast<TrapPhase*>(mat)->get_zeta_ij();
-        double zeta_jj = dynamic_cast<TrapPhase*>(mat)->get_zeta_jj();
-        double zeta_ii = dynamic_cast<TrapPhase*>(mat)->get_zeta_ii();
 
         // Loop through all elements.
         for(int iElem=0; iElem<nElements; iElem++){
 
-            NodeConn = elemNodeConn.at(iElem);
+            NodeConn = accessVec(elemNodeConn,iElem);
 
             // MUST BE POPULATED WITH ZEROS    
-            elStiffMatx.at(iElem).setZero();
-            elKDMatx.at(iElem).setZero();  
-            elKTMatx.at(iElem).setZero();  
-            elCapMatx.at(iElem).setZero(); 
+            accessVec(elStiffMatx, iElem).setZero();
+            accessVec(elKDMatx, iElem).setZero();  
+            accessVec(elKTMatx, iElem).setZero();  
+            accessVec(elCapMatx, iElem).setZero(); 
+            BDB.setZero();
 
             // Loop through element nodes to get nodal values.
             for(int iNod=0; iNod<nElNodes; iNod++){
@@ -526,33 +544,33 @@ void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vec
             }              
 
             // Integration over all Gauss points.
-            for (int iGauss=0; iGauss<nElGauss; iGauss++){
+            for (int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                phi_j = el_phi_j.at(iElem).at(iGauss);  // values of the current int-pt
-                gPhi_ii = el_gPhi_ii.at(iElem).at(iGauss);
-                gPhi_ij = el_gPhi_ij.at(iElem).at(iGauss);
-                gPhi_jj = el_gPhi_jj.at(iElem).at(iGauss);
+                const double phi_j = accessVec(el_phi_j, iElem, iGaus);  // values of the current int-pt
+                const double gPhi_ii = accessVec(el_gPhi_ii, iElem, iGaus);
+                const double gPhi_ij = accessVec(el_gPhi_ij, iElem, iGaus);
+                const double gPhi_jj = accessVec(el_gPhi_jj, iElem, iGaus);
 
-                // DMat = std::get<Matd2x2>(dynamic_cast<TrapPhase*>(mat)->CalcDMatx(phi_j, T));
+                DMat = std::get<Matd2x2>(phaseTrap->CalcDMatx(phi_j, T));
 
-                DMat = std::get<Matd2x2>(mat->CalcDMatx(phi_j, T));
+                const Matd2x3& dummyBMat = accessVec(BMat, iElem, iGaus); // derivative matrix for the given gauss point.
+                const RowVecd3& dummyShFunc = accessVec(shapeFunc, iGaus);
+                const double dummydVol = accessVec(intPtVol, iElem, iGaus);  // Volume of the current int-pt 
 
-                const Matd2x3& dummyBMat = BMat.at(iElem).at(iGauss); // derivative matrix for the given gauss point.
-                const RowVecd3& dummyShFunc = shapeFunc.at(iGauss);
-                dummydVol = intPtVol.at(iElem).at(iGauss);  // Volume of the current int-pt 
+                BDB = dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
 
                 // [B_ji]^T k_jj B_ji
-                elKDMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*dummyBMat*dummydVol;
+                accessVec(elKDMatx, iElem).noalias() += BDB;
                 // [B_ji]^T k_jj B_ji
-                elKTMatx.at(iElem).noalias() += dummyBMat.transpose()*DMat*zeta_j/(R*T)*dummyBMat*dummyElNod_phi_j*dummyShFunc*dummydVol + 
-                dummyBMat.transpose()*DMat*zeta_ii/(R*T)*dummyBMat*dummyElNod_gPhi_ii*dummyShFunc*dummydVol + 
-                dummyBMat.transpose()*DMat*zeta_ij/(R*T)*dummyBMat*dummyElNod_gPhi_ij*dummyShFunc*dummydVol +
-                dummyBMat.transpose()*DMat*zeta_jj/(R*T)*dummyBMat*dummyElNod_gPhi_jj*dummyShFunc*dummydVol; 
+                accessVec(elKTMatx, iElem).noalias() += (BDB*dummyElNod_phi_j)*(c_zeta_j*dummyShFunc) + 
+                    (BDB*dummyElNod_gPhi_ii)*(c_zeta_ii*dummyShFunc) + 
+                    (BDB*dummyElNod_gPhi_ij)*(c_zeta_ij*dummyShFunc) +
+                    (BDB*dummyElNod_gPhi_jj)*(c_zeta_jj*dummyShFunc); 
                 // [N_i]^T N_i
-                elCapMatx.at(iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
+                accessVec(elCapMatx, iElem).noalias() += (dummyShFunc.transpose()*dummyShFunc)*dummydVol;
             }
 
-            elStiffMatx.at(iElem) = dt*elKDMatx.at(iElem) - dt*elKTMatx.at(iElem) + elCapMatx.at(iElem);
+            accessVec(elStiffMatx, iElem) = dt*accessVec(elKDMatx, iElem) - dt*accessVec(elKTMatx, iElem) + accessVec(elCapMatx, iElem);
         }
     }
 
@@ -576,14 +594,36 @@ double Tri3TH::CalcAvCon(const double* globalBuffer){
 
         // Get element nodal concentration from the solution vector. 
         for(int iDof=0; iDof<nElConDofs; iDof++){
-            dummyCon[iDof] = globalBuffer[elemConDof.at(iElem).at(iDof)];
+            dummyCon[iDof] = globalBuffer[accessVec(elemConDof,iElem,iDof)];
         }
 
         // Gauss points
         for(int iGaus=0; iGaus<nElGauss; iGaus++){
-            IntPtCon = shapeFunc.at(iGaus)*dummyCon;
-            TotVol += intPtVol.at(iElem).at(iGaus);
-            AvCon += IntPtCon*intPtVol.at(iElem).at(iGaus);
+
+            const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
+            const double& dummydVol = accessVec(intPtVol, iElem, iGaus);
+
+            IntPtCon = N_i*dummyCon;
+            TotVol += dummydVol;
+            AvCon += IntPtCon*dummydVol;
+        }
+    }
+
+    return AvCon/TotVol;
+}
+
+double Tri3TH::CalcAvTrapCon(){
+
+    double conTrap, AvCon = 0, TotVol = 0;
+
+    for(int iElem=0; iElem<nElements; iElem++){
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            const double& dummydVol = accessVec(intPtVol, iElem, iGaus);
+
+            conTrap = accessVec(elTrapCon, iElem, iGaus);
+            TotVol += dummydVol;
+            AvCon += conTrap*dummydVol;
         }
     }
 
@@ -593,15 +633,23 @@ double Tri3TH::CalcAvCon(const double* globalBuffer){
 void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres& nodFlux, T_nodStres& intPtFlux, vector<double>& nodCount, const double T, const std::vector<std::vector<double>>* elPhi_d_ptr){
 
     Matd2x2 DMat; 
-    double IntPtCon;   // Integration point concnetration.
+    Matd2x3 DB;
     ColVecd3 dummyCon; // For element nodal concentration.
     int iNode=0;
 
+    // Precompute thermal constants to avoid division inside any loop
+    const double invRT = 1.0 / (R * T); 
+
+    // --- OPTIMIZATION: Extract variant references ONCE outside the loops ---
+    auto& ref_intPtFlux = std::get<std::vector<ColVecd3>>(intPtFlux);
+    auto& ref_nodFlux   = std::get<std::vector<ColVecd2>>(nodFlux);
+
     if (Trapping=="GBTrapping"){       // GB
         
-        Matd2x2 TMat; 
-        double gPhi; // gPhi for the current integraition point.
-        double dummydVol;
+        TrapGB* gbTrap = dynamic_cast<TrapGB*>(mat);
+        Matd2x2 TMat;
+        Matd2x3 TB; 
+
         ColVecd3 dummyElNod_gPhi; // vector of element nodal gPhi.
 
         // Loop through all elements
@@ -609,153 +657,169 @@ void Tri3TH::CalcFlux(BaseTrapping* mat, const double* globalBuffer, T_nodStres&
 
             // Get element nodal concentration and gPhi from the solution vector. 
             for(int iDof=0; iDof<nElConDofs; iDof++){
-                dummyCon[iDof] = globalBuffer[elemConDof.at(iElem).at(iDof)];
-                dummyElNod_gPhi[iDof] = nod_gPhi.at(elemConDof.at(iElem).at(iDof));
+                int gNod = accessVec(elemConDof, iElem, iDof);
+                dummyCon[iDof]        = globalBuffer[gNod];
+                dummyElNod_gPhi[iDof] = nod_gPhi.at(gNod);
             }
 
             // Gauss points
             for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                gPhi = el_gPhi.at(iElem).at(iGaus);
-                IntPtCon = shapeFunc.at(iGaus)*dummyCon;
-                dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current int-pt 
+                const double gPhi = accessVec(el_gPhi, iElem, iGaus);
+                const double IntPtCon = accessVec(shapeFunc, iGaus)*dummyCon;
+                const double dummydVol = accessVec(intPtVol, iElem, iGaus);  
+                const Matd2x3& dummyBMat = accessVec(BMat, iElem, iGaus);
+                const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
 
-                DMat = std::get<Matd2x2>(mat->CalcDMatx(gPhi, T));
-                TMat = std::get<Matd2x2>(dynamic_cast<TrapGB*>(mat)->CalcTMatx(gPhi, T));
+                DMat = std::get<Matd2x2>(gbTrap->CalcDMatx(gPhi, T));
+                TMat = std::get<Matd2x2>(gbTrap->CalcTMatx(gPhi, T));
+                DB = DMat*dummyBMat;
+                TB = TMat*dummyBMat;
 
                 // Int pt flux
-                elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon 
-                                            + TMat*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi;
+                auto& flux = accessVec(elFlux, iElem, iGaus);
+                flux = -DB * dummyCon + TB * (IntPtCon * dummyElNod_gPhi);
 
-                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[0] =  elFlux.at(iElem).at(iGaus)[0];
-                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[1] =  elFlux.at(iElem).at(iGaus)[1];
-                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[2] =  0;
+                int outIdx = accessVec(elemIDs, iElem) * nElGauss + iGaus;
+                ref_intPtFlux[outIdx][0] = flux[0];
+                ref_intPtFlux[outIdx][1] = flux[1];
+                ref_intPtFlux[outIdx][2] = 0.0;
 
-                // // Nodal values with shape function approximation
-                // for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
-                //     std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus)*dummydVol;
-                //     nodCount.at(*iNod2) += dummydVol;
-                // }
+                const auto& NodeConn = elemNodeConn[iElem];
 
                 // Nodal values
-                iNode = 0;
-                for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
-
-                    std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
-                    nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
-                    iNode += 1;
+                for(int iNode=0; iNode<nElNodes; iNode++){
+                    double weight = N_i[iNode] * dummydVol;
+                    int gNod = NodeConn[iNode];
+                    
+                    ref_nodFlux[gNod] += flux * weight;
+                    nodCount.at(gNod) += weight;
                 }
             }
         }
 
     } else if (Trapping=="HLGBTrapping"){ 
-        
+
+        TrapHLGB* hlgbTrap = dynamic_cast<TrapHLGB*>(mat);
         ColVecd3 dummyElNod_gPhi_HAGB, dummyElNod_gPhi_LAGB;
-        double gPhi_HAGB, gPhi_LAGB;              
 
-        double zeta_HAGB = dynamic_cast<TrapHLGB*>(mat)->get_zeta_HAGB();
-        double zeta_LAGB = dynamic_cast<TrapHLGB*>(mat)->get_zeta_LAGB();
-
-        double dummydVol;
+        // Pre-scale material properties
+        const double c_zeta_HAGB = hlgbTrap->get_zeta_HAGB() * invRT;
+        const double c_zeta_LAGB = hlgbTrap->get_zeta_LAGB() * invRT;
 
         // Loop through all elements
         for(int iElem=0; iElem<nElements; iElem++){
 
             // Get element nodal concentration and gPhi from the solution vector. 
             for(int iDof=0; iDof<nElConDofs; iDof++){
-                dummyCon[iDof] = globalBuffer[elemConDof.at(iElem).at(iDof)];
-                dummyElNod_gPhi_HAGB[iDof] = nod_gPhi_HAGB.at(elemConDof.at(iElem).at(iDof));
-                dummyElNod_gPhi_LAGB[iDof] = nod_gPhi_LAGB.at(elemConDof.at(iElem).at(iDof));
+                int gNod = accessVec(elemConDof, iElem, iDof);
+                dummyCon[iDof]             = globalBuffer[gNod];
+                dummyElNod_gPhi_HAGB[iDof] = nod_gPhi_HAGB[gNod];
+                dummyElNod_gPhi_LAGB[iDof] = nod_gPhi_LAGB[gNod];
             }
 
             // Gauss points
             for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                IntPtCon = shapeFunc.at(iGaus)*dummyCon;
-                dummydVol = intPtVol.at(iElem).at(iGaus);  // Volume of the current int-pt 
+                const Matd2x3& dummyBMat = accessVec(BMat, iElem, iGaus);
+                const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
+                const double IntPtCon = accessVec(shapeFunc, iGaus)*dummyCon;
+                const double dummydVol = accessVec(intPtVol, iElem, iGaus); 
 
-                DMat = std::get<Matd2x2>(mat->CalcDMatx(1.0, T));
+                DMat = std::get<Matd2x2>(hlgbTrap->CalcDMatx(1.0, T));
+                DB = DMat*dummyBMat;
 
                 // Int pt flux
-                elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon 
-                                             + DMat*zeta_HAGB/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi_HAGB
-                                             + DMat*zeta_LAGB/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi_LAGB;
+                auto& flux = accessVec(elFlux, iElem, iGaus);
+                
+                flux = -DB * (
+                    -(dummyCon) 
+                    + (c_zeta_HAGB * IntPtCon * dummyElNod_gPhi_HAGB)
+                    + (c_zeta_LAGB * IntPtCon * dummyElNod_gPhi_LAGB)
+                );
 
+                const auto& NodeConn = elemNodeConn[iElem];
 
-                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[0] =  elFlux.at(iElem).at(iGaus)[0];
-                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[1] =  elFlux.at(iElem).at(iGaus)[1];
-                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[2] =  0;
+                int outIdx = accessVec(elemIDs, iElem) * nElGauss + iGaus;
+                ref_intPtFlux[outIdx][0] = flux[0];
+                ref_intPtFlux[outIdx][1] = flux[1];
+                ref_intPtFlux[outIdx][2] = 0.0;
 
-                // // Nodal values with shape function approximation
-                // for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
-                //     std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus)*dummydVol;
-                //     nodCount.at(*iNod2) += dummydVol;
-                // }
-
-                // Nodal values
-                iNode = 0;
-                for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
-
-                    std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
-                    nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
-                    iNode += 1;
+                for(int iNode=0; iNode<nElNodes; iNode++){
+                    double weight = N_i[iNode] * dummydVol;
+                    int gNod = NodeConn[iNode];
+                    
+                    ref_nodFlux[gNod] += flux * weight;
+                    nodCount.at(gNod) += weight;
                 }
             }
         }
 
     } else if (Trapping=="2PhaseTrapping"){        // 2Phase
 
+        TrapPhase* phaseTrap = dynamic_cast<TrapPhase*>(mat);
         ColVecd3 dummyElNod_phi_j, dummyElNod_gPhi_ij, dummyElNod_gPhi_ii,
         dummyElNod_gPhi_jj;
-        double phi_j, gPhi_ii, gPhi_ij, gPhi_jj;              
 
-        double zeta_j = dynamic_cast<TrapPhase*>(mat)->get_zeta_j();
-        double zeta_ij = dynamic_cast<TrapPhase*>(mat)->get_zeta_ij();
-        double zeta_jj = dynamic_cast<TrapPhase*>(mat)->get_zeta_jj();
-        double zeta_ii = dynamic_cast<TrapPhase*>(mat)->get_zeta_ii();
+        const double c_zeta_j  = phaseTrap->get_zeta_j() * invRT;
+        const double c_zeta_ij = phaseTrap->get_zeta_ij() * invRT;
+        const double c_zeta_jj = phaseTrap->get_zeta_jj() * invRT;
+        const double c_zeta_ii = phaseTrap->get_zeta_ii() * invRT;
 
         // Loop through all elements
         for(int iElem=0; iElem<nElements; iElem++){
 
             // Loop through element nodes to get nodal values.
             for(int iDof=0; iDof<nElConDofs; iDof++){
-                dummyCon[iDof] = globalBuffer[elemConDof.at(iElem).at(iDof)];
-                dummyElNod_phi_j[iDof] = nod_phi_j.at(elemConDof.at(iElem).at(iDof));
-                dummyElNod_gPhi_ii[iDof] = nod_gPhi_ii.at(elemConDof.at(iElem).at(iDof));
-                dummyElNod_gPhi_ij[iDof] = nod_gPhi_ij.at(elemConDof.at(iElem).at(iDof));
-                dummyElNod_gPhi_jj[iDof] = nod_gPhi_jj.at(elemConDof.at(iElem).at(iDof));
+                int gNod = accessVec(elemConDof, iElem, iDof);
+                dummyCon[iDof]           = globalBuffer[gNod];
+                dummyElNod_phi_j[iDof]   = nod_phi_j.at(gNod);
+                dummyElNod_gPhi_ii[iDof] = nod_gPhi_ii.at(gNod);
+                dummyElNod_gPhi_ij[iDof] = nod_gPhi_ij.at(gNod);
+                dummyElNod_gPhi_jj[iDof] = nod_gPhi_jj.at(gNod);
             }
 
             // Gauss points
             for(int iGaus=0; iGaus<nElGauss; iGaus++){
 
-                IntPtCon = shapeFunc.at(iGaus)*dummyCon;
+                const double IntPtCon = accessVec(shapeFunc, iGaus)*dummyCon;
 
-                phi_j = el_phi_j.at(iElem).at(iGaus);  // values of the current int-pt
-                gPhi_ii = el_gPhi_ii.at(iElem).at(iGaus);
-                gPhi_ij = el_gPhi_ij.at(iElem).at(iGaus);
-                gPhi_jj = el_gPhi_jj.at(iElem).at(iGaus);
+                const double phi_j = accessVec(el_phi_j, iElem, iGaus);  // values of the current int-pt
+                const double gPhi_ii = accessVec(el_gPhi_ii, iElem, iGaus);
+                const double gPhi_ij = accessVec(el_gPhi_ij, iElem, iGaus);
+                const double gPhi_jj = accessVec(el_gPhi_jj, iElem, iGaus);
 
-                DMat = std::get<Matd2x2>(mat->CalcDMatx(phi_j, T));
+                DMat = std::get<Matd2x2>(phaseTrap->CalcDMatx(phi_j, T));
+
+                const Matd2x3& dummyBMat = accessVec(BMat, iElem, iGaus); // derivative matrix for the given gauss point.
+                const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
+                const double dummydVol = accessVec(intPtVol, iElem, iGaus);  // Volume of the current int-pt 
+
+                DB = DMat*dummyBMat;
 
                 // Int pt flux
-                elFlux.at(iElem).at(iGaus) = - DMat*BMat.at(iElem).at(iGaus)*dummyCon 
-                                             + DMat*zeta_j/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_phi_j
-                                             + DMat*zeta_ii/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi_ii
-                                             + DMat*zeta_ij/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi_ij
-                                             + DMat*zeta_jj/(R*T)*IntPtCon*BMat.at(iElem).at(iGaus)*dummyElNod_gPhi_jj;
+                auto& flux = accessVec(elFlux, iElem, iGaus);
+                flux = DB * (
+                    -(dummyCon) 
+                    + (c_zeta_j  * IntPtCon * dummyElNod_phi_j)
+                    + (c_zeta_ii * IntPtCon * dummyElNod_gPhi_ii)
+                    + (c_zeta_ij * IntPtCon * dummyElNod_gPhi_ij)
+                    + (c_zeta_jj * IntPtCon * dummyElNod_gPhi_jj)
+                );
 
-                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[0] =  elFlux.at(iElem).at(iGaus)[0];
-                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[1] =  elFlux.at(iElem).at(iGaus)[1];
-                std::get<std::vector<ColVecd3>>(intPtFlux).at(elemIDs.at(iElem)*nElGauss+iGaus)[2] =  0;
+                const auto& NodeConn = elemNodeConn.at(iElem);
 
-                // Nodal values
-                iNode = 0;
-                for(auto iNod2=elemNodeConn.at(iElem).begin(); iNod2!=elemNodeConn.at(iElem).end(); iNod2++){
+                int outIdx = accessVec(elemIDs, iElem) * nElGauss + iGaus;
+                ref_intPtFlux[outIdx][0] = flux[0];
+                ref_intPtFlux[outIdx][1] = flux[1];
+                ref_intPtFlux[outIdx][2] = 0.0;
 
-                    std::get<std::vector<ColVecd2>>(nodFlux).at(*iNod2) += elFlux.at(iElem).at(iGaus)*shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
-                    nodCount.at(*iNod2) += shapeFunc.at(iGaus)[iNode]*wts.at(iGaus);
-                    iNode += 1;
+                for(int iNode=0; iNode<nElNodes; iNode++){
+                    double weight = N_i[iNode] * dummydVol;
+                    int gNod = NodeConn[iNode]; // Vector lookups using index are much faster
+                    
+                    ref_nodFlux[gNod] += flux * weight;
+                    nodCount.at(gNod) += weight;
                 }
             }
         }
@@ -771,4 +835,160 @@ void Tri3TH::CalcFsrc(const double conB, BaseTrapping* mat, double* FsrcBuffer, 
 
 void Tri3TH::CalcElCon(const double* globalBuffer){
 
+    ColVecd3 nodCon;
+
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        // Cache the element's DOF connectivity row once
+        const auto& elDofs = accessVec(elemConDof, iElem);
+
+        // Unroll the 3-DOF fetch directly (Bypasses loop overhead)
+        nodCon(0) = globalBuffer[elDofs[0]];
+        nodCon(1) = globalBuffer[elDofs[1]];
+        nodCon(2) = globalBuffer[elDofs[2]];
+
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+            const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
+            accessVec(elCon, iElem, iGaus) = N_i.dot(nodCon);
+        }
+    }
+}
+
+void Tri3TH::CalcElTrapCon(const vector<double>& nodTrapCon){
+
+    ColVecd3 nodCon;
+
+    for(int iElem=0; iElem<nElements; iElem++){
+
+        // Cache the element's DOF connectivity row once
+        const auto& elDofs = accessVec(elemConDof, iElem);
+
+        // Unroll the 3-DOF fetch directly (Bypasses loop overhead)
+        nodCon(0) = nodTrapCon[elDofs[0]];
+        nodCon(1) = nodTrapCon[elDofs[1]];
+        nodCon(2) = nodTrapCon[elDofs[2]];
+
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+            const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
+            accessVec(elTrapCon, iElem, iGaus) = N_i.dot(nodCon);
+        }
+    }
+}
+
+void Tri3TH::CalcPrecipitaitonCon(BaseTrapping* mat, const double T){
+
+    TrapPhase* phaseDriftMat = dynamic_cast<TrapPhase*>(mat);
+
+    double Xmax = phaseDriftMat->get_Xmax();
+    double kf0 = phaseDriftMat->get_kf0();
+    double Qf = phaseDriftMat->get_Qf();
+    double kb0 = phaseDriftMat->get_kb0();
+    double Qb = phaseDriftMat->get_Qb();
+    double mask;
+    double conTrap; double conTrapOld;
+    double conL; double deltsConTrap;
+
+    double kf = kf0 * std::exp(-Qf / (R * T));
+    double kb = kb0 * std::exp(-Qb / (R * T));
+
+    const double epsilon = 0.1; 
+
+    for(int iElem=0; iElem<nElements; iElem++){
+        
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            double phi = accessVec(el_phi_j, iElem, iGaus);
+            
+            // Mask is 1.0 ONLY if phi is practically 0.0
+            double mask = (phi < epsilon) ? 1.0 : 0.0;
+
+            conTrapOld = accessVec(elTrapCon, iElem, iGaus);
+            conL = accessVec(elCon, iElem, iGaus);
+
+            conTrap = (conTrapOld + dt * mask * kf * conL * Xmax) / (1.0 + dt * mask * (kf * conL + kb));
+
+            accessVec(elTrapCon, iElem, iGaus) = conTrap;
+            accessVec(elDeltaTrap, iElem, iGaus) = conTrap - conTrapOld;
+
+        }
+    }
+}
+
+void Tri3TH::CalcGBTrapCon(BaseTrapping* mat, const double T){
+
+    TrapGB* gbTrapMat = dynamic_cast<TrapGB*>(mat);
+
+    double Vgb = gbTrapMat->get_Vgb();
+    double kf0 = gbTrapMat->get_kf0();
+    double Qf = gbTrapMat->get_Qf();
+    double kb0 = gbTrapMat->get_kb0();
+    double Qb = gbTrapMat->get_Qb();
+    double conTrap; double conTrapOld;
+    double conL; double deltsConTrap;
+
+    // Precompute all constants and inverses outside the loops
+    double kf = kf0 * std::exp(-Qf / (R * T));
+    double kb = kb0 * std::exp(-Qb / (R * T));
+    double invVgb = 1.0 / Vgb; // Multiplication is much faster than division
+
+
+    for(int iElem=0; iElem<nElements; iElem++){
+        
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            const double gPhi = accessVec(el_gPhi, iElem, iGaus);;
+
+            double conTrapOld = accessVec(elTrapCon, iElem, iGaus);
+            double conL = accessVec(elCon, iElem, iGaus);
+
+            conTrap = (conTrapOld + dt * kf * conL * gPhi * invVgb) / (1.0 + dt * (kf * conL + kb));
+
+            accessVec(elTrapCon, iElem, iGaus) = conTrap;
+            accessVec(elDeltaTrap, iElem, iGaus) = conTrap - conTrapOld;
+
+        }
+    }
+}
+
+void Tri3TH::CalcTrapRHS(double* FtrapBuffer){
+
+    ColVecd3 dummyFtrap;
+
+    for(int iElem=0; iElem<nElements; iElem++){
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
+            const double dummydVol = accessVec(intPtVol, iElem, iGaus);  
+
+            dummyFtrap = N_i.transpose()*accessVec(elDeltaTrap, iElem, iGaus)*dummydVol;
+
+            for(int iNod2 = 0; iNod2 < nElConDofs; ++iNod2) {
+                int gNod = elemNodeConn[iElem][iNod2];
+                FtrapBuffer[gNod] += dummyFtrap[iNod2];
+            }
+        }
+    }
+}
+
+void Tri3TH::CalcNodTrapCon(vector<double>& nodTrapCon, vector<double>& nodCount){
+
+    for(int iElem=0; iElem<nElements; iElem++){
+        for(int iGaus=0; iGaus<nElGauss; iGaus++){
+
+            const double conTrap = accessVec(elTrapCon, iElem, iGaus);
+            const double dummydVol = accessVec(intPtVol, iElem, iGaus);  
+            const RowVecd3& N_i = accessVec(shapeFunc, iGaus);
+
+            // Nodal values
+            int iNode = 0;
+            for(auto iNod2=accessVec(elemNodeConn, iElem).begin(); iNod2!=accessVec(elemNodeConn, iElem).end(); iNod2++){
+
+                double weight = N_i[iNode] * dummydVol;
+                accessVec(nodTrapCon, *iNod2) += conTrap * weight;;
+                nodCount.at(*iNod2) +=  weight;;
+                iNode += 1;
+
+            }
+        }
+    }
 }

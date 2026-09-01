@@ -5,8 +5,10 @@
 
 using namespace std;
 
-TrapPhase::TrapPhase(string dimensions, H5IO &H5File, int iSet, Logger& logger)
+TrapPhase::TrapPhase(string dimensions, H5IO &H5File, int iSet, Logger& logger, bool trapping)
     : BaseTrapping(dimensions, logger) {
+
+    trappingFlag = trapping;
 
     string dsetName;
 
@@ -37,6 +39,9 @@ TrapPhase::TrapPhase(string dimensions, H5IO &H5File, int iSet, Logger& logger)
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_j";
     zeta_j = H5File.ReadScalar(dsetName);
 
+    dsetName = "Materials/Material_"+ std::to_string(iSet)+"/S_over_R";
+    S_over_R = H5File.ReadScalar(dsetName);
+
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_jj";
     zeta_jj = H5File.ReadScalar(dsetName);
 
@@ -45,6 +50,25 @@ TrapPhase::TrapPhase(string dimensions, H5IO &H5File, int iSet, Logger& logger)
 
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_ii";
     zeta_ii = H5File.ReadScalar(dsetName);
+
+    if (trappingFlag){
+
+        dsetName = "Materials/Material_"+ std::to_string(iSet)+"/kf0";
+        kf0 = H5File.ReadScalar(dsetName);
+
+        dsetName = "Materials/Material_"+ std::to_string(iSet)+"/Qf";
+        Qf = H5File.ReadScalar(dsetName);
+
+        dsetName = "Materials/Material_"+ std::to_string(iSet)+"/kb0";
+        kb0 = H5File.ReadScalar(dsetName);
+
+        dsetName = "Materials/Material_"+ std::to_string(iSet)+"/Qb";
+        Qb = H5File.ReadScalar(dsetName);
+
+        dsetName = "Materials/Material_"+ std::to_string(iSet)+"/Xmax";
+        Xmax = H5File.ReadScalar(dsetName);
+
+    }
 
     if (dims=="3D"){
 

@@ -37,7 +37,7 @@ public:
  * @param H5File Input file.
  * @param matType Material isotropy.
  */
-TrapGB(string dimensions, H5IO& H5File, int iSet, Logger& logger);
+TrapGB(string dimensions, H5IO& H5File, int iSet, Logger& logger, bool trapping=false);
 
 T_DMatx CalcDMatx(const double phi, const double T) override;
 
@@ -47,6 +47,16 @@ T_DMatx CalcDMatx(const double phi, const double T) override;
  */
 T_DMatx CalcTMatx(const double gPhi, const double T);
 
+double get_kf0() const {return kf0;};
+
+double get_kb0() const {return kb0;};
+
+double get_Qf() const {return Qf;};
+
+double get_Qb() const {return Qb;};
+
+double get_Vgb() const {return Vgb;};
+
 private:
 
 /// @ brief diffusivity parameters @todo have to modify
@@ -54,6 +64,21 @@ double D0x1, D0y1, DQx1, DQy1, D0x2, D0y2, DQx2, DQy2;
 
 /// @brief GB trapping parameter  
 double zeta_GB;      
+
+/// @brief Precipitation pre-exponent
+double kf0;
+
+/// @brief Precipitation activation energy
+double Qf;
+
+/// @brief Dissolution activation energy
+double kb0;
+
+/// @brief Dissolution activation energy
+double Qb;
+
+/// @brief Maximum carbon capacity in carbide
+double Vgb;
 
 };
 #endif
