@@ -43,6 +43,8 @@ T_DMatx CalcDMatx(const double phi, const double T) override;
 
 double get_zeta_j() const {return zeta_j;};
 
+double get_S_over_R() const {return S_over_R;};
+
 double get_zeta_jj() const {return zeta_jj;};
 
 double get_zeta_ij() const {return zeta_ij;};
@@ -66,6 +68,9 @@ double D0x1, D0y1, DQx1, DQy1, D0x2, D0y2, DQx2, DQy2;
 
 /// @brief Phase phi_j trapping parameter
 double zeta_j;  
+
+/// @brief Entropy difference
+double S_over_R;  
 
 /// @brief gPhi_jj interface trapping parameter  
 double zeta_jj;  

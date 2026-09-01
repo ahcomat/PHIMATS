@@ -516,7 +516,7 @@ void Tri3TH::CalcElemStiffMatx(BaseTrapping* mat, const double T, const std::vec
 
         ColVecd3 dummyElNod_phi_j, dummyElNod_gPhi_ij, dummyElNod_gPhi_ii, dummyElNod_gPhi_jj;
 
-        const double c_zeta_j  = phaseTrap->get_zeta_j() * invRT;
+        const double c_zeta_j  = phaseTrap->get_zeta_j() * invRT + phaseTrap->get_S_over_R();
         const double c_zeta_ij = phaseTrap->get_zeta_ij() * invRT;
         const double c_zeta_jj = phaseTrap->get_zeta_jj() * invRT;
         const double c_zeta_ii = phaseTrap->get_zeta_ii() * invRT;             

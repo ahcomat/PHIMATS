@@ -39,6 +39,9 @@ TrapPhase::TrapPhase(string dimensions, H5IO &H5File, int iSet, Logger& logger, 
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_j";
     zeta_j = H5File.ReadScalar(dsetName);
 
+    dsetName = "Materials/Material_"+ std::to_string(iSet)+"/S_over_R";
+    S_over_R = H5File.ReadScalar(dsetName);
+
     dsetName = "Materials/Material_"+ std::to_string(iSet)+"/zeta_jj";
     zeta_jj = H5File.ReadScalar(dsetName);
 
